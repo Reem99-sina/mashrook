@@ -1,6 +1,6 @@
 import { useState } from "react";
 import SideBar from "./sidebar";
-import { MashrookLogo, Menu } from "@/app/assets/svg";
+import { Mainnavigationmenu, MashrookLogo, Menu } from "@/app/assets/svg";
 
 export default function MainHeader() {
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
@@ -14,7 +14,7 @@ export default function MainHeader() {
       <div className="flex justify-between">
         <div className="w-full self-center ms-3 p-4">
           <button onClick={toggleSidebar}>
-            <Menu />
+            <Mainnavigationmenu />
           </button>
         </div>
 
