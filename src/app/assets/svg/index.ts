@@ -1,5 +1,6 @@
 export { default as FacebookIcon } from "./facebook.svg";
-export { default as MashrookLogo } from "./Mashrook-logo-text.svg";
+export { default as MashrookLogo } from "./mashrook-logo.svg";
+export { default as CloseButton } from "./close-button-icon.svg";
 export { default as Menu } from "./Menu.svg";
 export { default as Mainnavigationmenu } from "./Button - Main navigation menu.svg";
 export { default as Banners1 } from "./Banners1.svg";
@@ -25,3 +26,4 @@ export { default as Bcard6} from "./card(6).png";
 export { default as Bcard7} from "./card(7).png";
 export { default as Bcard8} from "./card(8).png";
 export { default as Bcard9} from "./card(9).png";
+export { default as Whatsapp } from "./whatsapp-icon.svg";
