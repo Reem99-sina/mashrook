@@ -1,14 +1,15 @@
 "use client";
 
-import Footer from "../../../components/footer";
+import CarouselTransition from "../../../components/carousel";
 
 
 
-export default function CarouselTransition() {
+
+export default function Test() {
  
   return (
     <div>
-      <Footer></Footer>
+      <CarouselTransition />
     </div>
   );
 }
