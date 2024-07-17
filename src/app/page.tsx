@@ -5,6 +5,7 @@ import ClientJourney from "../../components/client-journey";
 import HowItWorks from "../../components/how-it-works";
 import CarouselTransition from "../../components/carousel";
 import FAQCollapse from "../../components/FAQCollapse";
+import Footer from "../../components/footer";
 
 export default function Home() {
   return (
@@ -30,21 +31,20 @@ export default function Home() {
                   <Addbutton />
                 </button>
               </div>
-              <div className="bg-white p-4 rounded shadow-md">
+              <div className="bg-white p-4 rounded shadow-md w-full">
                 <h2 className="text-xl font-bold mb-4">آخر الطلبات</h2>
               </div>
 
               <div className="container mx-auto w-auto  ">
                 <div className="flex justify-center pt-4 object-contain w-full h-full  ">
                   <HowItWorks />
-                  {/* <HowItWorks2/> */}
                 </div>
               </div>
-              <div className="container mx-auto py-6 w-auto">
-                <div className="flex justify-center object-contain w-full h-full ">
-                  <CTA />
-                </div>
+
+              <div className="flex flex-col items-center justify-center w-full h-full  pt-4 ">
+                <CTA />
               </div>
+
               <div className="container mx-auto w-auto  ">
                 <div className="flex justify-center object-contain w-full h-full ">
                   <ClientJourney />
@@ -52,6 +52,9 @@ export default function Home() {
               </div>
               <div className="pt-8">
                 <FAQCollapse />
+              </div>
+              <div className="pt-8">
+                <Footer />
               </div>
             </section>
           </main>

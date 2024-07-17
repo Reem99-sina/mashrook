@@ -1,13 +1,14 @@
 "use client";
 
-// import CarouselTransition from "../../../components/carousel";
-import FAQCollapse  from "../../../components/FAQCollapse";
+import Footer from "../../../components/footer";
 
 
-export default function Test() {
+
+export default function CarouselTransition() {
+ 
   return (
     <div>
-<FAQCollapse />
-</div>
+      <Footer></Footer>
+    </div>
   );
 }

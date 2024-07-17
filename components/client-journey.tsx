@@ -10,10 +10,10 @@ import {
 
 export default function ClientJourney() {
   return (
-    <div className="px-4 py-16 w-3/4  mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20">
-      <div className="w-fit h-fit  border-2 rounded-2xl bg-white">
+    <div className="flex flex-col items-center justify-center w-full h-full  border-2 rounded-2xl bg-white">
+      <div className="w-full h-full  border-2 rounded-2xl bg-white">
         <div dir="rtl">
-          <div className="w-fit">
+          <div className="w-full">
             <div className="inline-block align-middle p-4 text-center flex-autotext-lg font-bold m-4 w-full">
               رحلة العميل
             </div>
