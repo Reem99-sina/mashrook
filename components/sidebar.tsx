@@ -1,6 +1,8 @@
 "use client";
 
 import { Whatsapp } from "@/app/assets/svg";
+import { Button } from "@/app/components/shared/button.component";
+import { TextInput } from "@/app/components/shared/text-input.component";
 import Link from "next/link";
 
 interface SideBarProps {
@@ -61,7 +63,7 @@ export default function SideBar({ sidebarOpen, toggleSidebar }: SideBarProps) {
               <button className="mt-4 bg-green-500 py-2 px-4 rounded-lg text-white flex flex-row gap-2 items-center ">
                 تواصل معنا
                 <Whatsapp />
-              </button>{" "}
+              </button>
             </div>
           </div>
         </div>

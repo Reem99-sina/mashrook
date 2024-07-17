@@ -8,8 +8,8 @@ import FAQCollapse from "../../components/FAQCollapse";
 
 export default function Home() {
   return (
-    <div className="flex justify-center items-top w-dvh h-max  bg-[#DCE9E5]">
-      <div className="w-full md:w-1/2  lg:w-1/2 bg-white rounded text-black shadow">
+    <div className="flex justify-center w-dvh h-max  ">
+      <div className="w-full bg-white rounded text-black shadow">
         <div className="rtl w-full">
           <MainHeader />
         </div>
@@ -24,7 +24,7 @@ export default function Home() {
 
               <div className="flex justify-center space-x-2 mb-8">
                 <button className="flex items-center">
-                  <Addrequest className="" />
+                  <Addrequest />
                 </button>
                 <button className="flex items-center">
                   <Addbutton />
