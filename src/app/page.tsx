@@ -1,9 +1,9 @@
-'use client';
+"use client";
 import MainHeader from "../../components/main-header";
 
 export default function Home() {
   return (
-    <div className="flex justify-center items-top w-dvh h-dvh  bg-[#DCE9E5]">
+    <div className="flex justify-center items-top w-dvh h-dvh  ">
       <div className="w-full md:w-1/2  lg:w-1/2 bg-white rounded text-black shadow">
         <div className="rtl w-full">
           <MainHeader />
