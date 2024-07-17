@@ -4,16 +4,29 @@ import React from "react";
 import { CloseButton, MashrookLogo } from "../assets/svg";
 import { TextInput } from "../components/shared/text-input.component";
 import { Button } from "../components/shared/button.component";
+import { useRouter } from "next/navigation";
 
 const Login: React.FC = () => {
+  const router = useRouter();
+
   return (
-    <div className="flex items-center justify-center min-h-screen h-full  w-full flex-col bg-white">
+    <div className="flex items-center justify-center min-h-screen h-full  w-full flex-col">
       <div className="flex items-end justify-start p-4 w-full h-full lg:hidden bg-white ">
-        <CloseButton />
+        <CloseButton
+          onClick={() => {
+            router.push("/");
+          }}
+          className="cursor-pointer"
+        />
       </div>
       <div className="w-full max-w-md  space-y-8 bg-white   md:max-w-lg lg:max-w-xl ">
         <div className=" items-end justify-start ml-4 mt-4 hidden sm:flex ">
-          <CloseButton />
+          <CloseButton
+            onClick={() => {
+              router.push("/");
+            }}
+            className="cursor-pointer"
+          />
         </div>
         <div className="text-center flex items-center justify-center flex-col  h-full">
           <MashrookLogo />
