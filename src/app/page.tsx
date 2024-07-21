@@ -1,11 +1,9 @@
 "use client";
 import MainHeader from "../../components/MainHeader";
 import { Addbutton, Addrequest, CTA } from "./assets/svg";
-
 import CarouselTransition from "../../components/Carousel";
 import FAQCollapse from "../../components/FAQCollapse";
 import Footer from "../../components/Footer";
-
 import HowItWorks2 from "../../components/HowItWorks2";
 import ClientJourney2 from "../../components/ClientJourney2";
 import PropertyCardUnified from "../../components/PropertyCardUnified";
@@ -55,7 +53,6 @@ export default function Home() {
                     prices={sampleData1.prices}
                     currencies={sampleData1.currencies}
                     categories={sampleData1.categories}
-                    units={sampleData1.units}
                     dealStatuses={sampleData1.dealStatuses}
                   />
                   <PropertyCardUnified
