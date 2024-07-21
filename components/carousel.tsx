@@ -2,9 +2,29 @@
 
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { Bcard1, Bcard2, Bcard3, Bcard4, Bcard5, Bcard6, Bcard7, Bcard8, Bcard9 } from "../src/app/assets/svg";
+import {
+  Bcard1,
+  Bcard2,
+  Bcard3,
+  Bcard4,
+  Bcard5,
+  Bcard6,
+  Bcard7,
+  Bcard8,
+  Bcard9,
+} from "../src/app/assets/svg";
 
-const images = [Bcard1, Bcard2, Bcard3, Bcard4, Bcard5, Bcard6, Bcard7, Bcard8, Bcard9];
+const images = [
+  Bcard1,
+  Bcard2,
+  Bcard3,
+  Bcard4,
+  Bcard5,
+  Bcard6,
+  Bcard7,
+  Bcard8,
+  Bcard9,
+];
 
 export default function CarouselTransition() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -17,17 +37,24 @@ export default function CarouselTransition() {
   }, []);
 
   return (
-    
     <div className="relative w-full h-64 rounded-xl">
-
       {images.map((image, index) => (
         <div
           key={index}
-          className={`absolute inset-0 transition-opacity duration-1000 ${index === currentIndex ? "opacity-100" : "opacity-0"}`}
+          className={`absolute inset-0 transition-opacity duration-1000 ${
+            index === currentIndex ? "opacity-100" : "opacity-0"
+          }`}
         >
-          <Image src={image} alt={`image ${index + 1}`} layout="fit" objectFit="cover" className="rounded-xl" />
+          <Image
+            src={image}
+            alt={`image ${index + 1}`}
+            style={{ objectFit: "cover" }}
+            className="rounded-xl priority"
+          />
         </div>
       ))}
     </div>
   );
 }
+
+//last modified by Omar Marei 18/7

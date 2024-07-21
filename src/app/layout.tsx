@@ -1,8 +1,14 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+// import { Inter } from "next/font/google";
 import "./globals.css";
+import { Html, Head, Main, NextScript } from "next/document";
+import { Cairo } from "next/font/google";
 
-const inter = Inter({ subsets: ["latin"] });
+// const inter = Inter({ subsets: ["latin"] });
+const cairo = Cairo({
+  subsets: ["latin", "arabic"],
+  weight: ["400", "700"],
+});
 
 export const metadata: Metadata = {
   title: "Mashrook",
@@ -16,7 +22,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={cairo.className}>
         <div className="flex items-center justify-center min-h-screen bg-[#DCE9E5]">
           <div className="w-full lg:w-1/2 ">{children}</div>
         </div>

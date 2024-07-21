@@ -5,7 +5,6 @@ export { default as Mashrooklogotextlarge } from "./Logo(1).png";
 export { default as CloseButton } from "./close-button-icon.svg";
 export { default as Menu } from "./Menu.svg";
 export { default as Mainnavigationmenu } from "./Button - Main navigation menu.svg";
-export { default as Banners1 } from "./Banners1.svg";
 export { default as Addrequest } from "./Addrequest.svg";
 export { default as Addbutton } from "./Addbutton.svg";
 export { default as Truckicon } from "./Layer_x0020_1(2).svg";
@@ -33,3 +32,5 @@ export { default as Frame563 } from "./Frame563.png";
 export { default as Butwhatsapp } from "./Button(whatsapp).svg";
 export { default as Badge1 } from "./Badge.png";
 export { default as Badge2 } from "./Badge(1).png";
+export { default as Location } from "./location.svg";
+

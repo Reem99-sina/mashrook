@@ -1,4 +1,10 @@
-import {  Badge1, Badge2, Butwhatsapp, Frame563,  Mashrooklogotextlarge } from "@/app/assets/svg";
+import {
+  Badge1,
+  Badge2,
+  Butwhatsapp,
+  Frame563,
+  Mashrooklogotextlarge,
+} from "@/app/assets/svg";
 import Image from "next/image";
 
 export default function Footer() {
@@ -8,35 +14,31 @@ export default function Footer() {
       <Image
         src={Frame563}
         alt="image"
-        layout="fit"
-        objectFit="cover"
+        style={{ objectFit: "cover" }}
         className="rounded-xl mt-4"
       />
       <Image
         src={Mashrooklogotextlarge}
         alt="image"
-        layout="fit"
-        objectFit="cover"
+        style={{ objectFit: "cover" }}
         className="rounded-xl mt-4"
       />
 
-      <Butwhatsapp className="rounded-xl mt-4 mb-4"/>
+      <Butwhatsapp className="rounded-xl mt-4 mb-4" />
       <Image
         src={Badge1}
         alt="image"
-        layout="fit"
-        objectFit="cover"
+        style={{ objectFit: "cover" }}
         className="rounded-xl mt-4"
       />
-          <Image
+      <Image
         src={Badge2}
         alt="image"
-        layout="fit"
-        objectFit="cover"
+        style={{ objectFit: "cover" }}
         className="rounded-xl mt-4"
       />
     </div>
   );
 }
 
-
+//last modified by Omar Marei 18/7
