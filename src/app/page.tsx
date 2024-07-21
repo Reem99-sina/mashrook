@@ -1,14 +1,11 @@
 "use client";
 import MainHeader from "../../components/MainHeader";
 import { Addbutton, Addrequest, CTA } from "./assets/svg";
-// import ClientJourney from "../../components/client-journey";
-// import HowItWorks from "../../components/how-it-works";
+
 import CarouselTransition from "../../components/Carousel";
 import FAQCollapse from "../../components/FAQCollapse";
 import Footer from "../../components/Footer";
-// import PropertyCard from "../../components/PropertyCard1";
-// import PropertyCard2 from "../../components/PropertyCard2";
-// import PropertyCard3 from "../../components/PropertyCard3";
+
 import HowItWorks2 from "../../components/HowItWorks2";
 import ClientJourney2 from "../../components/ClientJourney2";
 import PropertyCardUnified from "../../components/PropertyCardUnified";
