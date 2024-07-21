@@ -1,13 +1,15 @@
+@import url("https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import url("https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap");
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
 }
+
 
 @media (prefers-color-scheme: dark) {
   :root {
@@ -16,6 +18,13 @@
     --background-end-rgb: 0, 0, 0;
   }
 }
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
 
 body {
   font-family: var(--font-cairo);
@@ -42,9 +51,4 @@ body {
 }
 .bg-blue-450{
   background-color: #3B73B9;
-}
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
 }

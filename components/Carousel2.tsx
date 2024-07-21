@@ -49,7 +49,7 @@ export default function CarouselTransition() {
             src={image}
             alt={`image ${index + 1}`}
             style={{ objectFit: "cover" }}
-            className="rounded-xl priority"
+            className="rounded-xl priority p2"
           />
         </div>
       ))}
@@ -57,4 +57,4 @@ export default function CarouselTransition() {
   );
 }
 
-//last modified by Omar Marei 18/7
+//last modified by Omar Marei 18/7/2024

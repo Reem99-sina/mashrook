@@ -23,7 +23,7 @@ const Step: React.FC<StepProps> = ({ number, title, icon, showLine }) => {
         <div className="inline-block align-middle p-4 text-center flex-auto">
           <p className="text-lg font-bold m-4">{title}</p>
         </div>
-        <div className="flex items-center justify-center m-2 w-24 h-24 rounded-full">
+        <div className="flex items-center justify-center p-2 m-2 w-24 h-24 rounded-full">
           {icon}
         </div>
       </div>
@@ -33,4 +33,4 @@ const Step: React.FC<StepProps> = ({ number, title, icon, showLine }) => {
 
 export default Step;
 
-//last modified by Omar Marei 19/7
+//last modified by Omar Marei 19/7/2024

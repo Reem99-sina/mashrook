@@ -1,5 +1,5 @@
 import { useState } from "react";
-import SideBar from "./sidebar";
+import SideBar from "./SideBar";
 import {
   Mainnavigationmenu,
   Mashrooklogotextlarge,
