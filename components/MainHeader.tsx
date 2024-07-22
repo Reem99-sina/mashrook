@@ -1,9 +1,9 @@
 import { useState } from "react";
-import SideBar from "./sidebar";
+import SideBar from "./SideBar2";
 import {
   Mainnavigationmenu,
   Mashrooklogotextlarge,
-  Menu,
+  
 } from "@/app/assets/svg";
 import Image from "next/image";
 
@@ -15,7 +15,7 @@ export default function MainHeader() {
   };
 
   return (
-    <header>
+    <header className="">
       <div className="flex items-center justify-between">
         <div className="w-full self-center p-4">
           <button onClick={toggleSidebar}>
@@ -27,8 +27,8 @@ export default function MainHeader() {
           <Image
             src={Mashrooklogotextlarge}
             alt={"logo"}
-            layout="fit"
-            objectFit="cover"
+            
+            style={{ objectFit: 'cover' }}
             className="rounded-xl"
           />
         </div>
@@ -37,3 +37,5 @@ export default function MainHeader() {
     </header>
   );
 }
+
+//last modified by Omar Marei 21/7

@@ -1,8 +1,6 @@
 "use client";
 
 import { Whatsapp } from "@/app/assets/svg";
-import { Button } from "@/app/components/shared/button.component";
-import { TextInput } from "@/app/components/shared/text-input.component";
 import Link from "next/link";
 
 interface SideBarProps {
@@ -14,18 +12,26 @@ export default function SideBar({ sidebarOpen, toggleSidebar }: SideBarProps) {
   return (
     <div>
       {sidebarOpen && (
-        <div className="flex  rtl items-start justify-end p-6 items w-dvh h-dvh  ">
+        <div className="flex  rtl items-start justify-end p-6 items w-dvh h-screen  ">
           <div className=" w-full">
-            <div className="text-right text-bold text-3xl ">
+            <div className="text-right text-bold text-2xl ">
               <ul>
-                <li className="mb-4 hover:text-gray-800 ">
-                  <Link href="/login" className=" text-[#3B73B9] ">
+                <li className="mb-4 text-xl hover:text-gray-800 ">
+                  <Link href="/login" className=" text-gray-500 hover:text-[#3B73B9] ">
                     تسجيل الدخول
                   </Link>
                 </li>
-                <li className="mb-4 hover:text-gray-800 text-[#6B7280] ">
-                  <Link href="/sign-up" className="">
+                
+                <li className="mb-4 text-xl text-gray-500 hover:text-[#3B73B9]">
+                  <Link href="/sign-up" className=" ">
                     إنشاء حساب
+                  </Link>
+                </li>
+                <hr className="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700" />
+                
+                <li className="mb-4 mt-4  hover:bg-gray-800">
+                  <Link href="/" className=" ">
+                    السوق
                   </Link>
                 </li>
                 <li className="mb-4 hover:bg-gray-800">
@@ -71,3 +77,5 @@ export default function SideBar({ sidebarOpen, toggleSidebar }: SideBarProps) {
     </div>
   );
 }
+
+//last modified by Omar Marei 21/7/2024

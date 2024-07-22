@@ -75,3 +75,5 @@ export default function FAQCollapse() {
     </div>
   );
 }
+
+//last modified by Omar Marei 18/7
