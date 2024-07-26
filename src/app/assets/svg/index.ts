@@ -33,4 +33,5 @@ export { default as Butwhatsapp } from "./Button(whatsapp).svg";
 export { default as Badge1 } from "./Badge.png";
 export { default as Badge2 } from "./Badge(1).png";
 export { default as Location } from "./location.svg";
+export { default as FinishedShares } from "./finshedshares.svg";
 

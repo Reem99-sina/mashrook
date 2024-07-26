@@ -6,6 +6,7 @@ import {
   
 } from "@/app/assets/svg";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function MainHeader() {
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
@@ -24,13 +25,14 @@ export default function MainHeader() {
         </div>
 
         <div className="self-center me-3 p-4">
+        <Link href="/">
           <Image
             src={Mashrooklogotextlarge}
             alt={"logo"}
             
             style={{ objectFit: 'cover' }}
             className="rounded-xl"
-          />
+          /></Link>
         </div>
       </div>
       <SideBar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} />

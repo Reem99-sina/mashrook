@@ -6,8 +6,32 @@ import FAQCollapse from "../../components/FAQCollapse";
 import Footer from "../../components/Footer2";
 import HowItWorks2 from "../../components/HowItWorks2";
 import ClientJourney2 from "../../components/ClientJourney2";
-import PropertyCardUnified from "../../components/PropertyCardUnified";
-import { sampleData1, sampleData2, sampleData3 } from "../app/assets/data/data";
+import {
+  sampleData5,
+} from "../app/assets/data/data";
+import Link from "next/link";
+import PropertyCard from "../../components/PropertyCard";
+
+const limit = 5;
+
+const slicedData = {
+  offersCount: sampleData5.offersCount.slice(0, limit),
+  date: sampleData5.date.slice(0, limit),
+  seller: sampleData5.seller.slice(0, limit),
+  unitStatus: sampleData5.unitStatus.slice(0, limit),
+  requestId: sampleData5.requestId.slice(0, limit),
+  licenseNumber: sampleData5.licenseNumber.slice(0, limit),
+  city: sampleData5.city.slice(0, limit),
+  district: sampleData5.district.slice(0, limit),
+  offeredShare: sampleData5.offeredShare.slice(0, limit),
+  area: sampleData5.area.slice(0, limit),
+  price: sampleData5.price.slice(0, limit),
+  currency: sampleData5.currency.slice(0, limit),
+  unitCategory: sampleData5.unitCategory.slice(0, limit),
+  unitType: sampleData5.unitType.slice(0, limit),
+  dealStatus: sampleData5.dealStatus.slice(0, limit),
+  offerId: sampleData5.offerId.slice(0, limit),
+};
 
 export default function Home() {
   return (
@@ -37,72 +61,46 @@ export default function Home() {
               </div>
               <div className=" p-4 rounded shadow-md w-full">
                 <div dir="rtl">
-                  <h2 className="text-xl font-bold mb-4">آخر الطلبات</h2>
-
-                  <PropertyCardUnified
-                    unitCount={sampleData1.unitCount}
-                    dates={sampleData1.dates}
-                    sellers={sampleData1.sellers}
-                    statuses={sampleData1.statuses}
-                    requestIds={sampleData1.requestIds}
-                    licenseNumbers={sampleData1.licenseNumbers}
-                    cities={sampleData1.cities}
-                    districts={sampleData1.districts}
-                    sharePercentages={sampleData1.sharePercentages}
-                    areas={sampleData1.areas}
-                    prices={sampleData1.prices}
-                    currencies={sampleData1.currencies}
-                    categories={sampleData1.categories}
-                    dealStatuses={sampleData1.dealStatuses}
-                  />
-                  <PropertyCardUnified
-                    unitCount={sampleData3.unitCount}
-                    dates={sampleData3.dates}
-                    sellers={sampleData3.sellers}
-                    statuses={sampleData3.statuses}
-                    requestIds={sampleData3.requestIds}
-                    licenseNumbers={sampleData3.licenseNumbers}
-                    cities={sampleData3.cities}
-                    districts={sampleData3.districts}
-                    sharePercentages={sampleData3.sharePercentages}
-                    areas={sampleData3.areas}
-                    prices={sampleData3.prices}
-                    currencies={sampleData3.currencies}
-                    categories={sampleData3.categories}
-                    units={sampleData3.units}
-                    dealStatuses={sampleData3.dealStatuses}
-                  />
-
-                  <div className="pt-4">
-                    <PropertyCardUnified
-                      unitCount={sampleData2.unitCount}
-                      dates={sampleData2.dates}
-                      sellers={sampleData2.sellers}
-                      statuses={sampleData2.statuses}
-                      requestIds={sampleData2.requestIds}
-                      licenseNumbers={sampleData2.licenseNumbers}
-                      cities={sampleData2.cities}
-                      districts={sampleData2.districts}
-                      sharePercentages={sampleData2.sharePercentages}
-                      areas={sampleData2.areas}
-                      prices={sampleData2.prices}
-                      currencies={sampleData2.currencies}
-                      categories={sampleData2.categories}
-                      units={sampleData2.units}
-                      dealStatuses={sampleData2.dealStatuses}
-                    />
+                  <div className="flex justify-between mx-6">
+                    <h2 className=" font-bold mb-4 text-2xl">آخر الطلبات</h2>
+                    <Link href="/market">
+                      <h2 className="text-2xl font-bold mb-4 text-blue-450">
+                        السوق
+                      </h2>
+                    </Link>
                   </div>
+
+                  <PropertyCard
+                    offersCount={slicedData.offersCount}
+                    date={slicedData.date}
+                    seller={slicedData.seller}
+                    unitStatus={slicedData.unitStatus}
+                    requestId={slicedData.requestId}
+                    licenseNumber={slicedData.licenseNumber}
+                    city={slicedData.city}
+                    district={slicedData.district}
+                    offeredShare={slicedData.offeredShare}
+                    area={slicedData.area}
+                    price={slicedData.price}
+                    currency={slicedData.currency}
+                    unitCategory={slicedData.unitCategory}
+                    unitType={slicedData.unitType}
+                    dealStatus={slicedData.dealStatus}
+                    offerId={slicedData.offerId}
+                  />
                 </div>
               </div>
 
-              <div className="container mx-auto w-auto  ">
+              <div className="container mx-auto w-auto">
                 <div className="flex justify-center p-4 object-contain w-full h-full  ">
                   <HowItWorks2 />
                 </div>
               </div>
 
               <div className="flex flex-col items-center justify-center w-full h-full  pt-4 ">
-                <CTA />
+                <Link href="/sign-up">
+                  <CTA />
+                </Link>
               </div>
 
               <div className="container mx-auto w-auto  ">
