@@ -30,7 +30,7 @@ export default function SideBar({ sidebarOpen, toggleSidebar }: SideBarProps) {
                 <hr className="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700" />
                 
                 <li className="mb-4 mt-4  hover:bg-gray-800">
-                  <Link href="/" className=" ">
+                  <Link href="/market" className=" ">
                     السوق
                   </Link>
                 </li>

@@ -11,12 +11,12 @@ import {
     return (
       <div className="flex flex-col items-center justify-center w-full h-full  border-2 rounded-2xl bg-white ">
         <h2 className="text-xl font-bold mt-8 mb-4 text-center">تابعونا</h2>
-        <Image
+        <button><Image
           src={Frame563}
           alt="image"
           style={{ objectFit: "cover" }}
           className="rounded-xl mt-4"
-        />
+        /></button>
         <Image
           src={Mashrooklogotextlarge}
           alt="image"
@@ -24,7 +24,7 @@ import {
           className="rounded-xl mt-4"
         />
   
-        <Butwhatsapp className="rounded-xl mt-4 mb-4" />
+        <button><Butwhatsapp className="rounded-xl mt-4 mb-4" /></button>
         <Image
           src={Badge1}
           alt="image"
