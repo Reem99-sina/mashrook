@@ -19,6 +19,7 @@ import { BiArea, BiShareAlt } from "react-icons/bi";
 import { LuTag } from "react-icons/lu";
 import { RxArrowLeft } from "react-icons/rx";
 import { MdOutlineFlag } from "react-icons/md";
+import Image from "next/image";
 
 const PropertyDetails: React.FC = () => {
   const [activeTab, setActiveTab] = useState<"location" | "details">(
@@ -45,7 +46,7 @@ const PropertyDetails: React.FC = () => {
     setReportText("");
   };
 
-  const handleTextChange = (e: { target: { value: string; }; }) => {
+  const handleTextChange = (e: { target: { value: string } }) => {
     setReportText(e.target.value.slice(0, maxChars));
   };
 
@@ -215,10 +216,14 @@ const PropertyDetails: React.FC = () => {
           </div>
         </div>
         <div className="mt-4">
-          <img
+          <Image
             src="https://storage.googleapis.com/support-forums-api/attachment/thread-16305330-5132562364420730370.png"
             alt="Map"
-            className="w-full h-auto rounded"
+            width={1024}
+            height={1024}
+            style={{ objectFit: "cover" }}
+            className="rounded-xl"
+            priority
           />
         </div>
       </div>
