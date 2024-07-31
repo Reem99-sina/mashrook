@@ -1,4 +1,4 @@
-import PropertyDetails from "../../../components/PropertyDetails";
+import PropertyDetails from "./PropertyDetails";
 
 export default function ShowProperty() {
   return (

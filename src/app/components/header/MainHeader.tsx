@@ -16,7 +16,7 @@ export default function MainHeader() {
   };
 
   return (
-    <header className="">
+    <header className="border-b-2 mb-4">
       <div className="flex items-center justify-between">
         <div className="w-full self-center p-4">
           <button onClick={toggleSidebar}>
@@ -40,4 +40,4 @@ export default function MainHeader() {
   );
 }
 
-//last modified by Omar Marei 21/7
+//last modified by Omar Marei 31/7

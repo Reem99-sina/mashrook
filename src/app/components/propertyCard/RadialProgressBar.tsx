@@ -8,7 +8,7 @@ interface CircularProgressBarProps {
 
 const CircularProgressBar: React.FC<CircularProgressBarProps> = ({
   percentage,
-  size = 200,
+  size = 50,
   strokeWidth = 5,
 }) => {
   const radius = (size - strokeWidth) / 2;
