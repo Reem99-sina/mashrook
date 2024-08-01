@@ -4,7 +4,9 @@ import { Carousel } from "../components/shared/Mimport";
 
 export function CarouselDefault() {
   return (
-    <Carousel className="rounded-xl">
+    <Carousel placeholder={undefined}
+    onPointerEnterCapture={undefined}
+    onPointerLeaveCapture={undefined} className="rounded-xl">
       <Image
         src="https://media.istockphoto.com/id/578830714/photo/white-modern-apartment-house.jpg?s=1024x1024&w=is&k=20&c=B6n0TfjrvKXuhBEY2-viVPGb1O2IsjbYnpnPHx2zeDE="
         alt="image 1"
