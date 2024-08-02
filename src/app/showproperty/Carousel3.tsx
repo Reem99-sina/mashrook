@@ -64,3 +64,5 @@ export function CarouselDefault() {
     </Carousel>
   );
 }
+
+//last modified by Omar Marei 2/8/2024

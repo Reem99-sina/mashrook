@@ -20,6 +20,10 @@ import { LuTag } from "react-icons/lu";
 import { RxArrowLeft } from "react-icons/rx";
 import { MdOutlineFlag } from "react-icons/md";
 import Image from "next/image";
+import JoinStatusButtons from "../components/propertyCard/JoinButton";
+
+
+
 
 const PropertyDetails: React.FC = () => {
   const [activeTab, setActiveTab] = useState<"location" | "details">(
@@ -36,6 +40,8 @@ const PropertyDetails: React.FC = () => {
   const [reportNotificationMessage, setReportNotificationMessage] =
     useState("");
   const maxChars = 250;
+
+  const currentDealStatus = "متاح";
 
   const handleReportClick = () => {
     setIsDialogOpen(true);
@@ -77,7 +83,7 @@ const PropertyDetails: React.FC = () => {
     setShowReportNotification(true);
     setTimeout(() => {
       setShowReportNotification(false);
-    }, 5000);
+    }, 3000);
   };
 
   const handleSaveClick = () => {
@@ -90,7 +96,7 @@ const PropertyDetails: React.FC = () => {
     setShowNotification(true);
     setTimeout(() => {
       setShowNotification(false);
-    }, 5000);
+    }, 3000);
   };
 
   const detailsContent = (
@@ -133,16 +139,10 @@ const PropertyDetails: React.FC = () => {
                 <span>2,000,000 ريال</span>
               </div>
             </div>
-            <div className="flex justify-center">
-              <button
-                type="button"
-                className="bg-blue-450 text-white hover:bg-blue-800 border-2 border-blue-500 w-3/4 font-medium rounded-lg text-sm px-5 py-2.5 mt-4 flex justify-center rtl:flex-row-reverse"
-              >
-                انضم كشريك
-                <RxArrowLeft className="mr-4 text-xl text-white" />
-              </button>
-            </div>
-          </div>
+
+            <JoinStatusButtons currentDealStatus={currentDealStatus} /> 
+
+
           <div className="border-2 rounded-lg p-4 mt-4">
             <h3 className="text-xl font-bold">قطعة 1256</h3>
             <div className="flex justify-between bg-gray-100 w-full items-center rounded-lg ml-2 mt-4 px-2  py-2">
@@ -178,14 +178,10 @@ const PropertyDetails: React.FC = () => {
                 <span>2,000,000 ريال</span>
               </div>
             </div>
-            <div className="flex justify-center">
-              <button
-                type="button"
-                className="bg-blue-450 text-white hover:bg-blue-800 border-2 border-blue-500 w-3/4 font-medium rounded-lg text-sm px-5 py-2.5 mt-4 flex justify-center rtl:flex-row-reverse"
-              >
-                انضم كشريك
-                <RxArrowLeft className="mr-4 text-xl text-white" />
-              </button>
+
+            <JoinStatusButtons currentDealStatus={currentDealStatus} /> 
+
+
             </div>
           </div>
         </div>
@@ -483,3 +479,6 @@ const PropertyDetails: React.FC = () => {
 };
 
 export default PropertyDetails;
+
+
+//last modified by Omar Marei 2/8/2024

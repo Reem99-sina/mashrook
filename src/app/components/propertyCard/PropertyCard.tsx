@@ -17,6 +17,7 @@ import { LuTag } from "react-icons/lu";
 import { BiArea } from "react-icons/bi";
 import { FinishedShares } from "@/app/assets/svg";
 import Link from "next/link";
+import JoinStatusButtons from "./JoinButton";
 
 type PropertyCardProps = {
   offerId: string[];
@@ -139,45 +140,8 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
               )}
             </div>
           </div>
-          <div id="joinStatus" className="py-4">
-            {currentDealStatus === "محجوز" ? (
-              <div className="flex flex-row items-center justify-between">
-                <button
-                  type="button"
-                  className="bg-blue-450 text-white border-blue-500 w-3/4 font-medium rounded-lg text-sm px-5 py-2.5 mx-4 flex justify-center"
-                >
-                  عرض المحادثات
-                </button>
-                <button
-                  type="button"
-                  className="bg-green-450 text-white border-blue-500 w-3/4 font-medium rounded-lg text-sm px-5 py-2.5 mx-4 flex justify-center"
-                >
-                  عرض الطلب
-                </button>
-              </div>
-            ) : (
-              <div className="flex justify-center">
-                <button
-                  type="button"
-                  className={`${
-                    currentDealStatus === "تمت الشراكة"
-                      ? "bg-gray-300 text-gray-800"
-                      : "bg-blue-450 text-white hover:bg-blue-800 border-2 border-blue-500"
-                  } w-3/4 font-medium rounded-lg text-sm px-5 py-2.5 flex justify-center rtl:flex-row-reverse dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
-                  disabled={currentDealStatus === "تمت الشراكة"}
-                >
-                  انضم كشريك
-                  <RxArrowLeft
-                    className={`mr-4 text-xl ${
-                      currentDealStatus === "تمت الشراكة"
-                        ? "text-gray-600"
-                        : "text-white"
-                    }`}
-                  />
-                </button>
-              </div>
-            )}
-          </div>
+
+          <JoinStatusButtons currentDealStatus={currentDealStatus} /> 
         </div>
       );
     }
@@ -282,10 +246,6 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
                 </div>
               )}
 
-              {/* <div className="flex flex-row pt-4">
-                <button className="text-blue-500 mx-4 align-middle">حفظ</button>
-                <FaBookmark className="text-blue-500 mx-2 align-middle" />
-              </div> */}
             </div>
           </div>
         </div>
@@ -295,3 +255,6 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
 };
 
 export default PropertyCard;
+
+
+//last modified by Omar Marei 2/8/2024
