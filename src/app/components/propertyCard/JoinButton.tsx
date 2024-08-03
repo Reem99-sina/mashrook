@@ -13,7 +13,7 @@ const JoinStatusButtons: React.FC<JoinStatusButtonsProps> = ({
 }) => {
   const [showDialog, setShowDialog] = useState(false);
   const [partnershipPercentage, setPartnershipPercentage] = useState(0);
-  const availableAmount = 600000; 
+  const availableAmount = 600000;
   const tooltipRef = useRef<HTMLDivElement>(null);
 
   const handleDialogToggle = () => {
@@ -52,13 +52,13 @@ const JoinStatusButtons: React.FC<JoinStatusButtonsProps> = ({
         <div className="flex flex-row items-center justify-between">
           <button
             type="button"
-            className="bg-blue-450 text-white border-blue-500 w-3/4 font-medium rounded-lg text-sm px-5 py-2.5 mx-4 flex justify-center"
+            className="flex justify-cente flex-growr bg-blue-450 text-white border-blue-500  font-medium rounded-lg text-sm px-5 py-2.5 mx-4 "
           >
             عرض المحادثات
           </button>
           <button
             type="button"
-            className="bg-green-450 text-white border-blue-500 w-3/4 font-medium rounded-lg text-sm px-5 py-2.5 mx-4 flex justify-center"
+            className="flex justify-center flex-grow bg-green-450 text-white border-blue-500  font-medium rounded-lg text-sm px-5 py-2.5 mx-4 "
           >
             عرض الطلب
           </button>
@@ -75,7 +75,6 @@ const JoinStatusButtons: React.FC<JoinStatusButtonsProps> = ({
             disabled={currentDealStatus === "تمت الشراكة"}
             onClick={handleDialogToggle}
           >
-            انضم كشريك
             <RxArrowLeft
               className={`mr-4 text-xl ${
                 currentDealStatus === "تمت الشراكة"
@@ -83,14 +82,16 @@ const JoinStatusButtons: React.FC<JoinStatusButtonsProps> = ({
                   : "text-white"
               }`}
             />
+            انضم كشريك
           </button>
         </div>
       )}
 
       {showDialog && (
-        <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex justify-center items-center lg:px-12 sm:px-4 md:px-4">
-          <div className="bg-white rounded-lg p-6 w-1/2 ">
-            <div className="flex justify-between items-center mb-4 border-b-2 pb-2">
+        <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex justify-center items-center px-2 ">
+          <div className="bg-white rounded-lg p-4 z-50 ">
+            
+            <div className="flex justify-between items-center mb-6 border-b-2 pb-2 ">
               <button
                 type="button"
                 className="text-2xl font-bold  text-gray-600 hover:text-gray-900"
@@ -98,13 +99,13 @@ const JoinStatusButtons: React.FC<JoinStatusButtonsProps> = ({
               >
                 &times;
               </button>
-              <h2 className="text-xl font-bold">ارض سكنية - قطعة رقم 1256</h2>
+              <h2 className="text-sm lg:text-xl font-bold">ارض سكنية - قطعة رقم 1256</h2>
               <p></p>
             </div>
             <div className="mb-4">
               <p className="text-lg font-medium">
-                المبلغ المتاح
-                <span className="text-blue-450 font-bold">
+                  المبلغ المتاح
+                <span className="text-blue-450 font-bold mx-4">
                   {availableAmount} ريال
                 </span>
               </p>
@@ -124,7 +125,7 @@ const JoinStatusButtons: React.FC<JoinStatusButtonsProps> = ({
                   value={partnershipPercentage}
                   onChange={handlePercentageChange}
                   className="w-full"
-                  dir="rtl" 
+                  dir="rtl"
                 />
                 <div
                   ref={tooltipRef}
@@ -134,7 +135,7 @@ const JoinStatusButtons: React.FC<JoinStatusButtonsProps> = ({
                 </div>
               </div>
             </div>
-            <div className="mb-4">
+            <div className="mb-4 mx-14">
               <label className="block mb-2 font-medium">مبلغ الشراكة</label>
               <div className="flex items-center">
                 <input
@@ -173,4 +174,4 @@ const JoinStatusButtons: React.FC<JoinStatusButtonsProps> = ({
 
 export default JoinStatusButtons;
 
-//last modified by Omar Marei 2/8/2024
+//last modified by Omar Marei 3/8/2024

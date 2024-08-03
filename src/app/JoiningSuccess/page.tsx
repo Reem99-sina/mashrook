@@ -22,7 +22,7 @@ export default function JoiningSuccess() {
                   تم الاشتراك في العقار بنجاح
                 </h2>
 
-                <div className="flex bg-gray-100 items-center justify-center py-2 px-2 rounded-2xl my-4 w-1/3 ">
+                <div className="flex bg-gray-100 items-center justify-center py-2 px-2 rounded-2xl my-4 ">
                   <span className="mr-2 ml-2 text-lg font-bold">
                     <h4>2024</h4>
                   </span>
