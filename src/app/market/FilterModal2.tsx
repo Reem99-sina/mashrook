@@ -194,3 +194,5 @@ const FilterModal: React.FC<FilterModalProps> = ({ onClose, onFilter }) => {
 };
 
 export default FilterModal;
+
+//last modified by Omar Marei 2/8/2024

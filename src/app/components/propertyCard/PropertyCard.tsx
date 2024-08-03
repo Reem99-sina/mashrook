@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import {
   FaRegCalendarAlt,
   FaBookmark,
@@ -16,6 +16,8 @@ import { CiLocationOn } from "react-icons/ci";
 import { LuTag } from "react-icons/lu";
 import { BiArea } from "react-icons/bi";
 import { FinishedShares } from "@/app/assets/svg";
+import Link from "next/link";
+import JoinStatusButtons from "./JoinButton";
 
 type PropertyCardProps = {
   offerId: string[];
@@ -54,8 +56,25 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
   unitType,
   dealStatus,
 }) => {
+  const [saved, setSaved] = useState(false);
+  const [showNotification, setShowNotification] = useState(false);
+  const [notificationMessage, setNotificationMessage] = useState("");
+  const handleSaveClick = () => {
+    if (!saved) {
+      setNotificationMessage("تم الحفظ");
+    } else {
+      setNotificationMessage("تم الغاء الحفظ");
+    }
+    setSaved(!saved);
+    setShowNotification(true);
+    setTimeout(() => {
+      setShowNotification(false);
+    }, 5000);
+  };
+
   const renderCards = (offerIndex: number) => {
     const cards = [];
+
     const unitsToShow = Math.min(2, offersCount[offerIndex]); // Limit to 2 units
 
     for (let i = 0; i < unitsToShow; i++) {
@@ -71,8 +90,11 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
       const currentSharePercentage = offeredShare[offerIndex][i] || 0;
 
       cards.push(
-        <div key={`${offerIndex}-${i}`} className="bg-white shadow rounded-lg p-2 mb-4">
-          <div className="flex flex-row md:flex-row sm:flex-row container items-center">
+        <div
+          key={`${offerIndex}-${i}`}
+          className="bg-white shadow rounded-lg p-2 mb-4"
+        >
+          <div className="flex flex-row flex-wrap items-center justify-center md:flex-row sm:flex-col ">
             <div className="ml-auto text-right py-2">
               <div className="flex flex-row">
                 <p className="text-2xl px-4 text-black">{unit}</p>
@@ -87,12 +109,12 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
                 <div className="bg-gray-200 rounded-xl px-2 mr-4 flex items-center">
                   <BiArea />
                   <p className="text-lg mx-2">
-                    {currentArea} <sup>2</sup>م
+                    {currentArea} م<sup>2</sup>
                   </p>
                 </div>
               </div>
             </div>
-            <div className="flex flex-col items-center justify-center w-16 h-16 bg-blue-100 rounded-full p-2">
+            <div className="flex flex-col items-center justify-center  rounded-full p-2">
               {currentDealStatus === "تمت الشراكة" ? (
                 <>
                   <FinishedShares />
@@ -118,43 +140,8 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
               )}
             </div>
           </div>
-          {currentDealStatus === "جاري التواصل" ? (
-            <div className="flex flex-row items-center justify-between">
-              <button
-                type="button"
-                className="bg-blue-450 text-white border-blue-500 w-3/4 font-medium rounded-lg text-sm px-5 py-2.5 mx-4 flex justify-center"
-              >
-                عرض المحادثات
-              </button>
-              <button
-                type="button"
-                className="bg-green-450 text-white border-blue-500 w-3/4 font-medium rounded-lg text-sm px-5 py-2.5 mx-4 flex justify-center"
-              >
-                عرض الطلب
-              </button>
-            </div>
-          ) : (
-            <div className="flex justify-center">
-              <button
-                type="button"
-                className={`${
-                  currentDealStatus === "تمت الشراكة"
-                    ? "bg-gray-300 text-gray-800"
-                    : "bg-blue-450 text-white hover:bg-blue-800 border-2 border-blue-500"
-                } w-3/4 font-medium rounded-lg text-sm px-5 py-2.5 flex justify-center rtl:flex-row-reverse dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
-                disabled={currentDealStatus === "تمت الشراكة"}
-              >
-                انضم كشريك
-                <RxArrowLeft
-                  className={`mr-4 text-xl ${
-                    currentDealStatus === "تمت الشراكة"
-                      ? "text-gray-600"
-                      : "text-white"
-                  }`}
-                />
-              </button>
-            </div>
-          )}
+
+          <JoinStatusButtons currentDealStatus={currentDealStatus} /> 
         </div>
       );
     }
@@ -232,18 +219,33 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
               </div>
             )}
             <hr className="h-px mt-6 bg-gray-200 border-0" />
-            <div className="flex justify-between items-center mt-4">
-              <div className="flex flex-row pt-4">
-                <button className="text-blue-500 mx-4 align-middle">
-                  عرض التفاصيل
-                </button>
+            <div className="flex justify-around items-center mt-4">
+              <div className="flex flex-row pt-4 py-4 items-center justify-center">
+                <Link href="/showproperty">
+                  <button className="text-blue-500 mx-4 align-middle">
+                    عرض التفاصيل
+                  </button>
+                </Link>
                 <FaEllipsisH className="text-blue-500 mx-2 align-middle" />
               </div>
               <div className="bg-gray-300 inline-block h-10 w-0.5 self-stretch"></div>
-              <div className="flex flex-row pt-4">
-                <button className="text-blue-500 mx-4 align-middle">حفظ</button>
-                <FaBookmark className="text-blue-500 mx-2 align-middle" />
+
+              <div className="flex flex-row py-4 items-center justify-center">
+                <button
+                  onClick={handleSaveClick}
+                  className="text-blue-500 mx-2 align-middle"
+                >
+                  {saved ? "إلغاء الحفظ" : "حفظ"}
+                </button>
+                <FaBookmark className="text-blue-500 mx-2 text-xl align-middle" />
               </div>
+
+              {showNotification && (
+                <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-500 text-white px-4 py-2 rounded-full">
+                  {notificationMessage}
+                </div>
+              )}
+
             </div>
           </div>
         </div>
@@ -253,3 +255,6 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
 };
 
 export default PropertyCard;
+
+
+//last modified by Omar Marei 2/8/2024

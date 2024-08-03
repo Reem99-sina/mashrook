@@ -1,4 +1,3 @@
-
 "use client";
 
 import {
@@ -7,7 +6,7 @@ import {
   Onlinebooking9471687,
   Realestatagent,
   Truckicon,
-} from "../src/app/assets/svg";
+} from "../../assets/svg";
 import Step from './Step';
 
 export default function HowItWorks2() {

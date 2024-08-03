@@ -1,16 +1,15 @@
 "use client";
-import MainHeader from "../../components/MainHeader";
+import MainHeader from "./components/header/MainHeader";
 import { Addbutton, Addrequest, CTA } from "./assets/svg";
-import CarouselTransition from "../../components/Carousel2";
-import FAQCollapse from "../../components/FAQCollapse";
-import Footer from "../../components/Footer2";
-import HowItWorks2 from "../../components/HowItWorks2";
-import ClientJourney2 from "../../components/ClientJourney2";
-import {
-  sampleData5,
-} from "../app/assets/data/data";
+import CarouselTransition from "../app/components/landingPage/Carousel2";
+import FAQCollapse from "../app/components/landingPage/FAQCollapse";
+import Footer from "./components/header/Footer2";
+import HowItWorks2 from "../app/components/landingPage/HowItWorks2";
+import ClientJourney2 from "../app/components/landingPage/ClientJourney2";
+import { sampleData5 } from "../app/assets/data/data";
 import Link from "next/link";
-import PropertyCard from "../../components/PropertyCard";
+import PropertyCard from "./components/propertyCard/PropertyCard";
+import { MdKeyboardArrowLeft } from "react-icons/md";
 
 const limit = 5;
 
@@ -63,9 +62,11 @@ export default function Home() {
                 <div dir="rtl">
                   <div className="flex justify-between mx-6">
                     <h2 className=" font-bold mb-4 text-2xl">آخر الطلبات</h2>
+
                     <Link href="/market">
-                      <h2 className="text-2xl font-bold mb-4 text-blue-450">
+                      <h2 className="flex items-center text-2xl font-bold mb-4 text-blue-450">
                         السوق
+                        <MdKeyboardArrowLeft />
                       </h2>
                     </Link>
                   </div>
@@ -121,3 +122,5 @@ export default function Home() {
     </div>
   );
 }
+
+//last modified by Omar Marei 20/7/2024

@@ -1,4 +1,4 @@
-import PropertyDetails from "../../../components/PropertyDetails";
+import PropertyDetails from "./PropertyDetails";
 
 export default function ShowProperty() {
   return (
@@ -7,3 +7,5 @@ export default function ShowProperty() {
     </div>
   );
 }
+
+//last modified by Omar Marei 2/8/2024

@@ -1,6 +1,10 @@
 const withSvgr = require("next-plugin-svgr");
 
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const nextConfig = {
+    images: {
+      domains: ['media.istockphoto.com','storage.googleapis.com'],
+    },
+  };
 
 module.exports = withSvgr(nextConfig);

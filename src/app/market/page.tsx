@@ -1,7 +1,7 @@
 "use client";
 
 
-import MarketPage from "../../../components/Marketpage";
+import MarketPage from "./Marketpage";
 
 export default function Market() {
   return (
@@ -14,3 +14,5 @@ export default function Market() {
     </div>
   );
 }
+
+//last modified by Omar Marei 2/8/2024

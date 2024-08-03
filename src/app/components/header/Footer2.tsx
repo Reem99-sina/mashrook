@@ -9,7 +9,7 @@ import {
   
   export default function Footer() {
     return (
-      <div className="flex flex-col items-center justify-center w-full h-full  border-2 rounded-2xl bg-white ">
+      <div className="flex flex-col items-center justify-center w-full h-full  border-2  bg-white ">
         <h2 className="text-xl font-bold mt-8 mb-4 text-center">تابعونا</h2>
         <button><Image
           src={Frame563}

@@ -1,11 +1,11 @@
 "use client";
 
 import React, { useState, ChangeEvent, useRef, useEffect } from "react";
-import PropertyCard from "../components/PropertyCard";
-import { sampleData5 } from "../src/app/assets/data/data";
+import PropertyCard from "../components/propertyCard/PropertyCard";
+import { sampleData5 } from "../assets/data/data";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import MainHeader from "./MainHeader";
-import Footer from "./Footer2";
+import MainHeader from "../components/header/MainHeader";
+import Footer from "../components/header/Footer2";
 import SortPopup from "./SortPopup";
 import FilterModal from "./FilterModal2";
 import { TbArrowsSort } from "react-icons/tb";
@@ -258,3 +258,5 @@ const MarketPage: React.FC = () => {
 };
 
 export default MarketPage;
+
+//last modified by Omar Marei 2/8/2024
