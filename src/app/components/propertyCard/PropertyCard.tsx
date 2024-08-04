@@ -95,20 +95,20 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
           className="bg-white shadow rounded-lg p-2 mb-4"
         >
           <div className="flex flex-row flex-wrap items-center justify-center md:flex-row sm:flex-col ">
-            <div className="ml-auto text-right py-2">
+            <div className="ml-auto text-right py-2 ">
               <div className="flex flex-row">
                 <p className="text-2xl px-4 text-black">{unit}</p>
               </div>
-              <div className="flex flex-row px-2 pt-4">
+              <div className="flex flex-row px-2 py-4 ">
                 <div className="bg-gray-200 rounded-xl px-2 flex items-center">
                   <LuTag />
-                  <p className="text-lg mx-2">
+                  <p className="text-base md:text-sm lg:text-lg mx-2">
                     {currentPrice} {currentCurrency}
                   </p>
                 </div>
                 <div className="bg-gray-200 rounded-xl px-2 mr-4 flex items-center">
                   <BiArea />
-                  <p className="text-lg mx-2">
+                  <p className="text-base md:text-sm lg:text-lg mx-2 ">
                     {currentArea} م<sup>2</sup>
                   </p>
                 </div>
@@ -257,4 +257,4 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
 export default PropertyCard;
 
 
-//last modified by Omar Marei 2/8/2024
+//last modified by Omar Marei 3/8/2024

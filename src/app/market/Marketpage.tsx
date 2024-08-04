@@ -150,7 +150,7 @@ const MarketPage: React.FC = () => {
         <hr className="h-px mb-6 mt-6 bg-gray-200 border-0" />
 
         <div className="flex justify-between mb-4 p-4">
-          <div className="relative w-3/4">
+          <div className="relative w-3/4 mx-2">
             <input
               type="text"
               placeholder="بحث... "
@@ -259,4 +259,4 @@ const MarketPage: React.FC = () => {
 
 export default MarketPage;
 
-//last modified by Omar Marei 2/8/2024
+//last modified by Omar Marei 3/8/2024
