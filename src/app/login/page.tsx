@@ -5,9 +5,42 @@ import { CloseButton, MashrookLogo } from "../assets/svg";
 import { TextInput } from "../components/shared/text-input.component";
 import { Button } from "../components/shared/button.component";
 import { useRouter } from "next/navigation";
+import { AppDispatch,RootState } from "@/redux/store";
+import { useDispatch,useSelector } from "react-redux";
+import { useState } from "react";
+import { login } from "@/redux/features/loginSlice";
+
+interface userLogin {
+  email: string;
+  password: string;
+}
 
 const Login: React.FC = () => {
   const router = useRouter();
+  const dispatch = useDispatch<AppDispatch>();
+  const [user, setUser] = useState<userLogin>({
+    email: "",
+    password: ""
+  });
+  let {loading, message, data}=useSelector<RootState>((state)=>state.login)
+  const onSubmit=(e)=>{
+    e.preventDefault();
+    let {  email, password } = user;
+    if (
+     
+      email != "" &&
+      password != "" 
+    ) {
+      dispatch(login(user))
+      if(data){
+      router.push("/");
+      }else{
+        toast.error(message)
+      }
+    }else{
+      toast.error("you need to fill the information")
+    }
+  }
 
   return (
     <div className="flex items-center justify-center min-h-screen h-full  w-full flex-col">
@@ -40,6 +73,11 @@ const Login: React.FC = () => {
                   label="البريد الإلكتروني "
                   inputProps={{ placeholder: "البريد الإلكتروني" }}
                   type="email"
+                  value={user.email}
+                  onChange={(event) =>
+                    setUser({ ...user, email: event.target.value })
+                  }
+                  disabled={loading}
                 />
               </div>
               <div>
@@ -47,6 +85,11 @@ const Login: React.FC = () => {
                   label="كلمة المرور"
                   type="password"
                   inputProps={{ placeholder: "ادخل كلمة المرور" }}
+                  value={user.password}
+                  onChange={(event) =>
+                    setUser({ ...user, password: event.target.value })
+                  }
+                  disabled={loading}
                 />
               </div>
             </div>

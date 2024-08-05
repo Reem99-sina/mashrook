@@ -19,74 +19,56 @@ interface Props {
   currency?: string;
   maxLength?: number;
   onChange?:(event: ChangeEvent<HTMLInputElement>) => void;
-  value?:any  
+  value?:any,
+  name?:string,
+  id?:string
 }
 
-export const TextInput: FC<Props> = ({
+export const RadioInput: FC<Props> = ({
   label,
   inputProps = {},
-  type = "text",
+  type = "radio",
   errorMessage,
   fontFamily,
   disabled,
   containerClasses,
-  icon,
-  currency,
+    name,
   maxLength,
   onChange,
-  value
+  value,id
 }) => {
-  const [showPassword, setShowPassword] = useState(false);
-
-  const togglePasswordVisibility = () => {
-    setShowPassword((prev) => !prev);
-  };
+ 
 
   return (
-    <div className={clsx("h-full w-full", containerClasses)}>
+    <div className={clsx("text-right h-full  p-2", containerClasses)}>
+        
       {label && (
         <label
           className={clsx(
-            "mb-2  text-base font-bold text-[#4B5563]  items-start flex justify-end",
+            "text-base font-bold text-[#4B5563] px-3",
             errorMessage && "dark:text-error-dark text-error"
           )}
+          for={id}
         >
           {label}
         </label>
       )}
-      <div className="relative flex min-h-[40px] items-center ">
-        {inputProps.type === "password" && (
-          <div
-            className="absolute left-3 top-1/2 -translate-y-1/2 transform cursor-pointer"
-            onClick={togglePasswordVisibility}
-          ></div>
-        )}
-        <input
+       <input
           min="0"
           {...inputProps}
           disabled={disabled}
-          type={showPassword && type === "password" ? "password" : type}
+          type={ type}
           style={{
             fontFamily: fontFamily,
           }}
-          className="relative block w-full px-3 py-2 border border-gray-300 rounded-lg bg-[#F9FAFB] focus:outline-none focus:ring-black focus:border-black sm:text-sm placeholder:text-right text-right"
+          className="  px-3  border border-gray-300 rounded-lg bg-[#F9FAFB] focus:outline-none focus:ring-black focus:border-black sm:text-sm placeholder:text-right text-right"
           maxLength={maxLength}
           onChange={onChange}
           value={value}
+          id={id}
+          name={name}
         />
-
-        {currency && (
-          <p
-            className={clsx(
-              "-mr-[42px] text-sm font-bold text-[#474747] opacity-60"
-            )}
-          >
-            {currency}
-          </p>
-        )}
-
-        {icon && <div className={clsx("-ms-[12%]")}>{icon}</div>}
-      </div>
+     
       {errorMessage && (
         <p className="mt-4 text-xs text-red-600 dark:text-red-500">
           {errorMessage}

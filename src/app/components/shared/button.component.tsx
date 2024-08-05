@@ -4,7 +4,7 @@ import clsx from "clsx";
 import { FC } from "react";
 
 interface Props {
-  text: string;
+  text?: string;
   onClick?: () => void;
   disabled?: boolean;
   className?: string;
@@ -20,7 +20,7 @@ export const Button: FC<Props> = ({
   className,
   type = "button",
   isLoading,
-  startIcon,
+  startIcon
 }) => {
   return (
     <button
@@ -54,6 +54,7 @@ export const Button: FC<Props> = ({
       ) : (
         text
       )}
+     
     </button>
   );
 };
