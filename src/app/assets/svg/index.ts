@@ -38,5 +38,9 @@ export { default as Visa } from "./visa.png";
 export { default as Mada } from "./mada.png";
 export { default as BankT } from "./Block.png";
 export { default as Check } from "./check.svg";
+export { default as Pattern } from "./Pattern.png";
+export { default as AddICon } from "./addicon.png";
+
+
 
 
