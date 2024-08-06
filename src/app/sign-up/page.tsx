@@ -7,10 +7,10 @@ import { Button } from "../components/shared/button.component";
 import { useRouter } from "next/navigation";
 import { AppDispatch,RootState } from "@/redux/store";
 import { useDispatch,useSelector } from "react-redux";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { register } from "@/redux/features/userSlice";
 import toast from "react-hot-toast";
-interface userRegister {
+export interface userRegister {
   username: string;
   email: string;
   password: string;
@@ -25,8 +25,8 @@ const SignUp: React.FC = () => {
     password: "",
     repeate_password: "",
   });
-  let {loading, message, data}=useSelector<RootState>((state)=>state.register)
-  const onSubmit = (e) => {
+  let {loading, message, data}=useSelector<RootState>((state)=>state.register)as {loading:boolean, message:string, data:any}
+  const onSubmit = (e:any) => {
     e.preventDefault();
     let { username, email, password, repeate_password } = user;
     if (
@@ -36,15 +36,17 @@ const SignUp: React.FC = () => {
       repeate_password != ""
     ) {
       dispatch(register(user))
-      if(data){
-      router.push("/verify");
-      }else{
-        toast.error(message)
-      }
+      console.log(data,"data")
+      
     }else{
       toast.error("you need to fill the information")
     }
   };
+  useEffect(()=>{
+    if(data){
+      router.push(`/verify/${data?.data?.user?.email}` );
+      }
+  },[data])
   return (
     <div className="flex items-center justify-center min-h-screen h-full  w-full flex-col">
       <div className="flex items-end justify-start p-4 w-full h-full lg:hidden bg-white ">

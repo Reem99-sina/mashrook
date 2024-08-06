@@ -1,8 +1,8 @@
 import { createSlice,createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import {userRegister} from "@/app/sign-up"
 
-
-export const register=createAsyncThunk("register", async (data, { rejectWithValue }) => {  
+export const register=createAsyncThunk("register", async (data:userRegister, { rejectWithValue }) => {  
         const response = await axios.post("http://54.91.216.53:8082/auth", data); // Adjust your endpoint as necessary 
         return response; // Return the user data from API response  
 })

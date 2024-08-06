@@ -3,7 +3,7 @@ import axios from "axios";
 
 
 export const verifyRequest=createAsyncThunk("verify", async (data, { rejectWithValue }) => {  
-        const response = await axios.post("http://localhost:8082/auth/code", data); // Adjust your endpoint as necessary 
+        const response = await axios.post("http://54.91.216.53:8082/auth/code", data); // Adjust your endpoint as necessary 
         return response; // Return the user data from API response  
 })
 
@@ -12,7 +12,11 @@ const initialstate={
     message:"",
     data:null
 }
+interface responseData{
+    message:string,
+    data:any
 
+}
 const verifySlice=createSlice({
     name:"verify",
     initialState:initialstate,
@@ -21,7 +25,8 @@ const verifySlice=createSlice({
     },extraReducers:(builder)=>{
         builder.addCase(verifyRequest.fulfilled,(state,action)=>{
             state.loading=false
-            state.message=action.payload.message?action.payload.message:"success"
+
+            state.message=action?.payload?.message?action.payload.message:"success"
             state.data=action.payload.data
         }),
         builder.addCase(verifyRequest.pending,(state,action)=>{

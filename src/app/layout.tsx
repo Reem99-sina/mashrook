@@ -5,7 +5,6 @@ import "./globals.css";
 import { Cairo } from "next/font/google";
 import { ReduxProvider } from "./components/provider/ReduxProvider";
 import ToasterContext from "./components/provider/ToasterProvider";
-
 // const inter = Inter({ subsets: ["latin"] });
 const cairo = Cairo({
   subsets: ["latin", "arabic"],
@@ -22,6 +21,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+ 
   return (
     <html lang="en">
       <body className={cairo.className}>
