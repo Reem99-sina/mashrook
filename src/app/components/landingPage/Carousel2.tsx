@@ -12,7 +12,7 @@ import {
   Bcard7,
   Bcard8,
   Bcard9,
-} from "../src/app/assets/svg";
+} from "../../assets/svg";
 
 const images = [
   Bcard1,

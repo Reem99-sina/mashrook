@@ -1,4 +1,3 @@
-// components/CircularProgressBar.tsx
 import React from 'react';
 
 interface CircularProgressBarProps {
@@ -9,12 +8,15 @@ interface CircularProgressBarProps {
 
 const CircularProgressBar: React.FC<CircularProgressBarProps> = ({
   percentage,
-  size = 120,
-  strokeWidth = 10,
+  size = 50,
+  strokeWidth = 5,
 }) => {
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
   const offset = circumference - (percentage / 100) * circumference;
+
+  // Determine the stroke color based on the percentage
+  const strokeColor = percentage === 100 ? '#98CC5D' : '#3b82f6';
 
   return (
     <svg
@@ -34,7 +36,7 @@ const CircularProgressBar: React.FC<CircularProgressBarProps> = ({
       />
       <circle
         className="circle-progress"
-        stroke="#3b82f6"
+        stroke={strokeColor}
         strokeWidth={strokeWidth}
         strokeLinecap="round"
         fill="none"
@@ -52,7 +54,7 @@ const CircularProgressBar: React.FC<CircularProgressBarProps> = ({
         textAnchor="middle"
         className="percentage-text"
         fontSize="12px"
-        fill="blue"
+        fill= {strokeColor}
       >
         {`${percentage}%`}
       </text>
@@ -62,4 +64,4 @@ const CircularProgressBar: React.FC<CircularProgressBarProps> = ({
 
 export default CircularProgressBar;
 
-//last modified by Omar Marei 21/7
+//last modified by Omar Marei 2/8/2024

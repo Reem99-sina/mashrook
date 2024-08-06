@@ -6,7 +6,7 @@ import {
   DocDeal,
   Onlinepayment117946931,
   Realestatagent,
-} from "../src/app/assets/svg";
+} from "../../assets/svg";
 import Step from './Step';
 
 export default function ClientJourney2() {
@@ -19,10 +19,9 @@ export default function ClientJourney2() {
           </div>
           <div className="flex flex-col">
             <Step number={1} title="انضم كشريك" icon={<Realestatagent />} showLine={true} />
-            <Step number={2} title="الاتفاق" icon={<Deal />} showLine={true} />
-            <Step number={3} title="دفع رسوم المنصة" icon={<Onlinepayment117946931 />} showLine={true} />
-            <Step number={4} title="المبايعة والافراغ" icon={<DocDeal />} showLine={true} />
-            <Step number={5} title="الانتهاء" icon={<Approve123 />} showLine={false} />
+            <Step number={2} title="دفع الرسوم" icon={<Onlinepayment117946931 />} showLine={true} />
+            <Step number={3} title="الافراغ" icon={<DocDeal />} showLine={true} />
+            <Step number={4} title="الانتهاء" icon={<Approve123 />} showLine={false} />
           </div>
         </div>
       </div>
