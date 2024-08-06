@@ -8,6 +8,7 @@ import HowItWorks2 from "../../components/HowItWorks2";
 import ClientJourney2 from "../../components/ClientJourney2";
 import PropertyCardUnified from "../../components/PropertyCardUnified";
 import { sampleData1, sampleData2, sampleData3 } from "../app/assets/data/data";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -30,9 +31,9 @@ export default function Home() {
                   <button className="flex items-center">
                     <Addrequest />
                   </button>
-                  <button className="flex items-center">
+                  <Link href={"add-your-request"} className="flex items-center">
                     <Addbutton />
-                  </button>
+                  </Link>
                 </div>
               </div>
               <div className=" p-4 rounded shadow-md w-full">

@@ -1,10 +1,6 @@
 import { useState } from "react";
 import SideBar from "./SideBar2";
-import {
-  Mainnavigationmenu,
-  Mashrooklogotextlarge,
-  
-} from "@/app/assets/svg";
+import { Mainnavigationmenu, Mashrooklogotextlarge } from "@/app/assets/svg";
 import Image from "next/image";
 
 export default function MainHeader() {
@@ -15,7 +11,7 @@ export default function MainHeader() {
   };
 
   return (
-    <header className="">
+    <header className="w-full bg-white">
       <div className="flex items-center justify-between">
         <div className="w-full self-center p-4">
           <button onClick={toggleSidebar}>
@@ -27,8 +23,7 @@ export default function MainHeader() {
           <Image
             src={Mashrooklogotextlarge}
             alt={"logo"}
-            
-            style={{ objectFit: 'cover' }}
+            style={{ objectFit: "cover" }}
             className="rounded-xl"
           />
         </div>
