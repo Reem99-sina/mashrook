@@ -10,7 +10,7 @@ import { sampleData5 } from "../app/assets/data/data";
 import Link from "next/link";
 import PropertyCard from "./components/propertyCard/PropertyCard";
 import { MdKeyboardArrowLeft } from "react-icons/md";
-
+import {useRouter} from "next/navigation"
 const limit = 5;
 
 const slicedData = {
@@ -33,6 +33,7 @@ const slicedData = {
 };
 
 export default function Home() {
+  let router=useRouter()
   return (
     <div className="flex justify-center w-dvh h-max  ">
       <div className="w-full bg-white rounded text-black shadow ">
@@ -50,7 +51,7 @@ export default function Home() {
                 </div>
 
                 <div className="flex justify-center space-x-2 mb-8">
-                  <button className="flex items-center">
+                  <button className="flex items-center" onClick={()=>router.push("/addOrder")}>
                     <Addrequest />
                   </button>
                   <button className="flex items-center">

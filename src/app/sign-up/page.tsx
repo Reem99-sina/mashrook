@@ -5,10 +5,52 @@ import { CloseButton, MashrookLogo } from "../assets/svg";
 import { TextInput } from "../components/shared/text-input.component";
 import { Button } from "../components/shared/button.component";
 import { useRouter } from "next/navigation";
-
+import { AppDispatch,RootState } from "@/redux/store";
+import { useDispatch,useSelector } from "react-redux";
+import { useState,useEffect } from "react";
+import { register } from "@/redux/features/userSlice";
+import toast from "react-hot-toast";
+export interface userRegister {
+  username: string;
+  email: string;
+  password: string;
+  repeate_password: string;
+}
 const SignUp: React.FC = () => {
   const router = useRouter();
-
+  const dispatch = useDispatch<AppDispatch>();
+  const [user, setUser] = useState<userRegister>({
+    username: "",
+    email: "",
+    password: "",
+    repeate_password: "",
+  });
+  let {loading, message, data}=useSelector<RootState>((state)=>state.register)as {loading:boolean, message:string, data:any}
+  const onSubmit = (e:React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    let { username, email, password, repeate_password } = user;
+    if (
+      username != "" &&
+      email != "" &&
+      password != "" &&
+      repeate_password != ""
+    ) {
+      dispatch(register(user))
+      console.log(data,"data")
+      
+    }else{
+      toast.error("you need to fill the information")
+    }
+  };
+  useEffect(()=>{
+    console.log(message,Boolean(data))
+      if(message&&Boolean(data)==false){
+        toast.error(message)
+      }else if(Boolean(data)==true){
+        toast.success(message)
+        router.push(`/verify/${data?.user?.email}` );
+      }
+  },[data])
   return (
     <div className="flex items-center justify-center min-h-screen h-full  w-full flex-col">
       <div className="flex items-end justify-start p-4 w-full h-full lg:hidden bg-white ">
@@ -32,13 +74,18 @@ const SignUp: React.FC = () => {
           <MashrookLogo />
           <p className="mt-6 text-2xl font-bold text-[#374151]">إنشاء حساب</p>
         </div>
-        <form className="mt-8 space-y-6 p-8">
+        <form className="mt-8 space-y-6 p-8" onSubmit={onSubmit}>
           <div className="rounded-md shadow-sm">
             <div className="mb-4 gap-4">
               <div className="!mb-2">
                 <TextInput
                   label="اسم المستخدم"
                   inputProps={{ placeholder: "اسم المستخدم" }}
+                  value={user.username}
+                  onChange={(event) =>
+                    setUser({ ...user, username: event.target.value })
+                  }
+                  disabled={loading}
                 />
               </div>
               <div className="!mb-2">
@@ -46,6 +93,11 @@ const SignUp: React.FC = () => {
                   label="البريد الإلكتروني "
                   inputProps={{ placeholder: "البريد الإلكتروني" }}
                   type="email"
+                  value={user.email}
+                  onChange={(event) =>
+                    setUser({ ...user, email: event.target.value })
+                  }
+                  disabled={loading}
                 />
               </div>
               <div className="!mb-2">
@@ -53,6 +105,11 @@ const SignUp: React.FC = () => {
                   label="كلمة المرور"
                   type="password"
                   inputProps={{ placeholder: "ادخل كلمة المرور" }}
+                  value={user.password}
+                  onChange={(event) =>
+                    setUser({ ...user, password: event.target.value })
+                  }
+                  disabled={loading}
                 />
               </div>
               <div className="!mb-2">
@@ -60,6 +117,11 @@ const SignUp: React.FC = () => {
                   label="تاكيد كلمة المرور"
                   type="password"
                   inputProps={{ placeholder: "تاكيد كلمة المرور" }}
+                  value={user.repeate_password}
+                  onChange={(event) =>
+                    setUser({ ...user, repeate_password: event.target.value })
+                  }
+                  disabled={loading}
                 />
               </div>
             </div>
@@ -89,9 +151,8 @@ const SignUp: React.FC = () => {
             <Button
               text="تسجيل جديد"
               className="relative flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-[#3B73B9] border border-transparent rounded-md group  focus:outline-none focus:ring-2 focus:ring-offset-2 "
-              onClick={() => {
-                router.push("/verify");
-              }}
+              onClick={() => {}}
+              type="submit"
             />
           </div>
         </form>
