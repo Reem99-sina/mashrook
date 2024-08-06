@@ -12,7 +12,7 @@ export default function MainHeader() {
   };
 
   return (
-    <header className="border-b-2 mb-4">
+    <header className="border-b-2 mb-4 w-full">
       <div className="flex items-center justify-between">
         <div className="w-full self-center p-4">
           <button onClick={toggleSidebar}>
@@ -21,13 +21,14 @@ export default function MainHeader() {
         </div>
 
         <div className="self-center me-3 p-4">
-        <Link href="/">
-          <Image
-            src={Mashrooklogotextlarge}
-            alt={"logo"}
-            style={{ objectFit: "cover" }}
-            className="rounded-xl"
-          /></Link>
+          <Link href="/">
+            <Image
+              src={Mashrooklogotextlarge}
+              alt={"logo"}
+              style={{ objectFit: "cover" }}
+              className="rounded-xl"
+            />
+          </Link>
         </div>
       </div>
       <SideBar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} />

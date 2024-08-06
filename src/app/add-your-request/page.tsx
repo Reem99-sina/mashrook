@@ -4,9 +4,9 @@ import React, { useRef, useState } from "react";
 import { AddButton, CloseIconSmall } from "../assets/svg";
 import { RadioInput } from "../components/shared/radio.component";
 import { Button } from "../components/shared/button.component";
-import MainHeader from "../../../components/MainHeader";
 import { Modal, ModalRef } from "../components/shared/modal.component";
-import Footer from "../../../components/Footer2";
+import Footer from "../components/header/Footer2";
+import MainHeader from "../components/header/MainHeader";
 
 const data = [
   {
@@ -101,7 +101,6 @@ const AddYourRequest: React.FC = () => {
   const filteredCites = cites.filter((cite) =>
     cite.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
   return (
     <form className="flex flex-col items-center min-h-screen h-full w-full bg-[url('/background-cover.png')] bg-cover">
       <MainHeader />
