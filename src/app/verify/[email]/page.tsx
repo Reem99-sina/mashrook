@@ -5,35 +5,37 @@ import { CloseButton, MashrookLogo } from "../../assets/svg";
 import { TextInput } from "../../components/shared/text-input.component";
 import { Button } from "../../components/shared/button.component";
 import { useParams } from "next/navigation";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { AppDispatch,RootState } from "@/redux/store";
 import { useDispatch,useSelector } from "react-redux";
 import { verifyRequest } from "@/redux/features/vierfySlice";
 import toast from "react-hot-toast";
 const Verify: React.FC = () => {
   const router = useParams(); 
-  const data = router
-  console.log(data,"data")
-  // Access the query parameters from router.query  
-
+  const {email} = router 
   const [code, setCode] = useState(Array(6).fill(""));
   let dispatch=useDispatch<AppDispatch>()
-  // let {loading, message, data}=useSelector<RootState>((state)=>state.register)
+  let {loading, message,data}=useSelector<RootState>((state)=>state.verify) as {loading:boolean, message:string,data:any}
   const handleChange = (value: string, index: number) => {
     const newCode = [...code];
     newCode[index] = value;
     setCode(newCode);
   };
-  const onSubmit=(e)=>{
+  const onSubmit=(e:React.FormEvent<HTMLFormElement>)=>{
      e.preventDefault();
-    if(data?.email){
-      console.log(data,"data",code)
-
-      dispatch(verifyRequest({email:data?.email?.split("%")[0]+"@gmail.com",code:code.join("")}))
+    if(email){
+      dispatch(verifyRequest({email:String(email)?.split("%")[0]+"@gmail.com",code:code.join("")}))
     }else{
       toast.error("you need email and code")
     }
   }
+  useEffect(()=>{
+    if(message&&Boolean(data)==false){
+      toast.error(message)
+    }else{
+      toast.success(message)
+    }
+  },[message])
   return (
     <div className="flex items-center  min-h-screen h-full  w-full flex-col bg-white">
       <div className="w-full max-w-md h-full   space-y-8 bg-white p-8  lg:p-16 md:max-w-lg lg:max-w-xl ">
@@ -51,7 +53,7 @@ const Verify: React.FC = () => {
             <p className="text-center mb-4">
               لقد قمنا بإرسال رمز التحقق إلى بريدك الإلكتروني
               <br />
-              {data?.email?.split("%")[0]+"@gmail.com"||"name@domain.com"}
+              {String(email)?.split("%")[0]+"@gmail.com"||"name@domain.com"}
               <br />
               الرجاء قم بإدخال رمز التحقق لإنشاء حسابك
             </p>

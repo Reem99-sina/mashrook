@@ -48,7 +48,7 @@ export const RadioInput: FC<Props> = ({
             "text-base font-bold text-[#4B5563] px-3",
             errorMessage && "dark:text-error-dark text-error"
           )}
-          for={id}
+          htmlFor={id}
         >
           {label}
         </label>

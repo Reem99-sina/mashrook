@@ -5,7 +5,7 @@ import { FC } from "react";
 
 interface Props {
   text?: string;
-  onClick?: () => void;
+  onClick?: any;
   disabled?: boolean;
   className?: string;
   type?: "button" | "submit";

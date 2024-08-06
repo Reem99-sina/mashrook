@@ -7,10 +7,11 @@ import { Button } from "../components/shared/button.component";
 import { useRouter } from "next/navigation";
 import { AppDispatch,RootState } from "@/redux/store";
 import { useDispatch,useSelector } from "react-redux";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { login } from "@/redux/features/loginSlice";
+import toast from "react-hot-toast";
 
-interface userLogin {
+export interface userLogin {
   email: string;
   password: string;
 }
@@ -22,26 +23,30 @@ const Login: React.FC = () => {
     email: "",
     password: ""
   });
-  let {loading, message, data}=useSelector<RootState>((state)=>state.login)
-  const onSubmit=(e)=>{
+  let {loading, message, data}=useSelector<RootState>((state)=>state.login)as {loading:boolean, message:string,data:any}
+  const onSubmit=(e:React.FormEvent<HTMLFormElement>)=>{
     e.preventDefault();
     let {  email, password } = user;
+
     if (
-     
       email != "" &&
       password != "" 
     ) {
       dispatch(login(user))
-      if(data){
-      router.push("/");
-      }else{
-        toast.error(message)
-      }
+      
     }else{
       toast.error("you need to fill the information")
     }
   }
-
+  useEffect(()=>{
+    console.log(message,Boolean(data))
+      if(message&&Boolean(data)==false){
+        toast.error(message)
+      }else if(Boolean(data)==true){
+        toast.success(message)
+        router.push(`/` );
+      }
+  },[data,message])
   return (
     <div className="flex items-center justify-center min-h-screen h-full  w-full flex-col">
       <div className="flex items-end justify-start p-4 w-full h-full lg:hidden bg-white ">
@@ -65,7 +70,7 @@ const Login: React.FC = () => {
           <MashrookLogo />
           <p className="mt-6 text-2xl font-bold text-[#374151]">تسجيل الدخول</p>
         </div>
-        <form className="mt-8 space-y-6 p-8 ">
+        <form className="mt-8 space-y-6 p-8 " onSubmit={onSubmit}>
           <div className="rounded-md shadow-sm">
             <div className="mb-4 gap-4">
               <div className="!mb-2">

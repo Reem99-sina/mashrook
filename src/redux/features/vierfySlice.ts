@@ -1,10 +1,14 @@
 import { createSlice,createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+interface verifyEmail{
+    email:string,
+    code:string
+}
 
-
-export const verifyRequest=createAsyncThunk("verify", async (data, { rejectWithValue }) => {  
-        const response = await axios.post("http://54.91.216.53:8082/auth/code", data); // Adjust your endpoint as necessary 
-        return response; // Return the user data from API response  
+export const verifyRequest=createAsyncThunk("verify", async (data:verifyEmail, { rejectWithValue }) => {  
+        const response = await axios.post("http://54.91.216.53:8082/auth/code", data)// Adjust your endpoint as necessary
+        console.log(response,"response") 
+        return response.data; // Return the user data from API response  
 })
 
 const initialstate={
@@ -35,8 +39,9 @@ const verifySlice=createSlice({
             state.data=null
         }),
         builder.addCase(verifyRequest.rejected,(state,action)=>{
+            console.log(action.error.message,"action.error.message")
             state.loading=false
-            state.message=action.error.message
+            state.message=action.error.message?action.error.message:"error"
             state.data=null
         })
     }

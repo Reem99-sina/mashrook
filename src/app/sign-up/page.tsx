@@ -26,7 +26,7 @@ const SignUp: React.FC = () => {
     repeate_password: "",
   });
   let {loading, message, data}=useSelector<RootState>((state)=>state.register)as {loading:boolean, message:string, data:any}
-  const onSubmit = (e:any) => {
+  const onSubmit = (e:React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     let { username, email, password, repeate_password } = user;
     if (
@@ -43,8 +43,12 @@ const SignUp: React.FC = () => {
     }
   };
   useEffect(()=>{
-    if(data){
-      router.push(`/verify/${data?.data?.user?.email}` );
+    console.log(message,Boolean(data))
+      if(message&&Boolean(data)==false){
+        toast.error(message)
+      }else if(Boolean(data)==true){
+        toast.success(message)
+        router.push(`/verify/${data?.user?.email}` );
       }
   },[data])
   return (

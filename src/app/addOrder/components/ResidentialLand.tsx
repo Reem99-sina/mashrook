@@ -6,14 +6,14 @@ import Image from "next/image"
 function ResidentialLand({
     children
   }: Readonly<{
-    children: React.ReactNode
+    children?: React.ReactNode
   }>) {
   return (
     <>
     <StyleForm title="موقع العقار">
-        <SelectCustomer>
+        {/* <SelectCustomer>
 
-        </SelectCustomer>
+        </SelectCustomer> */}
         <div className="flex my-4 items-center justify-end w-full">
         
             <h2 className="text-2xl mx-5 text-[#3B73B9] font-bold">إضافة حي/ أحياء</h2>
