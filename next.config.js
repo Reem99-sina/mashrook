@@ -4,6 +4,7 @@ const withSvgr = require("next-plugin-svgr");
 const nextConfig = {
     images: {
       domains: ['media.istockphoto.com','storage.googleapis.com'],
+      // remotePatterns:['media.istockphoto.com','storage.googleapis.com']
     },
   };
 

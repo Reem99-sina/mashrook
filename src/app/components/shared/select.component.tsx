@@ -1,80 +1,79 @@
-import React from "react";
-import ReactSelect, { PropsValue, SingleValue } from "react-select";
+import React, { useState } from "react";
 
-interface Option {
-  label: string;
-  value: string;
-}
+import Select from "react-select";
 
-interface Props {
-  placeholder?: string;
-  options: Option[];
-  onChange: (value: string) => void;
-  defaultValue?: PropsValue<Option>;
-  label?: string;
-}
+const Checkbox = ({ children, ...props }: JSX.IntrinsicElements["input"]) => (
+  <label style={{ marginRight: "1em" }}>
+    <input type="checkbox" {...props} />
+    {children}
+  </label>
+);
 
-export const Select: React.FC<Props> = ({
-  placeholder,
+export function SelectCustomer({
   options,
-  onChange,
-  defaultValue,
-  label,
-}) => {
-  const handleOnChange = (selectedOption: SingleValue<Option>) => {
-    if (selectedOption?.value) {
-      onChange(selectedOption.value);
-    }
-  };
+  name,
+}: {
+  options: any[];
+  name: string;
+}) {
+  const [isClearable, setIsClearable] = useState(true);
+  const [isSearchable, setIsSearchable] = useState(true);
+  const [isDisabled, setIsDisabled] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isRtl, setIsRtl] = useState(false);
 
   return (
     <>
-      {label ? (
-        <p className="text-sm font-bold text-[rgba(123,128,128,1)]">{label}</p>
-      ) : null}
-
-      <div className="mt-3" />
-
-      <ReactSelect
-        placeholder={placeholder ?? ""}
+      <Select
+        className=" w-full text-right"
+        classNamePrefix="select"
+        defaultValue={""}
+        isDisabled={isDisabled}
+        isLoading={isLoading}
+        isClearable={isClearable}
+        isRtl={isRtl}
+        isSearchable={isSearchable}
+        name={name}
         options={options}
-        onChange={handleOnChange}
-        defaultValue={defaultValue}
-        styles={{
-          control: (styles) => ({
-            ...styles,
-            borderColor: "#E2E2E2",
-            borderRadius: "6px",
-            // width: "347px",
-            width: "full",
-            height: "40px",
-            boxShadow: "none",
-            "&:hover": {},
-          }),
-          placeholder: (styles) => ({
-            ...styles,
-            color: "#58595B",
-            fontSize: "14px",
-            fontWeight: 400,
-            opacity: 0.5,
-          }),
-          dropdownIndicator: (styles) => ({
-            ...styles,
-            color: "#58595B",
-            opacity: 0.5,
-            "&:hover": {
-              color: "#58595B",
-              opacity: 0.5,
-            },
-          }),
-          option: (styles) => ({
-            ...styles,
-            borderColor: "#E2E2E2",
-            borderTopWidth: 1,
-          }),
-        }}
-        components={{ IndicatorSeparator: null }}
+        placeholder="--الرجاء الاختيار --"
       />
+      {/* <div
+        style={{
+          color: 'hsl(0, 0%, 40%)',
+          display: 'inline-block',
+          fontSize: 12,
+          fontStyle: 'italic',
+          marginTop: '1em',
+        }}
+      >
+        <Checkbox
+          checked={isClearable}
+          onChange={() => setIsClearable((state) => !state)}
+        >
+          Clearable
+        </Checkbox>
+        <Checkbox
+          checked={isSearchable}
+          onChange={() => setIsSearchable((state) => !state)}
+        >
+          Searchable
+        </Checkbox>
+        <Checkbox
+          checked={isDisabled}
+          onChange={() => setIsDisabled((state) => !state)}
+        >
+          Disabled
+        </Checkbox>
+        <Checkbox
+          checked={isLoading}
+          onChange={() => setIsLoading((state) => !state)}
+        >
+          Loading
+        </Checkbox>
+        <Checkbox checked={isRtl} onChange={() => setIsRtl((state) => !state)}>
+          RTL
+        </Checkbox>
+      </div> */}
     </>
   );
-};
+}
