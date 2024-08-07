@@ -17,18 +17,21 @@ export default function SideBar({ sidebarOpen, toggleSidebar }: SideBarProps) {
             <div className="text-right text-bold text-2xl ">
               <ul>
                 <li className="mb-4 text-xl hover:text-gray-800 ">
-                  <Link href="/login" className=" text-gray-500 hover:text-[#3B73B9] ">
+                  <Link
+                    href="/login"
+                    className=" text-gray-500 hover:text-[#3B73B9] "
+                  >
                     تسجيل الدخول
                   </Link>
                 </li>
-                
+
                 <li className="mb-4 text-xl text-gray-500 hover:text-[#3B73B9]">
                   <Link href="/sign-up" className=" ">
                     إنشاء حساب
                   </Link>
                 </li>
                 <hr className="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700" />
-                
+
                 <li className="mb-4 mt-4  hover:bg-gray-800">
                   <Link href="/market" className=" ">
                     السوق

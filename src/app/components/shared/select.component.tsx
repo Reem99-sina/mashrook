@@ -1,15 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
-import Select from 'react-select';
+import Select from "react-select";
 
-const Checkbox = ({ children, ...props }: JSX.IntrinsicElements['input']) => (
-  <label style={{ marginRight: '1em' }}>
+const Checkbox = ({ children, ...props }: JSX.IntrinsicElements["input"]) => (
+  <label style={{ marginRight: "1em" }}>
     <input type="checkbox" {...props} />
     {children}
   </label>
 );
 
-export  function SelectCustomer({options,name}:{options:any[],name:string}) {
+export function SelectCustomer({
+  options,
+  name,
+}: {
+  options: any[];
+  name: string;
+}) {
   const [isClearable, setIsClearable] = useState(true);
   const [isSearchable, setIsSearchable] = useState(true);
   const [isDisabled, setIsDisabled] = useState(false);
@@ -70,4 +76,4 @@ export  function SelectCustomer({options,name}:{options:any[],name:string}) {
       </div> */}
     </>
   );
-};
+}
