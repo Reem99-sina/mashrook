@@ -10,8 +10,10 @@ import { AppDispatch,RootState } from "@/redux/store";
 import { useDispatch,useSelector } from "react-redux";
 import { verifyRequest } from "@/redux/features/vierfySlice";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 const Verify: React.FC = () => {
   const router = useParams(); 
+  const links=useRouter()
   const {email} = router 
   const [code, setCode] = useState(Array(6).fill(""));
   let dispatch=useDispatch<AppDispatch>()
@@ -34,6 +36,8 @@ const Verify: React.FC = () => {
       toast.error(message)
     }else{
       toast.success(message)
+      links.push(`/login` );
+
     }
   },[message])
   return (
