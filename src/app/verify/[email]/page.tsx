@@ -15,7 +15,7 @@ const Verify: React.FC = () => {
   const router = useParams(); 
   const links=useRouter()
   const {email} = router 
-  const [code, setCode] = useState(Array(6).fill(""));
+  const [code, setCode] = useState(Array(4).fill(""));
   let dispatch=useDispatch<AppDispatch>()
   let {loading, message,data}=useSelector<RootState>((state)=>state.verify) as {loading:boolean, message:string,data:any}
   const handleChange = (value: string, index: number) => {
@@ -34,12 +34,12 @@ const Verify: React.FC = () => {
   useEffect(()=>{
     if(message&&Boolean(data)==false){
       toast.error(message)
-    }else{
+    }else if (Boolean(data) == true){
       toast.success(message)
       links.push(`/login` );
 
     }
-  },[message])
+  },[message,links,data])
   return (
     <div className="flex items-center  min-h-screen h-full  w-full flex-col bg-white">
       <div className="w-full max-w-md h-full   space-y-8 bg-white p-8  lg:p-16 md:max-w-lg lg:max-w-xl ">
