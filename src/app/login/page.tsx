@@ -39,14 +39,14 @@ const Login: React.FC = () => {
     }
   }
   useEffect(()=>{
-    console.log(message,Boolean(data))
       if(message&&Boolean(data)==false){
         toast.error(message)
       }else if(Boolean(data)==true){
         toast.success(message)
+        sessionStorage.setItem("token", data?.token);
         router.push(`/` );
       }
-  },[data,message])
+  },[data,message,router])
   return (
     <div className="flex items-center justify-center min-h-screen h-full  w-full flex-col">
       <div className="flex items-end justify-start p-4 w-full h-full lg:hidden bg-white ">

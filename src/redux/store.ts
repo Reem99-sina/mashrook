@@ -3,6 +3,9 @@ import thunk, {ThunkMiddleware, ThunkAction} from 'redux-thunk';
 // import authReducer from './reducers/authReducer';
 import userReducer from "./features/userSlice"
 import verifyReducer from "./features/vierfySlice"
+import properityType from "./features/getProperity"
+import properityRequest from "./features/postRequest"
+
 import loginReducer from "./features/loginSlice"
 
 import { Action } from '@reduxjs/toolkit';
@@ -11,7 +14,9 @@ const store = configureStore({
   reducer: {
     register:userReducer,
     verify:verifyReducer,
-    login:loginReducer
+    login:loginReducer,
+    properityType:properityType,
+    properityRequest:properityRequest
   }
 
 });
