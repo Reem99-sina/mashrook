@@ -8,7 +8,7 @@ export let rowSchema = object().shape({
   price: number().required("سعر مطلوب"),
   min_price: number().required("حد الادني للسعر مطلوب"),
   finance:string().required("هل ترغب في تمويل عقاري؟"),
-  property_type_id:string().required("حدد نوع العقار")
+  property_type_id:number().required("حدد نوع العقار")
 });
 export let earthSchema = object().shape({
     type: string().required("نوع دور مطلوب"),
@@ -18,7 +18,7 @@ export let earthSchema = object().shape({
     price: number().required("سعر مطلوب"),
     min_price: number().required("حد الادني للسعر مطلوب"),
     finance:string().required("هل ترغب في تمويل عقاري؟"),
-    property_type_id:string().required("حدد نوع العقار")
+    property_type_id:number().required("حدد نوع العقار")
   });
 export let departmentOwnSchema = object().shape({
     type: string().required("نوع شقة مطلوب"),
@@ -30,7 +30,7 @@ export let departmentOwnSchema = object().shape({
     finance:string().required("هل ترغب في تمويل عقاري؟"),
      min_apartment_floor:string().required("حدد اقصي دور ") , // الادوار الامرغوبة
     apartment_floor: string().required("حدد  دور ") ,
-    property_type_id:string().required("حدد نوع العقار")
+    property_type_id:number().required("حدد نوع العقار")
   });
   export let departmentSchema = object().shape({
     type: string().required("نوع شقة مطلوب"),
@@ -42,5 +42,5 @@ export let departmentOwnSchema = object().shape({
     finance:string().required("هل ترغب في تمويل عقاري؟"),
      min_apartment_floor:string() , // الادوار الامرغوبة
     apartment_floor: string(),
-    property_type_id:string().required("حدد نوع العقار")
+    property_type_id:number().required("حدد نوع العقار")
   });
