@@ -51,6 +51,8 @@ const SignUp: React.FC = () => {
         router.push(`/verify/${data?.user?.email}` );
       }
   },[data,message])
+
+
   return (
     <div className="flex items-center justify-center min-h-screen h-full  w-full flex-col">
       <div className="flex items-end justify-start p-4 w-full h-full lg:hidden bg-white ">

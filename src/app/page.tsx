@@ -54,9 +54,9 @@ export default function Home() {
                   <button className="flex items-center" onClick={()=>router.push("/addOrder")}>
                     <Addrequest />
                   </button>
-                  <button className="flex items-center">
+                  <Link href={"add-your-request"} className="flex items-center">
                     <Addbutton />
-                  </button>
+                  </Link>
                 </div>
               </div>
               <div className=" p-4 rounded shadow-md w-full">
