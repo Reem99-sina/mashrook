@@ -636,6 +636,7 @@ const AddYourRealEstate: React.FC = () => {
             />
           </div>
           <Footer />
+          {/*  */}
         </div>
       )}
     </>
