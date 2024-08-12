@@ -1,13 +1,17 @@
 "use client";
 
 import React, { useRef, useState,useEffect } from "react";
+=
 import { Add, CloseIconSmall, Succeeded } from "../assets/svg";
+
 import { RadioInput } from "../components/shared/radio.component";
 import { Button } from "../components/shared/button.component";
 import { Modal, ModalRef } from "../components/shared/modal.component";
 import Footer from "../components/header/Footer2";
 import MainHeader from "../components/header/MainHeader";
+
 import Image from "next/image";
+
 import { AppDispatch,RootState } from "@/redux/store";
 import { useDispatch,useSelector } from "react-redux";
 import { Range, getTrackBackground } from "react-range";
@@ -15,9 +19,11 @@ import {getproperityType} from "@/redux/features/getProperity"
 import {postProperityType,properityTypeInter} from "@/redux/features/postRequest"
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+
 import {rowSchema,departmentSchema,departmentOwnSchema,earthSchema,villaOwnSchema} from "@/typeSchema/schema"
 import { validateForm} from "./hooks/validate"
 import AccordionComponent from "../components/shared/Accordion.component"
+
 const dataReal = [
   {
     title: "نوع العقار",
@@ -116,7 +122,9 @@ const AddYourRequest: React.FC = () => {
     priceRange: [500000, 20000000],
     shareRange: [1000000, 2000000],
     desiredRow: [1, 1],
+
     floorType:""
+
   });
 
   const [sentYourRequest, setSentYourRequest] = useState<boolean>(false);
@@ -165,16 +173,19 @@ const AddYourRequest: React.FC = () => {
       city:criteria?.city ,
       district:selectedCites?.map((dis)=>dis?.name),
       status:criteria?.unitStatus,
+
       price:criteria?.shareRange[1],
+
       min_price: criteria?.shareRange[0],
       finance:criteria?.dealStatus
     } as properityTypeInter
     if(deal){
       if(token){
+
         if(selectedPropertyType?.title=="شقة"&&criteria?.unitType=="شقة تمليك (في عمارة سكنية)"){
           const status= await validateForm({...datasend,
-            min_apartment_floor: String(criteria?.desiredRow?.reduce((total:number,ele:number)=>total+ele,0)/2), // الادوار الامرغوبة
-            apartment_floor: String(criteria?.desiredRow[0])},departmentOwnSchema,setErrors)
+            min_apartment_floor: String(criteria?.desiredRow[0]), // الادوار الامرغوبة
+            apartment_floor: String(criteria?.desiredRow[1])},departmentOwnSchema,setErrors)
               if(status==true){
                 dispatch(postProperityType({...datasend,
                   finance:criteria?.dealStatus=="نعم"?true:false,
@@ -183,6 +194,7 @@ const AddYourRequest: React.FC = () => {
                  
                 }))
               }
+
         }else if(selectedPropertyType?.title=="أرض سكنية"||selectedPropertyType?.title=="أرض تجارية"){
             const status= await validateForm(datasend,earthSchema,setErrors)
              
@@ -192,6 +204,7 @@ const AddYourRequest: React.FC = () => {
               }))
             }
             
+
           }else if(selectedPropertyType?.title=="فيلا"&&criteria?.unitType=="فيلا (وحدات تمليك)"){
             const status= await validateForm({...datasend, apartment_floor:criteria?.floorType },villaOwnSchema,setErrors)
              
@@ -202,6 +215,7 @@ const AddYourRequest: React.FC = () => {
               }))
             }
             
+
           }else{
             const status= await validateForm(datasend,departmentSchema,setErrors)
               if(status==true){
@@ -211,10 +225,12 @@ const AddYourRequest: React.FC = () => {
             }
             
           }
+
          
         } else{
         toast.error("انت تحتاج الي تسجيل دخول")
         router.push("/login")
+
       }
     }else{
       toast.error("لازم تقبل بشروط الاستخدام وسياسية الخصوصية")
@@ -228,7 +244,9 @@ const AddYourRequest: React.FC = () => {
   },[dispatch])
   useEffect(()=>{
     if(messageRequest&&Boolean(dataRequest)==true){
+
       toast.success(messageRequest)
+
       setSentYourRequest(true);
     }
   },[dataRequest,messageRequest])
@@ -268,7 +286,9 @@ const AddYourRequest: React.FC = () => {
                   </div>
                 </div>
               ))}
+
               {errors?.property_type_id&&<p className="text-xs text-red-600 dark:text-red-500 text-right">
+
                   {errors?.property_type_id}
                 </p>}
             </div>
@@ -300,7 +320,9 @@ const AddYourRequest: React.FC = () => {
                     label="فيلا ( درج داخلي)"
                   />
                 </div>
+
                 {errors?.type&&<p className="text-xs text-red-600 dark:text-red-500 text-right">
+
                   {errors?.type}
                 </p>}
               </div>
@@ -326,7 +348,9 @@ const AddYourRequest: React.FC = () => {
                     label="دور علوي"
                   />
                 </div>
+
                 {errors?.type&&<p className="text-xs text-red-600 dark:text-red-500 text-right">
+
                   {errors?.type}
                 </p>}
               </div>
@@ -353,7 +377,9 @@ const AddYourRequest: React.FC = () => {
                     label="شقة تمليك (في عمارة سكنية)"
                   />
                 </div>{" "}
+
                 {errors?.type&&<p className="text-xs text-red-600 dark:text-red-500 text-right">
+
                   {errors?.type}
                 </p>}
               </div>
@@ -377,7 +403,9 @@ const AddYourRequest: React.FC = () => {
                     ))}
                   </select>
                 </div>
+
                 {errors?.city&&<p className="text-xs text-red-600 dark:text-red-500 text-right">
+
                   {errors?.city}
                 </p>}
               </div>
@@ -389,6 +417,7 @@ const AddYourRequest: React.FC = () => {
                 >
                   إضافة حي/ أحياء
                 </p>
+
                 <div onClick={() => modalRef.current?.open()}
                   className="cursor-pointer bg-[#3B73B9]">
                 <Image
@@ -397,7 +426,7 @@ const AddYourRequest: React.FC = () => {
                   height={21}
                   alt={"add"}
                 />
-                </div>
+
                   
               </div>
               <div className="flex flex-row gap-3 items-center justify-end flex-wrap ">
@@ -415,7 +444,9 @@ const AddYourRequest: React.FC = () => {
                     </p>
                   </div>
                 ))}
+
                 {errors?.district&&<p className="text-xs text-red-600 dark:text-red-500 text-right">
+
                   {errors?.district}
                 </p>}
               </div>
@@ -456,7 +487,9 @@ const AddYourRequest: React.FC = () => {
                     </div>
 
                 </div>
+
                 {errors?.status&&<p className="text-xs text-red-600 dark:text-red-500 text-right">
+
                   {errors?.status}
                 </p>}
                 
@@ -551,7 +584,9 @@ const AddYourRequest: React.FC = () => {
                   </div>
                   </div>
                 </>}
+
                 {criteria?.unitType!="فيلا (وحدات تمليك)"?<> <div className="flex items-center justify-end">
+
                 <p className="text-base font-bold text-[#4B5563]">ميزانيتك </p>
               </div>
               <div className="mb-4" style={{ direction: "rtl" }}>
@@ -578,7 +613,7 @@ const AddYourRequest: React.FC = () => {
                           width: "100%",
                         }}
                       >
-                        
+
                         <div
                           ref={props.ref}
                           style={{
@@ -666,6 +701,7 @@ const AddYourRequest: React.FC = () => {
                         }}
                       >
                         
+
                         <div
                           ref={props.ref}
                           style={{
@@ -770,7 +806,9 @@ const AddYourRequest: React.FC = () => {
                   label="لا"
                 />
               </div>
+
               {errors?.finance&&<p className="text-xs text-red-600 dark:text-red-500 text-right">
+
                   {String(errors?.finance)}
                 </p>}
             </div>
