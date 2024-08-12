@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef, useState,useEffect } from "react";
-=
+
 import { Add, CloseIconSmall, Succeeded } from "../assets/svg";
 
 import { RadioInput } from "../components/shared/radio.component";
@@ -291,6 +291,7 @@ const AddYourRequest: React.FC = () => {
 
                   {errors?.property_type_id}
                 </p>}
+            </div>
             </div>
 
             {selectedPropertyType?.title === "فيلا" && (
@@ -784,7 +785,7 @@ const AddYourRequest: React.FC = () => {
                 />
               </div>
             </div>
-}
+            }
             
             <div className="bg-white rounded-lg border border-[#E5E7EB] w-full mb-4 items-start justify-start p-4">
               <div className="flex items-center justify-end">
