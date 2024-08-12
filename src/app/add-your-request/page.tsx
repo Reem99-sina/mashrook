@@ -1,12 +1,17 @@
 "use client";
 
 import React, { useRef, useState,useEffect } from "react";
-import { AddButton, CloseIconSmall, Succeeded } from "../assets/svg";
+
+import { Add, CloseIconSmall, Succeeded } from "../assets/svg";
+
 import { RadioInput } from "../components/shared/radio.component";
 import { Button } from "../components/shared/button.component";
 import { Modal, ModalRef } from "../components/shared/modal.component";
 import Footer from "../components/header/Footer2";
 import MainHeader from "../components/header/MainHeader";
+
+import Image from "next/image";
+
 import { AppDispatch,RootState } from "@/redux/store";
 import { useDispatch,useSelector } from "react-redux";
 import { Range, getTrackBackground } from "react-range";
@@ -14,14 +19,22 @@ import {getproperityType} from "@/redux/features/getProperity"
 import {postProperityType,properityTypeInter} from "@/redux/features/postRequest"
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import {rowSchema,departmentSchema,departmentOwnSchema,earthSchema} from "@/typeSchema/schema"
+
+import {rowSchema,departmentSchema,departmentOwnSchema,earthSchema,villaOwnSchema} from "@/typeSchema/schema"
 import { validateForm} from "./hooks/validate"
+import AccordionComponent from "../components/shared/Accordion.component"
+
 const dataReal = [
   {
     title: "نوع العقار",
     children: ["أرض سكنية", "أرض تجارية", "فيلا", "دور", "شقة"],
   },
 ];
+const floorsVilla=[
+  {  name: "دور الارضي" },
+  {  name: "دور علوي" },
+  {  name: "شقة" },
+]
 const cites = [
   { id: 1, name: "حي النرجس" },
   { id: 2, name: "حي العليا" },
@@ -110,6 +123,8 @@ const AddYourRequest: React.FC = () => {
     shareRange: [1000000, 2000000],
     desiredRow: [1, 1],
 
+    floorType:""
+
   });
 
   const [sentYourRequest, setSentYourRequest] = useState<boolean>(false);
@@ -158,27 +173,28 @@ const AddYourRequest: React.FC = () => {
       city:criteria?.city ,
       district:selectedCites?.map((dis)=>dis?.name),
       status:criteria?.unitStatus,
-      price:(criteria?.shareRange[0]+criteria?.shareRange[1])/2,
+
+      price:criteria?.shareRange[1],
+
       min_price: criteria?.shareRange[0],
       finance:criteria?.dealStatus
     } as properityTypeInter
     if(deal){
       if(token){
-        if(selectedPropertyType?.title=="شقة"&&criteria?.unitType!="شقة تمليك (في عمارة سكنية)"){
+
+        if(selectedPropertyType?.title=="شقة"&&criteria?.unitType=="شقة تمليك (في عمارة سكنية)"){
           const status= await validateForm({...datasend,
-            min_apartment_floor: String(criteria?.desiredRow?.reduce((total:number,ele:number)=>total+ele,0)/2), // الادوار الامرغوبة
-            apartment_floor: String(criteria?.desiredRow[0])},departmentOwnSchema,setErrors)
-             
+            min_apartment_floor: String(criteria?.desiredRow[0]), // الادوار الامرغوبة
+            apartment_floor: String(criteria?.desiredRow[1])},departmentOwnSchema,setErrors)
               if(status==true){
                 dispatch(postProperityType({...datasend,
                   finance:criteria?.dealStatus=="نعم"?true:false,
-                  min_apartment_floor: String(criteria?.desiredRow?.reduce((total:number,ele:number)=>total+ele,0)/2), // الادوار الامرغوبة
-                  apartment_floor: String(criteria?.desiredRow[0]),
+                  min_apartment_floor: String(criteria?.desiredRow[0]), // الادوار الامرغوبة
+                  apartment_floor: String(criteria?.desiredRow[1]),
                  
                 }))
               }
-           
-          
+
         }else if(selectedPropertyType?.title=="أرض سكنية"||selectedPropertyType?.title=="أرض تجارية"){
             const status= await validateForm(datasend,earthSchema,setErrors)
              
@@ -188,6 +204,18 @@ const AddYourRequest: React.FC = () => {
               }))
             }
             
+
+          }else if(selectedPropertyType?.title=="فيلا"&&criteria?.unitType=="فيلا (وحدات تمليك)"){
+            const status= await validateForm({...datasend, apartment_floor:criteria?.floorType },villaOwnSchema,setErrors)
+             
+              if(status==true){
+              dispatch(postProperityType({...datasend,
+                finance:criteria?.dealStatus=="نعم"?true:false,
+                apartment_floor:criteria?.floorType
+              }))
+            }
+            
+
           }else{
             const status= await validateForm(datasend,departmentSchema,setErrors)
               if(status==true){
@@ -197,9 +225,12 @@ const AddYourRequest: React.FC = () => {
             }
             
           }
-       
+
+         
         } else{
         toast.error("انت تحتاج الي تسجيل دخول")
+        router.push("/login")
+
       }
     }else{
       toast.error("لازم تقبل بشروط الاستخدام وسياسية الخصوصية")
@@ -213,6 +244,9 @@ const AddYourRequest: React.FC = () => {
   },[dispatch])
   useEffect(()=>{
     if(messageRequest&&Boolean(dataRequest)==true){
+
+      toast.success(messageRequest)
+
       setSentYourRequest(true);
     }
   },[dataRequest,messageRequest])
@@ -252,9 +286,12 @@ const AddYourRequest: React.FC = () => {
                   </div>
                 </div>
               ))}
-              {errors?.property_type_id&&<p className="text-xs text-red-600 dark:text-red-500">
+
+              {errors?.property_type_id&&<p className="text-xs text-red-600 dark:text-red-500 text-right">
+
                   {errors?.property_type_id}
                 </p>}
+            </div>
             </div>
 
             {selectedPropertyType?.title === "فيلا" && (
@@ -284,7 +321,9 @@ const AddYourRequest: React.FC = () => {
                     label="فيلا ( درج داخلي)"
                   />
                 </div>
-                {errors?.type&&<p className="text-xs text-red-600 dark:text-red-500">
+
+                {errors?.type&&<p className="text-xs text-red-600 dark:text-red-500 text-right">
+
                   {errors?.type}
                 </p>}
               </div>
@@ -310,7 +349,9 @@ const AddYourRequest: React.FC = () => {
                     label="دور علوي"
                   />
                 </div>
-                {errors?.type&&<p className="text-xs text-red-600 dark:text-red-500">
+
+                {errors?.type&&<p className="text-xs text-red-600 dark:text-red-500 text-right">
+
                   {errors?.type}
                 </p>}
               </div>
@@ -337,7 +378,9 @@ const AddYourRequest: React.FC = () => {
                     label="شقة تمليك (في عمارة سكنية)"
                   />
                 </div>{" "}
-                {errors?.type&&<p className="text-xs text-red-600 dark:text-red-500">
+
+                {errors?.type&&<p className="text-xs text-red-600 dark:text-red-500 text-right">
+
                   {errors?.type}
                 </p>}
               </div>
@@ -361,7 +404,9 @@ const AddYourRequest: React.FC = () => {
                     ))}
                   </select>
                 </div>
-                {errors?.city&&<p className="text-xs text-red-600 dark:text-red-500">
+
+                {errors?.city&&<p className="text-xs text-red-600 dark:text-red-500 text-right">
+
                   {errors?.city}
                 </p>}
               </div>
@@ -373,10 +418,16 @@ const AddYourRequest: React.FC = () => {
                 >
                   إضافة حي/ أحياء
                 </p>
-                <AddButton
-                  onClick={() => modalRef.current?.open()}
-                  className="cursor-pointer bg-[#3B73B9]"
+
+                <div onClick={() => modalRef.current?.open()}
+                  className="cursor-pointer bg-[#3B73B9]">
+                <Image
+                  src={Add}
+                  width={21}
+                  height={21}
+                  alt={"add"}
                 />
+
                   
               </div>
               <div className="flex flex-row gap-3 items-center justify-end flex-wrap ">
@@ -394,7 +445,9 @@ const AddYourRequest: React.FC = () => {
                     </p>
                   </div>
                 ))}
-                {errors?.district&&<p className="text-xs text-red-600 dark:text-red-500">
+
+                {errors?.district&&<p className="text-xs text-red-600 dark:text-red-500 text-right">
+
                   {errors?.district}
                 </p>}
               </div>
@@ -435,7 +488,9 @@ const AddYourRequest: React.FC = () => {
                     </div>
 
                 </div>
-                {errors?.status&&<p className="text-xs text-red-600 dark:text-red-500">
+
+                {errors?.status&&<p className="text-xs text-red-600 dark:text-red-500 text-right">
+
                   {errors?.status}
                 </p>}
                 
@@ -530,7 +585,96 @@ const AddYourRequest: React.FC = () => {
                   </div>
                   </div>
                 </>}
-              <div className="flex items-center justify-end">
+
+                {criteria?.unitType!="فيلا (وحدات تمليك)"?<> <div className="flex items-center justify-end">
+
+                <p className="text-base font-bold text-[#4B5563]">ميزانيتك </p>
+              </div>
+              <div className="mb-4" style={{ direction: "rtl" }}>
+                <div className="flex flex-col">
+                  <div className="flex justify-between mb-2 text-sm text-gray-500 w-full p-4">
+                    <span>500,000 ريال</span>
+                    <span>+20,000,000 ريال </span>
+                  </div>
+                  <Range
+                    step={500000}
+                    min={500000}
+                    max={20000000}
+                    values={criteria.shareRange}
+                    onChange={handleShareRangeChange}
+                    rtl
+                    renderTrack={({ props, children }) => (
+                      <div
+                        onMouseDown={props.onMouseDown}
+                        onTouchStart={props.onTouchStart}
+                        style={{
+                          ...props.style,
+                          height: "36px",
+                          display: "flex",
+                          width: "100%",
+                        }}
+                      >
+
+                        <div
+                          ref={props.ref}
+                          style={{
+                            height: "5px",
+                            width: "100%",
+                            borderRadius: "4px",
+                            background: getTrackBackground({
+                              values: criteria.shareRange,
+                              colors: ["#ccc", "#548BF4", "#ccc"],
+                              min: 1000000,
+                              max: 20000000,
+                              rtl: true,
+                            }),
+                            alignSelf: "center",
+                          }}
+                        >
+                          {children}
+                        </div>
+                      </div>
+                    )}
+                    renderThumb={({ index, props }) => (
+                      <div
+                        {...props}
+                        style={{
+                          ...props.style,
+                          height: "20px",
+                          width: "20px",
+                          borderRadius: "50%",
+                          backgroundColor: "#548BF4",
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          boxShadow: "0px 2px 6px #AAA",
+                        }}
+                      >
+                        <div
+                          style={{
+                            position: "absolute",
+                            top: "-28px",
+                            color: "#fff",
+                            fontWeight: "bold",
+                            fontSize: "12px",
+                            fontFamily:
+                              "Arial,Helvetica Neue,Helvetica,sans-serif",
+                            padding: "4px",
+                            borderRadius: "4px",
+                            backgroundColor: "#548BF4",
+                          }}
+                        >
+                          {criteria.shareRange[index]}ريال
+                        </div>
+                      </div>
+                    )}
+                  />
+                </div>
+              </div></>:<>
+              {floorsVilla?.map((floor,index)=><AccordionComponent title={floor?.name} key={index} floors={floorsVilla}
+               onChange={(e)=>setCriteria({...criteria,floorType:e.target.value})} value={criteria?.floorType}>
+                    <>
+                    <div className="flex items-center justify-end">
                 <p className="text-base font-bold text-[#4B5563]">ميزانيتك </p>
               </div>
               <div className="mb-4" style={{ direction: "rtl" }}>
@@ -558,6 +702,7 @@ const AddYourRequest: React.FC = () => {
                         }}
                       >
                         
+
                         <div
                           ref={props.ref}
                           style={{
@@ -614,6 +759,10 @@ const AddYourRequest: React.FC = () => {
                   />
                 </div>
               </div>
+                    </>
+              </AccordionComponent>)}
+              </>}
+             
             </div>
             {(selectedPropertyType?.title=="أرض سكنية"||selectedPropertyType?.title=="أرض تجارية")&&<div className="bg-white rounded-lg border border-[#E5E7EB] w-full mb-4 items-start justify-start p-4">
               <div className="flex items-center justify-end">
@@ -636,7 +785,7 @@ const AddYourRequest: React.FC = () => {
                 />
               </div>
             </div>
-}
+            }
             
             <div className="bg-white rounded-lg border border-[#E5E7EB] w-full mb-4 items-start justify-start p-4">
               <div className="flex items-center justify-end">
@@ -658,7 +807,9 @@ const AddYourRequest: React.FC = () => {
                   label="لا"
                 />
               </div>
-              {errors?.finance&&<p className="text-xs text-red-600 dark:text-red-500">
+
+              {errors?.finance&&<p className="text-xs text-red-600 dark:text-red-500 text-right">
+
                   {String(errors?.finance)}
                 </p>}
             </div>
@@ -722,6 +873,7 @@ const AddYourRequest: React.FC = () => {
                         type="checkbox"
                         checked={selectedCites.some((c) => c.id === cite.id)}
                         onChange={() => handleCiteChange(cite)}
+                        className="checked:accent-[#3B73B9] w-[16px] h-[16px]"
                       />
                     </div>
                   ))}
@@ -754,7 +906,7 @@ const AddYourRequest: React.FC = () => {
             </p>
             <div className=" flex mb-auto bg-[#F3F4F6] rounded-lg justify-center items-center w-24 h-6">
               <p className="text-[#6B7280] text-xs font-normal">
-                رقم الطلب: 2022
+                رقم الطلب: {dataRequest?.id}
               </p>
             </div>
           </div>
