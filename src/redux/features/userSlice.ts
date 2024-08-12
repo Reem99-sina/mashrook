@@ -8,8 +8,8 @@ export interface userRegister {
     repeate_password: string;
   }
 export const register=createAsyncThunk("register", async (data:userRegister, { rejectWithValue }) => {  
-        const response = await axios.post("http://54.204.147.9:8082/auth", data); // Adjust your endpoint as necessary 
-        return response.data; // Return the user data from API response  
+        const response = await axios.post("http://54.204.147.9:8082/auth", data).then((response)=>response.data).catch((error)=>error?.response?.data)  // Adjust your endpoint as necessary 
+        return response; // Return the user data from API response  
 })
 
 const initialstate={

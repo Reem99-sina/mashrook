@@ -26,7 +26,7 @@ const Verify: React.FC = () => {
   const onSubmit=(e:React.FormEvent<HTMLFormElement>)=>{
      e.preventDefault();
     if(email){
-      dispatch(verifyRequest({email:String(email)?.split("%")[0]+"@gmail.com",code:code.join("")}))
+      dispatch(verifyRequest({email:String(email)?.replace("%40","@"),code:code.join("")}))
     }else{
       toast.error("you need email and code")
     }
@@ -57,7 +57,7 @@ const Verify: React.FC = () => {
             <p className="text-center mb-4">
               لقد قمنا بإرسال رمز التحقق إلى بريدك الإلكتروني
               <br />
-              {String(email)?.split("%")[0]+"@gmail.com"||"name@domain.com"}
+              {String(email)?.replace("%40","@")||"name@domain.com"}
               <br />
               الرجاء قم بإدخال رمز التحقق لإنشاء حسابك
             </p>
