@@ -27,7 +27,6 @@ const Login: React.FC = () => {
   const onSubmit=(e:React.FormEvent<HTMLFormElement>)=>{
     e.preventDefault();
     let {  email, password } = user;
-
     if (
       email != "" &&
       password != "" 
@@ -57,7 +56,7 @@ const Login: React.FC = () => {
           className="cursor-pointer"
         />
       </div>
-      <div className="w-full max-w-md  space-y-8 bg-white   md:max-w-lg lg:max-w-xl ">
+      <div className="w-full   space-y-8 bg-white  shadow-md  ">
         <div className=" items-end justify-start ml-4 mt-4 hidden sm:flex ">
           <CloseButton
             onClick={() => {

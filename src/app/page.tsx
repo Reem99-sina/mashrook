@@ -33,9 +33,8 @@ const slicedData = {
 };
 
 export default function Home() {
-  let router=useRouter()
   return (
-    <div className="flex justify-center w-dvh h-max  ">
+    <div className="flex justify-center w-dvh h-max ">
       <div className="w-full bg-white rounded text-black shadow ">
         <div className="w-full z-50">
           <MainHeader />
@@ -51,7 +50,7 @@ export default function Home() {
                 </div>
 
                 <div className="flex justify-center space-x-2 mb-8">
-                  <button className="flex items-center" onClick={()=>router.push("/addOrder")}>
+                  <button className="flex items-center" >
                     <Addrequest />
                   </button>
                   <Link href={"add-your-request"} className="flex items-center">

@@ -101,18 +101,13 @@ const AddYourRequest: React.FC = () => {
   const [selectedPropertyType, setSelectedPropertyType] = useState<typeSelect>();
   const router = useRouter();
   const [token, setToken] = useState<string | null>(null);
-
- 
   const [selectedCites, setSelectedCites] = useState<
     { id: number; name: string }[]
   >([]);
   const modalRef = useRef<ModalRef>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [deal, setdeal] = useState(false);
-
-  const [ownerShip, setownerShip] = useState("");
-  
-
+  const [ownerShip, setownerShip] = useState(false);
   const [criteria, setCriteria] = useState<any>({
     dealStatus: "",
     city: "",
@@ -126,15 +121,14 @@ const AddYourRequest: React.FC = () => {
     floorType:""
 
   });
-
   const [sentYourRequest, setSentYourRequest] = useState<boolean>(false);
+  const [errors,setErrors]=useState<properityTypeInter>()
 
   let {loading, message, data}=useSelector<RootState>((state)=>state.properityType)as {loading:boolean, message:string,data:any}
   let {loading:loadingRequest, message:messageRequest, data:dataRequest}=useSelector<RootState>((state)=>state.properityRequest)as {loading:boolean, message:string,data:any}
 
   const dispatch = useDispatch<AppDispatch>();
 
-  const [errors,setErrors]=useState<properityTypeInter>()
   const handlePropertyTypeChange = (value: typeSelect) => {
     setSelectedPropertyType(value);
   };
@@ -173,15 +167,12 @@ const AddYourRequest: React.FC = () => {
       city:criteria?.city ,
       district:selectedCites?.map((dis)=>dis?.name),
       status:criteria?.unitStatus,
-
       price:criteria?.shareRange[1],
-
       min_price: criteria?.shareRange[0],
       finance:criteria?.dealStatus
     } as properityTypeInter
     if(deal){
       if(token){
-
         if(selectedPropertyType?.title=="شقة"&&criteria?.unitType=="شقة تمليك (في عمارة سكنية)"){
           const status= await validateForm({...datasend,
             min_apartment_floor: String(criteria?.desiredRow[0]), // الادوار الامرغوبة
@@ -194,7 +185,6 @@ const AddYourRequest: React.FC = () => {
                  
                 }))
               }
-
         }else if(selectedPropertyType?.title=="أرض سكنية"||selectedPropertyType?.title=="أرض تجارية"){
             const status= await validateForm(datasend,earthSchema,setErrors)
              
@@ -203,11 +193,8 @@ const AddYourRequest: React.FC = () => {
                 finance:criteria?.dealStatus=="نعم"?true:false
               }))
             }
-            
-
           }else if(selectedPropertyType?.title=="فيلا"&&criteria?.unitType=="فيلا (وحدات تمليك)"){
             const status= await validateForm({...datasend, apartment_floor:criteria?.floorType },villaOwnSchema,setErrors)
-             
               if(status==true){
               dispatch(postProperityType({...datasend,
                 finance:criteria?.dealStatus=="نعم"?true:false,
@@ -215,7 +202,6 @@ const AddYourRequest: React.FC = () => {
               }))
             }
             
-
           }else{
             const status= await validateForm(datasend,departmentSchema,setErrors)
               if(status==true){
@@ -225,18 +211,13 @@ const AddYourRequest: React.FC = () => {
             }
             
           }
-
-         
         } else{
         toast.error("انت تحتاج الي تسجيل دخول")
         router.push("/login")
-
       }
     }else{
       toast.error("لازم تقبل بشروط الاستخدام وسياسية الخصوصية")
     }
-
-    // if()
   };
  
   useEffect(()=>{
@@ -244,9 +225,7 @@ const AddYourRequest: React.FC = () => {
   },[dispatch])
   useEffect(()=>{
     if(messageRequest&&Boolean(dataRequest)==true){
-
       toast.success(messageRequest)
-
       setSentYourRequest(true);
     }
   },[dataRequest,messageRequest])
@@ -256,6 +235,12 @@ const AddYourRequest: React.FC = () => {
       setToken(storedToken);
     }
   }, []);
+  // let router=useRouter()
+    useEffect(()=>{
+      return () => {
+        setSentYourRequest(false);
+      };
+      },[])
   return (
     <>
       {!sentYourRequest ? (
@@ -412,7 +397,7 @@ const AddYourRequest: React.FC = () => {
               </div>
               <div className="flex items-end gap-2 justify-end flex-row mt-5 ">
                 <p
-                  className={`cursor-pointer text-[#3B73B9] ${
+                  className={`cursor-pointer text-[#3B73B9]  ${
                     selectedCites ? "" : "text-gray-500"
                   }`}
                 >
@@ -426,11 +411,10 @@ const AddYourRequest: React.FC = () => {
                   width={21}
                   height={21}
                   alt={"add"}
-                />
-
-                  
+                />   
+                </div>
               </div>
-              <div className="flex flex-row gap-3 items-center justify-end flex-wrap ">
+              <div className="flex flex-row gap-3 items-center justify-end flex-wrap mb-5">
                 {selectedCites.map((cite) => (
                   <div
                     key={cite.id}
@@ -451,7 +435,6 @@ const AddYourRequest: React.FC = () => {
                   {errors?.district}
                 </p>}
               </div>
-            </div>
             <div className="bg-white rounded-lg border border-[#E5E7EB] w-full mb-4 items-start justify-start p-4">
              {(selectedPropertyType?.title === "شقة"
              ||selectedPropertyType?.title === "فيلا"||
@@ -911,11 +894,14 @@ const AddYourRequest: React.FC = () => {
             </div>
           </div>
           <div className="w-4/5 mb-28  ">
-            <Button text="الذهاب الى طلباتي" />
+            <Button text="الذهاب الى طلباتي"  onClick={() => {
+                router.refresh();
+                }}/>
             <Button
               text="العودة الى الرئيسية"
               className="!text-[#3B73B9] !bg-white !border !border-[#3B73B9] rounded !mt-5"
               onClick={() => {
+                router.refresh();
                 router.push("/");
               }}
             />

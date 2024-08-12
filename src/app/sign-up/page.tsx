@@ -55,7 +55,12 @@ const SignUp: React.FC = () => {
       router.push(`/verify/${data?.user?.email}`);
     }
   }, [data, message,router]);
-
+useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const storedToken = sessionStorage.removeItem('token');
+     
+    }
+  }, []);
   return (
     <div className="flex items-center justify-center min-h-screen h-full  w-full flex-col">
       <div className="flex items-end justify-start p-4 w-full h-full lg:hidden bg-white ">
@@ -66,7 +71,7 @@ const SignUp: React.FC = () => {
           className="cursor-pointer"
         />
       </div>
-      <div className="w-full max-w-md  space-y-8 bg-white  shadow-md md:max-w-lg lg:max-w-xl ">
+      <div className="w-full max-w-md  space-y-8 bg-white  shadow-md  ">
         <div className=" items-end justify-start ml-4 mt-4 hidden sm:flex ">
           <CloseButton
             onClick={() => {

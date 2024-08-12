@@ -7,10 +7,10 @@ import Link from "next/link";
 export default function MainHeader() {
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
 
-  const toggleSidebar = () => {
+  const toggleSidebar = (e?:any) => {
+    e.preventDefault()
     setSidebarOpen(!sidebarOpen);
   };
-
   return (
     <header className="border-b-2 mb-4 w-full">
       <div className="flex items-center justify-between">
