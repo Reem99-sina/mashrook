@@ -27,7 +27,6 @@ const Login: React.FC = () => {
   const onSubmit=(e:React.FormEvent<HTMLFormElement>)=>{
     e.preventDefault();
     let {  email, password } = user;
-
     if (
       email != "" &&
       password != "" 
@@ -39,14 +38,14 @@ const Login: React.FC = () => {
     }
   }
   useEffect(()=>{
-    console.log(message,Boolean(data))
       if(message&&Boolean(data)==false){
         toast.error(message)
       }else if(Boolean(data)==true){
         toast.success(message)
+        sessionStorage.setItem("token", data?.token);
         router.push(`/` );
       }
-  },[data,message])
+  },[data,message,router])
   return (
     <div className="flex items-center justify-center min-h-screen h-full  w-full flex-col">
       <div className="flex items-end justify-start p-4 w-full h-full lg:hidden bg-white ">
@@ -57,7 +56,7 @@ const Login: React.FC = () => {
           className="cursor-pointer"
         />
       </div>
-      <div className="w-full max-w-md  space-y-8 bg-white   md:max-w-lg lg:max-w-xl ">
+      <div className="w-full   space-y-8 bg-white  shadow-md  ">
         <div className=" items-end justify-start ml-4 mt-4 hidden sm:flex ">
           <CloseButton
             onClick={() => {

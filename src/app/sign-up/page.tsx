@@ -5,9 +5,9 @@ import { CloseButton, MashrookLogo } from "../assets/svg";
 import { TextInput } from "../components/shared/text-input.component";
 import { Button } from "../components/shared/button.component";
 import { useRouter } from "next/navigation";
-import { AppDispatch,RootState } from "@/redux/store";
-import { useDispatch,useSelector } from "react-redux";
-import { useState,useEffect } from "react";
+import { AppDispatch, RootState } from "@/redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { useState, useEffect } from "react";
 import { register } from "@/redux/features/userSlice";
 import toast from "react-hot-toast";
 export interface userRegister {
@@ -25,32 +25,42 @@ const SignUp: React.FC = () => {
     password: "",
     repeate_password: "",
   });
-  let {loading, message, data}=useSelector<RootState>((state)=>state.register)as {loading:boolean, message:string, data:any}
-  const onSubmit = (e:React.FormEvent<HTMLFormElement>) => {
+  const [checkBox, setCheckBox] = useState(false);
+  let { loading, message, data } = useSelector<RootState>(
+    (state) => state.register
+  ) as { loading: boolean; message: string; data: any };
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    let { username, email, password, repeate_password } = user;
-    if (
-      username != "" &&
-      email != "" &&
-      password != "" &&
-      repeate_password != ""
-    ) {
-      dispatch(register(user))
-      console.log(data,"data")
-      
-    }else{
-      toast.error("you need to fill the information")
+    if (checkBox) {
+      let { username, email, password, repeate_password } = user;
+      if (
+        username != "" &&
+        email != "" &&
+        password != "" &&
+        repeate_password != ""
+      ) {
+        dispatch(register(user));
+      } else {
+        toast.error("you need to fill the information");
+      }
+    } else {
+      toast.error("لازم تقبل بشروط الاستخدام وسياسية الخصوصية");
     }
   };
-  useEffect(()=>{
-    console.log(message,Boolean(data))
-      if(message&&Boolean(data)==false){
-        toast.error(message)
-      }else if(Boolean(data)==true){
-        toast.success(message)
-        router.push(`/verify/${data?.user?.email}` );
-      }
-  },[data])
+  useEffect(() => {
+    if (message && Boolean(data) == false) {
+      toast.error(message);
+    } else if (Boolean(data) == true) {
+      toast.success(message);
+      router.push(`/verify/${data?.user?.email}`);
+    }
+  }, [data, message,router]);
+useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const storedToken = sessionStorage.removeItem('token');
+     
+    }
+  }, []);
   return (
     <div className="flex items-center justify-center min-h-screen h-full  w-full flex-col">
       <div className="flex items-end justify-start p-4 w-full h-full lg:hidden bg-white ">
@@ -61,7 +71,7 @@ const SignUp: React.FC = () => {
           className="cursor-pointer"
         />
       </div>
-      <div className="w-full max-w-md  space-y-8 bg-white  shadow-md md:max-w-lg lg:max-w-xl ">
+      <div className="w-full max-w-md  space-y-8 bg-white  shadow-md  ">
         <div className=" items-end justify-start ml-4 mt-4 hidden sm:flex ">
           <CloseButton
             onClick={() => {
@@ -143,6 +153,7 @@ const SignUp: React.FC = () => {
                 name="remember-me"
                 type="checkbox"
                 className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+                onChange={(e) => setCheckBox(e.target.checked)}
               />
             </div>
           </div>

@@ -11,9 +11,8 @@ export interface userLogin {
     password: string;
   }
 export const login=createAsyncThunk<returnType,userLogin>("login", async (data:userLogin, { rejectWithValue }) => {  
-        const response = await axios.post("http://54.91.216.53:8082/auth/login", data); 
-        // Adjust your endpoint as necessary
-        return response.data; // Return the user data from API response  
+        const response = await axios.post("http://54.204.147.9:8082/auth/login", data).then((response)=>response.data).catch((error)=>error?.response?.data) 
+        return response;
 })
 
 const initialstate={
@@ -39,7 +38,6 @@ const loginSlice=createSlice({
             state.data=null
         }),
         builder.addCase(login.rejected,(state,action)=>{
-            console.log(action,"action.error.message")
             state.loading=false
             state.message=action.error.message?action.error.message:"error"
             state.data=null

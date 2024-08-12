@@ -26,7 +26,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={cairo.className}>
         <div className="flex items-center justify-center min-h-screen bg-[#DCE9E5]">
-          <div className="w-full lg:w-1/2 ">
+          <div className="md:w-[27.5rem] lg:w-[27.5rem] sm:w-full">
           <ReduxProvider>
           <ToasterContext/>
           {children}

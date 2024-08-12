@@ -35,7 +35,7 @@ const slicedData = {
 export default function Home() {
   let router = useRouter();
   return (
-    <div className="flex justify-center w-dvh h-max  ">
+    <div className="flex justify-center w-dvh h-max ">
       <div className="w-full bg-white rounded text-black shadow ">
         <div className="w-full z-50">
           <MainHeader />
@@ -54,7 +54,6 @@ export default function Home() {
                   <Link
                     href={"add-your-real-estate"}
                     className="flex items-center"
-                    onClick={() => router.push("/addOrder")}
                   >
                     <Addrequest />
                   </Link>

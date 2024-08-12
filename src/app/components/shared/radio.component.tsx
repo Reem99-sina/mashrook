@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC ,ChangeEvent} from "react";
 import clsx from "clsx";
 
 interface RadioInputProps {
@@ -6,7 +6,7 @@ interface RadioInputProps {
   name: string;
   value: string;
   checked?: boolean;
-  onChange: (value: string) => void;
+  onChange: (event: ChangeEvent<HTMLInputElement>) => void
 }
 
 export const RadioInput: FC<RadioInputProps> = ({
@@ -14,14 +14,12 @@ export const RadioInput: FC<RadioInputProps> = ({
   name,
   value,
   checked,
-  onChange,
+  onChange
 }) => {
   return (
     <div
       className="mb-4 flex cursor-pointer items-center flex-row-reverse "
-      onClick={() => {
-        onChange(value);
-      }}
+      
     >
       <input
         id={value}
@@ -29,13 +27,16 @@ export const RadioInput: FC<RadioInputProps> = ({
         value={value}
         name={name}
         checked={checked}
-        onChange={() => onChange(value)}
+        onChange={onChange}
         className={clsx("h-4 w-4")}
+        
       />
+      
       <label
         className={`mx-2 cursor-pointer text-sm font-bold ${
           checked ? "text-[#198897]" : "text-prim1"
         } `}
+        htmlFor={value}
       >
         {label}
       </label>
