@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useRef, useState,useEffect } from "react";
 import { AddButton, CloseIconSmall, Succeeded } from "../assets/svg";
 import { RadioInput } from "../components/shared/radio.component";
 import { Button } from "../components/shared/button.component";
@@ -9,6 +9,9 @@ import Footer from "../components/header/Footer2";
 import MainHeader from "../components/header/MainHeader";
 import { useRouter } from "next/navigation";
 import { TextInput } from "../components/shared/text-input.component";
+import { AppDispatch,RootState } from "@/redux/store";
+import { useDispatch,useSelector } from "react-redux";
+import {getproperityType} from "@/redux/features/getProperity"
 
 const cities = [
   {
@@ -50,15 +53,27 @@ const dataa = [
     option: ["أرض سكنية", "أرض تجارية", "فيلا", "دور", "شقة"],
   },
 ];
+interface typeSelectedProperty{
+  id:number,
+  title:string
+}
 const AddYourRealEstate: React.FC = () => {
   const modalRef = useRef<ModalRef>(null);
 
   const [sentYourRequest, setSentYourRequest] = useState<boolean>(false);
 
-  const [selectedPropertyType, setSelectedPropertyType] = useState("");
+  const [selectedPropertyType, setSelectedPropertyType] = useState<typeSelectedProperty>();
 
-  const handleOptionChange = (option: any) => {
-    setSelectedPropertyType(option);
+  const handleOptionChange = (option: any,title:string) => {
+    if(title=="صفة مقدم العرض"){
+      setDataSend({...dataSend,owner_type:option})  
+    }else if(title=="الغرض من عرض العقار"){
+      setDataSend({...dataSend,purpose:option})  
+    }else{
+      setDataSend({...dataSend,property_type_id:option?.id})  
+      setSelectedPropertyType(option);
+    }
+    // setSelectedPropertyType(option);
   };
 
   const onSubmit = () => {
@@ -67,12 +82,52 @@ const AddYourRealEstate: React.FC = () => {
   const router = useRouter();
 
   const [partnershipPercentage, setPartnershipPercentage] = useState(0);
-
+  const [dataSend,setDataSend]=useState({
+    owner_type: "", // وسيط عقاري, مطور عقاري, وسيط
+    purpose: "", //بيع, تطوير (شراكة برأس المال أو البنا
+    property_type_id: "",
+    city: "",
+    district: "",
+    address: "",
+    area: "",
+    price: "",
+    lat: "",
+    long: "",
+    is_divisible: "",
+    type:""
+  })
+  const [mediator,setMediator]=useState({
+    advertisement_number:"", // رقم الاعلان
+    license_number: "", 
+  })
+  const [earth,setEarth]=useState({
+    plan_number:"", // رقم الاعلان
+    piece_number: "", 
+  }) 
+  const [departmentArch,setdepartmentArch]=useState({
+    age:"",
+    rooms_number:"",
+    halls_number:"",
+    bathrooms_number:"",
+    kitchens_number:"",
+  })
+  const [additionalData,setAdditional]=useState({
+    pool:false,
+    garden:false,
+    servants_room: false, // مزايا اضافية غرفة خدم
+    ac: false, // مزايا اضافية مكيفة
+    furnished: false, // مزايا اضافية مؤثثة
+    kitchen: false, 
+  })
   const handlePercentageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPartnershipPercentage(Number(e.target.value));
   };
   const tooltipRef = useRef<HTMLDivElement>(null);
-
+  let {loading, message, data}=useSelector<RootState>((state)=>state.properityType)as {loading:boolean, message:string,data:any}
+  const dispatch = useDispatch<AppDispatch>();
+  useEffect(()=>{
+    dispatch(getproperityType())
+  },[dispatch])
   return (
     <>
       {!sentYourRequest ? (
@@ -94,13 +149,21 @@ const AddYourRealEstate: React.FC = () => {
                     </p>
                   </div>
                   <div className="flex flex-row flex-wrap justify-end mt-6 gap-8">
-                    {item.option.map((option, index) => (
+                    {item.tattle!="نوع العقار"?item.option.map((option, index) => (
                       <RadioInput
                         key={index}
                         name={`ownershipType_${item.id}`}
-                        onChange={() => handleOptionChange(option)}
+                        onChange={() => handleOptionChange(option,item.tattle)}
                         value={option}
                         label={option}
+                      />
+                    )):data?.map((option:{id:number,title:string}, index:number) => (
+                      <RadioInput
+                        key={index}
+                        name={`ownershipType_${item.id}`}
+                        onChange={() => handleOptionChange(option,item.tattle)}
+                        value={option?.title}
+                        label={option?.title}
                       />
                     ))}
                   </div>
@@ -108,24 +171,24 @@ const AddYourRealEstate: React.FC = () => {
               ))}
             </div>
 
-            {selectedPropertyType === "شقة" && (
+            {selectedPropertyType?.title === "شقة" && (
               <div className="bg-white rounded-lg border border-[#E5E7EB] w-full mb-4 items-start justify-start p-4 mt-4">
                 <div className="flex items-center justify-end">
                   <p className="text-base font-bold text-[#4B5563]">
                     نوع الشقة
                   </p>
                 </div>
-                <div className="flex flex-row flex-wrap justify-end mt-6 gap-8">
+                <div className="flex flex-col flex-wrap justify-end mt-6 gap-8">
                   <div className="mb-4">
                     <RadioInput
                       name="ownershipType"
-                      onChange={() => {}}
+                      onChange={(event) => setDataSend({...dataSend,type:event?.target?.value})}
                       value="شقة (داخل عمارة سكنية)"
                       label="شقة (داخل عمارة سكنية) "
                     />
                     <RadioInput
                       name="ownershipType"
-                      onChange={() => {}}
+                      onChange={(event) => setDataSend({...dataSend,type:event?.target?.value})}
                       value="شقة (داخل فيلا) "
                       label=" شقة (داخل فيلا)"
                     />
@@ -134,52 +197,52 @@ const AddYourRealEstate: React.FC = () => {
               </div>
             )}
 
-            {selectedPropertyType === "دور" && (
+            {selectedPropertyType?.title === "دور" && (
               <div className="bg-white rounded-lg border border-[#E5E7EB] w-full mb-4 items-start justify-start p-4 mt-4">
                 <div className="flex items-center justify-end">
                   <p className="text-base font-bold text-[#4B5563]">
                     نوع الدور
                   </p>
                 </div>
-                <div className="flex flex-row flex-wrap justify-end mt-6 gap-8">
+                <div className="flex flex-col flex-wrap justify-end mt-6 gap-8">
                   <div className="mb-4">
                     <RadioInput
                       name="ownershipType"
-                      onChange={() => {}}
+                      onChange={(event) => setDataSend({...dataSend,type:event?.target?.value})}
                       value="دور أرضي"
                       label="دور أرضي"
                     />
                     <RadioInput
                       name="ownershipType"
-                      onChange={() => {}}
+                      onChange={(event) => setDataSend({...dataSend,type:event?.target?.value})}
                       value="دور علوي"
-                      label=" دور علوي"
+                      label="دور علوي"
                     />
                   </div>
                 </div>
               </div>
             )}
 
-            {selectedPropertyType === "فيلا" && (
+            {selectedPropertyType?.title === "فيلا" && (
               <div className="bg-white rounded-lg border border-[#E5E7EB] w-full mb-4 items-start justify-start p-4 mt-4">
                 <div className="flex items-center justify-end">
                   <p className="text-base font-bold text-[#4B5563]">
                     نوع الفيلا
                   </p>
                 </div>
-                <div className="flex flex-row flex-wrap justify-end mt-6 gap-8">
+                <div className="flex flex-col flex-wrap justify-end mt-6 gap-8">
                   <div className="mb-4">
                     <RadioInput
                       name="ownershipType"
-                      onChange={() => {}}
-                      value="فيلا (درج داخلي + شقة) "
-                      label="فيلا (درج داخلي + شقة) "
+                      onChange={(event) => setDataSend({...dataSend,type:event?.target?.value})}
+                      value="فيلا (درج داخلي + شقة)"
+                      label="فيلا (درج داخلي + شقة)"
                     />
                     <RadioInput
                       name="ownershipType"
-                      onChange={() => {}}
-                      value="فيلا (وحدات تمليك) "
-                      label=" فيلا (وحدات تمليك) "
+                      onChange={(event) => setDataSend({...dataSend,type:event?.target?.value})}
+                      value="فيلا (وحدات تمليك)"
+                      label="فيلا (وحدات تمليك)"
                     />
                   </div>
                 </div>
@@ -196,7 +259,8 @@ const AddYourRealEstate: React.FC = () => {
               <div className="flex items-end gap-2 justify-end flex-row mt-5">
                 <div className="flex flex-col items-end gap-2 justify-end w-full">
                   <p className="text-base font-medium text-[#4B5563]">الحي</p>
-                  <select className="border w-full text-right  border-[#D1D5DB] rounded-lg">
+                  <select className="border w-full text-right  border-[#D1D5DB] rounded-lg "
+                  onChange={(event)=>setDataSend({...dataSend,district:event?.target?.value})}>
                     {cities.map((city) => (
                       <option key={city.id} value={city.name}>
                         {city.name}
@@ -208,7 +272,8 @@ const AddYourRealEstate: React.FC = () => {
                   <p className="text-base font-medium text-[#4B5563]">
                     المدينة
                   </p>
-                  <select className="border w-full text-right  border-[#D1D5DB] rounded-lg">
+                  <select className="border w-full text-right  border-[#D1D5DB] rounded-lg"
+                   onChange={(event)=>setDataSend({...dataSend,city:event?.target?.value})}>
                     {cities.map((city) => (
                       <option key={city.id} value={city.name}>
                         {city.name}
@@ -224,14 +289,17 @@ const AddYourRealEstate: React.FC = () => {
                   className="cursor-pointer"
                 />
               </div>
-              <div className="flex items-end gap-2 justify-end flex-col mt-5">
+              {(selectedPropertyType?.title=="أرض سكنية"||selectedPropertyType?.title=="أرض تجارية")&&<div className="flex items-end gap-2 justify-end flex-col mt-5">
                 <p className="text-base text-[#4B5563] font-medium">
                   رقم المخطط{" "}
                 </p>
                 <TextInput
                   inputProps={{ placeholder: "-- الرجاء الادخال --" }}
+                  onChange={(event)=>setEarth({...earth,plan_number:event?.target?.value})}
+                  value={earth?.plan_number}
                 />
-              </div>
+              </div>}
+              
             </div>
             <div className="bg-white rounded-lg border border-[#E5E7EB] w-full mb-4 items-start justify-start p-4">
               <div className="flex items-center justify-end">
@@ -239,7 +307,7 @@ const AddYourRealEstate: React.FC = () => {
                   تفاصيل وسعر العقار{" "}
                 </p>
               </div>
-              {selectedPropertyType === "فيلا" && (
+              {(selectedPropertyType?.title === "فيلا"||selectedPropertyType?.title === "شقة"||selectedPropertyType?.title === "دور") && (
                 <>
                   <div>
                     <div
@@ -265,7 +333,7 @@ const AddYourRealEstate: React.FC = () => {
                         max="10"
                         value={partnershipPercentage}
                         onChange={handlePercentageChange}
-                        className="w-full"
+                        className="w-full accent-[#3B73B9]"
                         dir="rtl"
                       />
                       <div
@@ -301,7 +369,7 @@ const AddYourRealEstate: React.FC = () => {
                         max="3"
                         // value={partnershipPercentage}
                         onChange={handlePercentageChange}
-                        className="w-full"
+                        className="w-full accent-[#3B73B9]"
                         dir="rtl"
                       />
                       <div
@@ -337,7 +405,7 @@ const AddYourRealEstate: React.FC = () => {
                         max="5"
                         // value={partnershipPercentage}
                         onChange={handlePercentageChange}
-                        className="w-full"
+                         className="w-full accent-[#3B73B9]"
                         dir="rtl"
                       />
                       <div

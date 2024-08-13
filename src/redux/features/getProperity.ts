@@ -19,7 +19,7 @@ export interface properityTypeInter {
     apartment_floor: String
 }
 export const getproperityType=createAsyncThunk<returnType>("properityType/get", async (_, { rejectWithValue }) => {  
-        const response = await axios.get("http://54.204.147.9:8082/property-type")
+        const response = await axios.get("https://server.mashrook.sa/property-type")
         .then((response)=>response.data)
         .catch((error)=>error?.response?.data) 
         return response;
