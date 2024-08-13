@@ -6,7 +6,7 @@ interface verifyEmail{
 }
 
 export const verifyRequest=createAsyncThunk("verify", async (data:verifyEmail, { rejectWithValue }) => {  
-        const response = await axios.put("http://54.204.147.9:8082/auth/code", data).then((response)=>response.data).catch((error)=>error?.response?.data)// Adjust your endpoint as necessary
+        const response = await axios.put("https://server.mashrook.sa/auth/code", data).then((response)=>response.data).catch((error)=>error?.response?.data)// Adjust your endpoint as necessary
         return response // Return the user data from API response  
 })
 

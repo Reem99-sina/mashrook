@@ -20,7 +20,7 @@ export interface properityTypeInter {
 }
 
 export const postProperityType=createAsyncThunk<returnType,properityTypeInter>("properityType/post", async (data:properityTypeInter, { rejectWithValue }) => {  
-    const response = await axios.post("http://54.204.147.9:8082/property/request",data,{headers:{
+    const response = await axios.post("https://server.mashrook.sa/property/request",data,{headers:{
         "Authorization":sessionStorage.getItem("token")
     }})
     .then((response)=>response.data)
