@@ -21,7 +21,7 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
 import {rowSchema,departmentSchema,departmentOwnSchema,earthSchema,villaOwnSchema} from "@/typeSchema/schema"
-import { validateForm} from "./hooks/validate"
+import { validateForm} from "../hooks/validate"
 import AccordionComponent from "../components/shared/Accordion.component"
 
 const dataReal = [
@@ -35,7 +35,7 @@ const floorsVilla=[
   {  name: "دور علوي" },
   {  name: "شقة" },
 ]
-const cites = [
+ const cites:{ id: number; name: string; }[] = [
   { id: 1, name: "حي النرجس" },
   { id: 2, name: "حي العليا" },
   { id: 3, name: "حي المروج" },
@@ -258,7 +258,7 @@ const AddYourRequest: React.FC = () => {
                       {item.title}
                     </p>
                   </div>
-                  <div className="flex flex-row flex-wrap gap-8 items-center justify-end mt-6">
+                  <div className="flex  flex-row-reverse flex-wrap gap-8 items-center justify-start mt-6">
                     {Array.isArray(data)&&data.map((child, id) => (
                       <RadioInput
                         key={id}
@@ -821,8 +821,8 @@ const AddYourRequest: React.FC = () => {
             </div>
           </div>
           <div>
-            <Modal ref={modalRef} size="xl">
-              <div className="items-start flex justify-center flex-col p-4">
+            <Modal ref={modalRef} size="sm">
+              <div className="items-start flex justify-center flex-col p-4 ">
                 <div className="flex items-center   w-full">
                   <div className="flex-1 flex  items-center justify-center">
                     <p className="text-base text-[#374151] font-bold">

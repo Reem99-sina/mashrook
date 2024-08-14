@@ -18,21 +18,10 @@ export const RadioInput: FC<RadioInputProps> = ({
 }) => {
   return (
     <div
-      className="mb-4 flex cursor-pointer items-center flex-row-reverse "
+      className="mb-4 flex cursor-pointer items-center flex-row "
       
     >
-      <input
-        id={value}
-        type="radio"
-        value={value}
-        name={name}
-        checked={checked}
-        onChange={onChange}
-        className={clsx("h-4 w-4")}
-        
-      />
-      
-      <label
+         <label
         className={`mx-2 cursor-pointer text-sm font-bold ${
           checked ? "text-[#198897]" : "text-prim1"
         } `}
@@ -40,6 +29,18 @@ export const RadioInput: FC<RadioInputProps> = ({
       >
         {label}
       </label>
+      <input
+       
+        type="radio"
+        value={value}
+        name={name}
+        checked={checked}
+        onChange={onChange}
+        className={clsx("h-4 w-4")}
+        id={value}
+      />
+      
+   
     </div>
   );
 };

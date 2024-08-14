@@ -5,7 +5,10 @@ import userReducer from "./features/userSlice"
 import verifyReducer from "./features/vierfySlice"
 import properityType from "./features/getProperity"
 import properityRequest from "./features/postRequest"
+import properityPurpose from "./features/getproperityPurpose"
+import properityOwnerType from "./features/getProperityOwnerType"
 
+import postrealEstateType from "./features/postRealEstate"
 import loginReducer from "./features/loginSlice"
 
 import { Action } from '@reduxjs/toolkit';
@@ -16,7 +19,10 @@ const store = configureStore({
     verify:verifyReducer,
     login:loginReducer,
     properityType:properityType,
-    properityRequest:properityRequest
+    properityRequest:properityRequest,
+    properityPurpose:properityPurpose,
+    properityOwnerType:properityOwnerType,
+    realEstateRequest:postrealEstateType
   }
 
 });

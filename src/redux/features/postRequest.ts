@@ -25,7 +25,7 @@ export const postProperityType=createAsyncThunk<returnType,properityTypeInter>("
     }})
     .then((response)=>response.data)
     .catch((error)=>error?.response?.data) 
-    console.log(response,"response")
+    
     return response;
 })
 const initialstate={
