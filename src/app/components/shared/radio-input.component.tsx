@@ -48,7 +48,7 @@ export const RadioInput: FC<Props> = ({
             "text-base font-bold text-[#4B5563] px-3",
             errorMessage && "dark:text-error-dark text-error"
           )}
-          htmlFor={id}
+          htmlFor={value}
         >
           {label}
         </label>
@@ -65,7 +65,7 @@ export const RadioInput: FC<Props> = ({
           maxLength={maxLength}
           onChange={onChange}
           value={value}
-          id={id}
+          id={value}
           name={name}
         />
      

@@ -51,3 +51,7 @@ export { default as Check } from "./check.svg";
 export { default as Succeeded } from "./succeeded.svg";
 export { default as Pattern } from "./Pattern.png";
 export { default as AddICon } from "./addicon.png";
+export { default as X } from "./x.png";
+export { default as Sub } from "./vectorSub.png";
+
+
