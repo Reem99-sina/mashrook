@@ -11,8 +11,8 @@ export interface userLogin {
     password: string;
   }
 export const login=createAsyncThunk<returnType,userLogin>("login", async (data:userLogin, { rejectWithValue }) => {  
-        const response = await axios.post("https://server.mashrook.sa/auth/login", data).then((response)=>response.data).catch((error)=>error?.response?.data) 
-        return response;
+    const response = await axios.post("https://server.mashrook.sa/auth/login", data).then((response)=>response.data).catch((error)=>error?.response?.data) 
+    return response;
 })
 
 const initialstate={

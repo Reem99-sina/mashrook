@@ -57,7 +57,7 @@ export default function Home() {
                   >
                     <Addrequest />
                   </Link>
-                  <Link href={"add-your-request"} className="flex items-center">
+                  <Link href={"add-your-request"} className="flex items-center" onClick={()=>router.refresh()}>
                     <Addbutton />
                   </Link>
                 </div>

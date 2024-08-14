@@ -24,15 +24,7 @@ export const getproperityType=createAsyncThunk<returnType>("properityType/get", 
         .catch((error)=>error?.response?.data) 
         return response;
 })
-export const postProperityType=createAsyncThunk<returnType,properityTypeInter>("properityType/post", async (data:properityTypeInter, { rejectWithValue }) => {  
-    const response = await axios.post("http://54.204.147.9:8082/property/request",data,{headers:{
-        "Authorization":sessionStorage.getItem("token")
-    }})
-    .then((response)=>response.data)
-    .catch((error)=>error?.response?.data) 
-    console.log(response,"response")
-    return response;
-})
+
 const initialstate={
     loading:false,
     message:"",
