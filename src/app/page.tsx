@@ -52,7 +52,7 @@ export default function Home() {
   }, []);
   useEffect(() => {
    dispatch(getRequest())
-  }, []);
+  }, [dispatch]);
   return (
     <div className="flex justify-center w-dvh h-max ">
       <div className="w-full bg-white rounded text-black shadow ">
