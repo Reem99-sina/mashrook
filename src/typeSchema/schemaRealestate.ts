@@ -11,9 +11,7 @@ export let earthSchema = object().shape({
   area:string().required("مساحة مطلوبة"),
   price: number().required("سعر مطلوب"),
   is_divisible:boolean().required("هل العقار قابل للتجزئة؟"),
-
   advertisement_number:string(),
-
   license_number:string()
 });
 export let departmentOrRowSchema = object().shape({
