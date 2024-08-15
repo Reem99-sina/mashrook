@@ -11,11 +11,9 @@ export let earthSchema = object().shape({
   area:string().required("مساحة مطلوبة"),
   price: number().required("سعر مطلوب"),
   is_divisible:boolean().required("هل العقار قابل للتجزئة؟"),
-<<<<<<< HEAD
+
   advertisement_number:string(),
-=======
-  advertisement_number:string().required("ما رقم الاعلان ؟"),
->>>>>>> 88e5f71afe4eefee98718f0b2b0e856f3a8d0091
+
   license_number:string()
 });
 export let departmentOrRowSchema = object().shape({
@@ -64,7 +62,7 @@ export let departmentOrRowArchSchema = object().shape({
   kitchen: boolean().required("هل تريدة مع مطبخ؟"),
   car_entrance: boolean().required("هل تريدة مع مدخل سيارة؟"),
 });
-<<<<<<< HEAD
+
 
 export let villaOwnSchema = object().shape({
   property_owner_type_id: number().required(" ما صفة مقدم الغرض؟ "),
@@ -90,8 +88,7 @@ export let villaOwnSchema = object().shape({
   kitchen: boolean().required("هل تريدة مع مطبخ؟"),
   car_entrance: boolean().required("هل تريدة مع مدخل سيارة؟"),
 });
-=======
->>>>>>> 88e5f71afe4eefee98718f0b2b0e856f3a8d0091
+
 // export let earthSchema = object().shape({
 //     type: string().required("نوع دور مطلوب"),
 //     city: string().required(" مدينة مطلوب"),
