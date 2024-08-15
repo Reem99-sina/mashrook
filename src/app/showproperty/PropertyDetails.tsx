@@ -8,6 +8,7 @@ import { useState } from "react";
 import { CarouselDefault } from "./Carousel3";
 import { GoLocation } from "react-icons/go";
 import { BsPerson } from "react-icons/bs";
+import { format } from 'date-fns';
 import { FaBookmark, FaChevronRight, FaRegCalendarAlt } from "react-icons/fa";
 import { CgSmartphoneShake } from "react-icons/cg";
 import {
@@ -21,16 +22,17 @@ import { RxArrowLeft } from "react-icons/rx";
 import { MdOutlineFlag } from "react-icons/md";
 import Image from "next/image";
 import JoinStatusButtons from "../components/propertyCard/JoinButton";
-
-
-
-
+import { AppDispatch,RootState } from "@/redux/store";
+import { useDispatch,useSelector } from "react-redux";
+import {dataReturn} from "@/redux/features/getRequest"
+import {useRouter} from "next/navigation"
 const PropertyDetails: React.FC = () => {
   const [activeTab, setActiveTab] = useState<"location" | "details">(
     "location"
   );
   const isDivisible = true;
   const [saved, setSaved] = useState(false);
+ let router=useRouter()
   const [showNotification, setShowNotification] = useState(false);
   const [notificationMessage, setNotificationMessage] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -39,6 +41,11 @@ const PropertyDetails: React.FC = () => {
   const [showReportNotification, setShowReportNotification] = useState(false);
   const [reportNotificationMessage, setReportNotificationMessage] =
     useState("");
+
+    let { loading, message, data,selectData } = useSelector<RootState>(
+      (state) => state.getRequest
+    ) as { loading: boolean; message: string; data: dataReturn[], selectData:dataReturn};
+
   const maxChars = 250;
 
   const currentDealStatus = "متاح";
@@ -98,6 +105,7 @@ const PropertyDetails: React.FC = () => {
       setShowNotification(false);
     }, 3000);
   };
+  
 
   const detailsContent = (
     <div className="mt-4">
@@ -105,7 +113,7 @@ const PropertyDetails: React.FC = () => {
         <h2 className="text-2xl font-bold mb-4">تفاصيل العقار</h2>
         <div className="mt-2">
           <div className="border-2 rounded-lg p-4">
-            <h3 className="text-xl font-bold">قطعة 1256</h3>
+            <h3 className="text-xl font-bold">قطعة {selectData?.landDetails?.piece_number}</h3>
             <div className="flex justify-between bg-gray-100 w-full items-center rounded-lg ml-2 mt-4 px-2  py-2">
               <span>حالة العقار</span>
               <span className="bg-blue-450 rounded-lg p-2 text-white">
@@ -118,7 +126,7 @@ const PropertyDetails: React.FC = () => {
                 <span>
                   <HiOutlineSquare3Stack3D className="text-xl mx-2" />
                 </span>
-                <span>1256</span>
+                <span>{selectData?.landDetails?.piece_number}</span>
               </div>
             </div>
             <div className="flex justify-between bg-gray-100 w-full items-center rounded-lg ml-2 mt-4 px-2  py-2">
@@ -128,7 +136,7 @@ const PropertyDetails: React.FC = () => {
                   <BiArea className="text-xl mx-2" />{" "}
                 </span>
                 <span>
-                  300 م<sup>2</sup>
+                {selectData?.area} م<sup>2</sup>
                 </span>
               </div>
             </div>
@@ -136,13 +144,13 @@ const PropertyDetails: React.FC = () => {
               <span>مبلغ الشراكة</span>
               <div className="flex justify-center items-center border-2 rounded-lg p-2 ">
                 <LuTag className="text-xl mx-2" />
-                <span>2,000,000 ريال</span>
+                <span>{selectData?.price} ريال</span>
               </div>
             </div>
 
-            <JoinStatusButtons currentDealStatus={currentDealStatus} /> 
+            <JoinStatusButtons currentDealStatus={currentDealStatus} data={selectData}/> 
 
-
+{/* 
           <div className="border-2 rounded-lg p-4 mt-4">
             <h3 className="text-xl font-bold">قطعة 1256</h3>
             <div className="flex justify-between bg-gray-100 w-full items-center rounded-lg ml-2 mt-4 px-2  py-2">
@@ -179,11 +187,11 @@ const PropertyDetails: React.FC = () => {
               </div>
             </div>
 
-            <JoinStatusButtons currentDealStatus={currentDealStatus} /> 
+            <JoinStatusButtons currentDealStatus={currentDealStatus} data={selectData}/> 
 
 
-            </div>
-          </div>
+            </div>*/}
+          </div> 
         </div>
       </div>
     </div>
@@ -196,15 +204,15 @@ const PropertyDetails: React.FC = () => {
         <div className="mt-2">
           <div className="flex justify-between bg-gray-100 w-full items-center rounded-lg ml-2 mt-4 px-2  py-2">
             <span>رقم المخطط</span>
-            <span>1234</span>
+            <span>{selectData?.landDetails?.plan_number}</span>
           </div>
           <div className="flex justify-between bg-gray-100 w-full items-center rounded-lg ml-2 mt-4 px-2  py-2">
             <span>المدينة</span>
-            <span>الرياض</span>
+            <span>{selectData?.propertyLocation?.city}</span>
           </div>
           <div className="flex justify-between bg-gray-100 w-full items-center rounded-lg ml-2 mt-4 px-2  py-2">
             <span>الحي</span>
-            <span>حي النرجس</span>
+            <span> {selectData?.propertyLocation?.district}</span>
           </div>
           <div className="flex-col justify-between bg-gray-100 w-full items-center rounded-lg ml-2 mt-4 px-2  py-2">
             <div>الموقع</div>
@@ -235,13 +243,13 @@ const PropertyDetails: React.FC = () => {
         <div className="relative p-6 ">
           <CarouselDefault />
           <BiShareAlt className="absolute top-10 left-10 text-4xl bg-white text-gray-700  rounded-full m-4 p-1 shadow-md " />
-          <FaChevronRight className="absolute top-10 right-10 text-4xl bg-white text-gray-700 rounded-full m-4 p-1 shadow-md " />
+          <FaChevronRight className="absolute top-10 right-10 text-4xl bg-white text-gray-700 rounded-full m-4 p-1 shadow-md "onClick={()=>router.back()} />
         </div>
       </div>
       <div className="p-4 bg-white rounded-lg shadow-md">
         <div className="flex justify-between items-center">
           <div className="flex w-full justify-between items-center">
-            <h1 className="text-2xl font-bold mt-4">أرض سكنية</h1>
+            <h1 className="text-2xl font-bold mt-4">  {selectData?.details?.type||selectData?.propertyType?.title}</h1>
             <div className=" border-2 rounded-full">
               <GoLocation className="m-2 text-3xl" />
             </div>
@@ -254,7 +262,7 @@ const PropertyDetails: React.FC = () => {
             </div>
             <div className="flex items-center ml-2 text-sm text-white bg-blue-450 px-2 py-1 rounded-lg">
               <BsPerson className="text-white ml-2" />
-              مالك
+              {selectData?.propertyOwnerType?.title}
             </div>
           </div>
           <div className="flex bg-gray-100 w-full justify-between items-center py-2  px-2 rounded-lg ml-2 mt-4">
@@ -264,7 +272,7 @@ const PropertyDetails: React.FC = () => {
             <div className="flex items-center ml-2 text-sm bg-green-450 px-2 py-1 rounded-lg">
               <FaRegCalendarAlt className="text-white ml-2" />
               <span className="mr-2 text-sm text-white">
-                <p>12-12-2024</p>
+                <p> {selectData?.updatedAt&&format(new Date(selectData?.updatedAt), 'yyyy-MM-dd')}</p>
               </span>
             </div>
           </div>
@@ -275,7 +283,7 @@ const PropertyDetails: React.FC = () => {
             <div className="flex items-center ml-2 text-sm bg-gray-100 border-2 px-2 py-1 rounded-lg">
               <FaRegCalendarAlt className=" ml-2" />
               <span className="mr-2 text-sm ">
-                <p>12-12-2024</p>
+                <p>{selectData?.createdAt&&format(new Date(selectData?.createdAt), 'yyyy-MM-dd')}</p>
               </span>
             </div>
           </div>
@@ -286,7 +294,7 @@ const PropertyDetails: React.FC = () => {
             <div className="flex items-center ml-2 text-sm bg-gray-100 border-2  px-2 py-1 rounded-lg">
               <CgSmartphoneShake className=" ml-2" />
               <span className="mr-2 text-lg ">
-                <p>1234422</p>
+                <p>{selectData?.license_number}</p>
               </span>
             </div>
           </div>
@@ -295,7 +303,7 @@ const PropertyDetails: React.FC = () => {
               <p>رقم الطلب</p>
             </div>
             <span className="mr-2 ml-2  text-lg font-bold ">
-              <h4>2024</h4>
+              <h4>{selectData?.id}</h4>
             </span>
           </div>
           <div className="flex bg-gray-100 w-full justify-between items-center py-2  px-2 rounded-lg ml-2 mt-4">
@@ -303,7 +311,7 @@ const PropertyDetails: React.FC = () => {
               <p>نوع العقار</p>
             </div>
             <span className="mr-2 ml-2  text-lg font-bold ">
-              <h4>أرض سكنية</h4>
+              <h4> {selectData?.details?.type||selectData?.propertyType?.title}</h4>
             </span>
           </div>
           <div className="flex bg-gray-100 w-full justify-between items-center py-2  px-2 rounded-lg ml-2 mt-4">
@@ -311,15 +319,15 @@ const PropertyDetails: React.FC = () => {
               <p>الغرض من عرض العقار</p>
             </div>
             <span className="mr-2 ml-2  text-lg font-bold ">
-              <h4>استثمار (شراكة برأس المال او البناء)</h4>
+              <h4> {selectData?.propertyPurpose?.title}</h4>
             </span>
           </div>
           <div className="flex bg-gray-100 w-full justify-between items-center py-2  px-2 rounded-lg ml-2 mt-4">
             <div>
-              <p>العقار قابل للتجزئة</p>
+              <p>{selectData?.landDetails?.is_divisible}العقار قابل للتجزئة</p>
             </div>
             <span>
-              {!isDivisible ? (
+              {selectData?.landDetails?.is_divisible==false ? (
                 <IoMdCloseCircleOutline className="mr-2 ml-2 bg-red-450 text-white text-2xl font-bold rounded-full " />
               ) : (
                 <IoIosCheckmarkCircleOutline className="mr-2 ml-2 bg-green-450 text-white text-2xl font-bold rounded-full " />

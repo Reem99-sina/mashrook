@@ -11,7 +11,7 @@ export let earthSchema = object().shape({
   area:string().required("مساحة مطلوبة"),
   price: number().required("سعر مطلوب"),
   is_divisible:boolean().required("هل العقار قابل للتجزئة؟"),
-  advertisement_number:string().required("ما رقم الاعلان ؟"),
+  advertisement_number:string(),
   license_number:string()
 });
 export let departmentOrRowSchema = object().shape({
@@ -60,6 +60,33 @@ export let departmentOrRowArchSchema = object().shape({
   kitchen: boolean().required("هل تريدة مع مطبخ؟"),
   car_entrance: boolean().required("هل تريدة مع مدخل سيارة؟"),
 });
+
+
+export let villaOwnSchema = object().shape({
+  property_owner_type_id: number().required(" ما صفة مقدم الغرض؟ "),
+  property_purpose_id: number().required(" ما الغرض ؟"),
+  property_type_id:number().required(" ما نوع العقار ؟"),
+  district:string().required("حي مطلوب"),
+  city: string().required(" مدينة مطلوب"),
+  type: string().required("نوع مطلوب"),
+  area:string().required("مساحة مطلوبة"),
+  location:string().required("اي دور مطلوبة"),
+
+  price: number().required("سعر مطلوب"),
+  is_divisible:boolean().required("هل العقار قابل للتجزئة؟"),
+  advertisement_number:string(),
+  license_number:string(),
+  age: number().required(" ما عمر العقار ؟"),
+  rooms_number: number().required("ما عدد غرف؟"),
+  halls_number: number().required("ما عدد صالات؟"),
+  bathrooms_number: number().required("ما عدد حمامات؟"),
+  kitchens_number: number().required("ما عدد مطابخ؟"),
+  ac: boolean().required("هل تريدة  مع مكيفة؟"), // مزايا اضافية مكيفة
+  furnished: boolean().required("هل تريدة مع مؤثثة؟"), // مزايا اضافية مؤثثة
+  kitchen: boolean().required("هل تريدة مع مطبخ؟"),
+  car_entrance: boolean().required("هل تريدة مع مدخل سيارة؟"),
+});
+
 // export let earthSchema = object().shape({
 //     type: string().required("نوع دور مطلوب"),
 //     city: string().required(" مدينة مطلوب"),

@@ -12,6 +12,7 @@ import postrealEstateType from "./features/postRealEstate"
 import loginReducer from "./features/loginSlice"
 
 import { Action } from '@reduxjs/toolkit';
+import  getRequest  from './features/getRequest';
 
 const store = configureStore({
   reducer: {
@@ -20,6 +21,9 @@ const store = configureStore({
     login:loginReducer,
     properityType:properityType,
     properityRequest:properityRequest,
+
+    getRequest:getRequest,
+
     properityPurpose:properityPurpose,
     properityOwnerType:properityOwnerType,
     realEstateRequest:postrealEstateType
