@@ -54,7 +54,11 @@ export interface RealEstateErrrorTypeInter {
     plan_number?: string, // في حالة اختيار ارض (رقم المخطط)
     piece_number?: string, // في حالة اختيار ارض (رقم القطعة)
     area?: string,
+<<<<<<< HEAD
     price?:string,
+=======
+    price?:number,
+>>>>>>> 88e5f71afe4eefee98718f0b2b0e856f3a8d0091
     is_divisible?: boolean, // قي حالة اختيار ارض  (هل العقار قابل للتجزئية)
     advertisement_number?:string, // رقم الاعلان
     license_number?: string, // رقم الرخصة في حالة اختيار وسيط عقاري او مطور عقاري 

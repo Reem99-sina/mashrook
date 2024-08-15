@@ -6,15 +6,19 @@ import { RadioInput } from "../components/shared/radio.component";
 import { Button } from "../components/shared/button.component";
 import { Modal, ModalRef } from "../components/shared/modal.component";
 import ImageAppear from "../components/shared/ImageAppear";
+
 import AccordionComponent from "../components/shared/Accordion.component";
+
 import NumberRoom from "./components/NumberRoom";
 import Footer from "../components/header/Footer2";
 import MainHeader from "../components/header/MainHeader";
 import { useRouter } from "next/navigation";
 import { TextInput } from "../components/shared/text-input.component";
+
 import CountElement from "./components/CountElemet";
 import CheckFeature from "./components/CheckFeature";
 import InputAreaPrice from "./components/InputAreaPrice";
+
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { getproperityType } from "@/redux/features/getProperity";
@@ -31,8 +35,10 @@ import toast from "react-hot-toast";
 import {
   earthSchema,
   departmentOrRowSchema,
+
   departmentOrRowArchSchema,
   villaOwnSchema,
+
 } from "@/typeSchema/schemaRealestate";
 // import MapLocation from "./components/MapLocation"
 const cities = [
@@ -78,11 +84,13 @@ const dataa = [
     option: ["أرض سكنية", "أرض تجارية", "فيلا", "دور", "شقة"],
   },
 ];
+
 const floorsVilla = [
   { name: "دور الارضي" },
   { name: "دور علوي" },
   { name: "شقة" },
 ];
+
 interface typeSelectedProperty {
   id: number;
   title: string;
@@ -128,9 +136,11 @@ const AddYourRealEstate: React.FC = () => {
     advertisement_number: "", // رقم الاعلان
     license_number: "",
   });
+
   const [villa, setvilla] = useState({
     location: "",
   });
+
   const [DepartmentArch, setDepartmentArch] = useState({
     apartment_number: "", // رقم الاعلان
     apartment_floor: "",
@@ -199,6 +209,7 @@ const AddYourRealEstate: React.FC = () => {
   const onSubmit = async () => {
     if (deal) {
       if (token) {
+
         if (images && images?.length > 0) {
           if (
             selectedPropertyType?.title == "أرض سكنية" ||
@@ -226,6 +237,7 @@ const AddYourRealEstate: React.FC = () => {
           } else if (departmentArch.type == "شقة (داخل عمارة سكنية)") {
             const status = await validateForm(
               {
+
                 ...dataSend,
                 ...departmentArch,
                 ...DepartmentArch,
@@ -233,6 +245,7 @@ const AddYourRealEstate: React.FC = () => {
                 furnished: additionalData?.furnished, // مزايا اضافية مؤثثة
                 kitchen: additionalData?.kitchen,
                 car_entrance: additionalData?.car_entrance,
+
               },
               departmentOrRowArchSchema,
               setErrors
@@ -317,6 +330,7 @@ const AddYourRealEstate: React.FC = () => {
         } else {
           setErrors({ ...errors, images: "مطلوب اضافة صوره" });
         }
+
       } else {
         toast.error("انت تحتاج الي تسجيل دخول");
         router.push("/login");
@@ -340,6 +354,7 @@ const AddYourRealEstate: React.FC = () => {
       setToken(storedToken);
     }
   }, []);
+
   useEffect(() => {
     if (messagerealEstateRequest && Boolean(datarealEstateRequest) == true) {
       toast.success(messagerealEstateRequest);
@@ -351,6 +366,7 @@ const AddYourRealEstate: React.FC = () => {
       setSentYourRequest(false);
     };
   }, []);
+
 
   // console.log(errors,"errors",formData,images,formData.has('images'))
   return (
@@ -705,6 +721,7 @@ const AddYourRealEstate: React.FC = () => {
                 </p>
               </div>
               <div className="mb-4" style={{ direction: "rtl" }}>
+
                 {departmentArch?.type == "شقة (داخل عمارة سكنية)" && (
                   <>
                     <div className="flex flex-col gap-5 my-3">
@@ -733,6 +750,7 @@ const AddYourRealEstate: React.FC = () => {
                     </div>
                   </>
                 )}
+
                 {(selectedPropertyType?.title == "أرض سكنية" ||
                   selectedPropertyType?.title == "أرض تجارية") && (
                   <div className="mb-4">
@@ -759,6 +777,7 @@ const AddYourRealEstate: React.FC = () => {
                     )}
                   </div>
                 )}
+
                 {(selectedPropertyType?.title == "أرض سكنية" ||
                   selectedPropertyType?.title == "أرض تجارية" ||
                   selectedPropertyType?.title == "شقة" ||
@@ -802,6 +821,7 @@ const AddYourRealEstate: React.FC = () => {
                     max={10}
                   />
                   <NumberRoom
+
                     errors={String(errors?.rooms_number)}
                     value={departmentArch?.rooms_number}
                     onChange={handlePercentageChange}
@@ -841,6 +861,7 @@ const AddYourRealEstate: React.FC = () => {
                     secondNumber={"3+ مطابخ"}
                     max={3}
                   />
+
                 </>
               ) : (
                 selectedPropertyType?.title === "فيلا" && (
@@ -1099,6 +1120,7 @@ const AddYourRealEstate: React.FC = () => {
                     </div>
                   </div>
                 )
+
               )}
 
               <div className="mb-4" style={{ direction: "rtl" }}>
@@ -1154,6 +1176,8 @@ const AddYourRealEstate: React.FC = () => {
               <div className="flex items-center justify-end">
                 <p className="text-base font-bold text-[#4B5563]">المرفقات</p>
               </div>
+
+
 
               <ImageAppear images={images} onDelete={onDelete} />
               <div className="flex flex-row justify-end mt-1 gap-8">

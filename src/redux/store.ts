@@ -21,7 +21,10 @@ const store = configureStore({
     login:loginReducer,
     properityType:properityType,
     properityRequest:properityRequest,
+<<<<<<< HEAD
     getRequest:getRequest,
+=======
+>>>>>>> 88e5f71afe4eefee98718f0b2b0e856f3a8d0091
     properityPurpose:properityPurpose,
     properityOwnerType:properityOwnerType,
     realEstateRequest:postrealEstateType

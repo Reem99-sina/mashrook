@@ -84,6 +84,7 @@ export default function Home() {
                     }}
                   >
                     <Addrequest />
+<<<<<<< HEAD
                   </button>
                   <button  className="flex items-center" onClick={()=>{
                       if(!token){
@@ -94,6 +95,10 @@ export default function Home() {
                         router.replace("/add-your-request")
                       }
                   }}>
+=======
+                  </Link>
+                  <Link href={"add-your-request"} className="flex items-center" onClick={()=>router.refresh()}>
+>>>>>>> 88e5f71afe4eefee98718f0b2b0e856f3a8d0091
                     <Addbutton />
                   </button>
                 </div>
