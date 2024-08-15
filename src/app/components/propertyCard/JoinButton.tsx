@@ -3,15 +3,19 @@
 import Link from "next/link";
 import React, { useState, useRef, useEffect } from "react";
 import { RxArrowLeft } from "react-icons/rx";
+import {dataReturn} from "@/redux/features/getRequest"
 
 type JoinStatusButtonsProps = {
   currentDealStatus: string;
+  data:dataReturn;
 };
 
 const JoinStatusButtons: React.FC<JoinStatusButtonsProps> = ({
   currentDealStatus,
+  data
 }) => {
   const [showDialog, setShowDialog] = useState(false);
+  const [token, setToken] = useState<string | null>(null);
   const [partnershipPercentage, setPartnershipPercentage] = useState(0);
   const availableAmount = 600000;
   const tooltipRef = useRef<HTMLDivElement>(null);
@@ -43,12 +47,17 @@ const JoinStatusButtons: React.FC<JoinStatusButtonsProps> = ({
       };
     }
   }, [partnershipPercentage]);
-
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const storedToken = sessionStorage.getItem('token');
+      setToken(storedToken);
+    }
+  }, []);
   const partnershipAmount = (availableAmount * partnershipPercentage) / 100;
 
   return (
     <div id="joinStatus" className="py-4">
-      {currentDealStatus === "محجوز" ? (
+      {/* {currentDealStatus === "محجوز" ? (
         <div className="flex flex-row items-center justify-between">
           <button
             type="button"
@@ -63,21 +72,21 @@ const JoinStatusButtons: React.FC<JoinStatusButtonsProps> = ({
             عرض الطلب
           </button>
         </div>
-      ) : (
+      ) : ( */}
         <div className="flex justify-center">
           <button
             type="button"
             className={`${
-              currentDealStatus === "تمت الشراكة"
+             (currentDealStatus === "تمت الشراكة"||Boolean(token)==false)
                 ? "bg-gray-300 text-gray-800"
                 : "bg-blue-450 text-white hover:bg-blue-800 border-2 border-blue-500"
             } w-3/4 font-medium rounded-lg text-sm px-5 py-2.5 flex justify-center rtl:flex-row-reverse dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
-            disabled={currentDealStatus === "تمت الشراكة"}
+            disabled={currentDealStatus === "تمت الشراكة"||Boolean(token)==false}
             onClick={handleDialogToggle}
           >
             <RxArrowLeft
               className={`mr-4 text-xl ${
-                currentDealStatus === "تمت الشراكة"
+                (currentDealStatus === "تمت الشراكة"||Boolean(token)==false)
                   ? "text-gray-600"
                   : "text-white"
               }`}
@@ -85,7 +94,7 @@ const JoinStatusButtons: React.FC<JoinStatusButtonsProps> = ({
             انضم كشريك
           </button>
         </div>
-      )}
+      {/* )} */}
 
       {showDialog && (
         <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex justify-center items-center px-2 ">
@@ -99,14 +108,16 @@ const JoinStatusButtons: React.FC<JoinStatusButtonsProps> = ({
               >
                 &times;
               </button>
-              <h2 className="text-sm lg:text-xl font-bold">ارض سكنية - قطعة رقم 1256</h2>
+              <h2 className="text-sm lg:text-xl font-bold">{ data?.details?.type||data?.propertyType?.title}-{data?.landDetails?.piece_number?
+                `قطعة رقم  ${data?.landDetails?.piece_number}`
+                :data?.propertyType?.title}</h2>
               <p></p>
             </div>
             <div className="mb-4">
               <p className="text-lg font-medium">
                   المبلغ المتاح
                 <span className="text-blue-450 font-bold mx-4">
-                  {availableAmount} ريال
+                  {data?.price} ريال
                 </span>
               </p>
             </div>

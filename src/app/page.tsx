@@ -8,9 +8,14 @@ import HowItWorks2 from "../app/components/landingPage/HowItWorks2";
 import ClientJourney2 from "../app/components/landingPage/ClientJourney2";
 import { sampleData5 } from "../app/assets/data/data";
 import Link from "next/link";
+import { AppDispatch,RootState } from "@/redux/store";
+import { useDispatch,useSelector } from "react-redux";
 import PropertyCard from "./components/propertyCard/PropertyCard";
 import { MdKeyboardArrowLeft } from "react-icons/md";
 import { useRouter } from "next/navigation";
+import {useEffect,useState} from "react"
+import toast from "react-hot-toast";
+import { getRequest } from "@/redux/features/getRequest";
 const limit = 5;
 
 const slicedData = {
@@ -33,7 +38,21 @@ const slicedData = {
 };
 
 export default function Home() {
+  const [token, setToken] = useState<string | null>(null);
   let router = useRouter();
+  let { loading, message, data } = useSelector<RootState>(
+    (state) => state.getRequest
+  ) as { loading: boolean; message: string; data: any };
+  const dispatch = useDispatch<AppDispatch>();
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const storedToken = sessionStorage.getItem('token');
+      setToken(storedToken);
+    }
+  }, []);
+  useEffect(() => {
+   dispatch(getRequest())
+  }, []);
   return (
     <div className="flex justify-center w-dvh h-max ">
       <div className="w-full bg-white rounded text-black shadow ">
@@ -51,15 +70,32 @@ export default function Home() {
                 </div>
 
                 <div className="flex justify-center space-x-2 mb-8">
-                  <Link
-                    href={"add-your-real-estate"}
+                  <button
+                    // href={"add-your-real-estate"}
                     className="flex items-center"
+                    onClick={()=>{
+                      if(!token){
+                        toast.error("انت تحتاج الي تسجيل دخول")
+                        router.push("/login")
+                      }else{
+                        router.refresh()
+                        router.replace("/add-your-real-estate")
+                      }
+                    }}
                   >
                     <Addrequest />
-                  </Link>
-                  <Link href={"add-your-request"} className="flex items-center" onClick={()=>router.refresh()}>
+                  </button>
+                  <button  className="flex items-center" onClick={()=>{
+                      if(!token){
+                        toast.error("انت تحتاج الي تسجيل دخول")
+                        router.push("/login")
+                      }else{
+                        router.refresh()
+                        router.replace("/add-your-request")
+                      }
+                  }}>
                     <Addbutton />
-                  </Link>
+                  </button>
                 </div>
               </div>
               <div className=" p-4 rounded shadow-md w-full">

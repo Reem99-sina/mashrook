@@ -6,12 +6,15 @@ import { RadioInput } from "../components/shared/radio.component";
 import { Button } from "../components/shared/button.component";
 import { Modal, ModalRef } from "../components/shared/modal.component";
 import ImageAppear from "../components/shared/ImageAppear";
+import AccordionComponent from "../components/shared/Accordion.component";
 import NumberRoom from "./components/NumberRoom";
 import Footer from "../components/header/Footer2";
 import MainHeader from "../components/header/MainHeader";
 import { useRouter } from "next/navigation";
 import { TextInput } from "../components/shared/text-input.component";
-import CountElement  from "./components/CountElemet"
+import CountElement from "./components/CountElemet";
+import CheckFeature from "./components/CheckFeature";
+import InputAreaPrice from "./components/InputAreaPrice";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { getproperityType } from "@/redux/features/getProperity";
@@ -28,7 +31,8 @@ import toast from "react-hot-toast";
 import {
   earthSchema,
   departmentOrRowSchema,
-  departmentOrRowArchSchema
+  departmentOrRowArchSchema,
+  villaOwnSchema,
 } from "@/typeSchema/schemaRealestate";
 // import MapLocation from "./components/MapLocation"
 const cities = [
@@ -74,6 +78,11 @@ const dataa = [
     option: ["أرض سكنية", "أرض تجارية", "فيلا", "دور", "شقة"],
   },
 ];
+const floorsVilla = [
+  { name: "دور الارضي" },
+  { name: "دور علوي" },
+  { name: "شقة" },
+];
 interface typeSelectedProperty {
   id: number;
   title: string;
@@ -118,6 +127,9 @@ const AddYourRealEstate: React.FC = () => {
   const [mediator, setMediator] = useState({
     advertisement_number: "", // رقم الاعلان
     license_number: "",
+  });
+  const [villa, setvilla] = useState({
+    location: "",
   });
   const [DepartmentArch, setDepartmentArch] = useState({
     apartment_number: "", // رقم الاعلان
@@ -187,42 +199,33 @@ const AddYourRealEstate: React.FC = () => {
   const onSubmit = async () => {
     if (deal) {
       if (token) {
-        if(images&&images?.length>0){
-        if (
-          selectedPropertyType?.title == "أرض سكنية" ||
-          selectedPropertyType?.title == "أرض تجارية"
-        ) {
-          const status = await validateForm(
-            {
-              ...earth,
-              ...dataSend,
-              advertisement_number: mediator.advertisement_number,
-            },
-            earthSchema,
-            setErrors
-          );
-          if (status == true) {
-            dispatch(
-              postrealEstateType({ ...earth, ...dataSend, ...mediator, images })
+        if (images && images?.length > 0) {
+          if (
+            selectedPropertyType?.title == "أرض سكنية" ||
+            selectedPropertyType?.title == "أرض تجارية"
+          ) {
+            const status = await validateForm(
+              {
+                ...earth,
+                ...dataSend,
+                advertisement_number: mediator.advertisement_number,
+              },
+              earthSchema,
+              setErrors
             );
-          }
-        } else if(departmentArch.type=="شقة (داخل عمارة سكنية)"){
-          const status = await validateForm(
-            {
-              ...dataSend,
-              ...departmentArch,
-              ...DepartmentArch,
-              ac: additionalData?.ac, // مزايا اضافية مكيفة
-              furnished: additionalData?.furnished, // مزايا اضافية مؤثثة
-              kitchen: additionalData?.kitchen,
-              car_entrance: additionalData?.car_entrance,
-            },
-            departmentOrRowArchSchema,
-            setErrors
-          );
-          if (status == true) {
-            dispatch(
-              postrealEstateType({
+            if (status == true) {
+              dispatch(
+                postrealEstateType({
+                  ...earth,
+                  ...dataSend,
+                  ...mediator,
+                  images,
+                })
+              );
+            }
+          } else if (departmentArch.type == "شقة (داخل عمارة سكنية)") {
+            const status = await validateForm(
+              {
                 ...dataSend,
                 ...departmentArch,
                 ...DepartmentArch,
@@ -230,45 +233,90 @@ const AddYourRealEstate: React.FC = () => {
                 furnished: additionalData?.furnished, // مزايا اضافية مؤثثة
                 kitchen: additionalData?.kitchen,
                 car_entrance: additionalData?.car_entrance,
-                ...mediator,
-                images,
-              })
+              },
+              departmentOrRowArchSchema,
+              setErrors
             );
-        }
-      }else if (
-          selectedPropertyType?.title == "شقة" ||
-          selectedPropertyType?.title == "دور"
-        ) {
-          const status = await validateForm(
-            {
-              ...dataSend,
-              ...departmentArch,
-              ac: additionalData?.ac, // مزايا اضافية مكيفة
-              furnished: additionalData?.furnished, // مزايا اضافية مؤثثة
-              kitchen: additionalData?.kitchen,
-              car_entrance: additionalData?.car_entrance,
-            },
-            departmentOrRowSchema,
-            setErrors
-          );
-          if (status == true) {
-            dispatch(
-              postrealEstateType({
+            if (status == true) {
+              dispatch(
+                postrealEstateType({
+                  ...dataSend,
+                  ...departmentArch,
+                  ...DepartmentArch,
+                  ac: additionalData?.ac, // مزايا اضافية مكيفة
+                  furnished: additionalData?.furnished, // مزايا اضافية مؤثثة
+                  kitchen: additionalData?.kitchen,
+                  car_entrance: additionalData?.car_entrance,
+                  ...mediator,
+                  images,
+                })
+              );
+            }
+          } else if (
+            selectedPropertyType?.title == "شقة" ||
+            selectedPropertyType?.title == "دور"
+          ) {
+            const status = await validateForm(
+              {
                 ...dataSend,
                 ...departmentArch,
                 ac: additionalData?.ac, // مزايا اضافية مكيفة
                 furnished: additionalData?.furnished, // مزايا اضافية مؤثثة
                 kitchen: additionalData?.kitchen,
                 car_entrance: additionalData?.car_entrance,
-                ...mediator,
-                images,
-              })
+              },
+              departmentOrRowSchema,
+              setErrors
             );
+            if (status == true) {
+              dispatch(
+                postrealEstateType({
+                  ...dataSend,
+                  ...departmentArch,
+                  ac: additionalData?.ac, // مزايا اضافية مكيفة
+                  furnished: additionalData?.furnished, // مزايا اضافية مؤثثة
+                  kitchen: additionalData?.kitchen,
+                  car_entrance: additionalData?.car_entrance,
+                  ...mediator,
+                  images,
+                })
+              );
+            }
+          } else if (
+            selectedPropertyType?.title === "فيلا" &&
+            departmentArch?.type == "فيلا (وحدات تمليك)"
+          ) {
+            const status = await validateForm(
+              {
+                ...dataSend,
+                ...departmentArch,
+                ac: additionalData?.ac, // مزايا اضافية مكيفة
+                furnished: additionalData?.furnished, // مزايا اضافية مؤثثة
+                kitchen: additionalData?.kitchen,
+                car_entrance: additionalData?.car_entrance,
+                ...villa,
+              },
+              villaOwnSchema,
+              setErrors
+            );
+            if (status == true) {
+              dispatch(
+                postrealEstateType({
+                  ...dataSend,
+                  ...departmentArch,
+                  ac: additionalData?.ac, // مزايا اضافية مكيفة
+                  furnished: additionalData?.furnished, // مزايا اضافية مؤثثة
+                  kitchen: additionalData?.kitchen,
+                  car_entrance: additionalData?.car_entrance,
+                  ...villa,
+                  images,
+                })
+              );
+            }
           }
+        } else {
+          setErrors({ ...errors, images: "مطلوب اضافة صوره" });
         }
-      }else{
-        setErrors({...errors,images:"مطلوب اضافة صوره"})
-      }
       } else {
         toast.error("انت تحتاج الي تسجيل دخول");
         router.push("/login");
@@ -292,17 +340,18 @@ const AddYourRealEstate: React.FC = () => {
       setToken(storedToken);
     }
   }, []);
-  useEffect(()=>{
-    if(messagerealEstateRequest&&Boolean(datarealEstateRequest)==true){
-      toast.success(messagerealEstateRequest)
+  useEffect(() => {
+    if (messagerealEstateRequest && Boolean(datarealEstateRequest) == true) {
+      toast.success(messagerealEstateRequest);
       setSentYourRequest(true);
     }
-  },[datarealEstateRequest,messagerealEstateRequest])
-  useEffect(()=>{
+  }, [datarealEstateRequest, messagerealEstateRequest]);
+  useEffect(() => {
     return () => {
       setSentYourRequest(false);
     };
-    },[])
+  }, []);
+
   // console.log(errors,"errors",formData,images,formData.has('images'))
   return (
     <>
@@ -656,22 +705,34 @@ const AddYourRealEstate: React.FC = () => {
                 </p>
               </div>
               <div className="mb-4" style={{ direction: "rtl" }}>
-                {departmentArch?.type=="شقة (داخل عمارة سكنية)"&&<>
-                <div className="flex flex-col gap-5 my-3">
-                  <p>رقم الشقة </p>
-                <CountElement
-                 value={DepartmentArch?.apartment_number} 
-                    onChange={(num)=>setDepartmentArch({...DepartmentArch,apartment_number:String(num)})}
-                    title="رقم الشقة"
-                    />
-                    <p> رقم الدور</p>
-                     <CountElement
-                 value={DepartmentArch?.apartment_floor} 
-                    onChange={(num)=>setDepartmentArch({...DepartmentArch,apartment_floor:String(num)})}
-                    title="رقم الدور"
-                    />
-                  </div>
-                </>}
+                {departmentArch?.type == "شقة (داخل عمارة سكنية)" && (
+                  <>
+                    <div className="flex flex-col gap-5 my-3">
+                      <p>رقم الشقة </p>
+                      <CountElement
+                        value={DepartmentArch?.apartment_number}
+                        onChange={(num) =>
+                          setDepartmentArch({
+                            ...DepartmentArch,
+                            apartment_number: String(num),
+                          })
+                        }
+                        title="رقم الشقة"
+                      />
+                      <p> رقم الدور</p>
+                      <CountElement
+                        value={DepartmentArch?.apartment_floor}
+                        onChange={(num) =>
+                          setDepartmentArch({
+                            ...DepartmentArch,
+                            apartment_floor: String(num),
+                          })
+                        }
+                        title="رقم الدور"
+                      />
+                    </div>
+                  </>
+                )}
                 {(selectedPropertyType?.title == "أرض سكنية" ||
                   selectedPropertyType?.title == "أرض تجارية") && (
                   <div className="mb-4">
@@ -698,59 +759,48 @@ const AddYourRealEstate: React.FC = () => {
                     )}
                   </div>
                 )}
-                <label className="block mb-2 font-medium">المساحة </label>
-                <div className="flex items-center ">
-                  <input
-                    type="number"
-                    className="  p-2 border border-gray-300 rounded-r-lg w-full "
-                    placeholder="-- الرجاء الادخال --"
-                    onChange={(event) =>
-                      setDataSend({ ...dataSend, area: event?.target?.value })
-                    }
-                  />
-                  <span className="bg-blue-450 text-white  py-2 px-4  rounded-l-lg border-2 border-r-0">
-                    متر
-                  </span>
-                </div>
-                {errors?.area && (
-                  <p className="text-xs text-red-600 dark:text-red-500 text-right">
-                    {errors?.area}
-                  </p>
+                {(selectedPropertyType?.title == "أرض سكنية" ||
+                  selectedPropertyType?.title == "أرض تجارية" ||
+                  selectedPropertyType?.title == "شقة" ||
+                  selectedPropertyType?.title == "دور") && (
+                  <>
+                    <InputAreaPrice
+                      title="المساحة"
+                      onChange={(event) =>
+                        setDataSend({ ...dataSend, area: event?.target?.value })
+                      }
+                      errors={errors?.area}
+                      measurement="متر"
+                    />
+                    <InputAreaPrice
+                      title="السعر"
+                      onChange={(event) =>
+                        setDataSend({
+                          ...dataSend,
+                          price: Number(event?.target?.value),
+                        })
+                      }
+                      errors={errors?.price}
+                      measurement="ريال"
+                      desc="(بدون القيمة المضافة والسعي)"
+                    />
+                  </>
                 )}
               </div>
-              <div className="mb-4" style={{ direction: "rtl" }}>
-                <label className="block mb-2 font-medium">
-                  السعر{" "}
-                  <span className="text-[#3B73B9]">
-                    (بدون القيمة المضافة والسعي)
-                  </span>{" "}
-                </label>
-                <div className="flex items-center">
-                  <input
-                    type="number"
-                    className="w-full p-2 border border-gray-300 rounded-r-lg"
-                    placeholder="-- الرجاء الادخال --"
-                    onChange={(event) =>
-                      setDataSend({
-                        ...dataSend,
-                        price: Number(event?.target?.value),
-                      })
-                    }
-                  />
-                  <span className="bg-blue-450 text-white py-2 px-4 rounded-l-lg border-2 border-r-0">
-                    ريال
-                  </span>
-                </div>
-                {errors?.price && (
-                  <p className="text-xs text-red-600 dark:text-red-500 text-right">
-                    {errors?.price}
-                  </p>
-                )}
-              </div>
-              {(selectedPropertyType?.title === "فيلا" ||
-                selectedPropertyType?.title === "شقة" ||
-                selectedPropertyType?.title === "دور") && (
+
+              {selectedPropertyType?.title === "شقة" ||
+              selectedPropertyType?.title === "دور" ? (
                 <>
+                  <NumberRoom
+                    errors={String(errors?.age)}
+                    value={departmentArch?.age}
+                    onChange={handlePercentageChange}
+                    name="age"
+                    title={"العمر"}
+                    firstNumber={"جديد"}
+                    secondNumber={"+10 سنين"}
+                    max={10}
+                  />
                   <NumberRoom
                     errors={String(errors?.rooms_number)}
                     value={departmentArch?.rooms_number}
@@ -791,175 +841,264 @@ const AddYourRealEstate: React.FC = () => {
                     secondNumber={"3+ مطابخ"}
                     max={3}
                   />
-                  {selectedPropertyType?.title === "فيلا" &&
-                  departmentArch?.type == "فيلا (درج داخلي + شقة)" ? (
-                    <div className="mt-2">
-                      <div
-                        className="flex justify-between text-sm mt-2"
-                        style={{ direction: "rtl" }}
-                      >
-                        <p className="font-medium text-base text-[#4B5563]">
-                          مزايا إضافية:
-                        </p>
-                      </div>
-                      <div
-                        className=" flex flex-row flex-wrap gap-8"
-                        style={{ direction: "rtl" }}
-                      >
-                        <div
-                          style={{ direction: "rtl" }}
-                          className="flex flex-row gap-2 items-center mt-2 mb-2"
-                        >
-                          <input
-                            type="checkbox"
-                            className="h-4 w-4 rounded-2xl accent-[#3B73B9]"
-                            onChange={(event) =>
-                              setAdditional({
-                                ...additionalData,
-                                pool: event?.target?.checked,
-                              })
-                            }
-                          />
-                          <p>مسبح</p>
-                        </div>
-
-                        <div
-                          style={{ direction: "rtl" }}
-                          className="flex flex-row gap-2 items-center mt-2 mb-2"
-                        >
-                          <input
-                            type="checkbox"
-                            className="h-4 w-4 rounded-2xl accent-[#3B73B9]"
-                            onChange={(event) =>
-                              setAdditional({
-                                ...additionalData,
-                                garage: event?.target?.checked,
-                              })
-                            }
-                          />
-                          <p>كراج للسيارات</p>
-                        </div>
-
-                        <div
-                          style={{ direction: "rtl" }}
-                          className="flex flex-row gap-2 items-center mt-2 mb-2"
-                        >
-                          <input
-                            type="checkbox"
-                            className="h-4 w-4 rounded-2xl accent-[#3B73B9]"
-                            onChange={(event) =>
-                              setAdditional({
-                                ...additionalData,
-                                servants_room: event?.target?.checked,
-                              })
-                            }
-                          />
-                          <p>غرفة خدم</p>
-                        </div>
-
-                        <div
-                          style={{ direction: "rtl" }}
-                          className="flex flex-row gap-2 items-center mt-2 mb-2"
-                        >
-                          <input
-                            type="checkbox"
-                            className="h-4 w-4 rounded-2xl accent-[#3B73B9]"
-                            onChange={(event) =>
-                              setAdditional({
-                                ...additionalData,
-                                furnished: event?.target?.checked,
-                              })
-                            }
-                          />
-                          <p>مؤثثة</p>
-                        </div>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="mt-2">
-                      <div
-                        className="flex justify-between text-sm mt-2"
-                        style={{ direction: "rtl" }}
-                      >
-                        <p className="font-medium text-base text-[#4B5563]">
-                          مزايا إضافية:
-                        </p>
-                      </div>
-                      <div
-                        className=" flex flex-row flex-wrap gap-8"
-                        style={{ direction: "rtl" }}
-                      >
-                        <div
-                          style={{ direction: "rtl" }}
-                          className="flex flex-row gap-2 items-center mt-2 mb-2"
-                        >
-                          <input
-                            type="checkbox"
-                            className="h-4 w-4 rounded-2xl accent-[#3B73B9]"
-                            onChange={(event) =>
-                              setAdditional({
-                                ...additionalData,
-                                ac: event?.target?.checked,
-                              })
-                            }
-                          />
-                          <p>مكيفة</p>
-                        </div>
-
-                        <div
-                          style={{ direction: "rtl" }}
-                          className="flex flex-row gap-2 items-center mt-2 mb-2"
-                        >
-                          <input
-                            type="checkbox"
-                            className="h-4 w-4 rounded-2xl accent-[#3B73B9]"
-                            onChange={(event) =>
-                              setAdditional({
-                                ...additionalData,
-                                car_entrance: event?.target?.checked,
-                              })
-                            }
-                          />
-                          <p>مدخل سيارة</p>
-                        </div>
-
-                        <div
-                          style={{ direction: "rtl" }}
-                          className="flex flex-row gap-2 items-center mt-2 mb-2"
-                        >
-                          <input
-                            type="checkbox"
-                            className="h-4 w-4 rounded-2xl accent-[#3B73B9]"
-                            onChange={(event) =>
-                              setAdditional({
-                                ...additionalData,
-                                kitchen: event?.target?.checked,
-                              })
-                            }
-                          />
-                          <p>مطبخ راكب</p>
-                        </div>
-
-                        <div
-                          style={{ direction: "rtl" }}
-                          className="flex flex-row gap-2 items-center mt-2 mb-2"
-                        >
-                          <input
-                            type="checkbox"
-                            className="h-4 w-4 rounded-2xl accent-[#3B73B9]"
-                            onChange={(event) =>
-                              setAdditional({
-                                ...additionalData,
-                                furnished: event?.target?.checked,
-                              })
-                            }
-                          />
-                          <p>مؤثثة</p>
-                        </div>
-                      </div>
-                    </div>
-                  )}
                 </>
+              ) : (
+                selectedPropertyType?.title === "فيلا" && (
+                  <>
+                    <NumberRoom
+                      errors={String(errors?.age)}
+                      value={departmentArch?.age}
+                      onChange={handlePercentageChange}
+                      name="age"
+                      title={"العمر"}
+                      firstNumber={"جديد"}
+                      secondNumber={"+10 سنين"}
+                      max={10}
+                    />
+                  </>
+                )
+              )}
+              {selectedPropertyType?.title === "فيلا" &&
+                departmentArch?.type == "فيلا (وحدات تمليك)" && (
+                  <>
+                    {floorsVilla?.map((floor, index) => (
+                      <AccordionComponent
+                        title={floor?.name}
+                        key={index}
+                        floors={floorsVilla}
+                        onChange={(e) =>
+                          setvilla({ ...villa, location: e.target.value })
+                        }
+                        value={villa?.location}
+                      >
+                        <>
+                          <InputAreaPrice
+                            title="المساحة"
+                            onChange={(event) =>
+                              setDataSend({
+                                ...dataSend,
+                                area: event?.target?.value,
+                              })
+                            }
+                            errors={errors?.area}
+                            measurement="متر"
+                          />
+                          <InputAreaPrice
+                            title="السعر"
+                            onChange={(event) =>
+                              setDataSend({
+                                ...dataSend,
+                                price: Number(event?.target?.value),
+                              })
+                            }
+                            errors={errors?.price}
+                            measurement="ريال"
+                            desc="(بدون القيمة المضافة والسعي)"
+                          />
+                          <NumberRoom
+                            errors={String(errors?.rooms_number)}
+                            value={departmentArch?.rooms_number}
+                            onChange={handlePercentageChange}
+                            name="rooms_number"
+                            title={"عدد الغرف"}
+                            firstNumber={"غرفة"}
+                            secondNumber={"+10 غرف"}
+                            max={10}
+                          />
+                          <NumberRoom
+                            errors={String(errors?.halls_number)}
+                            value={departmentArch?.halls_number}
+                            onChange={handlePercentageChange}
+                            name="halls_number"
+                            title={"عدد الصالات"}
+                            firstNumber={"صالة"}
+                            secondNumber={"3+ صالات "}
+                            max={3}
+                          />
+                          <NumberRoom
+                            errors={String(errors?.bathrooms_number)}
+                            value={departmentArch?.bathrooms_number}
+                            onChange={handlePercentageChange}
+                            name="bathrooms_number"
+                            title={"عدد دورات المياه"}
+                            firstNumber={"دورة مياه"}
+                            secondNumber={"3+ دورة مياه "}
+                            max={3}
+                          />
+                          <NumberRoom
+                            errors={String(errors?.kitchens_number)}
+                            value={departmentArch?.kitchens_number}
+                            onChange={handlePercentageChange}
+                            name="kitchens_number"
+                            title={" عدد المطابخ"}
+                            firstNumber={"مطبخ"}
+                            secondNumber={"3+ مطابخ"}
+                            max={3}
+                          />
+                          <div className="mt-2">
+                            <div
+                              className="flex justify-between text-sm mt-2"
+                              style={{ direction: "rtl" }}
+                            >
+                              <p className="font-medium text-base text-[#4B5563]">
+                                مزايا إضافية:
+                              </p>
+                            </div>
+                            <div
+                              className=" flex flex-row flex-wrap gap-8"
+                              style={{ direction: "rtl" }}
+                            >
+                              <CheckFeature
+                                title="مكيفة"
+                                onChange={(event) =>
+                                  setAdditional({
+                                    ...additionalData,
+                                    ac: event?.target?.checked,
+                                  })
+                                }
+                              />
+                              <CheckFeature
+                                title="مدخل سيارة"
+                                onChange={(event) =>
+                                  setAdditional({
+                                    ...additionalData,
+                                    car_entrance: event?.target?.checked,
+                                  })
+                                }
+                              />
+                              <CheckFeature
+                                title="مطبخ راكب"
+                                onChange={(event) =>
+                                  setAdditional({
+                                    ...additionalData,
+                                    kitchen: event?.target?.checked,
+                                  })
+                                }
+                              />
+                              <CheckFeature
+                                title="مؤثثة"
+                                onChange={(event) =>
+                                  setAdditional({
+                                    ...additionalData,
+                                    furnished: event?.target?.checked,
+                                  })
+                                }
+                              />
+                            </div>
+                          </div>
+                        </>
+                      </AccordionComponent>
+                    ))}
+                  </>
+                )}
+              {selectedPropertyType?.title === "فيلا" &&
+              departmentArch?.type == "فيلا (درج داخلي + شقة)" ? (
+                <div className="mt-2">
+                  <div
+                    className="flex justify-between text-sm mt-2"
+                    style={{ direction: "rtl" }}
+                  >
+                    <p className="font-medium text-base text-[#4B5563]">
+                      مزايا إضافية:
+                    </p>
+                  </div>
+                  <div
+                    className=" flex flex-row flex-wrap gap-8"
+                    style={{ direction: "rtl" }}
+                  >
+                    <CheckFeature
+                      title="مسبح"
+                      onChange={(event) =>
+                        setAdditional({
+                          ...additionalData,
+                          pool: event?.target?.checked,
+                        })
+                      }
+                    />
+                    <CheckFeature
+                      title="كراج للسيارات"
+                      onChange={(event) =>
+                        setAdditional({
+                          ...additionalData,
+                          garage: event?.target?.checked,
+                        })
+                      }
+                    />
+                    <CheckFeature
+                      title="غرفة خدم"
+                      onChange={(event) =>
+                        setAdditional({
+                          ...additionalData,
+                          servants_room: event?.target?.checked,
+                        })
+                      }
+                    />
+                    <CheckFeature
+                      title="مؤثثة"
+                      onChange={(event) =>
+                        setAdditional({
+                          ...additionalData,
+                          furnished: event?.target?.checked,
+                        })
+                      }
+                    />
+                  </div>
+                </div>
+              ) : (
+                (selectedPropertyType?.title === "شقة" ||
+                  selectedPropertyType?.title === "دور") && (
+                  <div className="mt-2">
+                    <div
+                      className="flex justify-between text-sm mt-2"
+                      style={{ direction: "rtl" }}
+                    >
+                      <p className="font-medium text-base text-[#4B5563]">
+                        مزايا إضافية:
+                      </p>
+                    </div>
+                    <div
+                      className=" flex flex-row flex-wrap gap-8"
+                      style={{ direction: "rtl" }}
+                    >
+                      <CheckFeature
+                        title="مكيفة"
+                        onChange={(event) =>
+                          setAdditional({
+                            ...additionalData,
+                            ac: event?.target?.checked,
+                          })
+                        }
+                      />
+                      <CheckFeature
+                        title="مدخل سيارة"
+                        onChange={(event) =>
+                          setAdditional({
+                            ...additionalData,
+                            car_entrance: event?.target?.checked,
+                          })
+                        }
+                      />
+                      <CheckFeature
+                        title="مطبخ راكب"
+                        onChange={(event) =>
+                          setAdditional({
+                            ...additionalData,
+                            kitchen: event?.target?.checked,
+                          })
+                        }
+                      />
+                      <CheckFeature
+                        title="مؤثثة"
+                        onChange={(event) =>
+                          setAdditional({
+                            ...additionalData,
+                            furnished: event?.target?.checked,
+                          })
+                        }
+                      />
+                    </div>
+                  </div>
+                )
               )}
 
               <div className="mb-4" style={{ direction: "rtl" }}>
@@ -1015,7 +1154,7 @@ const AddYourRealEstate: React.FC = () => {
               <div className="flex items-center justify-end">
                 <p className="text-base font-bold text-[#4B5563]">المرفقات</p>
               </div>
-            
+
               <ImageAppear images={images} onDelete={onDelete} />
               <div className="flex flex-row justify-end mt-1 gap-8">
                 <div className="flex gap-2  flex-row mt-5">
@@ -1164,7 +1303,7 @@ const AddYourRealEstate: React.FC = () => {
               text="العودة الى الرئيسية"
               className="!text-[#3B73B9] !bg-white !border !border-[#3B73B9] rounded !mt-5"
               onClick={() => {
-                router.push("/");
+                router.replace("/");
               }}
             />
           </div>
