@@ -35,11 +35,10 @@ import toast from "react-hot-toast";
 import {
   earthSchema,
   departmentOrRowSchema,
-
   departmentOrRowArchSchema,
   villaOwnSchema,
-
 } from "@/typeSchema/schemaRealestate";
+import Map from "../components/shared/map";
 // import MapLocation from "./components/MapLocation"
 const cities = [
   {
@@ -209,7 +208,6 @@ const AddYourRealEstate: React.FC = () => {
   const onSubmit = async () => {
     if (deal) {
       if (token) {
-
         if (images && images?.length > 0) {
           if (
             selectedPropertyType?.title == "أرض سكنية" ||
@@ -237,7 +235,6 @@ const AddYourRealEstate: React.FC = () => {
           } else if (departmentArch.type == "شقة (داخل عمارة سكنية)") {
             const status = await validateForm(
               {
-
                 ...dataSend,
                 ...departmentArch,
                 ...DepartmentArch,
@@ -245,7 +242,6 @@ const AddYourRealEstate: React.FC = () => {
                 furnished: additionalData?.furnished, // مزايا اضافية مؤثثة
                 kitchen: additionalData?.kitchen,
                 car_entrance: additionalData?.car_entrance,
-
               },
               departmentOrRowArchSchema,
               setErrors
@@ -330,7 +326,6 @@ const AddYourRealEstate: React.FC = () => {
         } else {
           setErrors({ ...errors, images: "مطلوب اضافة صوره" });
         }
-
       } else {
         toast.error("انت تحتاج الي تسجيل دخول");
         router.push("/login");
@@ -366,7 +361,6 @@ const AddYourRealEstate: React.FC = () => {
       setSentYourRequest(false);
     };
   }, []);
-
 
   // console.log(errors,"errors",formData,images,formData.has('images'))
   return (
@@ -721,7 +715,6 @@ const AddYourRealEstate: React.FC = () => {
                 </p>
               </div>
               <div className="mb-4" style={{ direction: "rtl" }}>
-
                 {departmentArch?.type == "شقة (داخل عمارة سكنية)" && (
                   <>
                     <div className="flex flex-col gap-5 my-3">
@@ -821,7 +814,6 @@ const AddYourRealEstate: React.FC = () => {
                     max={10}
                   />
                   <NumberRoom
-
                     errors={String(errors?.rooms_number)}
                     value={departmentArch?.rooms_number}
                     onChange={handlePercentageChange}
@@ -861,7 +853,6 @@ const AddYourRealEstate: React.FC = () => {
                     secondNumber={"3+ مطابخ"}
                     max={3}
                   />
-
                 </>
               ) : (
                 selectedPropertyType?.title === "فيلا" && (
@@ -1120,7 +1111,6 @@ const AddYourRealEstate: React.FC = () => {
                     </div>
                   </div>
                 )
-
               )}
 
               <div className="mb-4" style={{ direction: "rtl" }}>
@@ -1176,8 +1166,6 @@ const AddYourRealEstate: React.FC = () => {
               <div className="flex items-center justify-end">
                 <p className="text-base font-bold text-[#4B5563]">المرفقات</p>
               </div>
-
-
 
               <ImageAppear images={images} onDelete={onDelete} />
               <div className="flex flex-row justify-end mt-1 gap-8">
@@ -1288,6 +1276,12 @@ const AddYourRealEstate: React.FC = () => {
             <Modal ref={modalRef} size="xl">
               <div className="items-start flex justify-center flex-col p-4">
                 {/* <MapLocation/> */}
+                <Map />
+                <div></div>
+                <div className="flex flex-col  mt-6 gap-3 mb-6 w-full  items-end justify-start">
+                  <p className="text-base font-bold text-[#4B5563]">العنوان</p>
+                  <input className="w-full h-14 rounded-lg bg-[#D1D5DB]" />
+                </div>
                 <div className="flex flex-row items-center justify-center gap-3  w-full">
                   <Button
                     text="الغاء"
