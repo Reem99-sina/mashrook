@@ -461,7 +461,7 @@ const AddYourRealEstate: React.FC = () => {
     dispatch(getproperityTypeMore({num:dataSend?.property_type_id||1,type:"offer"}));
   },[dataSend?.property_type_id,dispatch])
   useEffect(() => {
-    if (typeof window != "undefined") {
+    if (typeof window !== "undefined") {
       const storedToken = sessionStorage.getItem("token");
       setToken(storedToken);
     }
@@ -489,7 +489,7 @@ const AddYourRealEstate: React.FC = () => {
       price: 0
   }]:[...prev])
   }, [count.nums]);
- console.log(errors,"errors")
+
   return (
     <>
       {!sentYourRequest ? (

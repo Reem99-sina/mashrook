@@ -1,7 +1,11 @@
 "use client"
-import {useState} from "react"
+import {useState,useEffect} from "react"
 import axios from "axios"
-import Map from "../../components/shared/map";
+import dynamic from "next/dynamic"
+
+// import Map from "../../components/shared/map";
+const Map = dynamic(() => import("../../components/shared/map"), { ssr:false })
+
 import toast from "react-hot-toast";
 import {typeInput} from "@/redux/features/postRealEstate"
 const MapLocation:React.FC<any>=({lat,long,onChange})=>{
@@ -35,7 +39,12 @@ const MapLocation:React.FC<any>=({lat,long,onChange})=>{
         } catch (error) {  
           console.error('Error fetching geocoding data', error);  
         }  
-      };  
+      }; 
+      useEffect(() => {
+        if (typeof window !== "undefined") {
+          
+        }
+      }, []); 
     return <>
 
                 <Map latitude={viewport?.latitude}longitude={viewport?.longitude} handleSearch={handleSearch}/>

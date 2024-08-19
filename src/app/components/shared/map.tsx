@@ -12,7 +12,6 @@ const icon = L.icon({
 interface LocationSelectorProps {
   onLocationSelected: (lat: number, lng: number) => void;
 }
-
 const LocationSelector: React.FC<LocationSelectorProps> = ({
   onLocationSelected,
 }) => {
@@ -51,8 +50,13 @@ const Map: React.FC<{
   };
 
 useEffect(()=>{
-  console.log(latitude.toFixed(2),longitude.toFixed(2),"latitude,longitude")
+  
 },[latitude,longitude])
+useEffect(() => {
+  if (typeof window !== "undefined") {
+    
+  }
+}, []); 
   return (
     <MapContainer
       center={[latitude, longitude]}
