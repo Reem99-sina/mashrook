@@ -36,7 +36,8 @@ const Verify: React.FC = () => {
       toast.error(message)
     }else if (Boolean(data) == true){
       toast.success(message)
-      links.push(`/login` );
+      sessionStorage.setItem("token", data?.token);
+      links.push(`/`);
 
     }
   },[message,links,data])

@@ -15,7 +15,7 @@ import Image from "next/image";
 import { AppDispatch,RootState } from "@/redux/store";
 import { useDispatch,useSelector } from "react-redux";
 import { Range, getTrackBackground } from "react-range";
-import {getproperityType} from "@/redux/features/getProperity"
+import {getproperityType,getproperityTypeMore} from "@/redux/features/getProperity"
 import {postProperityType,properityTypeInter} from "@/redux/features/postRequest"
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
@@ -112,7 +112,7 @@ const AddYourRequest: React.FC = () => {
     dealStatus: "",
     city: "",
     district: null,
-    unitType: "",
+    unitType: 0,
     unitStatus: "",
     priceRange: [500000, 20000000],
     shareRange: [1000000, 2000000],
@@ -124,7 +124,12 @@ const AddYourRequest: React.FC = () => {
   const [sentYourRequest, setSentYourRequest] = useState<boolean>(false);
   const [errors,setErrors]=useState<properityTypeInter>()
 
-  let {loading, message, data}=useSelector<RootState>((state)=>state.properityType)as {loading:boolean, message:string,data:any}
+  let { loading, message, data,title,details, titleSection,
+    detailsSection
+    } = useSelector<RootState>(
+    (state) => state.properityType
+  ) as { loading: boolean; message: string; data: any,title:string,details:any,titleSection:string,
+    detailsSection:any };
   let {loading:loadingRequest, message:messageRequest, data:dataRequest}=useSelector<RootState>((state)=>state.properityRequest)as {loading:boolean, message:string,data:any}
 
   const dispatch = useDispatch<AppDispatch>();
@@ -173,7 +178,7 @@ const AddYourRequest: React.FC = () => {
     } as properityTypeInter
     if(deal){
       if(token){
-        if(selectedPropertyType?.title=="شقة"&&criteria?.unitType=="شقة تمليك (في عمارة سكنية)"){
+        if(selectedPropertyType?.title=="شقة"&&criteria?.unitType=="5"){
           const status= await validateForm({...datasend,
             min_apartment_floor: String(criteria?.desiredRow[0]), // الادوار الامرغوبة
             apartment_floor: String(criteria?.desiredRow[1])},departmentOwnSchema,setErrors)
@@ -193,7 +198,7 @@ const AddYourRequest: React.FC = () => {
                 finance:criteria?.dealStatus=="نعم"?true:false
               }))
             }
-          }else if(selectedPropertyType?.title=="فيلا"&&criteria?.unitType=="فيلا (وحدات تمليك)"){
+          }else if(selectedPropertyType?.title=="فيلا"&&criteria?.unitType=="2"){
             const status= await validateForm({...datasend, apartment_floor:criteria?.floorType },villaOwnSchema,setErrors)
               if(status==true){
               dispatch(postProperityType({...datasend,
@@ -221,8 +226,11 @@ const AddYourRequest: React.FC = () => {
   };
  
   useEffect(()=>{
-    dispatch(getproperityType())
+    dispatch(getproperityType({num:1}))
   },[dispatch])
+  useEffect(()=>{
+    dispatch(getproperityTypeMore({num:selectedPropertyType?.id||1,type:"request"}));
+  },[selectedPropertyType?.id,dispatch])
   useEffect(()=>{
     if(messageRequest&&Boolean(dataRequest)==true){
       toast.success(messageRequest)
@@ -235,6 +243,7 @@ const AddYourRequest: React.FC = () => {
       setToken(storedToken);
     }
   }, []);
+  console.log(detailsSection,"details",criteria?.unitType)
   // let router=useRouter()
     useEffect(()=>{
       return () => {
@@ -259,7 +268,7 @@ const AddYourRequest: React.FC = () => {
                     </p>
                   </div>
                   <div className="flex  flex-row-reverse flex-wrap gap-8 items-center justify-start mt-6">
-                    {Array.isArray(data)&&data.map((child, id) => (
+                    {Array.isArray(data?.data)&&data?.data?.map((child:{id:number,title:string}, id:number) => (
                       <RadioInput
                         key={id}
                         name="propertyType"
@@ -278,99 +287,32 @@ const AddYourRequest: React.FC = () => {
                 </p>}
             </div>
             </div>
-
-            {selectedPropertyType?.title === "فيلا" && (
-              <div className="bg-white rounded-lg border border-[#E5E7EB] w-full mb-4 items-start justify-start p-4">
+            {(titleSection&&detailsSection)&&<div className="bg-white rounded-lg border border-[#E5E7EB] w-full mb-4 items-start justify-start p-4 mt-4">
                 <div className="flex items-center justify-end">
                   <p className="text-base font-bold text-[#4B5563]">
-                    نوع الفيلا
+                   {titleSection}
                   </p>
                 </div>
-                <div className="flex flex-row flex-wrap justify-end mt-6 gap-8">
-                  <RadioInput
-                    name="villaType"
-                    onChange={(event) => setCriteria({...criteria,unitType:event?.target?.value})}
-                    value="فيلا ( درج داخلي+ شقة)"
-                    label="فيلا ( درج داخلي+ شقة)"
-                  />
-                  <RadioInput
-                    name="villaType"
-                    onChange={(event) => setCriteria({...criteria,unitType:event?.target?.value})}
-                    value="فيلا (وحدات تمليك)"
-                    label="فيلا (وحدات تمليك)"
-                  />
-                  <RadioInput
-                    name="villaType"
-                    onChange={(event) => setCriteria({...criteria,unitType:event?.target?.value})}
-                    value="فيلا ( درج داخلي)"
-                    label="فيلا ( درج داخلي)"
-                  />
+                <div className="flex flex-row flex-wrap justify-end mt-6 gap-8 items-end">
+                  <div className="mb-4 flex-row-reverse flex flex-wrap">
+                    {detailsSection?.map((ele:{id:number,title:string})=><RadioInput
+                    key={ele?.id}
+                      name="property_type_details_id"
+                      onChange={(event) => setCriteria({...criteria,unitType:event?.target?.value})
+                      }
+                      value={ele.id}
+                      label={ele?.title}
+                    />)}
+                  </div>
                 </div>
-
-                {errors?.type&&<p className="text-xs text-red-600 dark:text-red-500 text-right">
-
-                  {errors?.type}
-                </p>}
-              </div>
-            )}
-            {selectedPropertyType?.title === "دور" && (
-              <div className="bg-white rounded-lg border border-[#E5E7EB] w-full mb-4 items-start justify-start p-4">
-                <div className="flex items-center justify-end">
-                  <p className="text-base font-bold text-[#4B5563]">
-                    نوع الدور
+                {errors?.type && (
+                  <p className="text-xs text-red-600 dark:text-red-500 text-right">
+                    {String(errors?.type)}
                   </p>
-                </div>
-                <div className="flex flex-row flex-wrap gap-8 items-center justify-end mt-6">
-                  <RadioInput
-                    name="rowType"
-                    onChange={(event) => setCriteria({...criteria,unitType:event?.target?.value})}
-                    value="دور أرضي"
-                    label="دور أرضي"
-                  />
-                  <RadioInput
-                    name="rowType"
-                    onChange={(event) => setCriteria({...criteria,unitType:event?.target?.value})}
-                    value="دور علوي"
-                    label="دور علوي"
-                  />
-                </div>
-
-                {errors?.type&&<p className="text-xs text-red-600 dark:text-red-500 text-right">
-
-                  {errors?.type}
-                </p>}
+                )}
               </div>
-            )}
-
-            {selectedPropertyType?.title === "شقة" && (
-              <div className="bg-white rounded-lg border border-[#E5E7EB] w-full mb-4 items-start justify-start p-4">
-                <div className="flex items-center justify-end">
-                  <p className="text-base font-bold text-[#4B5563]">
-                    نوع الشقة{" "}
-                  </p>
-                </div>
-                <div className="flex flex-col   justify-end mt-6">
-                  <RadioInput
-                    name="departmentType"
-                    onChange={(event) => setCriteria({...criteria,unitType:event?.target?.value})}
-                    value="شقة (داخل فيلا)"
-                    label="شقة (داخل فيلا)"
-                  />
-                  <RadioInput
-                    name="departmentType"
-                    onChange={(event) => setCriteria({...criteria,unitType:event?.target?.value})}
-                    value="شقة تمليك (في عمارة سكنية)"
-                    label="شقة تمليك (في عمارة سكنية)"
-                  />
-                </div>{" "}
-
-                {errors?.type&&<p className="text-xs text-red-600 dark:text-red-500 text-right">
-
-                  {errors?.type}
-                </p>}
-              </div>
-            )}
-
+            
+}
             <div className="bg-white rounded-lg border border-[#E5E7EB] w-full mb-4 items-start justify-start p-4">
               <div className="flex items-center justify-end">
                 <p className="text-base font-bold text-[#4B5563]">
@@ -479,7 +421,7 @@ const AddYourRequest: React.FC = () => {
                 
                 </>
                 }
-                {selectedPropertyType?.title === "شقة"&&criteria?.unitType=="شقة تمليك (في عمارة سكنية)"&&<>
+                {selectedPropertyType?.title === "شقة"&&criteria?.unitType=="5"&&<>
                   <div className="flex items-center justify-end">
                   <p className="text-base font-bold text-[#4B5563]">
                       الادوار المرغوبة{" "}
@@ -569,8 +511,8 @@ const AddYourRequest: React.FC = () => {
                   </div>
                 </>}
 
-                {criteria?.unitType!="فيلا (وحدات تمليك)"?<> <div className="flex items-center justify-end">
-
+                {(criteria?.unitType!=2)?<> 
+                <div className="flex items-center justify-end">
                 <p className="text-base font-bold text-[#4B5563]">ميزانيتك </p>
               </div>
               <div className="mb-4" style={{ direction: "rtl" }}>

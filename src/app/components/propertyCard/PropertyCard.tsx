@@ -84,7 +84,8 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
 
   const renderCards = (ele:dataReturn,offerIndex: number) => {
     const cards = [];
-
+   
+    // landDetails
     const unitsToShow = Math.min(2, offersCount[offerIndex]); // Limit to 2 units   
       const currentDealStatus = dealStatus
         ? dealStatus[2][1]
@@ -92,8 +93,8 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
       const currentPrice = price[2][1]?.toLocaleString() || "N/A";
       const currentCurrency = currency[2] || "N/A";
       const currentArea = area[2][1] || "N/A";
-      const currentSharePercentage = offeredShare[2][1] ;
-
+      const currentSharePercentage = offeredShare[2][1];
+    for(let i=0;i<ele?.details?.length;i++){
       cards.push(
         <div
           key={`${offerIndex}-0`}
@@ -103,21 +104,19 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
             <div className="ml-auto text-right py-1 ">
               <div className="flex flex-row">
                 <p className="text-2xl px-4 text-black">{
-                ele?.landDetails?.piece_number?
-                `قطعة رقم  ${ele?.landDetails?.piece_number}`
-                :ele?.propertyType?.title}</p>
+               ele?.details[i]?ele?.details[i]?.type:ele?.propertyType?.title}</p>
               </div>
               <div className="flex flex-row px-2 py-4 flex-wrap ">
                 <div className="bg-gray-200 rounded-xl px-2 flex items-center">
                   <LuTag />
                   <p className="text-base md:text-sm lg:text-lg mx-2">
-                    {ele?.price} {currentCurrency}
+                    {ele?.details[i]?.price||ele?.price} {currentCurrency}
                   </p>
                 </div>
                 <div className="bg-gray-200 rounded-xl px-2 mr-4 flex items-center">
                   <BiArea />
                   <p className="text-base md:text-sm lg:text-lg mx-2 ">
-                    {ele?.area} م<sup>2</sup>
+                  {ele?.details[i]?.area||ele?.area} م<sup>2</sup>
                   </p>
                 </div>
               </div>
@@ -152,6 +151,70 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
           <JoinStatusButtons currentDealStatus={currentDealStatus} data={ele} /> 
         </div>
       );
+    }
+    if(ele?.details?.length==0){
+      for(let i=0;i<ele?.landDetails?.length;i++){
+      cards.push(
+        <div
+          key={`${offerIndex}-`}
+          className="bg-white shadow rounded-lg p-2 mb-4"
+        >
+          <div className="flex flex-row flex-no-wrap items-center justify-center md:flex-row sm:flex-col ">
+            <div className="ml-auto text-right py-1 ">
+              <div className="flex flex-row">
+                <p className="text-2xl px-4 text-black">{
+                ele?.landDetails[i]?.piece_number&&
+                `قطعة رقم  ${ele?.landDetails[i]?.piece_number}`
+                }</p>
+              </div>
+              <div className="flex flex-row px-2 py-4 flex-wrap ">
+                <div className="bg-gray-200 rounded-xl px-2 flex items-center">
+                  <LuTag />
+                  <p className="text-base md:text-sm lg:text-lg mx-2">
+                    {/* {ele?.landDetails[i]?.price} {currentCurrency} */}
+                  </p>
+                </div>
+                <div className="bg-gray-200 rounded-xl px-2 mr-4 flex items-center">
+                  <BiArea />
+                  <p className="text-base md:text-sm lg:text-lg mx-2 ">
+                  {/* {ele?.landDetails[i]?.area} م<sup>2</sup> */}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="flex flex-col items-center justify-center  rounded-full p-2">
+              {currentDealStatus === "تمت الشراكة" ? (
+                <>
+                  <FinishedShares />
+                  <div className="w-12">
+                    <p className="text-center text-sm text-gray-900">
+                      اكتمال الشراكة
+                    </p>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <span className="text-xl font-bold text-blue-500 mb-2">
+                    <CircularProgressBar
+                      percentage={currentSharePercentage}
+                      size={50}
+                      strokeWidth={5}
+                    />
+                  </span>
+                  <div className="">
+                    <p className="text-sm text-gray-500">متاح</p>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+
+          <JoinStatusButtons currentDealStatus={currentDealStatus} data={ele} /> 
+        </div>
+      );
+    }
+    }
+     
     
     return cards;
   };
@@ -163,7 +226,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
             <div className="flex justify-between py-2 container items-start">
               <div className="flex flex-col justify-between h-full items-start">
               <p className="text-2xl px-4 text-black mb-4">
-                    {ele?.details?.type||ele?.propertyType?.title}
+                    {ele?.propertyType?.title||ele?.propertyTypeDetails?.title}
                   </p>
                 <div className="flex flex-row gap-x-2">
                  

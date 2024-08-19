@@ -1,58 +1,64 @@
 "use client"
-import {useState} from "react"
+import {useState,useEffect} from "react"
 import axios from "axios"
+import dynamic from "next/dynamic"
 
+// import Map from "../../components/shared/map";
+const Map = dynamic(() => import("../../components/shared/map"), { ssr:false })
 
-const MapLocation:React.FC<any>=()=>{
+import toast from "react-hot-toast";
+import {typeInput} from "@/redux/features/postRealEstate"
+const MapLocation:React.FC<any>=({lat,long,onChange})=>{
     const [viewport, setViewport] = useState({  
-        latitude: 37.8,  
-        longitude: 122.4,  
+        latitude: 24.64, longitude: 46.72
+       , 
         zoom: 6,  
       });  
       const [searchQuery, setSearchQuery] = useState('');  
     
-      const handleSearch = async (e:any) => {  
-        e.preventDefault();  
+      const handleSearch = async (lat:number,lng:number) => {  
+         
         try {  
           // Replace 'YOUR_GEOCODING_API_URL' with the actual API URL  
-          const response = await axios.get(`https://nominatim.openstreetmap.org/search?q=${e.target.value}&format=json`);  
-          const data = response.data[0];  
-          if (data) {  
-            setViewport({  
-              latitude: parseFloat(data.lat),  
-              longitude: parseFloat(data.lon),  
-              zoom: 14,  
-            });  
+          setViewport({  
+            latitude: lat,  
+            longitude: lng,  
+            zoom: 14,  
+          });
+          onChange((prev:typeInput)=>({...prev,lat: lat,  
+            long: lng})) 
+          const response = await axios.get(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`);  
+          const data = response.data;  
+          if (data) { 
+            setSearchQuery(data.display_name)
+              onChange((prev:typeInput)=>({...prev,address:data.display_name}))
+             
           } else {  
-            alert('Location not found');  
+            toast.error('Location not found');  
           }  
         } catch (error) {  
           console.error('Error fetching geocoding data', error);  
         }  
-      };  
-      console.log(viewport,"viewport")
-//       latitude
-// : 
-// 36.57937225
-// longitude
-// : 
-// 37.03497286770472
+      }; 
+      useEffect(() => {
+        if (typeof window !== "undefined") {
+          
+        }
+      }, []); 
     return <>
-     <input  
-          type="text"  
-        //   value={searchQuery}  
-          onChange={(e) => handleSearch(e)}  
+
+                <Map latitude={viewport?.latitude}longitude={viewport?.longitude} handleSearch={handleSearch}/>
+                
+                <div className="flex flex-col  mt-6 gap-3 mb-6 w-full  items-end justify-start">
+                  <p className="text-base font-bold text-[#4B5563]">العنوان</p>
+                  <input className="w-full h-10 rounded-lg bg-[#D1D5DB]" 
           placeholder="Search for a location"  
-          style={{ position: 'absolute', top: '10px', left: '10px', zIndex: 1 }}  
-        />  
-     {/* <Map  
-        initialViewState={viewport}  
-        style={{ width: "500px", height: "500px" }}  
-        mapStyle="https://basemaps.cartocdn.com/gl/positron-gl-style/style.json"  
-        onViewportChange={(nextViewport) => setViewport(nextViewport)}  
-      >  
-        <Marker longitude={viewport.longitude} latitude={viewport.latitude} color="red" />  
-      </Map>  */}
+          value={searchQuery}
+            />
+                </div>
+          
+
+
      
     </>
 }
