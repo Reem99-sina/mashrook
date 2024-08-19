@@ -6,6 +6,7 @@ function AccordionComponent({children,title,floors,onChange,value}:{
     ,onChange:(event: ChangeEvent<HTMLInputElement>) => void,
     value:string
 }) {
+  let [open,setOpen]=useState(false)
   return (
     <div className="relative mb-3 border-b border-solid">
     <h6 className="mb-0">
@@ -21,19 +22,22 @@ function AccordionComponent({children,title,floors,onChange,value}:{
         // onChange={() => handleCiteChange(cite)}
         className="checked:accent-[#3B73B9] w-[16px] h-[16px]  radioCheck"
         
-        onChange={onChange}
+        onChange={(e)=>{
+          onChange(e)
+          setOpen(!open)
+        }}
         value={title}
-        checked={value==title}
+        
          name="floorType"
         />
         <label className="mx-2 font-normal">{title}</label>
       </div>
     </h6>
-    {value==title?<div
+    {open&&<div
       className={" overflow-hidden transition-all duration-300 ease-in-out"}
     >
      {children}
-    </div>:<></>}
+    </div>}
     
   </div>
   )

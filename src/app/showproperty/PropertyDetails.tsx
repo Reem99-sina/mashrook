@@ -249,7 +249,9 @@ const PropertyDetails: React.FC = () => {
       <div className="p-4 bg-white rounded-lg shadow-md">
         <div className="flex justify-between items-center">
           <div className="flex w-full justify-between items-center">
-            <h1 className="text-2xl font-bold mt-4">  {selectData?.details?.type||selectData?.propertyType?.title}</h1>
+            <h1 className="text-2xl font-bold mt-4">  {
+            // selectData?.details?.type||
+            selectData?.propertyType?.title}</h1>
             <div className=" border-2 rounded-full">
               <GoLocation className="m-2 text-3xl" />
             </div>
@@ -311,7 +313,9 @@ const PropertyDetails: React.FC = () => {
               <p>نوع العقار</p>
             </div>
             <span className="mr-2 ml-2  text-lg font-bold ">
-              <h4> {selectData?.details?.type||selectData?.propertyType?.title}</h4>
+              <h4> {
+              // selectData?.details?.type||
+              selectData?.propertyType?.title}</h4>
             </span>
           </div>
           <div className="flex bg-gray-100 w-full justify-between items-center py-2  px-2 rounded-lg ml-2 mt-4">

@@ -4,7 +4,7 @@ import clsx from "clsx";
 interface RadioInputProps {
   label?: string;
   name: string;
-  value: string;
+  value: string|number;
   checked?: boolean;
   onChange: (event: ChangeEvent<HTMLInputElement>) => void
 }
@@ -25,7 +25,7 @@ export const RadioInput: FC<RadioInputProps> = ({
         className={`mx-2 cursor-pointer text-sm font-bold ${
           checked ? "text-[#198897]" : "text-prim1"
         } `}
-        htmlFor={value}
+        htmlFor={String(value)}
       >
         {label}
       </label>
@@ -37,7 +37,7 @@ export const RadioInput: FC<RadioInputProps> = ({
         checked={checked}
         onChange={onChange}
         className={clsx("h-4 w-4")}
-        id={value}
+        id={String(value)}
       />
       
    

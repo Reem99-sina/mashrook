@@ -221,7 +221,7 @@ const AddYourRequest: React.FC = () => {
   };
  
   useEffect(()=>{
-    dispatch(getproperityType())
+    dispatch(getproperityType({num:1}))
   },[dispatch])
   useEffect(()=>{
     if(messageRequest&&Boolean(dataRequest)==true){
