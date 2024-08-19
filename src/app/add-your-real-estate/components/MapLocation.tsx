@@ -44,7 +44,8 @@ const MapLocation:React.FC<any>=()=>{
           onChange={(e) => handleSearch(e)}  
           placeholder="Search for a location"  
           style={{ position: 'absolute', top: '10px', left: '10px', zIndex: 1 }}  
-        />  
+        /> 
+        <Map/> 
      {/* <Map  
         initialViewState={viewport}  
         style={{ width: "500px", height: "500px" }}  

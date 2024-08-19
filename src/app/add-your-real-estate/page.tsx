@@ -39,10 +39,13 @@ import {
   departmentOrRowSchema,
   departmentOrRowArchSchema,
   villaOwnSchema,
+
   departmentWithVillaSchema,
   schemaMain,
   earthDevSchema
+
 } from "@/typeSchema/schemaRealestate";
+import Map from "../components/shared/map";
 // import MapLocation from "./components/MapLocation"
 const cities = [
   {
@@ -251,6 +254,7 @@ const AddYourRealEstate: React.FC = () => {
   const onSubmit = async () => {
     if (deal) {
       if (token) {
+
         let validationMain=await validateForm({
           property_owner_type_id: dataSend?.property_owner_type_id, // وسيط عقاري, مطور عقاري, وسيط
           property_purpose_id: dataSend?.property_purpose_id, //بيع, تطوير (شراكة برأس المال أو البنا
@@ -259,6 +263,7 @@ const AddYourRealEstate: React.FC = () => {
         // if (images && images?.length > 0) {
           if(title&&details){
             validationMain= validationMain&&await validateForm(
+
               {
                 partner_type_id:dataSend?.partner_type_id
               },
@@ -312,7 +317,9 @@ const AddYourRealEstate: React.FC = () => {
                 ac: additionalData?.ac, // مزايا اضافية مكيفة
                 furnished: additionalData?.furnished, // مزايا اضافية مؤثثة
                 kitchen: additionalData?.kitchen,
+
                 car_entrance: additionalData?.car_entrance
+
               },
               departmentOrRowArchSchema,
               setErrors
@@ -427,6 +434,8 @@ const AddYourRealEstate: React.FC = () => {
               );
             }
           }
+
+
       } else {
         toast.error("انت تحتاج الي تسجيل دخول");
         router.push("/login");
@@ -472,6 +481,7 @@ const AddYourRealEstate: React.FC = () => {
       setSentYourRequest(false);
     };
   }, []);
+
   useEffect(() => {
     setlandDetails((prev)=>prev.length<count.nums?[...prev,{
       piece_number: "", // في حالة اختيار ارض (رقم القطعة)
@@ -480,6 +490,7 @@ const AddYourRealEstate: React.FC = () => {
       price: 0
   }]:[...prev])
   }, [count.nums]);
+
   return (
     <>
       {!sentYourRequest ? (
@@ -756,7 +767,9 @@ const AddYourRealEstate: React.FC = () => {
                 </p>
               </div>
               <div className="mb-4" style={{ direction: "rtl" }}>
+
                 {departmentArch?.property_type_details_id == 5 && (
+
                   <>
                     <div className="flex flex-col gap-5 my-3">
                       <p>رقم الشقة </p>
@@ -1518,6 +1531,12 @@ const AddYourRealEstate: React.FC = () => {
             <Modal ref={modalRef} size="xl">
               <div className="items-start flex justify-center flex-col p-4">
                 {/* <MapLocation/> */}
+                {/* <Map /> */}
+                <div></div>
+                <div className="flex flex-col  mt-6 gap-3 mb-6 w-full  items-end justify-start">
+                  <p className="text-base font-bold text-[#4B5563]">العنوان</p>
+                  <input className="w-full h-14 rounded-lg bg-[#D1D5DB]" />
+                </div>
                 <div className="flex flex-row items-center justify-center gap-3  w-full">
                   <Button
                     text="الغاء"

@@ -43,7 +43,7 @@ export default function SideBar({ sidebarOpen, toggleSidebar }: SideBarProps) {
                   </Link>
                 </li>
                 <li className="mb-4">
-                  <Link href="/" className=" ">
+                  <Link href="/chat" className=" ">
                     محادثاتي
                   </Link>
                 </li>
