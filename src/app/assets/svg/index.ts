@@ -53,5 +53,8 @@ export { default as Pattern } from "./Pattern.png";
 export { default as AddICon } from "./addicon.png";
 export { default as X } from "./x.png";
 export { default as Sub } from "./vectorSub.png";
-
-
+export { default as Search } from "./search-outline.svg";
+export { default as Block } from "./Block.svg";
+export { default as MessageIcon } from "./message-icon.svg";
+export { default as MashrookLogoChat } from "./MashrookLogoChat.svg";
+export { default as BackButtonOutline } from "./state-layer.svg";

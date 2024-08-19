@@ -1,7 +1,12 @@
 "use client";
 
 import clsx from "clsx";
-import React, { FC, HTMLInputTypeAttribute, useState,ChangeEvent } from "react";
+import React, {
+  FC,
+  HTMLInputTypeAttribute,
+  useState,
+  ChangeEvent,
+} from "react";
 
 interface Props {
   errorMessage?: string;
@@ -18,8 +23,8 @@ interface Props {
   icon?: React.ReactElement | undefined;
   currency?: string;
   maxLength?: number;
-  onChange?:(event: ChangeEvent<HTMLInputElement>) => void;
-  value?:any  
+  onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
+  value?: any;
 }
 
 export const TextInput: FC<Props> = ({
@@ -34,7 +39,7 @@ export const TextInput: FC<Props> = ({
   currency,
   maxLength,
   onChange,
-  value
+  value,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -85,7 +90,7 @@ export const TextInput: FC<Props> = ({
           </p>
         )}
 
-        {icon && <div className={clsx("-ms-[12%]")}>{icon}</div>}
+        {icon && <div className={clsx("-ms-[8%] z-50")}>{icon}</div>}
       </div>
       {errorMessage && (
         <p className="mt-4 text-xs text-red-600 dark:text-red-500">

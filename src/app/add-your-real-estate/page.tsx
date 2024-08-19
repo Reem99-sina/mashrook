@@ -1276,7 +1276,7 @@ const AddYourRealEstate: React.FC = () => {
             <Modal ref={modalRef} size="xl">
               <div className="items-start flex justify-center flex-col p-4">
                 {/* <MapLocation/> */}
-                <Map />
+                {/* <Map /> */}
                 <div></div>
                 <div className="flex flex-col  mt-6 gap-3 mb-6 w-full  items-end justify-start">
                   <p className="text-base font-bold text-[#4B5563]">العنوان</p>
