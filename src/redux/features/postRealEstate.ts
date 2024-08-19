@@ -6,6 +6,20 @@ export interface returnType {
   message: string | undefined;
   data: any;
 }
+export interface typeInput{
+  property_owner_type_id?: number; // وسيط عقاري, مطور عقاري, وسيط
+  property_purpose_id?: number; //بيع, تطوير (شراكة برأس المال أو البناء)
+  property_type_id?: number;
+  partner_type_id?: number,
+  city?: string;
+  district?: string;
+  lat?: number;
+  long?: number;
+  address?: string;
+  area?: string;
+  price?: number|string;
+  is_divisible?: boolean; //
+}
 export interface RealEstateTypeInter {
   property_owner_type_id?: number; // وسيط عقاري, مطور عقاري, وسيط
   property_purpose_id?: number; //بيع, تطوير (شراكة برأس المال أو البناء)
@@ -20,7 +34,7 @@ export interface RealEstateTypeInter {
   car_entrance?: boolean;
   plan_number?: string; // في حالة اختيار ارض (رقم المخطط)
   piece_number?: string; // في حالة اختيار ارض (رقم القطعة)
-  area?: string;
+  area?: number;
   price?: number|string;
   is_divisible?: boolean; // قي حالة اختيار ارض  (هل العقار قابل للتجزئية)
   advertisement_number?: string; // رقم الاعلان
@@ -123,7 +137,7 @@ landDetails?:{
 }
 export interface earthInter{
   type: string,
-  area: string,
+  area: number,
   price: number,
   rooms_number: number,// في حالة الفيلا عدد الغرف
   halls_number: number, // في حالة الفيلا عدد الصالات
@@ -197,7 +211,7 @@ const realEstateTypeSlice = createSlice({
     builder.addCase(postrealEstateType.fulfilled, (state, action) => {
       
       state.loading = false;
-      state.message = action.payload.message
+      state.message = action?.payload?.message
         ? action.payload.message
         : "success";
       state.data = action.payload.data;

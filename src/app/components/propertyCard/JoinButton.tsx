@@ -110,9 +110,7 @@ const JoinStatusButtons: React.FC<JoinStatusButtonsProps> = ({
               </button>
               <h2 className="text-sm lg:text-xl font-bold">{
               //  data?.details?.type||
-               data?.propertyType?.title}-{data?.landDetails?.piece_number?
-                `قطعة رقم  ${data?.landDetails?.piece_number}`
-                :data?.propertyType?.title}</h2>
+               data?.propertyType?.title}-{data?.propertyType?.title}</h2>
               <p></p>
             </div>
             <div className="mb-4">

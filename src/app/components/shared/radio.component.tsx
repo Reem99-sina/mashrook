@@ -18,7 +18,7 @@ export const RadioInput: FC<RadioInputProps> = ({
 }) => {
   return (
     <div
-      className="mb-4 flex cursor-pointer items-center flex-row "
+      className="mb-4 flex cursor-pointer items-center flex-row justify-end"
       
     >
          <label

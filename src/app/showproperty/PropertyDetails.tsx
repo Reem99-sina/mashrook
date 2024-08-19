@@ -113,7 +113,7 @@ const PropertyDetails: React.FC = () => {
         <h2 className="text-2xl font-bold mb-4">تفاصيل العقار</h2>
         <div className="mt-2">
           <div className="border-2 rounded-lg p-4">
-            <h3 className="text-xl font-bold">قطعة {selectData?.landDetails?.piece_number}</h3>
+            {/* <h3 className="text-xl font-bold">قطعة {selectData?.landDetails?.piece_number}</h3> */}
             <div className="flex justify-between bg-gray-100 w-full items-center rounded-lg ml-2 mt-4 px-2  py-2">
               <span>حالة العقار</span>
               <span className="bg-blue-450 rounded-lg p-2 text-white">
@@ -126,7 +126,7 @@ const PropertyDetails: React.FC = () => {
                 <span>
                   <HiOutlineSquare3Stack3D className="text-xl mx-2" />
                 </span>
-                <span>{selectData?.landDetails?.piece_number}</span>
+                {/* <span>{selectData?.landDetails?.piece_number}</span> */}
               </div>
             </div>
             <div className="flex justify-between bg-gray-100 w-full items-center rounded-lg ml-2 mt-4 px-2  py-2">
@@ -204,7 +204,7 @@ const PropertyDetails: React.FC = () => {
         <div className="mt-2">
           <div className="flex justify-between bg-gray-100 w-full items-center rounded-lg ml-2 mt-4 px-2  py-2">
             <span>رقم المخطط</span>
-            <span>{selectData?.landDetails?.plan_number}</span>
+            {/* <span>{selectData?.landDetails?.plan_number}</span> */}
           </div>
           <div className="flex justify-between bg-gray-100 w-full items-center rounded-lg ml-2 mt-4 px-2  py-2">
             <span>المدينة</span>
@@ -215,7 +215,7 @@ const PropertyDetails: React.FC = () => {
             <span> {selectData?.propertyLocation?.district}</span>
           </div>
           <div className="flex-col justify-between bg-gray-100 w-full items-center rounded-lg ml-2 mt-4 px-2  py-2">
-            <div>الموقع</div>
+            <div> الموقع</div>
             <div>العنوان التفصيلي</div>
           </div>
         </div>
@@ -328,14 +328,14 @@ const PropertyDetails: React.FC = () => {
           </div>
           <div className="flex bg-gray-100 w-full justify-between items-center py-2  px-2 rounded-lg ml-2 mt-4">
             <div>
-              <p>{selectData?.landDetails?.is_divisible}العقار قابل للتجزئة</p>
+              {/* <p>{selectData?.landDetails?.is_divisible}العقار قابل للتجزئة</p> */}
             </div>
             <span>
-              {selectData?.landDetails?.is_divisible==false ? (
+              {/* {selectData?.landDetails?.is_divisible==false ? (
                 <IoMdCloseCircleOutline className="mr-2 ml-2 bg-red-450 text-white text-2xl font-bold rounded-full " />
               ) : (
                 <IoIosCheckmarkCircleOutline className="mr-2 ml-2 bg-green-450 text-white text-2xl font-bold rounded-full " />
-              )}
+              )} */}
             </span>
           </div>
 

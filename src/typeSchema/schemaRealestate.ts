@@ -5,7 +5,9 @@ export let earthSchema = object().shape({
   property_purpose_id: number().required(" ما الغرض ؟"),
   property_type_id: number().required(" ما نوع العقار ؟"),
   images: array().min(1, " مطلوب اضافة صوره").required(" مطلوب اضافة صوره"),
-
+  address:string().required("عنوان مطلوب"),
+  lat:number().notOneOf([0], "احداثيات مكان مطلوبة").required("احداثيات مكان مطلوبة"),
+  long:number().notOneOf([0], "احداثيات مكان مطلوبة").required("احداثيات مكان مطلوبة"),
   district: string().required("حي مطلوب"),
   city: string().required(" مدينة مطلوب"),
   is_divisible: boolean().required("هل العقار قابل للتجزئة؟"),
@@ -16,7 +18,7 @@ export let earthSchema = object().shape({
       object().shape({
         plan_number: string().required("ما رقم المخطط ؟"),
         piece_number: string().required("ما رقم المقطعة ؟"),
-        area: string().required("مساحة مطلوبة"),
+        area: number().required("مساحة مطلوبة"),
         price: number().notOneOf([0], "سعر مطلوب").required("سعر مطلوب"),
       })
     )
@@ -31,10 +33,12 @@ export let departmentOrRowSchema = object().shape({
   property_purpose_id: number().required(" ما الغرض ؟"),
   property_type_id: number().required(" ما نوع العقار ؟"),
   district: string().required("حي مطلوب"),
+  address:string().required("عنوان مطلوب"),
+  lat:number().notOneOf([0], "احداثيات مكان مطلوبة").required("احداثيات مكان مطلوبة"),
+  long:number().notOneOf([0], "احداثيات مكان مطلوبة").required("احداثيات مكان مطلوبة"),
   city: string().required(" مدينة مطلوب"),
-  area: string().required("مساحة مطلوبة"),
+  area: number().notOneOf([0], "مساحة مطلوبة").required("مساحة مطلوبة"),
   images: array().min(1, " مطلوب اضافة صوره").required(" مطلوب اضافة صوره"),
-
   price: number().notOneOf([0], "سعر مطلوب").required("سعر مطلوب"),
   is_divisible: boolean().required("هل العقار قابل للتجزئة؟"),
   advertisement_number: string(),
@@ -61,11 +65,13 @@ export let departmentOrRowArchSchema = object().shape({
   property_type_id: number().required(" ما نوع العقار ؟"),
   district: string().required("حي مطلوب"),
   images: array().min(1, " مطلوب اضافة صوره").required(" مطلوب اضافة صوره"),
-
+  address:string().required("عنوان مطلوب"),
+  lat:number().notOneOf([0], "احداثيات مكان مطلوبة").required("احداثيات مكان مطلوبة"),
+  long:number().notOneOf([0], "احداثيات مكان مطلوبة").required("احداثيات مكان مطلوبة"),
   city: string().required(" مدينة مطلوب"),
-  area: string().required("مساحة مطلوبة"),
-  apartment_number: string().required(" ما رقم شقة ؟"), // في حالة الشقة رقم الشقة
-  apartment_floor: string().required(" ما رقم  دور ؟"),
+  area: number().required("مساحة مطلوبة"),
+  apartment_number: string().notOneOf(["0"], " ما رقم شقة ؟").required(" ما رقم شقة ؟"), // في حالة الشقة رقم الشقة
+  apartment_floor: string().notOneOf(["0"], "ما رقم  دور ؟").required(" ما رقم  دور ؟"),
   price: number().notOneOf([0], "سعر مطلوب").required("سعر مطلوب"),
   is_divisible: boolean().required("هل العقار قابل للتجزئة؟"),
   advertisement_number: string(),
@@ -93,8 +99,10 @@ export let departmentWithVillaSchema = object().shape({
   district: string().required("حي مطلوب"),
   city: string().required(" مدينة مطلوب"),
   images: array().min(1, " مطلوب اضافة صوره").required(" مطلوب اضافة صوره"),
-
-  area: string().required("مساحة مطلوبة"),
+  address:string().required("عنوان مطلوب"),
+  lat:number().notOneOf([0], "احداثيات مكان مطلوبة").required("احداثيات مكان مطلوبة"),
+  long:number().notOneOf([0], "احداثيات مكان مطلوبة").required("احداثيات مكان مطلوبة"),
+  area: number().required("مساحة مطلوبة"),
   price: number().notOneOf([0], "سعر مطلوب").required("سعر مطلوب"),
   is_divisible: boolean().required("هل العقار قابل للتجزئة؟"),
   advertisement_number: string(),
@@ -136,22 +144,27 @@ export let villaOwnSchema = object().shape({
   property_type_id: number().required(" ما نوع العقار ؟"),
   property_type_details_id: number().required(" ما نوع العقار ؟"),
   images: array().min(1, " مطلوب اضافة صوره").required(" مطلوب اضافة صوره"),
-
+  address:string().required("عنوان مطلوب"),
+  lat:number().notOneOf([0], "احداثيات مكان مطلوبة").required("احداثيات مكان مطلوبة"),
+  long:number().notOneOf([0], "احداثيات مكان مطلوبة").required("احداثيات مكان مطلوبة"),
   district: string().required("حي مطلوب"),
   city: string().required(" مدينة مطلوب"),
   is_divisible: boolean().required("هل العقار قابل للتجزئة؟"),
   advertisement_number: string(),
   license_number: string(),
   age: number().notOneOf([0], "ما عمر العقار ؟").required(" ما عمر العقار ؟"),
-  details: array().of(
+  details: array().min(1, "مطلوب اضافت نفاصيل الادوار").required("مطلوب اضافت نفاصيل الادوار").of(
     object().shape({
       type: string(),
-      area: string(),
-      price: number(),
-      rooms_number: number(), // في حالة الفيلا عدد الغرف
-      halls_number: number(), // في حالة الفيلا عدد الصالات
-      bathrooms_number: number(), // في حالة الفيلا عدد دورات المياه
-      kitchens_number: number(), // في حالة الفيلا عدد المطابخ
+      area: number().notOneOf([0], "ما  مساحة ؟").required(" ما  مساحة ؟"),
+      price: number().notOneOf([0], "ما  الشعر ؟").required(" ما  السعر ؟"),
+      rooms_number: number().notOneOf([0], "ما عدد غرف؟").required("ما عدد غرف؟"), // في حالة الفيلا عدد الغرف
+      halls_number: number().notOneOf([0], "ما عدد صالات؟")
+      .required("ما عدد صالات؟"), // في حالة الفيلا عدد الصالات
+      bathrooms_number: number().notOneOf([0], "ما عدد حمامات؟")
+      .required("ما عدد حمامات؟"), // في حالة الفيلا عدد دورات المياه
+      kitchens_number: number().notOneOf([0], "ما عدد مطابخ؟")
+      .required("ما عدد مطابخ؟"), // في حالة الفيلا عدد المطابخ
       pool: boolean(), // مزايا اضافية مسبح
       garden: boolean(), // مزايا اضافية
       servants_room: boolean(), // مزايا اضافية غرفة خدم

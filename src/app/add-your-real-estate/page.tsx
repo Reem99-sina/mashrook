@@ -45,8 +45,8 @@ import {
   earthDevSchema
 
 } from "@/typeSchema/schemaRealestate";
-import Map from "../components/shared/map";
-// import MapLocation from "./components/MapLocation"
+// import Map from "../components/shared/map";
+import MapLocation from "./components/MapLocation"
 const cities = [
   {
     id: 1,
@@ -130,14 +130,13 @@ const AddYourRealEstate: React.FC = () => {
     property_purpose_id: 0, //بيع, تطوير (شراكة برأس المال أو البنا
     property_type_id: 0,
     partner_type_id:0,
-   
     city: "",
     district: "",
-    address: "gh",
-    area: "",
+    address: "",
+    area: 0,
     price: 0,
-    lat: 45,
-    long: 67,
+    lat: 24.64, long: 46.72
+    ,
     is_divisible: false,
   });
   const [mediator, setMediator] = useState({
@@ -145,13 +144,13 @@ const AddYourRealEstate: React.FC = () => {
     license_number: "",
   });
   const initialVillaData: earthInter[] = Array.from({ length: 3 }, () => ({  
-    type: "دور أرضي",  
-    area: "1",  
-    price: 1,  
-    rooms_number: 1, // في حالة الفيلا عدد الغرف  
-    halls_number: 1, // في حالة الفيلا عدد الصالات  
-    bathrooms_number: 1, // في حالة الفيلا عدد دورات المياه  
-    kitchens_number: 1, // في حالة الفيلا عدد المطابخ  
+    type: "",  
+    area: 0,  
+    price: 0,  
+    rooms_number: 0, // في حالة الفيلا عدد الغرف  
+    halls_number: 0, // في حالة الفيلا عدد الصالات  
+    bathrooms_number: 0, // في حالة الفيلا عدد دورات المياه  
+    kitchens_number: 0, // في حالة الفيلا عدد المطابخ  
     pool: true, // مزايا اضافية مسبح  
     garden: true, // مزايا اضافية   
     servants_room: true, // مزايا اضافية غرفة خدم  
@@ -173,7 +172,7 @@ const AddYourRealEstate: React.FC = () => {
   const [earth, setEarth] = useState({
     plan_number: ""
   });
-  const [landDetails, setlandDetails] = useState<{ piece_number: string; area: string; price: number;plan_number:string; }[]>([]);
+  const [landDetails, setlandDetails] = useState<{ piece_number: string; area: number; price: number;plan_number:string; }[]>([]);
   const [departmentArch, setdepartmentArch] = useState({
     age: 0,
     rooms_number: 0,
@@ -295,7 +294,7 @@ const AddYourRealEstate: React.FC = () => {
                 earthSchema,
                 setErrors
               );
-              console.log(errors,validationMain,"validationMain")
+             
               if (validationMain == true) {
                 dispatch(
                   postrealEstateType({
@@ -307,7 +306,7 @@ const AddYourRealEstate: React.FC = () => {
                 );
               }
           } else if (departmentArch.property_type_details_id == 5) {
-            console.log(errors,validationMain,"validationMain")
+           
             validationMain = validationMain&&await validateForm(
               {
                 ...dataSend,
@@ -324,7 +323,7 @@ const AddYourRealEstate: React.FC = () => {
               departmentOrRowArchSchema,
               setErrors
             );
-            console.log(errors,validationMain,"validationMain")
+          
             if (validationMain == true) {
               dispatch(
                 postrealEstateType({
@@ -357,7 +356,7 @@ const AddYourRealEstate: React.FC = () => {
               departmentOrRowSchema,
               setErrors
             );
-            console.log(errors,validationMain,"validationMain")
+            
             if (validationMain == true) {
               dispatch(
                 postrealEstateType({
@@ -453,16 +452,16 @@ const AddYourRealEstate: React.FC = () => {
     dispatch(getproperityType({num:1}));
     dispatch(getproperityPurposeType());
     dispatch(getproperityOwnerType());
-    dispatch(getproperityTypeMore({num:1}));
+    dispatch(getproperityTypeMore({num:1,type:"offer"}));
   }, [dispatch]);
   useEffect(()=>{
     dispatch(getproperityType({num:dataSend?.property_purpose_id||1}));
   },[dataSend?.property_purpose_id,dispatch])
   useEffect(()=>{
-    dispatch(getproperityTypeMore({num:dataSend?.property_type_id||1}));
+    dispatch(getproperityTypeMore({num:dataSend?.property_type_id||1,type:"offer"}));
   },[dataSend?.property_type_id,dispatch])
   useEffect(() => {
-    if (typeof window !== "undefined") {
+    if (typeof window != "undefined") {
       const storedToken = sessionStorage.getItem("token");
       setToken(storedToken);
     }
@@ -486,11 +485,11 @@ const AddYourRealEstate: React.FC = () => {
     setlandDetails((prev)=>prev.length<count.nums?[...prev,{
       piece_number: "", // في حالة اختيار ارض (رقم القطعة)
       plan_number: "",
-      area: "",
+      area: 0,
       price: 0
   }]:[...prev])
   }, [count.nums]);
-
+ console.log(errors,"errors")
   return (
     <>
       {!sentYourRequest ? (
@@ -757,8 +756,14 @@ const AddYourRealEstate: React.FC = () => {
                   onClick={() => modalRef.current?.open()}
                   className="cursor-pointer"
                 />
+                
+                  
               </div>
-             
+              {(errors?.address||errors?.lat||errors?.long) && (
+                    <p className="text-xs text-red-600 dark:text-red-500 text-right">
+                      {errors?.address||errors?.lat||errors?.long}
+                    </p>
+                  )}
             </div>
             <div className="bg-white rounded-lg border border-[#E5E7EB] w-full mb-4 items-start justify-start p-4">
               <div className="flex items-center justify-end">
@@ -783,6 +788,11 @@ const AddYourRealEstate: React.FC = () => {
                         }
                         title="رقم الشقة"
                       />
+                      {errors?.apartment_number&& (
+                    <p className="text-xs text-red-600 dark:text-red-500 text-right">
+                      {errors?.apartment_number}
+                    </p>
+                  )}
                       <p> رقم الدور</p>
                       <CountElement
                         value={DepartmentArch?.apartment_floor}
@@ -794,6 +804,11 @@ const AddYourRealEstate: React.FC = () => {
                         }
                         title="رقم الدور"
                       />
+                      {errors?.apartment_floor&& (
+                    <p className="text-xs text-red-600 dark:text-red-500 text-right">
+                      {errors?.apartment_floor}
+                    </p>
+                  )}
                     </div>
                   </>
                 )}
@@ -850,7 +865,7 @@ const AddYourRealEstate: React.FC = () => {
                       onChange={(event) =>
                         setlandDetails((prevs)=>(prevs.map((ele,i)=>i==index?{
                           ...ele,
-                          area: event?.target?.value,
+                          area: Number(event?.target?.value),
                         }:ele)))
                       }
                       errors={errors&&errors[`landDetails[${index}].area`]}
@@ -879,7 +894,7 @@ const AddYourRealEstate: React.FC = () => {
                     <InputAreaPrice
                       title="المساحة"
                       onChange={(event) =>
-                        setDataSend({ ...dataSend, area: event?.target?.value })
+                        setDataSend({ ...dataSend, area: Number(event?.target?.value) })
                       }
                       errors={errors?.area}
                       measurement="متر"
@@ -988,9 +1003,9 @@ const AddYourRealEstate: React.FC = () => {
                             title="المساحة"
                             
                             onChange={(e) =>
-                              setvilla((prev)=>prev.map((ele,i)=>i==index?({ ...ele, area: e.target.value }):ele))
+                              setvilla((prev)=>prev.map((ele,i)=>i==index?({ ...ele, area: Number(e.target.value) }):ele))
                             }
-                            errors={errors?.area}
+                            errors={errors&&errors[`details[${index}].area`]}
                             measurement="متر"
                           />
                           <InputAreaPrice
@@ -999,12 +1014,12 @@ const AddYourRealEstate: React.FC = () => {
                             onChange={(e) =>
                               setvilla((prev)=>prev.map((ele,i)=>i==index?({ ...ele, price: Number(e.target.value) }):ele))
                             }
-                            errors={errors?.price}
+                            errors={errors&&errors[`details[${index}].price`]}
                             measurement="ريال"
                             desc="(بدون القيمة المضافة والسعي)"
                           />
                           <NumberRoom
-                            errors={String(errors?.rooms_number)}
+                            errors={errors&&errors[`details[${index}].rooms_number`]}
                             value={villa[index]?.rooms_number}
                             onChange={(e) =>
                               setvilla((prev)=>prev.map((ele,i)=>i==index?({ ...ele, rooms_number: Number(e.target.value) }):ele))
@@ -1016,7 +1031,7 @@ const AddYourRealEstate: React.FC = () => {
                             max={10}
                           />
                           <NumberRoom
-                            errors={String(errors?.halls_number)}
+                             errors={errors&&errors[`details[${index}].halls_number`]}
                             value={villa[index]?.halls_number}
                             onChange={(e) =>
                               setvilla((prev)=>prev.map((ele,i)=>i==index?({ ...ele, halls_number: Number(e.target.value) }):ele))
@@ -1028,7 +1043,7 @@ const AddYourRealEstate: React.FC = () => {
                             max={3}
                           />
                           <NumberRoom
-                            errors={String(errors?.bathrooms_number)}
+                            errors={errors&&errors[`details[${index}].bathrooms_number`]}
                             value={villa[index]?.bathrooms_number}
                             onChange={(e) =>
                               setvilla((prev)=>prev.map((ele,i)=>i==index?({ ...ele, bathrooms_number: Number(e.target.value) }):ele))
@@ -1040,7 +1055,7 @@ const AddYourRealEstate: React.FC = () => {
                             max={3}
                           />
                           <NumberRoom
-                            errors={String(errors?.kitchens_number)}
+                            errors={errors&&errors[`details[${index}].kitchens_number`]}
                             value={villa[index]?.kitchens_number}
                             onChange={(e) =>
                               setvilla((prev)=>prev.map((ele,i)=>i==index?({ ...ele, kitchens_number: Number(e.target.value) }):ele))
@@ -1117,7 +1132,7 @@ const AddYourRealEstate: React.FC = () => {
                           onChange={(event) =>
                             setDataSend({
                               ...dataSend,
-                              area: event?.target?.value,
+                              area: Number(event?.target?.value),
                             })
                           }
                           errors={errors?.area}
@@ -1530,13 +1545,13 @@ const AddYourRealEstate: React.FC = () => {
           <div>
             <Modal ref={modalRef} size="xl">
               <div className="items-start flex justify-center flex-col p-4">
-                {/* <MapLocation/> */}
+                <MapLocation  lat={dataSend?.lat}long={dataSend?.long} onChange={setDataSend}/>
                 {/* <Map /> */}
-                <div></div>
-                <div className="flex flex-col  mt-6 gap-3 mb-6 w-full  items-end justify-start">
+                {/* <div></div> */}
+                {/* <div className="flex flex-col  mt-6 gap-3 mb-6 w-full  items-end justify-start">
                   <p className="text-base font-bold text-[#4B5563]">العنوان</p>
-                  <input className="w-full h-14 rounded-lg bg-[#D1D5DB]" />
-                </div>
+                  <input className="w-full h-10 rounded-lg bg-[#D1D5DB]" />
+                </div> */}
                 <div className="flex flex-row items-center justify-center gap-3  w-full">
                   <Button
                     text="الغاء"

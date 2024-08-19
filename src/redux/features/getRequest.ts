@@ -43,7 +43,7 @@ export interface dataReturn {
     createdAt: string;
     updatedAt: string;
     property_id: number;
-  };
+  }[];
   details: {
     id: number;
     type: string;
@@ -89,7 +89,12 @@ export interface dataReturn {
     title: string;
     createdAt: string;
     updatedAt: string;
-  };
+  };propertyTypeDetails:{
+    id: number;
+    title: string;
+    createdAt: string;
+    updatedAt: string;
+  }
 }
 
 export const getRequest = createAsyncThunk<returnType>(

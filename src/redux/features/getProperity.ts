@@ -28,14 +28,18 @@ export interface properityTypeInter {
 export interface propsInter {
    num:number
 }
+export interface propsMoreInter {
+    num:number,
+    type:string
+ }
 export const getproperityType=createAsyncThunk<returnType,propsInter>("properityType/get", async (data:propsInter, { rejectWithValue }) => {  
         const response = await axios.get(`https://server.mashrook.sa/property-type/${data?.num}`)
         .then((response)=>response.data)
         .catch((error)=>error?.response?.data) 
         return response;
 })
-export const getproperityTypeMore=createAsyncThunk<returnMoreType,propsInter>("properityTypemore/get", async (data:propsInter, { rejectWithValue }) => {  
-    const response = await axios.get(`https://server.mashrook.sa/property-type/section-details/${data?.num}`)
+export const getproperityTypeMore=createAsyncThunk<returnMoreType,propsMoreInter>("properityTypemore/get", async (data:propsMoreInter, { rejectWithValue }) => {  
+    const response = await axios.get(`https://server.mashrook.sa/property-type/section-details/${data?.type}/${data?.num}`)
     .then((response)=>response.data)
     .catch((error)=>error?.response?.data) 
     return response;
