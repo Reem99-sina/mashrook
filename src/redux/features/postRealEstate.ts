@@ -110,6 +110,8 @@ apartment?: {
   bathrooms_number?: number; // في حالة الفيلا عدد دورات المياه
   kitchens_number?: number;
 };
+
+
 landDetails?:{
   area?: number|string;
   price?: number|string;
@@ -117,6 +119,7 @@ landDetails?:{
   plan_number?: string; 
 
 }[]
+[key: string]: any; 
 }
 export interface earthInter{
   type: string,
