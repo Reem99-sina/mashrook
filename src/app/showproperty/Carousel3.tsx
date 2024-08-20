@@ -1,22 +1,31 @@
 "use client";
 import Image from "next/image";
 import { Carousel } from "../components/shared/Mimport";
-
-export function CarouselDefault() {
+interface imageInfo{
+  id: number,
+name: string,
+link: string,
+createdAt: string,
+updatedAt:string,
+property_id: number
+}
+export function CarouselDefault({images}:{images:imageInfo[]}) {
   return (
     <Carousel placeholder={undefined}
     onPointerEnterCapture={undefined}
     onPointerLeaveCapture={undefined} className="rounded-xl">
-      <Image
-        src="https://media.istockphoto.com/id/578830714/photo/white-modern-apartment-house.jpg?s=1024x1024&w=is&k=20&c=B6n0TfjrvKXuhBEY2-viVPGb1O2IsjbYnpnPHx2zeDE="
-        alt="image 1"
+      {images?.map((ele)=><Image
+      key={ele?.id}
+        src={ele.link}
+        alt={ele.name}
         width={1024}
         height={1024}
         style={{ objectFit: "cover" }}
         className="rounded-xl"
         priority
-      />
-      <Image
+      />)}
+      
+      {/* <Image
         src="https://media.istockphoto.com/id/638342740/photo/modern-luxury-apartment-house-in-berlin.jpg?s=1024x1024&w=is&k=20&c=8v2Gp7z6i1rfDD5qF5_p2ZhyeEtit-yx75HZZnO7Y1s="
         alt="image 2"
         width={1024}
@@ -60,7 +69,7 @@ export function CarouselDefault() {
         style={{ objectFit: "cover" }}
         className="rounded-xl"
         priority
-      />
+      /> */}
     </Carousel>
   );
 }

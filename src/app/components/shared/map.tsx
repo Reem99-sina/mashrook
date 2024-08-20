@@ -1,5 +1,12 @@
-import { useState,useEffect } from "react";
-import { MapContainer, TileLayer, useMapEvents,useMap, Marker, Popup } from "react-leaflet";
+import { useState, useEffect } from "react";
+import {
+  MapContainer,
+  TileLayer,
+  useMapEvents,
+  useMap,
+  Marker,
+  Popup,
+} from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { FaMapMarkerAlt } from "react-icons/fa";
@@ -32,7 +39,7 @@ const LocationSelector: React.FC<LocationSelectorProps> = ({
   );
 };
 type LatLngTuple = [number, number];
-const UpdateMapCenter = ({ center }:{center:LatLngTuple}) => {
+const UpdateMapCenter = ({ center }: { center: LatLngTuple }) => {
   const map = useMap();
   useEffect(() => {
     if (center) {
@@ -42,21 +49,19 @@ const UpdateMapCenter = ({ center }:{center:LatLngTuple}) => {
   return null;
 };
 const Map: React.FC<{
-  latitude: number; longitude: number; handleSearch: (lat: number, lng: number) => Promise<void>;
-}> = ({latitude,longitude,handleSearch}) => {
+  latitude: number;
+  longitude: number;
+  handleSearch: (lat: number, lng: number) => Promise<void>;
+}> = ({ latitude, longitude, handleSearch }) => {
   const handleLocationSelected = (lat: number, lng: number) => {
-    handleSearch(lat,lng)
-   
+    handleSearch(lat, lng);
   };
 
-useEffect(()=>{
-  
-},[latitude,longitude])
-useEffect(() => {
-  if (typeof window !== "undefined") {
-    
-  }
-}, []); 
+  useEffect(() => {}, [latitude, longitude]);
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+    }
+  }, []);
   return (
     <MapContainer
       center={[latitude, longitude]}
@@ -67,7 +72,7 @@ useEffect(() => {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution='&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
       />
-       
+
       <LocationSelector onLocationSelected={handleLocationSelected} />
       <UpdateMapCenter center={[latitude, longitude]} />
     </MapContainer>

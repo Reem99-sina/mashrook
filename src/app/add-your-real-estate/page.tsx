@@ -21,14 +21,17 @@ import InputAreaPrice from "./components/InputAreaPrice";
 
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
-import { getproperityType,getproperityTypeMore } from "@/redux/features/getProperity";
+import {
+  getproperityType,
+  getproperityTypeMore,
+} from "@/redux/features/getProperity";
 import { getproperityPurposeType } from "@/redux/features/getproperityPurpose";
 import { getproperityOwnerType } from "@/redux/features/getProperityOwnerType";
 import {
   RealEstateTypeInter,
   RealEstateErrrorTypeInter,
   postrealEstateType,
-  earthInter
+  earthInter,
 } from "@/redux/features/postRealEstate";
 import { cites } from "@/typeSchema/schema";
 import { validateForm } from "../hooks/validate";
@@ -39,14 +42,12 @@ import {
   departmentOrRowSchema,
   departmentOrRowArchSchema,
   villaOwnSchema,
-
   departmentWithVillaSchema,
   schemaMain,
-  earthDevSchema
-
+  earthDevSchema,
 } from "@/typeSchema/schemaRealestate";
 // import Map from "../components/shared/map";
-import MapLocation from "./components/MapLocation"
+import MapLocation from "./components/MapLocation";
 const cities = [
   {
     id: 1,
@@ -129,39 +130,39 @@ const AddYourRealEstate: React.FC = () => {
     property_owner_type_id: 0, // وسيط عقاري, مطور عقاري, وسيط
     property_purpose_id: 0, //بيع, تطوير (شراكة برأس المال أو البنا
     property_type_id: 0,
-    partner_type_id:0,
+    partner_type_id: 0,
     city: "",
     district: "",
     address: "",
     area: 0,
     price: 0,
-    lat: 24.64, long: 46.72
-    ,
+    lat: 24.64,
+    long: 46.72,
     is_divisible: false,
   });
   const [mediator, setMediator] = useState({
     advertisement_number: "", // رقم الاعلان
     license_number: "",
   });
-  const initialVillaData: earthInter[] = Array.from({ length: 3 }, () => ({  
-    type: "",  
-    area: 0,  
-    price: 0,  
-    rooms_number: 0, // في حالة الفيلا عدد الغرف  
-    halls_number: 0, // في حالة الفيلا عدد الصالات  
-    bathrooms_number: 0, // في حالة الفيلا عدد دورات المياه  
-    kitchens_number: 0, // في حالة الفيلا عدد المطابخ  
-    pool: true, // مزايا اضافية مسبح  
-    garden: true, // مزايا اضافية   
-    servants_room: true, // مزايا اضافية غرفة خدم  
-    ac: true, // مزايا اضافية مكيفة  
-    furnished: true, // مزايا اضافية مؤثثة  
-    kitchen: true, // مزايا اضافية مطبخ راكب  
-    garage: true,  
-    car_entrance: true,  
-}));  
+  const initialVillaData: earthInter[] = Array.from({ length: 3 }, () => ({
+    type: "",
+    area: 0,
+    price: 0,
+    rooms_number: 0, // في حالة الفيلا عدد الغرف
+    halls_number: 0, // في حالة الفيلا عدد الصالات
+    bathrooms_number: 0, // في حالة الفيلا عدد دورات المياه
+    kitchens_number: 0, // في حالة الفيلا عدد المطابخ
+    pool: true, // مزايا اضافية مسبح
+    garden: true, // مزايا اضافية
+    servants_room: true, // مزايا اضافية غرفة خدم
+    ac: true, // مزايا اضافية مكيفة
+    furnished: true, // مزايا اضافية مؤثثة
+    kitchen: true, // مزايا اضافية مطبخ راكب
+    garage: true,
+    car_entrance: true,
+  }));
   const [villa, setvilla] = useState<earthInter[]>(initialVillaData);
-  
+
   const [count, setCount] = useState({
     nums: 1,
   });
@@ -170,16 +171,18 @@ const AddYourRealEstate: React.FC = () => {
     apartment_floor: "",
   });
   const [earth, setEarth] = useState({
-    plan_number: ""
+    plan_number: "",
   });
-  const [landDetails, setlandDetails] = useState<{ piece_number: string; area: number; price: number;plan_number:string; }[]>([]);
+  const [landDetails, setlandDetails] = useState<
+    { piece_number: string; area: number; price: number; plan_number: string }[]
+  >([]);
   const [departmentArch, setdepartmentArch] = useState({
     age: 0,
     rooms_number: 0,
     halls_number: 0,
     bathrooms_number: 0,
     kitchens_number: 0,
-    property_type_details_id:0,
+    property_type_details_id: 0,
   });
   const [departmentvilla, setDepartmentvilla] = useState({
     area: 0,
@@ -200,12 +203,16 @@ const AddYourRealEstate: React.FC = () => {
     garage: false,
   });
   const [images, setImages] = useState<File[] | undefined>([]);
-  let { loading, message, data,title,details, titleSection,
-    detailsSection
-    } = useSelector<RootState>(
-    (state) => state.properityType
-  ) as { loading: boolean; message: string; data: any,title:string,details:any,titleSection:string,
-    detailsSection:any };
+  let { loading, message, data, title, details, titleSection, detailsSection } =
+    useSelector<RootState>((state) => state.properityType) as {
+      loading: boolean;
+      message: string;
+      data: any;
+      title: string;
+      details: any;
+      titleSection: string;
+      detailsSection: any;
+    };
   let {
     loading: loadingproperty_purpose_id,
     message: messagePurpose,
@@ -235,15 +242,16 @@ const AddYourRealEstate: React.FC = () => {
   };
   const dispatch = useDispatch<AppDispatch>();
   const handlePercentageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    
     setdepartmentArch({
       ...departmentArch,
       [e.target.name]: Number(e.target.value),
     });
     // set(Number(e.target.value));
   };
-  
-  const handleDepartmentVillaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+
+  const handleDepartmentVillaChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     setDepartmentvilla({
       ...departmentvilla,
       [e.target.name]: Number(e.target.value),
@@ -253,101 +261,113 @@ const AddYourRealEstate: React.FC = () => {
   const onSubmit = async () => {
     if (deal) {
       if (token) {
-
-        let validationMain=await validateForm({
-          property_owner_type_id: dataSend?.property_owner_type_id, // وسيط عقاري, مطور عقاري, وسيط
-          property_purpose_id: dataSend?.property_purpose_id, //بيع, تطوير (شراكة برأس المال أو البنا
-          property_type_id: dataSend?.property_type_id
-        },schemaMain,setErrors)
+        let validationMain = await validateForm(
+          {
+            property_owner_type_id: dataSend?.property_owner_type_id, // وسيط عقاري, مطور عقاري, وسيط
+            property_purpose_id: dataSend?.property_purpose_id, //بيع, تطوير (شراكة برأس المال أو البنا
+            property_type_id: dataSend?.property_type_id,
+          },
+          schemaMain,
+          setErrors
+        );
         // if (images && images?.length > 0) {
-          if(title&&details){
-            validationMain= validationMain&&await validateForm(
-
+        if (title && details) {
+          validationMain =
+            validationMain &&
+            (await validateForm(
               {
-                partner_type_id:dataSend?.partner_type_id
+                partner_type_id: dataSend?.partner_type_id,
               },
-              partnerSchema
-              ,
+              partnerSchema,
               setErrors
-            );
-          }
-          if(dataSend.property_owner_type_id==2||dataSend.property_owner_type_id==3){
-            validationMain= validationMain&&await validateForm(
+            ));
+        }
+        if (
+          dataSend.property_owner_type_id == 2 ||
+          dataSend.property_owner_type_id == 3
+        ) {
+          validationMain =
+            validationMain &&
+            (await validateForm(
               {
                 ...mediator,
               },
               earthDevSchema,
               setErrors
+            ));
+        }
+        if (
+          selectedPropertyType?.title == "أرض سكنية" ||
+          selectedPropertyType?.title == "أرض تجارية" ||
+          selectedPropertyType?.title == "أرض سكنية تجارية"
+        ) {
+          validationMain =
+            validationMain &&
+            (await validateForm(
+              {
+                ...dataSend,
+                landDetails: landDetails,
+                images: images,
+              },
+              earthSchema,
+              setErrors
+            ));
+
+          if (validationMain == true) {
+            dispatch(
+              postrealEstateType({
+                ...dataSend,
+                landDetails: landDetails,
+                ...mediator,
+                images,
+              })
             );
           }
-          if (
-            selectedPropertyType?.title == "أرض سكنية" ||
-            selectedPropertyType?.title == "أرض تجارية"||
-            selectedPropertyType?.title == "أرض سكنية تجارية"
-          ) {   
-            validationMain = validationMain&&await validateForm(
-                {
-                  ...dataSend,
-                  landDetails:landDetails,
-                  images:images
-                },
-                earthSchema,
-                setErrors
-              );
-             
-              if (validationMain == true) {
-                dispatch(
-                  postrealEstateType({
-                    ...dataSend,
-                    landDetails:landDetails,
-                    ...mediator,
-                    images,
-                  })
-                );
-              }
-          } else if (departmentArch.property_type_details_id == 5) {
-           
-            validationMain = validationMain&&await validateForm(
+        } else if (departmentArch.property_type_details_id == 5) {
+          validationMain =
+            validationMain &&
+            (await validateForm(
               {
                 ...dataSend,
                 ...departmentArch,
                 ...DepartmentArch,
-                images:images,
+                images: images,
                 ac: additionalData?.ac, // مزايا اضافية مكيفة
                 furnished: additionalData?.furnished, // مزايا اضافية مؤثثة
                 kitchen: additionalData?.kitchen,
 
-                car_entrance: additionalData?.car_entrance
-
+                car_entrance: additionalData?.car_entrance,
               },
               departmentOrRowArchSchema,
               setErrors
+            ));
+
+          if (validationMain == true) {
+            dispatch(
+              postrealEstateType({
+                ...dataSend,
+                ...departmentArch,
+                ...DepartmentArch,
+                ac: additionalData?.ac, // مزايا اضافية مكيفة
+                furnished: additionalData?.furnished, // مزايا اضافية مؤثثة
+                kitchen: additionalData?.kitchen,
+                car_entrance: additionalData?.car_entrance,
+                ...mediator,
+                images,
+              })
             );
-          
-            if (validationMain == true) {
-              dispatch(
-                postrealEstateType({
-                  ...dataSend,
-                  ...departmentArch,
-                  ...DepartmentArch,
-                  ac: additionalData?.ac, // مزايا اضافية مكيفة
-                  furnished: additionalData?.furnished, // مزايا اضافية مؤثثة
-                  kitchen: additionalData?.kitchen,
-                  car_entrance: additionalData?.car_entrance,
-                  ...mediator,
-                  images,
-                })
-              );
-            }
-          } else if (
-            selectedPropertyType?.title == "شقة" ||
-            selectedPropertyType?.title == "دور"
-          ) {
-            validationMain = validationMain&&await validateForm(
+          }
+        } else if (
+          selectedPropertyType?.title == "شقة" ||
+          selectedPropertyType?.title == "دور"
+        ) {
+          validationMain =
+            validationMain &&
+            (await validateForm(
               {
                 ...dataSend,
                 ...departmentArch,
-                images:images,
+                images: images,
                 ac: additionalData?.ac, // مزايا اضافية مكيفة
                 furnished: additionalData?.furnished, // مزايا اضافية مؤثثة
                 kitchen: additionalData?.kitchen,
@@ -355,86 +375,90 @@ const AddYourRealEstate: React.FC = () => {
               },
               departmentOrRowSchema,
               setErrors
+            ));
+
+          if (validationMain == true) {
+            dispatch(
+              postrealEstateType({
+                ...dataSend,
+                ...departmentArch,
+                ac: additionalData?.ac, // مزايا اضافية مكيفة
+                furnished: additionalData?.furnished, // مزايا اضافية مؤثثة
+                kitchen: additionalData?.kitchen,
+                car_entrance: additionalData?.car_entrance,
+                ...mediator,
+                images,
+              })
             );
-            
-            if (validationMain == true) {
-              dispatch(
-                postrealEstateType({
-                  ...dataSend,
-                  ...departmentArch,
-                  ac: additionalData?.ac, // مزايا اضافية مكيفة
-                  furnished: additionalData?.furnished, // مزايا اضافية مؤثثة
-                  kitchen: additionalData?.kitchen,
-                  car_entrance: additionalData?.car_entrance,
-                  ...mediator,
-                  images,
-                })
-              );
-            }
-          } else if (
-            selectedPropertyType?.title === "فيلا" &&
-            departmentArch?.property_type_details_id == 2
-          ) {
-            validationMain =validationMain&& await validateForm(
+          }
+        } else if (
+          selectedPropertyType?.title === "فيلا" &&
+          departmentArch?.property_type_details_id == 2
+        ) {
+          validationMain =
+            validationMain &&
+            (await validateForm(
               {
                 ...dataSend,
-                property_type_details_id:departmentArch?.property_type_details_id,
-                age:departmentArch?.age,
-                details:villa,
-                images:images
+                property_type_details_id:
+                  departmentArch?.property_type_details_id,
+                age: departmentArch?.age,
+                details: villa,
+                images: images,
               },
               villaOwnSchema,
               setErrors
+            ));
+
+          if (validationMain == true) {
+            dispatch(
+              postrealEstateType({
+                ...dataSend,
+                property_type_details_id:
+                  departmentArch?.property_type_details_id,
+                age: departmentArch?.age,
+                details: villa,
+                ...mediator,
+                images,
+              })
             );
-            
-            if (validationMain == true) {
-              dispatch(
-                postrealEstateType({
-                  ...dataSend,
-                  property_type_details_id:departmentArch?.property_type_details_id,
-                  age:departmentArch?.age,
-                  details:villa,
-                  ...mediator,
-                  images,
-                })
-              );
-            }
-          }else if (
-            selectedPropertyType?.title === "فيلا" &&
-            departmentArch?.property_type_details_id == 1
-          ) {
-            validationMain = validationMain&&await validateForm(
+          }
+        } else if (
+          selectedPropertyType?.title === "فيلا" &&
+          departmentArch?.property_type_details_id == 1
+        ) {
+          validationMain =
+            validationMain &&
+            (await validateForm(
               {
                 ...dataSend,
                 ...departmentArch,
                 pool: additionalData?.pool, // مزايا اضافية مكيفة
-                  furnished: additionalData?.furnished, // مزايا اضافية مؤثثة
-                  servants_room: additionalData?.servants_room,
-                  garage: additionalData?.garage,
-                  images:images,
-                apartment:{...departmentvilla},
+                furnished: additionalData?.furnished, // مزايا اضافية مؤثثة
+                servants_room: additionalData?.servants_room,
+                garage: additionalData?.garage,
+                images: images,
+                apartment: { ...departmentvilla },
               },
               departmentWithVillaSchema,
               setErrors
+            ));
+          if (validationMain == true) {
+            dispatch(
+              postrealEstateType({
+                ...dataSend,
+                ...departmentArch,
+                pool: additionalData?.pool, // مزايا اضافية مكيفة
+                furnished: additionalData?.furnished, // مزايا اضافية مؤثثة
+                servants_room: additionalData?.servants_room,
+                garage: additionalData?.garage,
+                apartment: departmentvilla,
+                ...mediator,
+                images,
+              })
             );
-            if (validationMain == true) {
-              dispatch(
-                postrealEstateType({
-                  ...dataSend,
-                  ...departmentArch,
-                  pool: additionalData?.pool, // مزايا اضافية مكيفة
-                  furnished: additionalData?.furnished, // مزايا اضافية مؤثثة
-                  servants_room: additionalData?.servants_room,
-                  garage: additionalData?.garage,
-                  apartment:departmentvilla,
-                  ...mediator,
-                  images,
-                })
-              );
-            }
           }
-
-
+        }
       } else {
         toast.error("انت تحتاج الي تسجيل دخول");
         router.push("/login");
@@ -444,22 +468,27 @@ const AddYourRealEstate: React.FC = () => {
     }
     // setSentYourRequest(true);
   };
- 
+
   const onDelete = (index: Number) => {
     setImages(images?.filter((_, ind) => ind != index));
   };
   useEffect(() => {
-    dispatch(getproperityType({num:1}));
+    dispatch(getproperityType({ num: 1 }));
     dispatch(getproperityPurposeType());
     dispatch(getproperityOwnerType());
-    dispatch(getproperityTypeMore({num:1,type:"offer"}));
+    dispatch(getproperityTypeMore({ num: 1, type: "offer" }));
   }, [dispatch]);
-  useEffect(()=>{
-    dispatch(getproperityType({num:dataSend?.property_purpose_id||1}));
-  },[dataSend?.property_purpose_id,dispatch])
-  useEffect(()=>{
-    dispatch(getproperityTypeMore({num:dataSend?.property_type_id||1,type:"offer"}));
-  },[dataSend?.property_type_id,dispatch])
+  useEffect(() => {
+    dispatch(getproperityType({ num: dataSend?.property_purpose_id || 1 }));
+  }, [dataSend?.property_purpose_id, dispatch]);
+  useEffect(() => {
+    dispatch(
+      getproperityTypeMore({
+        num: dataSend?.property_type_id || 1,
+        type: "offer",
+      })
+    );
+  }, [dataSend?.property_type_id, dispatch]);
   useEffect(() => {
     if (typeof window !== "undefined") {
       const storedToken = sessionStorage.getItem("token");
@@ -471,8 +500,11 @@ const AddYourRealEstate: React.FC = () => {
     if (messagerealEstateRequest && Boolean(datarealEstateRequest) == true) {
       toast.success(messagerealEstateRequest);
       setSentYourRequest(true);
-    }else  if(messagerealEstateRequest&&Boolean(datarealEstateRequest)==false){
-      toast.error(messagerealEstateRequest)
+    } else if (
+      messagerealEstateRequest &&
+      Boolean(datarealEstateRequest) == false
+    ) {
+      toast.error(messagerealEstateRequest);
     }
   }, [datarealEstateRequest, messagerealEstateRequest]);
   useEffect(() => {
@@ -482,14 +514,21 @@ const AddYourRealEstate: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    setlandDetails((prev)=>prev.length<count.nums?[...prev,{
-      piece_number: "", // في حالة اختيار ارض (رقم القطعة)
-      plan_number: "",
-      area: 0,
-      price: 0
-  }]:[...prev])
+    setlandDetails((prev) =>
+      prev.length < count.nums
+        ? [
+            ...prev,
+            {
+              piece_number: "", // في حالة اختيار ارض (رقم القطعة)
+              plan_number: "",
+              area: 0,
+              price: 0
+            },
+          ]
+        : [...prev]
+    );
   }, [count.nums]);
-
+  console.log(errors,"errors")
   return (
     <>
       {!sentYourRequest ? (
@@ -509,20 +548,20 @@ const AddYourRealEstate: React.FC = () => {
                     <p className="text-base font-bold text-[#4B5563]">
                       {item.tattle}
                     </p>
-                    {( item.tattle == "نوع العقار"&&
-                      errors?.property_type_id )&& (
+                    {item.tattle == "نوع العقار" &&
+                      errors?.property_type_id && (
                         <p className="text-xs text-red-600 dark:text-red-500 text-right">
                           {errors?.property_type_id}
                         </p>
                       )}
-                    {(item.tattle == "صفة مقدم العرض"&&
-                      errors?.property_owner_type_id) && (
+                    {item.tattle == "صفة مقدم العرض" &&
+                      errors?.property_owner_type_id && (
                         <p className="text-xs text-red-600 dark:text-red-500 text-right">
                           {errors?.property_owner_type_id}
                         </p>
                       )}
-                    {(item.tattle == "الغرض من عرض العقار"&&
-                      errors?.property_purpose_id) && (
+                    {item.tattle == "الغرض من عرض العقار" &&
+                      errors?.property_purpose_id && (
                         <p className="text-xs text-red-600 dark:text-red-500 text-right">
                           {errors?.property_purpose_id}
                         </p>
@@ -569,50 +608,56 @@ const AddYourRealEstate: React.FC = () => {
                             index: number
                           ) => (
                             <RadioInput
-                            key={index}
+                              key={index}
                               name={item.tattle}
                               onChange={() =>
                                 handleOptionChange(option, item.tattle)
                               }
                               value={option?.title}
-                            
                               label={option?.title}
                             />
                           )
                         )}
-                          {(title&&details&&item.tattle == "الغرض من عرض العقار")&&<div className=" w-full mb-2 items-start justify-start ">
-                <div className="flex items-center justify-end">
-                  <p className="text-base font-bold text-[#4B5563] self-end">
-                   {title}
-                  </p>
-                </div>
-                <div className="flex flex-row flex-wrap justify-end mt-2 gap-8 items-end">
-                  <div className="mb-4 flex-row-reverse flex">
-                    {details?.map((ele:{id:number,title:string})=><RadioInput
-                     key={ele?.id}
-                      name="partner_type_id"
-                      onChange={(event) =>
-                        setDataSend({
-                          ...dataSend,
-                          partner_type_id: Number(event?.target?.value),
-                        })
-                      }
-                      value={ele?.id}
-                      label={ele?.title}
-                    />)}
+                    {title &&
+                      details &&
+                      item.tattle == "الغرض من عرض العقار" && (
+                        <div className=" w-full mb-2 items-start justify-start ">
+                          <div className="flex items-center justify-end">
+                            <p className="text-base font-bold text-[#4B5563] self-end">
+                              {title}
+                            </p>
+                          </div>
+                          <div className="flex flex-row flex-wrap justify-end mt-2 gap-8 items-end">
+                            <div className="mb-4 flex-row-reverse flex">
+                              {details?.map(
+                                (ele: { id: number; title: string }) => (
+                                  <RadioInput
+                                    key={ele?.id}
+                                    name="partner_type_id"
+                                    onChange={(event) =>
+                                      setDataSend({
+                                        ...dataSend,
+                                        partner_type_id: Number(
+                                          event?.target?.value
+                                        ),
+                                      })
+                                    }
+                                    value={ele?.id}
+                                    label={ele?.title}
+                                  />
+                                )
+                              )}
+                            </div>
+                          </div>
+                          {errors?.partner_type_id && (
+                            <p className="text-xs text-red-600 dark:text-red-500 text-right">
+                              {String(errors?.partner_type_id)}
+                            </p>
+                          )}
+                        </div>
+                      )}
                   </div>
-                </div>
-                {errors?.partner_type_id && (
-                  <p className="text-xs text-red-600 dark:text-red-500 text-right">
-                    {String(errors?.partner_type_id)}
-                  </p>
-                )}
-              </div>
-            
-}
-                  </div>
-                  
-                  
+
                   {(dataSend?.property_owner_type_id == 2 ||
                     dataSend?.property_owner_type_id == 3) &&
                     item.tattle == "صفة مقدم العرض" && (
@@ -663,26 +708,33 @@ const AddYourRealEstate: React.FC = () => {
               ))}
             </div>
 
-            {(titleSection&&detailsSection)&&<div className="bg-white rounded-lg border border-[#E5E7EB] w-full mb-4 items-start justify-start p-4 mt-4">
+            {titleSection && detailsSection && (
+              <div className="bg-white rounded-lg border border-[#E5E7EB] w-full mb-4 items-start justify-start p-4 mt-4">
                 <div className="flex items-center justify-end">
                   <p className="text-base font-bold text-[#4B5563]">
-                   {titleSection}
+                    {titleSection}
                   </p>
                 </div>
                 <div className="flex flex-row flex-wrap justify-end mt-6 gap-8 items-end">
                   <div className="mb-4 flex-row-reverse flex">
-                    {detailsSection?.map((ele:{id:number,title:string})=><RadioInput
-                    key={ele?.id}
-                      name="property_type_details_id"
-                      onChange={(event) =>
-                        setdepartmentArch({
-                          ...departmentArch,
-                          property_type_details_id: Number(event?.target?.value),
-                        })
-                      }
-                      value={ele.id}
-                      label={ele?.title}
-                    />)}
+                    {detailsSection?.map(
+                      (ele: { id: number; title: string }) => (
+                        <RadioInput
+                          key={ele?.id}
+                          name="property_type_details_id"
+                          onChange={(event) =>
+                            setdepartmentArch({
+                              ...departmentArch,
+                              property_type_details_id: Number(
+                                event?.target?.value
+                              ),
+                            })
+                          }
+                          value={ele.id}
+                          label={ele?.title}
+                        />
+                      )
+                    )}
                   </div>
                 </div>
                 {errors?.property_type_details_id && (
@@ -691,10 +743,7 @@ const AddYourRealEstate: React.FC = () => {
                   </p>
                 )}
               </div>
-            
-}
-              
-            
+            )}
 
             <div className="bg-white rounded-lg border border-[#E5E7EB] w-full mb-4 items-start justify-start p-4">
               <div className="flex items-center justify-end">
@@ -756,14 +805,12 @@ const AddYourRealEstate: React.FC = () => {
                   onClick={() => modalRef.current?.open()}
                   className="cursor-pointer"
                 />
-                
-                  
               </div>
-              {(errors?.address||errors?.lat||errors?.long) && (
-                    <p className="text-xs text-red-600 dark:text-red-500 text-right">
-                      {errors?.address||errors?.lat||errors?.long}
-                    </p>
-                  )}
+              {(errors?.address || errors?.lat || errors?.long) && (
+                <p className="text-xs text-red-600 dark:text-red-500 text-right">
+                  {errors?.address || errors?.lat || errors?.long}
+                </p>
+              )}
             </div>
             <div className="bg-white rounded-lg border border-[#E5E7EB] w-full mb-4 items-start justify-start p-4">
               <div className="flex items-center justify-end">
@@ -772,9 +819,7 @@ const AddYourRealEstate: React.FC = () => {
                 </p>
               </div>
               <div className="mb-4" style={{ direction: "rtl" }}>
-
                 {departmentArch?.property_type_details_id == 5 && (
-
                   <>
                     <div className="flex flex-col gap-5 my-3">
                       <p>رقم الشقة </p>
@@ -788,11 +833,11 @@ const AddYourRealEstate: React.FC = () => {
                         }
                         title="رقم الشقة"
                       />
-                      {errors?.apartment_number&& (
-                    <p className="text-xs text-red-600 dark:text-red-500 text-right">
-                      {errors?.apartment_number}
-                    </p>
-                  )}
+                      {errors?.apartment_number && (
+                        <p className="text-xs text-red-600 dark:text-red-500 text-right">
+                          {errors?.apartment_number}
+                        </p>
+                      )}
                       <p> رقم الدور</p>
                       <CountElement
                         value={DepartmentArch?.apartment_floor}
@@ -804,97 +849,125 @@ const AddYourRealEstate: React.FC = () => {
                         }
                         title="رقم الدور"
                       />
-                      {errors?.apartment_floor&& (
-                    <p className="text-xs text-red-600 dark:text-red-500 text-right">
-                      {errors?.apartment_floor}
-                    </p>
-                  )}
+                      {errors?.apartment_floor && (
+                        <p className="text-xs text-red-600 dark:text-red-500 text-right">
+                          {errors?.apartment_floor}
+                        </p>
+                      )}
                     </div>
                   </>
                 )}
 
                 {(selectedPropertyType?.title == "أرض سكنية" ||
-                  selectedPropertyType?.title == "أرض تجارية"||selectedPropertyType?.title == "أرض سكنية تجارية") && (
-                    Array.from({length:count.nums}).map((_,index)=><>
-                     <div className="flex items-start gap-2 justify-end flex-col mt-5">
-                  <p className="text-base text-[#4B5563] font-medium">
-                    رقم المخطط{" "}
-                  </p>
-                  <TextInput
-                    inputProps={{ placeholder: "-- الرجاء الادخال --" }}
-                    onChange={(event) =>
-                      setlandDetails((prevs)=>(prevs.map((ele,i)=>i==index?{
-                        ...ele,
-                        piece_number: event?.target?.value,
-                      }:ele)))
-                    }
-                    
-                  />
-                  {errors&&errors[`landDetails[${index}].plan_number`]&& (
-                    <p className="text-xs text-red-600 dark:text-red-500 text-right">
-                      {errors[`landDetails[${index}].plan_number`]}
-                    </p>
-                  )}
-                </div>
-                    <div className="mb-4">
-                    <label className="block mb-2 font-medium mt-2">
-                      رقم القطعة{" "}
-                    </label>
-                    <div className="flex items-center">
-                      <input
-                        type="text"
-                        className="w-full p-2 border border-gray-300 rounded-lg"
-                        placeholder="-- الرجاء الادخال --"
-                        onChange={(event) =>
-                          setlandDetails((prevs)=>(prevs.map((ele,i)=>i==index?{
-                            ...ele,
-                            plan_number: event?.target?.value,
-                          }:ele)))
-                        }
-                      />
-                    </div>
-                   
-                     {errors&&errors[`landDetails[${index}].piece_number`]&& (
-                    <p className="text-xs text-red-600 dark:text-red-500 text-right">
-                      {errors[`landDetails[${index}].piece_number`]}
-                    </p>
-                  )}
-                  </div>
-                  <InputAreaPrice
-                      title="المساحة"
-                      onChange={(event) =>
-                        setlandDetails((prevs)=>(prevs.map((ele,i)=>i==index?{
-                          ...ele,
-                          area: Number(event?.target?.value),
-                        }:ele)))
-                      }
-                      errors={errors&&errors[`landDetails[${index}].area`]}
-                      measurement="متر"
-                    />
-                    <InputAreaPrice
-                      title="السعر"
-                      onChange={(event) =>
-                        setlandDetails((prevs)=>(prevs.map((ele,i)=>i==index?{
-                          ...ele,
-                          price: Number(event?.target?.value),
-                        }:ele)))
-                      }
-                      errors={errors&&errors[`landDetails[${index}].price`]}
-                      measurement="ريال"
-                      desc="(بدون القيمة المضافة والسعي)"
-                    />
-                  </>)
-                  
-                )}
+                  selectedPropertyType?.title == "أرض تجارية" ||
+                  selectedPropertyType?.title == "أرض سكنية تجارية") &&
+                  Array.from({ length: count.nums }).map((_, index) => (
+                    <>
+                      <div className="flex items-start gap-2 justify-end flex-col mt-5">
+                        <p className="text-base text-[#4B5563] font-medium">
+                          رقم المخطط{" "}
+                        </p>
+                        <TextInput
+                          inputProps={{ placeholder: "-- الرجاء الادخال --" }}
+                          onChange={(event) =>
+                            setlandDetails((prevs) =>
+                              prevs.map((ele, i) =>
+                                i == index
+                                  ? {
+                                      ...ele,
+                                      piece_number: event?.target?.value,
+                                    }
+                                  : ele
+                              )
+                            )
+                          }
+                        />
+                        {errors &&
+                          errors[`landDetails[${index}].plan_number`] && (
+                            <p className="text-xs text-red-600 dark:text-red-500 text-right">
+                              {errors[`landDetails[${index}].plan_number`]}
+                            </p>
+                          )}
+                      </div>
+                      <div className="mb-4">
+                        <label className="block mb-2 font-medium mt-2">
+                          رقم القطعة{" "}
+                        </label>
+                        <div className="flex items-center">
+                          <input
+                            type="text"
+                            className="w-full p-2 border border-gray-300 rounded-lg"
+                            placeholder="-- الرجاء الادخال --"
+                            onChange={(event) =>
+                              setlandDetails((prevs) =>
+                                prevs.map((ele, i) =>
+                                  i == index
+                                    ? {
+                                        ...ele,
+                                        plan_number: event?.target?.value,
+                                      }
+                                    : ele
+                                )
+                              )
+                            }
+                          />
+                        </div>
 
-                {(
-                  selectedPropertyType?.title == "شقة" ||
+                        {errors &&
+                          errors[`landDetails[${index}].piece_number`] && (
+                            <p className="text-xs text-red-600 dark:text-red-500 text-right">
+                              {errors[`landDetails[${index}].piece_number`]}
+                            </p>
+                          )}
+                      </div>
+                      <InputAreaPrice
+                        title="المساحة"
+                        onChange={(event) =>
+                          setlandDetails((prevs) =>
+                            prevs.map((ele, i) =>
+                              i == index
+                                ? {
+                                    ...ele,
+                                    area: Number(event?.target?.value),
+                                  }
+                                : ele
+                            )
+                          )
+                        }
+                        errors={errors && errors[`landDetails[${index}].area`]}
+                        measurement="متر"
+                      />
+                      <InputAreaPrice
+                        title="السعر"
+                        onChange={(event) =>
+                          setlandDetails((prevs) =>
+                            prevs.map((ele, i) =>
+                              i == index
+                                ? {
+                                    ...ele,
+                                    price: Number(event?.target?.value),
+                                  }
+                                : ele
+                            )
+                          )
+                        }
+                        errors={errors && errors[`landDetails[${index}].price`]}
+                        measurement="ريال"
+                        desc="(بدون القيمة المضافة والسعي)"
+                      />
+                    </>
+                  ))}
+
+                {(selectedPropertyType?.title == "شقة" ||
                   selectedPropertyType?.title == "دور") && (
                   <>
                     <InputAreaPrice
                       title="المساحة"
                       onChange={(event) =>
-                        setDataSend({ ...dataSend, area: Number(event?.target?.value) })
+                        setDataSend({
+                          ...dataSend,
+                          area: Number(event?.target?.value),
+                        })
                       }
                       errors={errors?.area}
                       measurement="متر"
@@ -994,47 +1067,86 @@ const AddYourRealEstate: React.FC = () => {
                         key={index}
                         floors={floorsVilla}
                         onChange={(e) =>
-                          setvilla((prev)=>prev.map((ele,i)=>i==index?({ ...ele, type: e.target.value }):ele))
+                          setvilla((prev) =>
+                            prev.map((ele, i) =>
+                              i == index
+                                ? { ...ele, type: e.target.value }
+                                : ele
+                            )
+                          )
                         }
                         value={floor?.name}
+                        error={errors && errors[`details[${index}].type`]}
                       >
                         <>
                           <InputAreaPrice
                             title="المساحة"
-                            
                             onChange={(e) =>
-                              setvilla((prev)=>prev.map((ele,i)=>i==index?({ ...ele, area: Number(e.target.value) }):ele))
+                              setvilla((prev) =>
+                                prev.map((ele, i) =>
+                                  i == index
+                                    ? { ...ele, area: Number(e.target.value) }
+                                    : ele
+                                )
+                              )
                             }
-                            errors={errors&&errors[`details[${index}].area`]}
+                            errors={errors && errors[`details[${index}].area`]}
                             measurement="متر"
                           />
                           <InputAreaPrice
                             title="السعر"
-                            
                             onChange={(e) =>
-                              setvilla((prev)=>prev.map((ele,i)=>i==index?({ ...ele, price: Number(e.target.value) }):ele))
+                              setvilla((prev) =>
+                                prev.map((ele, i) =>
+                                  i == index
+                                    ? { ...ele, price: Number(e.target.value) }
+                                    : ele
+                                )
+                              )
                             }
-                            errors={errors&&errors[`details[${index}].price`]}
+                            errors={errors && errors[`details[${index}].price`]}
                             measurement="ريال"
                             desc="(بدون القيمة المضافة والسعي)"
                           />
                           <NumberRoom
-                            errors={errors&&errors[`details[${index}].rooms_number`]}
+                            errors={
+                              errors && errors[`details[${index}].rooms_number`]
+                            }
                             value={villa[index]?.rooms_number}
                             onChange={(e) =>
-                              setvilla((prev)=>prev.map((ele,i)=>i==index?({ ...ele, rooms_number: Number(e.target.value) }):ele))
+                              setvilla((prev) =>
+                                prev.map((ele, i) =>
+                                  i == index
+                                    ? {
+                                        ...ele,
+                                        rooms_number: Number(e.target.value),
+                                      }
+                                    : ele
+                                )
+                              )
                             }
-                             name="rooms_number"
+                            name="rooms_number"
                             title={"عدد الغرف"}
                             firstNumber={"غرفة"}
                             secondNumber={"+10 غرف"}
                             max={10}
                           />
                           <NumberRoom
-                             errors={errors&&errors[`details[${index}].halls_number`]}
+                            errors={
+                              errors && errors[`details[${index}].halls_number`]
+                            }
                             value={villa[index]?.halls_number}
                             onChange={(e) =>
-                              setvilla((prev)=>prev.map((ele,i)=>i==index?({ ...ele, halls_number: Number(e.target.value) }):ele))
+                              setvilla((prev) =>
+                                prev.map((ele, i) =>
+                                  i == index
+                                    ? {
+                                        ...ele,
+                                        halls_number: Number(e.target.value),
+                                      }
+                                    : ele
+                                )
+                              )
                             }
                             name="halls_number"
                             title={"عدد الصالات"}
@@ -1043,10 +1155,24 @@ const AddYourRealEstate: React.FC = () => {
                             max={3}
                           />
                           <NumberRoom
-                            errors={errors&&errors[`details[${index}].bathrooms_number`]}
+                            errors={
+                              errors &&
+                              errors[`details[${index}].bathrooms_number`]
+                            }
                             value={villa[index]?.bathrooms_number}
                             onChange={(e) =>
-                              setvilla((prev)=>prev.map((ele,i)=>i==index?({ ...ele, bathrooms_number: Number(e.target.value) }):ele))
+                              setvilla((prev) =>
+                                prev.map((ele, i) =>
+                                  i == index
+                                    ? {
+                                        ...ele,
+                                        bathrooms_number: Number(
+                                          e.target.value
+                                        ),
+                                      }
+                                    : ele
+                                )
+                              )
                             }
                             name="bathrooms_number"
                             title={"عدد دورات المياه"}
@@ -1055,10 +1181,22 @@ const AddYourRealEstate: React.FC = () => {
                             max={3}
                           />
                           <NumberRoom
-                            errors={errors&&errors[`details[${index}].kitchens_number`]}
+                            errors={
+                              errors &&
+                              errors[`details[${index}].kitchens_number`]
+                            }
                             value={villa[index]?.kitchens_number}
                             onChange={(e) =>
-                              setvilla((prev)=>prev.map((ele,i)=>i==index?({ ...ele, kitchens_number: Number(e.target.value) }):ele))
+                              setvilla((prev) =>
+                                prev.map((ele, i) =>
+                                  i == index
+                                    ? {
+                                        ...ele,
+                                        kitchens_number: Number(e.target.value),
+                                      }
+                                    : ele
+                                )
+                              )
                             }
                             name="kitchens_number"
                             title={" عدد المطابخ"}
@@ -1081,29 +1219,59 @@ const AddYourRealEstate: React.FC = () => {
                             >
                               <CheckFeature
                                 title="مكيفة"
-                               
                                 onChange={(event) =>
-                                  setvilla((prev)=>prev.map((ele,i)=>i==index?({ ...ele, ac: event.target.checked }):ele))
+                                  setvilla((prev) =>
+                                    prev.map((ele, i) =>
+                                      i == index
+                                        ? { ...ele, ac: event.target.checked }
+                                        : ele
+                                    )
+                                  )
                                 }
                               />
                               <CheckFeature
                                 title="مدخل سيارة"
                                 onChange={(event) =>
-                                  setvilla((prev)=>prev.map((ele,i)=>i==index?({ ...ele, car_entrance: event.target.checked }):ele))
+                                  setvilla((prev) =>
+                                    prev.map((ele, i) =>
+                                      i == index
+                                        ? {
+                                            ...ele,
+                                            car_entrance: event.target.checked,
+                                          }
+                                        : ele
+                                    )
+                                  )
                                 }
                               />
                               <CheckFeature
                                 title="مطبخ راكب"
-                                
                                 onChange={(event) =>
-                                  setvilla((prev)=>prev.map((ele,i)=>i==index?({ ...ele, kitchen: event.target.checked }):ele))
+                                  setvilla((prev) =>
+                                    prev.map((ele, i) =>
+                                      i == index
+                                        ? {
+                                            ...ele,
+                                            kitchen: event.target.checked,
+                                          }
+                                        : ele
+                                    )
+                                  )
                                 }
                               />
                               <CheckFeature
                                 title="مؤثثة"
-                               
                                 onChange={(event) =>
-                                  setvilla((prev)=>prev.map((ele,i)=>i==index?({ ...ele, furnished: event.target.checked }):ele))
+                                  setvilla((prev) =>
+                                    prev.map((ele, i) =>
+                                      i == index
+                                        ? {
+                                            ...ele,
+                                            furnished: event.target.checked,
+                                          }
+                                        : ele
+                                    )
+                                  )
                                 }
                               />
                             </div>
@@ -1210,7 +1378,7 @@ const AddYourRealEstate: React.FC = () => {
                               area: Number(event?.target?.value),
                             })
                           }
-                          errors={errors&&errors["apartment.area"]}
+                          errors={errors && errors["apartment.area"]}
                           measurement="متر"
                         />
                         <InputAreaPrice
@@ -1221,12 +1389,12 @@ const AddYourRealEstate: React.FC = () => {
                               price: Number(event?.target?.value),
                             })
                           }
-                          errors={errors&&errors["apartment.price"]}
+                          errors={errors && errors["apartment.price"]}
                           measurement="ريال"
                           desc="(بدون القيمة المضافة والسعي)"
                         />
                         <NumberRoom
-                          errors={errors&&errors["apartment.rooms_number"]}
+                          errors={errors && errors["apartment.rooms_number"]}
                           value={departmentvilla?.rooms_number}
                           onChange={handleDepartmentVillaChange}
                           name="rooms_number"
@@ -1236,7 +1404,7 @@ const AddYourRealEstate: React.FC = () => {
                           max={10}
                         />
                         <NumberRoom
-                          errors={errors&&errors["apartment.halls_number"]}
+                          errors={errors && errors["apartment.halls_number"]}
                           value={departmentvilla?.halls_number}
                           onChange={handleDepartmentVillaChange}
                           name="halls_number"
@@ -1246,7 +1414,9 @@ const AddYourRealEstate: React.FC = () => {
                           max={3}
                         />
                         <NumberRoom
-                          errors={errors&&errors["apartment.bathrooms_number"]}
+                          errors={
+                            errors && errors["apartment.bathrooms_number"]
+                          }
                           value={departmentvilla?.bathrooms_number}
                           onChange={handleDepartmentVillaChange}
                           name="bathrooms_number"
@@ -1256,7 +1426,7 @@ const AddYourRealEstate: React.FC = () => {
                           max={3}
                         />
                         <NumberRoom
-                          errors={errors&&errors["apartment.kitchens_number"]}
+                          errors={errors && errors["apartment.kitchens_number"]}
                           value={departmentvilla?.kitchens_number}
                           onChange={handleDepartmentVillaChange}
                           name="kitchens_number"
@@ -1380,17 +1550,22 @@ const AddYourRealEstate: React.FC = () => {
                 )
               )}
               {(selectedPropertyType?.title == "أرض سكنية" ||
-            selectedPropertyType?.title == "أرض تجارية"||selectedPropertyType?.title == "أرض سكنية تجارية")&&
-            <div className="mb-4" style={{ direction: "rtl" }}>
-                <div className="flex gap-2  flex-row mt-5">
-                  <AddButton className="cursor-pointer"  onClick={()=>{
-                setCount((prev)=>({nums:prev.nums+1}))
-                  }}/>
-                  <p className="text-sm text-[#3B73B9] font-bold">
-                    إضافة عقار اخر
-                  </p>
+                selectedPropertyType?.title == "أرض تجارية" ||
+                selectedPropertyType?.title == "أرض سكنية تجارية") && (
+                <div className="mb-4" style={{ direction: "rtl" }}>
+                  <div className="flex gap-2  flex-row mt-5">
+                    <AddButton
+                      className="cursor-pointer"
+                      onClick={() => {
+                        setCount((prev) => ({ nums: prev.nums + 1 }));
+                      }}
+                    />
+                    <p className="text-sm text-[#3B73B9] font-bold">
+                      إضافة عقار اخر
+                    </p>
+                  </div>
                 </div>
-              </div>}  
+              )}
             </div>
 
             <div className="bg-white rounded-lg border border-[#E5E7EB] w-full mb-4 items-start justify-start p-4">
@@ -1409,6 +1584,7 @@ const AddYourRealEstate: React.FC = () => {
                         event?.target?.value == "نعم" ? true : false,
                     })
                   }
+                  checked={dataSend?.is_divisible==true}
                   value="نعم"
                   label="نعم"
                 />
@@ -1421,6 +1597,7 @@ const AddYourRealEstate: React.FC = () => {
                         event?.target?.value == "نعم" ? true : false,
                     })
                   }
+                  checked={dataSend?.is_divisible==false}
                   value="لا"
                   label="لا"
                 />
@@ -1481,12 +1658,14 @@ const AddYourRealEstate: React.FC = () => {
                     name="haveNumber"
                     onChange={() => setHaveNumber(true)}
                     value="نعم"
+                    checked={haveNumber==true}
                     label="نعم"
                   />
                   <RadioInput
                     name="haveNumber"
                     onChange={() => setHaveNumber(false)}
                     value="لا"
+                    checked={haveNumber==false}
                     label="لا"
                   />
                 </div>
@@ -1534,6 +1713,7 @@ const AddYourRealEstate: React.FC = () => {
                   type="checkbox"
                   className="h-4 w-4 rounded-2xl accent-[#3B73B9]"
                   onChange={(event) => setDeal(event?.target?.checked)}
+                  
                 />
               </div>
               <div className="p-7">
@@ -1545,7 +1725,11 @@ const AddYourRealEstate: React.FC = () => {
           <div>
             <Modal ref={modalRef} size="xl">
               <div className="items-start flex justify-center flex-col p-4">
-                <MapLocation  lat={dataSend?.lat}long={dataSend?.long} onChange={setDataSend}/>
+                <MapLocation
+                  lat={dataSend?.lat}
+                  long={dataSend?.long}
+                  onChange={setDataSend}
+                />
                 {/* <Map /> */}
                 {/* <div></div> */}
                 {/* <div className="flex flex-col  mt-6 gap-3 mb-6 w-full  items-end justify-start">

@@ -3,22 +3,30 @@
 import Link from "next/link";
 import React, { useState, useRef, useEffect } from "react";
 import { RxArrowLeft } from "react-icons/rx";
-import {dataReturn} from "@/redux/features/getRequest"
 
+import { AppDispatch,RootState } from "@/redux/store";
+import { useDispatch,useSelector } from "react-redux";
+import {dataReturn,addUnqiue,typePay} from "@/redux/features/getRequest"
 type JoinStatusButtonsProps = {
   currentDealStatus: string;
-  data:dataReturn;
+  data:typePay;
+  dataMain:dataReturn
 };
 
 const JoinStatusButtons: React.FC<JoinStatusButtonsProps> = ({
   currentDealStatus,
-  data
+  data,
+  dataMain
 }) => {
   const [showDialog, setShowDialog] = useState(false);
   const [token, setToken] = useState<string | null>(null);
   const [partnershipPercentage, setPartnershipPercentage] = useState(0);
   const availableAmount = 600000;
+  const dispatch=useDispatch<AppDispatch>()
   const tooltipRef = useRef<HTMLDivElement>(null);
+  let { selectData } = useSelector<RootState>(
+    (state) => state.getRequest
+  ) as { loading: boolean; message: string; data: dataReturn[], selectData:dataReturn};
 
   const handleDialogToggle = () => {
     setShowDialog(!showDialog);
@@ -55,6 +63,14 @@ const JoinStatusButtons: React.FC<JoinStatusButtonsProps> = ({
   }, []);
   const partnershipAmount = (availableAmount * partnershipPercentage) / 100;
 
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem('amount',String(partnershipAmount))
+      sessionStorage.setItem('element',JSON.stringify(data))
+    }
+  }, [partnershipAmount,data]);
+ 
+  
   return (
     <div id="joinStatus" className="py-4">
       {/* {currentDealStatus === "محجوز" ? (
@@ -110,7 +126,7 @@ const JoinStatusButtons: React.FC<JoinStatusButtonsProps> = ({
               </button>
               <h2 className="text-sm lg:text-xl font-bold">{
               //  data?.details?.type||
-               data?.propertyType?.title}-{data?.propertyType?.title}</h2>
+              data?.piece_number?"رقم القطعة-"+data?.piece_number: data?.type}</h2>
               <p></p>
             </div>
             <div className="mb-4">
@@ -162,9 +178,15 @@ const JoinStatusButtons: React.FC<JoinStatusButtonsProps> = ({
             </div>
             <div className="flex justify-between">
               <Link
-                href="./termsandconditions"
+                href="/termsandconditions"
                 type="button"
                 className="flex-grow bg-blue-450 text-white px-4 py-2 mx-2 rounded-lg text-center"
+                onClick={()=>{
+                  dispatch(addUnqiue({
+                    id:dataMain?.id,detail_id:data?.id,title:dataMain?.propertyType?.title,numberPiece:data?.piece_number,
+                    type:Boolean(data?.type)?false:true
+                  }))
+                }}
               >
                 متابعة
               </Link>
