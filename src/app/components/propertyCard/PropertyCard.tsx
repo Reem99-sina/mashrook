@@ -148,7 +148,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
             </div>
           </div>
 
-          <JoinStatusButtons currentDealStatus={currentDealStatus} data={ele} /> 
+          <JoinStatusButtons currentDealStatus={currentDealStatus} data={ele?.details[i]} dataMain={ele}/> 
         </div>
       );
     }
@@ -171,13 +171,13 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
                 <div className="bg-gray-200 rounded-xl px-2 flex items-center">
                   <LuTag />
                   <p className="text-base md:text-sm lg:text-lg mx-2">
-                    {/* {ele?.landDetails[i]?.price} {currentCurrency} */}
+                    {ele?.landDetails[i]?.price} {currentCurrency}
                   </p>
                 </div>
                 <div className="bg-gray-200 rounded-xl px-2 mr-4 flex items-center">
                   <BiArea />
                   <p className="text-base md:text-sm lg:text-lg mx-2 ">
-                  {/* {ele?.landDetails[i]?.area} م<sup>2</sup> */}
+                  {ele?.landDetails[i]?.area} م<sup>2</sup>
                   </p>
                 </div>
               </div>
@@ -209,7 +209,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
             </div>
           </div>
 
-          <JoinStatusButtons currentDealStatus={currentDealStatus} data={ele} /> 
+          <JoinStatusButtons currentDealStatus={currentDealStatus} data={ele?.landDetails[i]} dataMain={ele}/> 
         </div>
       );
     }
@@ -308,9 +308,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
             <hr className="h-px mt-6 bg-gray-200 border-0" />
             <div className="flex justify-around items-center mt-4">
               <div className="flex flex-row pt-4 py-4 items-center justify-center">
-                <Link href="/showproperty"  onClick={()=>{
-    dispatch(addUnqiue(ele))
-  }} >
+                <Link href={`/showproperty/${ele?.id}`}  onClick={()=>{}} >
                   <button className="text-blue-500 mx-4 align-middle">
                     عرض التفاصيل
                   </button>

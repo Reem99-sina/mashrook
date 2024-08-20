@@ -6,18 +6,18 @@ export interface returnType {
   message: string | undefined;
   data: any;
 }
-export interface typeInput{
+export interface typeInput {
   property_owner_type_id?: number; // وسيط عقاري, مطور عقاري, وسيط
   property_purpose_id?: number; //بيع, تطوير (شراكة برأس المال أو البناء)
   property_type_id?: number;
-  partner_type_id?: number,
+  partner_type_id?: number;
   city?: string;
   district?: string;
   lat?: number;
   long?: number;
   address?: string;
   area?: string;
-  price?: number|string;
+  price?: number | string;
   is_divisible?: boolean; //
 }
 export interface RealEstateTypeInter {
@@ -35,11 +35,11 @@ export interface RealEstateTypeInter {
   plan_number?: string; // في حالة اختيار ارض (رقم المخطط)
   piece_number?: string; // في حالة اختيار ارض (رقم القطعة)
   area?: number;
-  price?: number|string;
+  price?: number | string;
   is_divisible?: boolean; // قي حالة اختيار ارض  (هل العقار قابل للتجزئية)
   advertisement_number?: string; // رقم الاعلان
   license_number?: string; // رقم الرخصة في حالة اختيار وسيط عقاري او مطور عقاري
-  partner_type_id?: number, /// في حالة الفيلا (فيلا ( درج داخلي + شقة)او فيلا (وحدات تمليك)) :::::: في حالة الدور (دور أرضي و دور علوي) :::::  في حالة شقة (شقة (داخل عمارة سكنية)و شقة (داخل فيلا))
+  partner_type_id?: number; /// في حالة الفيلا (فيلا ( درج داخلي + شقة)او فيلا (وحدات تمليك)) :::::: في حالة الدور (دور أرضي و دور علوي) :::::  في حالة شقة (شقة (داخل عمارة سكنية)و شقة (داخل فيلا))
   age?: number; //  في حالة الفيلا العمر
   location?: string; // في حالة الفيلا دور أرضي, دور علوي ,شقة
   apartment_number?: string; // في حالة الشقة رقم الشقة
@@ -52,39 +52,39 @@ export interface RealEstateTypeInter {
   garden?: boolean; // مزايا اضافية
   servants_room?: boolean; // مزايا اضافية غرفة خدم
   ac?: boolean; // مزايا اضافية مكيفة
-  garage?:boolean;
+  garage?: boolean;
   furnished?: boolean; // مزايا اضافية مؤثثة
   kitchen?: boolean; // مزايا اضافية مطبخ راكب
   partnership_amount?: number; // في حالة الاستثمار
   images?: File[];
   apartment?: {
-    area?: number|string;
-    price?: number|string;
+    area?: number | string;
+    price?: number | string;
     rooms_number?: number; // في حالة الفيلا عدد الغرف
     halls_number?: number; // في حالة الفيلا عدد الصالات
     bathrooms_number?: number; // في حالة الفيلا عدد دورات المياه
     kitchens_number?: number;
   };
-  landDetails?:{
-    area?: number|string;
-    price?: number|string;
-    piece_number?: string; 
-    plan_number?: string; 
-
-  }[],details?:earthInter[]
+  landDetails?: {
+    area?: number | string;
+    price?: number | string;
+    piece_number?: string;
+    plan_number?: string;
+  }[];
+  details?: earthInter[];
 }
 export interface RealEstateErrrorTypeInter {
   property_owner_type_id?: number; // وسيط عقاري, مطور عقاري, وسيط
   property_purpose_id?: number; //بيع, تطوير (شراكة برأس المال أو البناء)
   property_type_id?: number; /// get the ids from property type getAll
-  property_type_details_id?: string; 
+  property_type_details_id?: string;
   city?: string;
   district?: string;
   lat?: number;
   long?: number;
   address?: string;
   car_entrance?: boolean;
-  garage?:boolean;
+  garage?: boolean;
   plan_number?: string; // في حالة اختيار ارض (رقم المخطط)
   piece_number?: string; // في حالة اختيار ارض (رقم القطعة)
   area?: string;
@@ -92,7 +92,7 @@ export interface RealEstateErrrorTypeInter {
   is_divisible?: boolean; // قي حالة اختيار ارض  (هل العقار قابل للتجزئية)
   advertisement_number?: string; // رقم الاعلان
   license_number?: string; // رقم الرخصة في حالة اختيار وسيط عقاري او مطور عقاري
-  partner_type_id?: string, /// في حالة الفيلا (فيلا ( درج داخلي + شقة)او فيلا (وحدات تمليك)) :::::: في حالة الدور (دور أرضي و دور علوي) :::::  في حالة شقة (شقة (داخل عمارة سكنية)و شقة (داخل فيلstring; /// في حالة الفيلا (فيلا ( درج داخلي + شقة)او فيلا (وحدات تمليك)) :::::: في حالة الدور (دور أرضي و دور علوي) :::::  في حالة شقة (شقة (داخل عمارة سكنية)و شقة (داخل فيلا))
+  partner_type_id?: string; /// في حالة الفيلا (فيلا ( درج داخلي + شقة)او فيلا (وحدات تمليك)) :::::: في حالة الدور (دور أرضي و دور علوي) :::::  في حالة شقة (شقة (داخل عمارة سكنية)و شقة (داخل فيلstring; /// في حالة الفيلا (فيلا ( درج داخلي + شقة)او فيلا (وحدات تمليك)) :::::: في حالة الدور (دور أرضي و دور علوي) :::::  في حالة شقة (شقة (داخل عمارة سكنية)و شقة (داخل فيلا))
   age?: number; //  في حالة الفيلا العمر
   location?: string; // في حالة الفيلا دور أرضي, دور علوي ,شقة
   apartment_number?: string; // في حالة الشقة رقم الشقة
@@ -109,48 +109,46 @@ export interface RealEstateErrrorTypeInter {
   kitchen?: boolean; // مزايا اضافية مطبخ راكب
   partnership_amount?: number; // في حالة الاستثمار
   images?: string;
-  "apartment.area"?: string,
-  "apartment.price"?: string,
-  "apartment.rooms_number"?: string,
-  "apartment.halls_number"?: string,
- "apartment.bathrooms_number"?: string,
-  "apartment.kitchens_number"?: string,
-details?:earthInter[],
-apartment?: {
-  area?: number|string;
-  price?: number|string;
-  rooms_number?: number; // في حالة الفيلا عدد الغرف
-  halls_number?: number; // في حالة الفيلا عدد الصالات
-  bathrooms_number?: number; // في حالة الفيلا عدد دورات المياه
-  kitchens_number?: number;
-};
+  "apartment.area"?: string;
+  "apartment.price"?: string;
+  "apartment.rooms_number"?: string;
+  "apartment.halls_number"?: string;
+  "apartment.bathrooms_number"?: string;
+  "apartment.kitchens_number"?: string;
+  details?: earthInter[];
+  apartment?: {
+    area?: number | string;
+    price?: number | string;
+    rooms_number?: number; // في حالة الفيلا عدد الغرف
+    halls_number?: number; // في حالة الفيلا عدد الصالات
+    bathrooms_number?: number; // في حالة الفيلا عدد دورات المياه
+    kitchens_number?: number;
+  };
 
-
-landDetails?:{
-  area?: number|string;
-  price?: number|string;
-  piece_number?: string; 
-  plan_number?: string; 
-
-}[]
-[key: string]: any; 
+  landDetails?: {
+    area?: number | string;
+    price?: number | string;
+    piece_number?: string;
+    plan_number?: string;
+  }[];
+  [key: string]: any;
 }
-export interface earthInter{
-  type: string,
-  area: number,
-  price: number,
-  rooms_number: number,// في حالة الفيلا عدد الغرف
-  halls_number: number, // في حالة الفيلا عدد الصالات
-  bathrooms_number: number, // في حالة الفيلا عدد دورات المياه
-  kitchens_number: number, // في حالة الفيلا عدد المطابخ
-  pool: boolean, // مزايا اضافية مسبح
-  garden: boolean, // مزايا اضافية 
-  servants_room: boolean, // مزايا اضافية غرفة خدم
-  ac: boolean, // مزايا اضافية مكيفة
-  furnished: boolean, // مزايا اضافية مؤثثة
-  kitchen: boolean, // مزايا اضافية مطبخ راكب
-  garage: boolean,
-  car_entrance: boolean
+export interface earthInter {
+  type: string;
+  area: number;
+  price: number;
+  rooms_number: number; // في حالة الفيلا عدد الغرف
+  halls_number: number; // في حالة الفيلا عدد الصالات
+  bathrooms_number: number; // في حالة الفيلا عدد دورات المياه
+  kitchens_number: number; // في حالة الفيلا عدد المطابخ
+  pool: boolean; // مزايا اضافية مسبح
+  garden: boolean; // مزايا اضافية
+  servants_room: boolean; // مزايا اضافية غرفة خدم
+  ac: boolean; // مزايا اضافية مكيفة
+  furnished: boolean; // مزايا اضافية مؤثثة
+  kitchen: boolean; // مزايا اضافية مطبخ راكب
+  garage: boolean;
+  car_entrance: boolean;
 }
 interface imageInter {
   id: number;
@@ -209,7 +207,6 @@ const realEstateTypeSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(postrealEstateType.fulfilled, (state, action) => {
-      
       state.loading = false;
       state.message = action?.payload?.message
         ? action.payload.message

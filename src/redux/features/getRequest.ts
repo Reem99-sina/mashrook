@@ -43,6 +43,8 @@ export interface dataReturn {
     createdAt: string;
     updatedAt: string;
     property_id: number;
+    area: number;
+    price: number;
   }[];
   details: {
     id: number;
@@ -95,13 +97,55 @@ export interface dataReturn {
     createdAt: string;
     updatedAt: string;
   }
+  propertyMedia:{
+    id: number,
+    name: string,
+    link: string,
+    createdAt: string,
+    updatedAt:string,
+    property_id: number
+  }[]
 }
-
+export interface typePay{
+  
+    id?: number;
+    is_divisible?: boolean;
+    piece_number?: string;
+    plan_number?: string;
+    type?: string | null;
+    createdAt?: string;
+    updatedAt?: string;
+    area?: number;
+    price?: number;
+    rooms_number?: number;
+    halls_number?: number;
+    bathrooms_number?: number;
+    kitchens_number?: number;
+    age?: number;
+    status?: any;
+    location?: any;
+    apartment_number?: any;
+    apartment_floor?: any;
+    min_apartment_floor?: any;
+   
+    property_id?: number;
+}
 export const getRequest = createAsyncThunk<returnType>(
   "requestGet",
   async (_, { rejectWithValue }) => {
     const response = await axios
       .get("https://server.mashrook.sa/property/offer", { headers: {} })
+      .then((response) => response.data)
+      .catch((error) => error?.response?.data);
+
+    return response;
+  }
+);
+export const getRequestByid = createAsyncThunk<returnType,{id:number}>(
+  "requestGet/id",
+  async (data:{id:number}, { rejectWithValue }) => {
+    const response = await axios
+      .get(`https://server.mashrook.sa/property/get/${data?.id}`, { headers: {} })
       .then((response) => response.data)
       .catch((error) => error?.response?.data);
 
@@ -140,7 +184,17 @@ const requestGetSlice = createSlice({
         state.loading = false;
         state.message = action.error.message ? action.error.message : "error";
         state.data = null;
-      });
+      }),
+      builder.addCase(getRequestByid.fulfilled, (state, action) => {
+        console.log("data",action.payload)
+        state.loading = false;
+        state.message = action.payload.message
+          ? action.payload.message
+          : "success";
+        state.selectData = action.payload.data;
+      }),builder.addCase(getRequestByid.rejected, (state, action) => {
+        console.log("data",action.error.message)
+      })
   },
 });
 

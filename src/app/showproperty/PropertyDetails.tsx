@@ -105,13 +105,13 @@ const PropertyDetails: React.FC = () => {
       setShowNotification(false);
     }, 3000);
   };
-  
+  console.log(selectData,"selectData")
 
   const detailsContent = (
     <div className="mt-4">
       <div className="border-2 rounded-lg p-4">
         <h2 className="text-2xl font-bold mb-4">تفاصيل العقار</h2>
-        <div className="mt-2">
+        {selectData?.landDetails?.map((ele)=><div className="mt-2" key={ele?.id}>
           <div className="border-2 rounded-lg p-4">
             {/* <h3 className="text-xl font-bold">قطعة {selectData?.landDetails?.piece_number}</h3> */}
             <div className="flex justify-between bg-gray-100 w-full items-center rounded-lg ml-2 mt-4 px-2  py-2">
@@ -126,7 +126,7 @@ const PropertyDetails: React.FC = () => {
                 <span>
                   <HiOutlineSquare3Stack3D className="text-xl mx-2" />
                 </span>
-                {/* <span>{selectData?.landDetails?.piece_number}</span> */}
+                <span>{ele?.piece_number}</span>
               </div>
             </div>
             <div className="flex justify-between bg-gray-100 w-full items-center rounded-lg ml-2 mt-4 px-2  py-2">
@@ -136,7 +136,7 @@ const PropertyDetails: React.FC = () => {
                   <BiArea className="text-xl mx-2" />{" "}
                 </span>
                 <span>
-                {selectData?.area} م<sup>2</sup>
+                {ele?.area} م<sup>2</sup>
                 </span>
               </div>
             </div>
@@ -144,11 +144,11 @@ const PropertyDetails: React.FC = () => {
               <span>مبلغ الشراكة</span>
               <div className="flex justify-center items-center border-2 rounded-lg p-2 ">
                 <LuTag className="text-xl mx-2" />
-                <span>{selectData?.price} ريال</span>
+                <span>{ele?.price} ريال</span>
               </div>
             </div>
 
-            <JoinStatusButtons currentDealStatus={currentDealStatus} data={selectData}/> 
+            <JoinStatusButtons currentDealStatus={currentDealStatus} data={ele} dataMain={selectData}/> 
 
 {/* 
           <div className="border-2 rounded-lg p-4 mt-4">
@@ -192,7 +192,8 @@ const PropertyDetails: React.FC = () => {
 
             </div>*/}
           </div> 
-        </div>
+        </div>)}
+        
       </div>
     </div>
   );
@@ -216,7 +217,7 @@ const PropertyDetails: React.FC = () => {
           </div>
           <div className="flex-col justify-between bg-gray-100 w-full items-center rounded-lg ml-2 mt-4 px-2  py-2">
             <div> الموقع</div>
-            <div>العنوان التفصيلي</div>
+            <div>العنوان التفصيلي {selectData?.propertyLocation?.address}</div>
           </div>
         </div>
         <div className="mt-4">
@@ -241,7 +242,7 @@ const PropertyDetails: React.FC = () => {
 
       <div dir="ltr" className="flex justify-center">
         <div className="relative p-6 ">
-          <CarouselDefault />
+          <CarouselDefault  images={selectData?.propertyMedia}/>
           <BiShareAlt className="absolute top-10 left-10 text-4xl bg-white text-gray-700  rounded-full m-4 p-1 shadow-md " />
           <FaChevronRight className="absolute top-10 right-10 text-4xl bg-white text-gray-700 rounded-full m-4 p-1 shadow-md "onClick={()=>router.back()} />
         </div>
