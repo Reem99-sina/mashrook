@@ -1,20 +1,20 @@
-"use client"
+"use client";
 import PropertyDetails from "../PropertyDetails";
 import { useParams } from "next/navigation";
-import {useEffect} from "react"
+import { useEffect } from "react";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
-import {getRequestByid} from "@/redux/features/getRequest"
+import { getRequestByid } from "@/redux/features/getRequest";
 export default function ShowProperty() {
   const router = useParams();
-  const {id} = router
+  const { id } = router;
   const dispatch = useDispatch<AppDispatch>();
-  console.log(id,"id") 
-  useEffect(()=>{
-    if(id){
-      dispatch(getRequestByid({id:Number(id)}))
+  console.log(id, "id");
+  useEffect(() => {
+    if (id) {
+      dispatch(getRequestByid({ id: Number(id) }));
     }
-  },[id,dispatch])
+  }, [id, dispatch]);
   return (
     <div dir="rtl">
       <PropertyDetails />

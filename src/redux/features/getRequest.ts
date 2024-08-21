@@ -9,6 +9,8 @@ export interface returnType {
 export interface dataReturn {
   id: number;
   type: string;
+  is_divisible?: boolean;
+  age?: number;
   license_number: string;
   area: number;
   price: number;
@@ -45,6 +47,9 @@ export interface dataReturn {
     property_id: number;
     area: number;
     price: number;
+    stage:string;
+    available_percentage:number;
+    available_price:number;
   }[];
   details: {
     id: number;
@@ -55,6 +60,9 @@ export interface dataReturn {
     halls_number: number;
     bathrooms_number: number;
     kitchens_number: number;
+    stage:string;
+    available_percentage:number;
+    available_price:number;
     age: number;
     status: any;
     location: any;
@@ -64,6 +72,16 @@ export interface dataReturn {
     createdAt: string;
     updatedAt: string;
     property_id: number;
+    amenities?:{
+      pool?: boolean; // مزايا اضافية مسبح
+      garden?: boolean; // مزايا اضافية
+      servants_room?: boolean; // مزايا اضافية غرفة خدم
+      ac?: boolean; // مزايا اضافية مكيفة
+      furnished?: boolean; // مزايا اضافية مؤثثة
+      kitchen?: boolean; // مزايا اضافية مطبخ راكب
+      garage?: boolean;
+      car_entrance?: boolean;  
+    }
   }[];
   amenities: any[];
   user: {
@@ -91,44 +109,46 @@ export interface dataReturn {
     title: string;
     createdAt: string;
     updatedAt: string;
-  };propertyTypeDetails:{
+  };
+  propertyTypeDetails: {
     id: number;
     title: string;
     createdAt: string;
     updatedAt: string;
-  }
-  propertyMedia:{
-    id: number,
-    name: string,
-    link: string,
-    createdAt: string,
-    updatedAt:string,
-    property_id: number
-  }[]
+  };
+  propertyMedia: {
+    id: number;
+    name: string;
+    link: string;
+    createdAt: string;
+    updatedAt: string;
+    property_id: number;
+  }[];
 }
-export interface typePay{
-  
-    id?: number;
-    is_divisible?: boolean;
-    piece_number?: string;
-    plan_number?: string;
-    type?: string | null;
-    createdAt?: string;
-    updatedAt?: string;
-    area?: number;
-    price?: number;
-    rooms_number?: number;
-    halls_number?: number;
-    bathrooms_number?: number;
-    kitchens_number?: number;
-    age?: number;
-    status?: any;
-    location?: any;
-    apartment_number?: any;
-    apartment_floor?: any;
-    min_apartment_floor?: any;
-   
-    property_id?: number;
+export interface typePay {
+  id?: number;
+  is_divisible?: boolean;
+  piece_number?: string;
+  plan_number?: string;
+  type?: string | null;
+  createdAt?: string;
+  updatedAt?: string;
+  area?: number;
+  price?: number;
+  rooms_number?: number;
+  halls_number?: number;
+  bathrooms_number?: number;
+  kitchens_number?: number;
+  age?: number;
+  status?: any;
+  location?: any;
+  apartment_number?: any;
+  apartment_floor?: any;
+  min_apartment_floor?: any;
+  stage:string;
+  available_percentage:number;
+  available_price:number;
+  property_id?: number;
 }
 export const getRequest = createAsyncThunk<returnType>(
   "requestGet",
@@ -141,11 +161,13 @@ export const getRequest = createAsyncThunk<returnType>(
     return response;
   }
 );
-export const getRequestByid = createAsyncThunk<returnType,{id:number}>(
+export const getRequestByid = createAsyncThunk<returnType, { id: number }>(
   "requestGet/id",
-  async (data:{id:number}, { rejectWithValue }) => {
+  async (data: { id: number }, { rejectWithValue }) => {
     const response = await axios
-      .get(`https://server.mashrook.sa/property/get/${data?.id}`, { headers: {} })
+      .get(`https://server.mashrook.sa/property/get/${data?.id}`, {
+        headers: {},
+      })
       .then((response) => response.data)
       .catch((error) => error?.response?.data);
 
@@ -186,15 +208,16 @@ const requestGetSlice = createSlice({
         state.data = null;
       }),
       builder.addCase(getRequestByid.fulfilled, (state, action) => {
-        console.log("data",action.payload)
+        console.log("data", action.payload);
         state.loading = false;
         state.message = action.payload.message
           ? action.payload.message
           : "success";
         state.selectData = action.payload.data;
-      }),builder.addCase(getRequestByid.rejected, (state, action) => {
-        console.log("data",action.error.message)
-      })
+      }),
+      builder.addCase(getRequestByid.rejected, (state, action) => {
+        console.log("data", action.error.message);
+      });
   },
 });
 

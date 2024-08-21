@@ -1,32 +1,35 @@
 "use client";
 
 import Link from "next/link";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect,useMemo } from "react";
 import { RxArrowLeft } from "react-icons/rx";
 
-import { AppDispatch,RootState } from "@/redux/store";
-import { useDispatch,useSelector } from "react-redux";
-import {dataReturn,addUnqiue,typePay} from "@/redux/features/getRequest"
+import { AppDispatch, RootState } from "@/redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { dataReturn, addUnqiue, typePay } from "@/redux/features/getRequest";
 type JoinStatusButtonsProps = {
-  currentDealStatus: string;
-  data:typePay;
-  dataMain:dataReturn
+  currentDealStatus: boolean;
+  data: typePay;
+  dataMain: dataReturn;
 };
 
 const JoinStatusButtons: React.FC<JoinStatusButtonsProps> = ({
   currentDealStatus,
   data,
-  dataMain
+  dataMain,
 }) => {
   const [showDialog, setShowDialog] = useState(false);
   const [token, setToken] = useState<string | null>(null);
   const [partnershipPercentage, setPartnershipPercentage] = useState(0);
   const availableAmount = 600000;
-  const dispatch=useDispatch<AppDispatch>()
+  const dispatch = useDispatch<AppDispatch>();
   const tooltipRef = useRef<HTMLDivElement>(null);
-  let { selectData } = useSelector<RootState>(
-    (state) => state.getRequest
-  ) as { loading: boolean; message: string; data: dataReturn[], selectData:dataReturn};
+  let { selectData } = useSelector<RootState>((state) => state.getRequest) as {
+    loading: boolean;
+    message: string;
+    data: dataReturn[];
+    selectData: dataReturn;
+  };
 
   const handleDialogToggle = () => {
     setShowDialog(!showDialog);
@@ -56,21 +59,21 @@ const JoinStatusButtons: React.FC<JoinStatusButtonsProps> = ({
     }
   }, [partnershipPercentage]);
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const storedToken = sessionStorage.getItem('token');
+    if (typeof window !== "undefined") {
+      const storedToken = sessionStorage.getItem("token");
       setToken(storedToken);
     }
   }, []);
-  const partnershipAmount = (availableAmount * partnershipPercentage) / 100;
+  const partnershipAmount = useMemo(()=>{
+    return (data?.available_price * partnershipPercentage) / 100;
+  },[data?.available_price,partnershipPercentage])
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      sessionStorage.setItem('amount',String(partnershipAmount))
-      sessionStorage.setItem('element',JSON.stringify(data))
+    if (typeof window !== "undefined") {
+      sessionStorage.setItem("amount", String(partnershipAmount));
+      sessionStorage.setItem("element", JSON.stringify(data));
     }
-  }, [partnershipAmount,data]);
- 
-  
+  }, [partnershipAmount, data]);
   return (
     <div id="joinStatus" className="py-4">
       {/* {currentDealStatus === "محجوز" ? (
@@ -89,33 +92,34 @@ const JoinStatusButtons: React.FC<JoinStatusButtonsProps> = ({
           </button>
         </div>
       ) : ( */}
-        <div className="flex justify-center">
-          <button
-            type="button"
-            className={`${
-             (currentDealStatus === "تمت الشراكة"||Boolean(token)==false)
-                ? "bg-gray-300 text-gray-800"
-                : "bg-blue-450 text-white hover:bg-blue-800 border-2 border-blue-500"
-            } w-3/4 font-medium rounded-lg text-sm px-5 py-2.5 flex justify-center rtl:flex-row-reverse dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
-            disabled={currentDealStatus === "تمت الشراكة"||Boolean(token)==false}
-            onClick={handleDialogToggle}
-          >
-            <RxArrowLeft
-              className={`mr-4 text-xl ${
-                (currentDealStatus === "تمت الشراكة"||Boolean(token)==false)
-                  ? "text-gray-600"
-                  : "text-white"
-              }`}
-            />
-            انضم كشريك
-          </button>
-        </div>
+      <div className="flex justify-center">
+        <button
+          type="button"
+          className={`${
+            data?.stage === "finished" || Boolean(token) == false
+              ? "bg-gray-300 text-gray-800"
+              : "bg-blue-450 text-white hover:bg-blue-800 border-2 border-blue-500"
+          } w-3/4 font-medium rounded-lg text-sm px-5 py-2.5 flex justify-center rtl:flex-row-reverse dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
+          disabled={
+            data?.stage === "finished" || Boolean(token) == false
+          }
+          onClick={handleDialogToggle}
+        >
+          <RxArrowLeft
+            className={`mr-4 text-xl ${
+              data?.stage === "finished" || Boolean(token) == false
+                ? "text-gray-600"
+                : "text-white"
+            }`}
+          />
+          انضم كشريك
+        </button>
+      </div>
       {/* )} */}
 
       {showDialog && (
         <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex justify-center items-center px-2 ">
           <div className="bg-white rounded-lg p-4 z-50 ">
-            
             <div className="flex justify-between items-center mb-6 border-b-2 pb-2 ">
               <button
                 type="button"
@@ -124,16 +128,21 @@ const JoinStatusButtons: React.FC<JoinStatusButtonsProps> = ({
               >
                 &times;
               </button>
-              <h2 className="text-sm lg:text-xl font-bold">{
-              //  data?.details?.type||
-              data?.piece_number?"رقم القطعة-"+data?.piece_number: data?.type}</h2>
+              <h2 className="text-sm lg:text-xl font-bold">
+                {
+                  //  data?.details?.type||
+                  data?.piece_number
+                    ? "رقم القطعة-" + data?.piece_number
+                    : data?.type
+                }
+              </h2>
               <p></p>
             </div>
             <div className="mb-4">
               <p className="text-lg font-medium">
-                  المبلغ المتاح
+                المبلغ المتاح
                 <span className="text-blue-450 font-bold mx-4">
-                  {data?.price} ريال
+                  {data?.available_price} ريال
                 </span>
               </p>
             </div>
@@ -181,11 +190,17 @@ const JoinStatusButtons: React.FC<JoinStatusButtonsProps> = ({
                 href="/termsandconditions"
                 type="button"
                 className="flex-grow bg-blue-450 text-white px-4 py-2 mx-2 rounded-lg text-center"
-                onClick={()=>{
-                  dispatch(addUnqiue({
-                    id:dataMain?.id,detail_id:data?.id,title:dataMain?.propertyType?.title,numberPiece:data?.piece_number,
-                    type:Boolean(data?.type)?false:true
-                  }))
+                onClick={() => {
+                  dispatch(
+                    addUnqiue({
+                      id: dataMain?.id,
+                      detail_id: data?.id,
+                      title: dataMain?.propertyType?.title,
+                      numberPiece: data?.piece_number,
+                      type: Boolean(data?.type) ? false : true,
+                      propertyOwnerType:dataMain?.propertyOwnerType?.title
+                    })
+                  );
                 }}
               >
                 متابعة

@@ -160,6 +160,9 @@ const AddYourRealEstate: React.FC = () => {
     kitchen: true, // مزايا اضافية مطبخ راكب
     garage: true,
     car_entrance: true,
+    stage:"",
+    available_percentage:0,
+    available_price:0
   }));
   const [villa, setvilla] = useState<earthInter[]>(initialVillaData);
 
@@ -528,7 +531,6 @@ const AddYourRealEstate: React.FC = () => {
         : [...prev]
     );
   }, [count.nums]);
-  console.log(errors,"errors")
   return (
     <>
       {!sentYourRequest ? (

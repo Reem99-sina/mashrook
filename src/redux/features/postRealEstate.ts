@@ -124,12 +124,14 @@ export interface RealEstateErrrorTypeInter {
     bathrooms_number?: number; // في حالة الفيلا عدد دورات المياه
     kitchens_number?: number;
   };
-
   landDetails?: {
     area?: number | string;
     price?: number | string;
     piece_number?: string;
     plan_number?: string;
+    stage:string;
+    available_percentage:number;
+    available_price:number;
   }[];
   [key: string]: any;
 }
@@ -137,6 +139,9 @@ export interface earthInter {
   type: string;
   area: number;
   price: number;
+  stage:string;
+  available_percentage:number;
+  available_price:number;
   rooms_number: number; // في حالة الفيلا عدد الغرف
   halls_number: number; // في حالة الفيلا عدد الصالات
   bathrooms_number: number; // في حالة الفيلا عدد دورات المياه
