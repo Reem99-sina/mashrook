@@ -1,14 +1,18 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState,useEffect,useRef } from "react";
 import { Range, getTrackBackground } from "react-range";
 
+import {CloseIconSmall } from "../assets/svg";
+import { Modal, ModalRef } from "../components/shared/modal.component";
 type FilterModalProps = {
   onClose: () => void;
   onFilter: (criteria: any) => void;
+  open:boolean
 };
 
-const FilterModal: React.FC<FilterModalProps> = ({ onClose, onFilter }) => {
+const FilterModal: React.FC<FilterModalProps> = ({ onClose, onFilter,open }) => {
+  let refFilter=useRef<ModalRef>(null)
   const [criteria, setCriteria] = useState<any>({
     dealStatus: "",
     city: "",
@@ -52,12 +56,22 @@ const FilterModal: React.FC<FilterModalProps> = ({ onClose, onFilter }) => {
     onFilter(criteria);
     onClose();
   };
-
+useEffect(()=>{
+if(open==true){
+  refFilter.current?.open()
+}else{
+  refFilter.current?.close()
+}
+},[open])
   return (
-    <div className="flex items-start justify-center p-6 items w-dvh h-auto z-100 bg-gray-800 opacity-75">
-      <div className="bg-white p-6 rounded-lg shadow-lg max-w-3xl opacity-100" style={{ direction: "rtl" }}>
+   
+    <Modal ref={refFilter} className="flex rounded-lg items-start justify-center p-6 h-[100vh] w-full overflow-y-scroll " size="xs">
+      <div className="bg-white p-6  opacity-100  " style={{ direction: "rtl" }}>
+      <CloseIconSmall
+                    className="cursor-pointer w-4 h-4"
+                    onClick={() => refFilter.current?.close()}
+                  />
         <h2 className="text-xl font-bold mb-4 text-center border-b-2 pb-4">عوامل التصفية</h2>
-
         {/* Deal Status */}
         <div className="mb-4">
           <h3 className="font-semibold mb-2">حالة العقار</h3>
@@ -335,7 +349,7 @@ const FilterModal: React.FC<FilterModalProps> = ({ onClose, onFilter }) => {
           </button>
         </div>
       </div>
-    </div>
+    </Modal>
   );
 };
 

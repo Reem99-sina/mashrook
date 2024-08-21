@@ -58,3 +58,13 @@ export { default as Block } from "./Block.svg";
 export { default as MessageIcon } from "./message-icon.svg";
 export { default as MashrookLogoChat } from "./MashrookLogoChat.svg";
 export { default as BackButtonOutline } from "./state-layer.svg";
+export { default as Vector } from "./Vector.svg";
+export { default as Money } from "./money.svg";
+export { default as Diagram } from "./Diagram.svg";
+export { default as Dance } from "./dance-floor.svg";
+export { default as Shower } from "./shower.svg";
+export { default as Kitchen } from "./Kitchen.svg";
+export { default as CheckOut } from "./check_outlined.svg";
+export {default as Tune} from "./tune.svg"
+
+

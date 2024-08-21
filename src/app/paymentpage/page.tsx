@@ -20,7 +20,8 @@ export default function Payment() {
     (state) => state.getRequest
   ) as { loading: boolean; message: string; data: dataReturn[], selectData:{
     id:number,detail_id?:number,title:string,numberPiece:number,
-    type:boolean
+    type:boolean,
+    propertyOwnerType:string
   }
 };
   let {  messagePayment,
@@ -69,10 +70,10 @@ let dispatch=useDispatch<AppDispatch>()
       toast.error(messagePayment)
     }else if(messagePayment&&Boolean(dataPayment)==true){
       toast.success(messagePayment)
+      
       router.push("/JoiningSuccess")
     }
   },[messagePayment,dataPayment,router])
-  console.log(data,"data",errors,messagePayment,dataPayment)
   return (
     <div className="flex justify-center w-dvh h-max  ">
       <div className="w-full bg-white rounded text-black shadow ">
@@ -93,7 +94,7 @@ let dispatch=useDispatch<AppDispatch>()
 
                 <div className="text-right p-4 m-4 bg-gray-200">
                   <div className="flex flex-row justify-between">
-                    <p className="text-xl text-green-500 font-bold">100 ريال</p>
+                    <p className="text-xl text-green-500 font-bold">{selectData?.propertyOwnerType=="مالك"?100:500} ريال</p>
                     <p className="text-xl text-blue-450 font-bold my-2">
                       رسوم خدمة شراكة
                     </p>

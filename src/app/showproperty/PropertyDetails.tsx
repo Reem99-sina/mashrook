@@ -26,6 +26,7 @@ import { AppDispatch,RootState } from "@/redux/store";
 import { useDispatch,useSelector } from "react-redux";
 import {dataReturn} from "@/redux/features/getRequest"
 import {useRouter} from "next/navigation"
+import {Vector,Money,Diagram,Dance,Shower,Kitchen,CheckOut} from "../assets/svg"
 const PropertyDetails: React.FC = () => {
   const [activeTab, setActiveTab] = useState<"location" | "details">(
     "location"
@@ -116,8 +117,8 @@ const PropertyDetails: React.FC = () => {
             {/* <h3 className="text-xl font-bold">قطعة {selectData?.landDetails?.piece_number}</h3> */}
             <div className="flex justify-between bg-gray-100 w-full items-center rounded-lg ml-2 mt-4 px-2  py-2">
               <span>حالة العقار</span>
-              <span className="bg-blue-450 rounded-lg p-2 text-white">
-                50٪ متاح
+              <span className={`${ele?.available_percentage==100?"bg-[#98CC5D]":"bg-blue-450"} rounded-lg p-2 text-white`}>
+               {ele?.available_percentage}٪ متاح
               </span>
             </div>
             <div className="flex justify-between bg-gray-100 w-full items-center rounded-lg ml-2 mt-4 px-2  py-2">
@@ -148,52 +149,118 @@ const PropertyDetails: React.FC = () => {
               </div>
             </div>
 
-            <JoinStatusButtons currentDealStatus={currentDealStatus} data={ele} dataMain={selectData}/> 
-
-{/* 
-          <div className="border-2 rounded-lg p-4 mt-4">
-            <h3 className="text-xl font-bold">قطعة 1256</h3>
+            <JoinStatusButtons currentDealStatus={ele?.stage=="finished"} data={ele} dataMain={selectData}/> 
+          </div> 
+        </div>)}
+        {selectData?.details?.length>0&&<>
+         
+            {/* <h3 className="text-xl font-bold">قطعة {selectData?.landDetails?.piece_number}</h3> */}
             <div className="flex justify-between bg-gray-100 w-full items-center rounded-lg ml-2 mt-4 px-2  py-2">
-              <span>حالة العقار</span>
-              <span className="bg-blue-450 rounded-lg p-2 text-white">
-                50٪ متاح
+              <span>العمر</span>
+              <span >
+               {selectData?.age} سنين
               </span>
             </div>
             <div className="flex justify-between bg-gray-100 w-full items-center rounded-lg ml-2 mt-4 px-2  py-2">
-              <span>رقم القطعة</span>
+              <span>المساحة</span>
               <div className="flex justify-center items-center border-2 rounded-lg p-2">
                 <span>
-                  <HiOutlineSquare3Stack3D className="text-xl mx-2" />
+                  <Vector className="text-xl mx-2" />
                 </span>
-                <span>1256</span>
+                <span>{selectData?.area} م<sup>2</sup></span>
               </div>
             </div>
-            <div className="flex justify-between bg-gray-100 w-full items-center rounded-lg ml-2 mt-4 px-2  py-2">
-              <span>المساحة</span>
+        </>}
+        {selectData?.details?.map((ele)=><div className="mt-2" key={ele?.id}>
+          <div className="border-2 rounded-lg my-4 p-2">
+            <h3 className="text-xl font-bold"> {ele?.type}</h3>
+            
+            <div className="flex justify-between bg-gray-100 w-full items-center rounded-lg ml-2 mt-2 px-2  py-1">
+              <span className="text-sm">المساحة</span>
+              <div className="flex justify-center items-center border-2 rounded-lg p-2">
+                <span>
+                  <Vector className="text-xl mx-2" />
+                </span>
+                <span>{ele?.area} م<sup>2</sup></span>
+              </div>
+            </div>
+            <div className="flex justify-between bg-gray-100 w-full items-center rounded-lg ml-2 mt-2 px-2  py-1 ">
+              <span className="text-sm">السعر</span>
+              <span className="text-blue-450 text-xs">(بدون القيمة المضافة أو السعي)</span>
               <div className="flex justify-center items-center border-2 rounded-lg p-2 ">
                 <span>
-                  <BiArea className="text-xl mx-2" />{" "}
+                  <Money className="text-xl mx-2" />{" "}
                 </span>
                 <span>
-                  300 م<sup>2</sup>
+                {ele?.price} ريال
                 </span>
               </div>
             </div>
-            <div className="flex justify-between bg-gray-100 w-full items-center rounded-lg ml-2 mt-4 px-2  py-2">
-              <span>مبلغ الشراكة</span>
+            <div className="flex justify-between bg-gray-100 w-full items-center rounded-lg ml-2 mt-2 px-2  py-1">
+              <span className="text-sm">عدد الغرف</span>
               <div className="flex justify-center items-center border-2 rounded-lg p-2 ">
-                <LuTag className="text-xl mx-2" />
-                <span>2,000,000 ريال</span>
+                <Diagram className="text-xl mx-2" />
+                <span>{ele?.rooms_number}</span>
               </div>
             </div>
-
-            <JoinStatusButtons currentDealStatus={currentDealStatus} data={selectData}/> 
-
-
-            </div>*/}
+            <div className="flex justify-between bg-gray-100 w-full items-center rounded-lg ml-2 mt-2 px-2  py-1">
+              <span className="text-sm">عدد الصالات</span>
+              <div className="flex justify-center items-center border-2 rounded-lg p-2 ">
+                <Dance className="text-xl mx-2" />
+                <span>{ele?.halls_number}</span>
+              </div>
+            </div>
+            <div className="flex justify-between bg-gray-100 w-full items-center rounded-lg ml-2 mt-2 px-2  py-2">
+              <span className="text-sm">عدد دورات المياه</span>
+              <div className="flex justify-center items-center border-2 rounded-lg p-2 ">
+                <Shower className="text-xl mx-2" />
+                <span>{ele?.bathrooms_number}</span>
+              </div>
+            </div>
+            <div className="flex justify-between bg-gray-100 w-full items-center rounded-lg ml-2 mt-2 px-2  py-2">
+              <span className="text-sm">عدد المطابخ</span>
+              <div className="flex justify-center items-center border-2 rounded-lg p-2 ">
+                <Kitchen className="text-xl mx-2" />
+                <span>{ele?.kitchens_number}</span>
+              </div>
+            </div>
+            <div className="flex flex-col justify-start bg-gray-100 w-full items-start rounded-lg ml-2 mt-2 px-2  py-2">
+            <p>مزايا اضافية</p>
+            <div className="flex flex-wrap items-center gap-3">
+              {ele?.amenities?.pool}
+            <div className="flex flex-wrap items-center gap-2 my-3">
+           {ele?.amenities?.pool? <CheckOut/>:<IoMdCloseCircleOutline/>}
+              <p>مسبح </p>
+            </div>
+            <div className="flex flex-wrap items-center gap-2 my-3">
+            {ele?.amenities?.car_entrance? <CheckOut/>:<IoMdCloseCircleOutline className="text-red"/>}
+              <p >مدخل سيارة </p>
+            </div>
+            <div className="flex flex-wrap items-center gap-2 my-3">
+            {ele?.amenities?.ac? <CheckOut/>:<IoMdCloseCircleOutline className="text-red"/>}
+              <p >مكيفة </p>
+            </div>
+            <div className="flex flex-wrap items-center gap-2 my-3">
+            {ele?.amenities?.kitchen? <CheckOut/>:<IoMdCloseCircleOutline className="text-red"/>}
+              <p >مطبخ راكب </p>
+            </div>
+            <div className="flex flex-wrap items-center gap-2 my-3">
+            {ele?.amenities?.furnished? <CheckOut/>:<IoMdCloseCircleOutline className="text-red"/>}
+              <p > مؤنثة </p>
+            </div>
+            <div className="flex flex-wrap items-center gap-2 my-3">
+            {ele?.amenities?.servants_room? <CheckOut/>:<IoMdCloseCircleOutline className="text-red"/>}
+              <p > غرف الخدم </p>
+            </div>
+            <div className="flex flex-wrap items-center gap-2 my-3">
+            {ele?.amenities?.garage? <CheckOut/>:<IoMdCloseCircleOutline className="text-red"/>}
+              <p > كراج </p>
+            </div>
+            </div>
+            </div>
+            <JoinStatusButtons currentDealStatus={ele?.stage=="finished"} data={ele} dataMain={selectData}/> 
           </div> 
         </div>)}
-        
       </div>
     </div>
   );
@@ -329,14 +396,14 @@ const PropertyDetails: React.FC = () => {
           </div>
           <div className="flex bg-gray-100 w-full justify-between items-center py-2  px-2 rounded-lg ml-2 mt-4">
             <div>
-              {/* <p>{selectData?.landDetails?.is_divisible}العقار قابل للتجزئة</p> */}
+              <p>{selectData?.is_divisible}العقار قابل للتجزئة</p>
             </div>
             <span>
-              {/* {selectData?.landDetails?.is_divisible==false ? (
+              {selectData?.is_divisible==false ? (
                 <IoMdCloseCircleOutline className="mr-2 ml-2 bg-red-450 text-white text-2xl font-bold rounded-full " />
               ) : (
                 <IoIosCheckmarkCircleOutline className="mr-2 ml-2 bg-green-450 text-white text-2xl font-bold rounded-full " />
-              )} */}
+              )}
             </span>
           </div>
 
