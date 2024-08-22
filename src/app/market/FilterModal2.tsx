@@ -3,7 +3,7 @@
 import React, { useState,useEffect,useRef } from "react";
 import { Range, getTrackBackground } from "react-range";
 
-import {CloseIconSmall } from "../assets/svg";
+import {CloseIconSmall } from "@/app/assets/svg";
 import { Modal, ModalRef } from "../components/shared/modal.component";
 type FilterModalProps = {
   onClose: () => void;
@@ -65,22 +65,23 @@ if(open==true){
 },[open])
   return (
    
-    <Modal ref={refFilter} className="flex rounded-lg items-start justify-center p-6 h-[100vh] w-full overflow-y-scroll " size="xs">
-      <div className="bg-white p-6  opacity-100  " style={{ direction: "rtl" }}>
+    <Modal ref={refFilter} className="flex rounded-lg items-start justify-center font-[Cairo] w-full" size="xs">
+      <div className="bg-white p-2  opacity-100 h-[100vh]  overflow-y-scroll rounded-lg" style={{ direction: "rtl" }}>
       <CloseIconSmall
-                    className="cursor-pointer w-4 h-4"
+                    className="cursor-pointer "
                     onClick={() => refFilter.current?.close()}
+                    size="lg"
                   />
         <h2 className="text-xl font-bold mb-4 text-center border-b-2 pb-4">عوامل التصفية</h2>
         {/* Deal Status */}
-        <div className="mb-4">
+        <div className="mb-4  ">
           <h3 className="font-semibold mb-2">حالة العقار</h3>
           <div className="flex flex-wrap">
             {dealStatuses.map((status) => (
               <button
                 key={status}
                 className={`px-4 py-2 m-1 rounded-md border ${
-                  criteria.dealStatus === status ? "bg-blue-500 text-white" : "bg-white text-gray-900"
+                  criteria.dealStatus === status ? "bg-blue-450 text-white" : "bg-white text-gray-900"
                 }`}
                 onClick={() => setCriteria({ ...criteria, dealStatus: status })}
               >
@@ -98,7 +99,7 @@ if(open==true){
               <button
                 key={status}
                 className={`px-4 py-2 m-1 rounded-md border ${
-                  criteria.unitStatus === status ? "bg-blue-500 text-white" : "bg-white text-gray-900"
+                  criteria.unitStatus === status ? "bg-blue-450 text-white" : "bg-white text-gray-900"
                 }`}
                 onClick={() => setCriteria({ ...criteria, unitStatus: status })}
               >
@@ -150,7 +151,7 @@ if(open==true){
               <button
                 key={type}
                 className={`px-4 py-2 m-1 rounded-md border ${
-                  criteria.unitType === type ? "bg-blue-500 text-white" : "bg-white text-gray-900"
+                  criteria.unitType === type ? "bg-blue-450 text-white" : "bg-white text-gray-900"
                 }`}
                 onClick={() => setCriteria({ ...criteria, unitType: type })}
               >

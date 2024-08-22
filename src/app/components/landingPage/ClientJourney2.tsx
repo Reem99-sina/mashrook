@@ -6,7 +6,7 @@ import {
   DocDeal,
   Onlinepayment117946931,
   Realestatagent,
-} from "../../assets/svg";
+} from "@/app/assets/svg";
 import Step from './Step';
 
 export default function ClientJourney2() {

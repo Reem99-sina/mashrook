@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { useState } from "react";
-import { BankT, Mada, Visa } from "../assets/svg";
+import { BankT, Mada, Visa } from "@/app/assets/svg";
 
 function ImageRadioButtons({setData,data}:{setData:(prev: any) => any,data:{
   method:string,

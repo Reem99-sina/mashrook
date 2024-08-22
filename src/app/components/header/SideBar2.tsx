@@ -2,13 +2,21 @@
 
 import { Whatsapp } from "@/app/assets/svg";
 import Link from "next/link";
-
+import {useEffect,useState} from "react"
 interface SideBarProps {
   sidebarOpen: boolean;
   toggleSidebar: () => void;
 }
 
 export default function SideBar({ sidebarOpen, toggleSidebar }: SideBarProps) {
+  const [token, setToken] = useState<string | null>(null);
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedToken = sessionStorage.getItem("token");
+      setToken(storedToken);
+    }
+  }, []);
+  
   return (
     <div>
       {sidebarOpen && (
@@ -16,7 +24,8 @@ export default function SideBar({ sidebarOpen, toggleSidebar }: SideBarProps) {
           <div className=" w-full">
             <div className="text-right text-bold text-2xl ">
               <ul>
-                <li className="mb-4 text-xl hover:text-gray-800 ">
+                {!token&&<>
+                  <li className="mb-4 text-xl hover:text-gray-800 ">
                   <Link
                     href="/login"
                     className=" text-gray-500 hover:text-[#3B73B9] "
@@ -31,18 +40,18 @@ export default function SideBar({ sidebarOpen, toggleSidebar }: SideBarProps) {
                   </Link>
                 </li>
                 <hr className="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700" />
-
-                <li className="mb-4 mt-4  hover:bg-gray-800">
+                </>}
+                <li className="mb-4 mt-4  hover:bg-gray-200">
                   <Link href="/market" className=" ">
                     السوق
                   </Link>
                 </li>
-                <li className="mb-4 hover:bg-gray-800">
+                <li className="mb-4 hover:bg-gray-200">
                   <Link href="/" className=" ">
                     طلباتي
                   </Link>
                 </li>
-                <li className="mb-4">
+                <li className="mb-4 hover:bg-gray-200">
                   <Link href="/chat" className=" ">
                     محادثاتي
                   </Link>
@@ -62,6 +71,34 @@ export default function SideBar({ sidebarOpen, toggleSidebar }: SideBarProps) {
                     تواصل معنا
                   </Link>
                 </li>
+                {token&&<>
+                  <hr className="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700" />
+                  <li className="mb-4 text-xl hover:text-gray-800 ">
+                  <Link
+                    href="/"
+                    className=" text-blue-450 hover:text-[#3B73B9] "
+                  >
+                    حسابي
+                  </Link>
+                  </li>
+                  <li className="mb-4 text-xl hover:text-gray-800 ">
+                  <Link
+                    href="/"
+                    className=" text-blue-450 hover:text-[#3B73B9] "
+                  >
+                    الاشعارات
+                  </Link>
+                </li>
+                <li className="mb-4 text-xl hover:text-gray-800 ">
+                  <Link
+                    href="/"
+                    className=" text-black hover:text-[#3B73B9] "
+                    onClick={()=>{sessionStorage.removeItem("token"); setToken("");sessionStorage.removeItem("user");}}
+                  >
+                    تسجيل خروج
+                  </Link>
+                </li>
+                </>}
               </ul>
             </div>
             <div className=" justify-center items-center flex flex-col w-full">

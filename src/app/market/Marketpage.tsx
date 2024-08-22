@@ -12,10 +12,14 @@ import { TbArrowsSort } from "react-icons/tb";
 import { RiEqualizerFill } from "react-icons/ri";
 import { IoIosSearch } from "react-icons/io";
 import Link from "next/link";
-import {Tune} from "../assets/svg"
-import { Modal, ModalRef } from "../components/shared/modal.component";
+import {Tune,MenuWhite} from "@/app/assets/svg"
+import { AppDispatch, RootState } from "@/redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { dataReturn, addUnqiue } from "@/redux/features/getRequest";
 const MarketPage: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
+  const [status, setstatus] = useState("");
+
   const [sortOption, setSortOption] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [isSortPopupOpen, setIsSortPopupOpen] = useState<boolean>(false);
@@ -26,7 +30,9 @@ const MarketPage: React.FC = () => {
   }>({ top: 0, left: 0 });
   const sortButtonRef = useRef<HTMLButtonElement>(null);
   const popupRef = useRef<HTMLDivElement>(null);
-
+  let { loading, message, data } = useSelector<RootState>(
+    (state) => state.getRequest
+  ) as { loading: boolean; message: string; data: dataReturn[] };
   const offersPerPage = 5;
   const totalOffers = sampleData5.offerId.length;
   const totalPages = Math.ceil(totalOffers / offersPerPage);
@@ -115,14 +121,11 @@ const MarketPage: React.FC = () => {
         setIsSortPopupOpen(false);
       }
     };
-
     document.addEventListener("mousedown", handleClickOutside);
-
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-
   return (
     <div dir="">
       <div className="bg-white">
@@ -171,7 +174,7 @@ const MarketPage: React.FC = () => {
               className="flex items-center"
             >
               <div className={`py-1 rounded-md border-2 border-blue-500 ${isFilterModalOpen?"bg-blue-450":"bg-white"}`}>
-                <Tune className={`text-xl mx-2  ${isFilterModalOpen?"text-white ":"text-blue-450"}`} />
+                {isFilterModalOpen?<MenuWhite  className={`text-xl mx-2 my-1`}/>:<Tune className={`text-xl mx-2`} />}
               </div>
             </button>
             <button
@@ -185,9 +188,30 @@ const MarketPage: React.FC = () => {
             </button>
           </div>
         </div>
-
+            <div className="flex gap-x-2">
+            <button
+                // key={status}
+                className={`px-4 py-2 m-1 rounded-md border ${
+                   status=="للبيع" ? "bg-blue-450 text-white" :
+                   "bg-white text-gray-900"
+                }`}
+                onClick={() => setstatus("للبيع")}
+              >
+            للبيع
+              </button>
+              <button
+                // key={status}
+                className={`px-4 py-2 m-1 rounded-md border ${
+                  status=="للتطوير"  ? "bg-blue-450 text-white" :
+                   "bg-white text-gray-900"
+                }`}
+                onClick={() => setstatus("للتطوير")}
+              >
+            للتطوير
+              </button>
+            </div>
        
-          <PropertyCard/>
+          <PropertyCard page={currentPage}limit={4}/>
        
 
         <div className="flex justify-center items-center p-6">
@@ -199,7 +223,7 @@ const MarketPage: React.FC = () => {
             <FaChevronRight className="text-lg text-gray-900" />
           </button>
           <div className="flex items-center">
-            {Array.from({ length: totalPages }, (_, index) => (
+            {Array.from({ length:Math.ceil( data?.length/4) }, (_, index) => (
               <button
                 key={index + 1}
                 onClick={() => setCurrentPage(index + 1)}

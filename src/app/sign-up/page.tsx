@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { CloseButton, MashrookLogo } from "../assets/svg";
+import { CloseButton, MashrookLogo } from "@/app/assets/svg";
 import { TextInput } from "../components/shared/text-input.component";
 import { Button } from "../components/shared/button.component";
 import { useRouter } from "next/navigation";

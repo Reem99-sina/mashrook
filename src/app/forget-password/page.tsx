@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { CloseButton, MashrookLogo } from "../assets/svg";
+import { CloseButton, MashrookLogo } from "@/app/assets/svg";
 import { Button } from "../components/shared/button.component";
 import { ResetPassword } from "./Resetpassword";
 import { ForgetNewPassword } from "./ForgetNewPassword";

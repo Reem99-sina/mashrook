@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState ,useMemo} from "react";
 import {
   FaRegCalendarAlt,
   FaBookmark,
@@ -25,14 +25,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { dataReturn, addUnqiue } from "@/redux/features/getRequest";
 
 type PropertyCardProps = {
- 
+  page?:number,limit?:number
 };
 
-const PropertyCard: React.FC<PropertyCardProps> = () => {
+const PropertyCard: React.FC<PropertyCardProps> = ({page,limit}) => {
   const [saved, setSaved] = useState(false);
   let router = useRouter();
   let dispatch = useDispatch();
   const [showNotification, setShowNotification] = useState(false);
+  ;
+
   const [show, setShow] = useState(false);
 
   const [notificationMessage, setNotificationMessage] = useState("");
@@ -51,7 +53,7 @@ const PropertyCard: React.FC<PropertyCardProps> = () => {
       setShowNotification(false);
     }, 5000);
   };
-
+ 
   const renderCards = (ele: dataReturn, offerIndex: number) => {
     const cards = [];
     // landDetails
@@ -59,7 +61,7 @@ const PropertyCard: React.FC<PropertyCardProps> = () => {
     for (let i = 0; i < (ele?.details?.length); i++) {
       cards.push(
         <div
-          key={`${offerIndex}-0`}
+          key={`${ele?.details[i]?.id}-0`}
           className="bg-white shadow-lg rounded-lg p-2 mb-4"
         >
           <div className="flex flex-row flex-no-wrap items-center justify-center md:flex-row sm:flex-col ">
@@ -124,10 +126,11 @@ const PropertyCard: React.FC<PropertyCardProps> = () => {
       );
     }
     if (ele?.details?.length == 0) {
-      for (let i = 0; i < ((ele?.landDetails?.length>2&&show==false)?2:ele?.landDetails?.length); i++) {
+      
+      for (let i = 0; i < (ele?.landDetails?.length>2&&show==false?2:ele?.landDetails?.length); i++) {
         cards.push(
           <div
-            key={`${offerIndex}-`}
+            key={`${ele?.landDetails[i]?.id}-`}
             className="bg-white shadow-lg rounded-lg p-2 mb-4"
           >
             <div className="flex flex-row flex-no-wrap items-center justify-center md:flex-row sm:flex-col ">
@@ -141,14 +144,14 @@ const PropertyCard: React.FC<PropertyCardProps> = () => {
                 <div className="flex flex-col gap-y-2  my-2  items-start flex-wrap ">
                   <div className="bg-gray-200 rounded-xl px-2 flex items-center">
                     <LuTag />
-                    <p className="text-base md:text-sm lg:text-lg mx-2">
+                    <p className="text-base md:text-xs lg:text-sm mx-2">
                       {ele?.landDetails[i]?.price} {"ريال"}
                       <span className="text-[#3B73B9]"> (بدون القيمة المضافة أو السعي)</span>
                     </p>
                   </div>
                   <div className="bg-gray-200 rounded-xl px-2 mr-4 flex items-center">
                     <BiArea />
-                    <p className="text-base md:text-sm lg:text-lg mx-2 ">
+                    <p className="text-base md:text-xs lg:text-sm mx-2 ">
                       {ele?.landDetails[i]?.area} م<sup>2</sup>
                     </p>
                   </div>
@@ -195,9 +198,15 @@ const PropertyCard: React.FC<PropertyCardProps> = () => {
 
     return cards;
   };
+let dataPage=useMemo(()=>{
+  return page&&limit?  data?.slice(
+    (page - 1) * limit,
+    page * limit
+  ):data
+},[data,page,limit])
   return (
     <div className="mb-4">
-      {data?.map((ele: dataReturn, offerIndex: number) => (
+      {dataPage?.map((ele: dataReturn, offerIndex: number) => (
         <div key={ele?.id} id="offerCard" className="flex flex-col ">
           <div className="flex flex-col mt-4 mx-2 border-2 rounded-lg p-4 bg-white">
             <div className="flex justify-between py-2 container items-start">

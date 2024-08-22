@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { CloseButton, MashrookLogo } from "../assets/svg";
+import { CloseButton, MashrookLogo } from "@/app/assets/svg";
 import { TextInput } from "../components/shared/text-input.component";
 import { Button } from "../components/shared/button.component";
 import { useRouter } from "next/navigation";
@@ -43,21 +43,22 @@ const Login: React.FC = () => {
       }else if(Boolean(data)==true){
         toast.success(message)
         sessionStorage.setItem("token", data?.token);
+        sessionStorage.setItem("user", JSON.stringify(data?.user));
         router.push(`/` );
       }
   },[data,message,router])
   return (
     <div className="flex items-center justify-center min-h-screen h-full  w-full flex-col">
-      <div className="flex items-end justify-start p-4 w-full h-full lg:hidden bg-white ">
+      {/* <div className="flex items-end justify-start p-4 w-full h-full lg:hidden bg-white ">
         <CloseButton
           onClick={() => {
             router.push("/");
           }}
           className="cursor-pointer"
         />
-      </div>
+      </div> */}
       <div className="w-full   space-y-8 bg-white  shadow-md  ">
-        <div className=" items-end justify-start ml-4 mt-4 hidden sm:flex ">
+        <div className=" items-end justify-start ml-4 mt-4 flex ">
           <CloseButton
             onClick={() => {
               router.push("/");

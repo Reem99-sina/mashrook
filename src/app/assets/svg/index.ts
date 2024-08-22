@@ -66,5 +66,9 @@ export { default as Shower } from "./shower.svg";
 export { default as Kitchen } from "./Kitchen.svg";
 export { default as CheckOut } from "./check_outlined.svg";
 export {default as Tune} from "./tune.svg"
+export {default as User} from "./user.svg"
+export {default as MenuWhite} from "./menuWhite.svg"
+
+
 
 

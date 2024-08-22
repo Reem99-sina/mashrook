@@ -26,7 +26,7 @@ import { AppDispatch,RootState } from "@/redux/store";
 import { useDispatch,useSelector } from "react-redux";
 import {dataReturn} from "@/redux/features/getRequest"
 import {useRouter} from "next/navigation"
-import {Vector,Money,Diagram,Dance,Shower,Kitchen,CheckOut} from "../assets/svg"
+import {Vector,Money,Diagram,Dance,Shower,Kitchen,CheckOut} from "@/app/assets/svg"
 const PropertyDetails: React.FC = () => {
   const [activeTab, setActiveTab] = useState<"location" | "details">(
     "location"
