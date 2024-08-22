@@ -61,7 +61,7 @@ export default function Home() {
         </div>
         <div className="flex">
           <main className="container mx-auto ">
-            <section className="bg-gray-100 rounded shadow-md text-center">
+            <section className="bg-[url('/background-cover.png')] rounded shadow-md text-center">
               <div className="pt-4">
                 <div className="flex justify-center">
                   <div className=" w-96 h-44 ">
@@ -69,10 +69,10 @@ export default function Home() {
                   </div>
                 </div>
 
-                <div className="flex justify-center space-x-2 mb-8">
+                <div className="flex justify-center space-x-2 space-y-2">
                   <button
                     // href={"add-your-real-estate"}
-                    className="flex items-center"
+                    className="flex "
                     onClick={()=>{
                       if(!token){
                         toast.error("انت تحتاج الي تسجيل دخول")
@@ -84,9 +84,8 @@ export default function Home() {
                     }}
                   >
                     <Addrequest />
-
                   </button>
-                  <button  className="flex items-center" onClick={()=>{
+                  <button  className="flex " onClick={()=>{
                       if(!token){
                         toast.error("انت تحتاج الي تسجيل دخول")
                         router.push("/login")
@@ -114,22 +113,7 @@ export default function Home() {
                   </div>
 
                   <PropertyCard
-                    offersCount={slicedData.offersCount}
-                    date={slicedData.date}
-                    seller={slicedData.seller}
-                    unitStatus={slicedData.unitStatus}
-                    requestId={slicedData.requestId}
-                    licenseNumber={slicedData.licenseNumber}
-                    city={slicedData.city}
-                    district={slicedData.district}
-                    offeredShare={slicedData.offeredShare}
-                    area={slicedData.area}
-                    price={slicedData.price}
-                    currency={slicedData.currency}
-                    unitCategory={slicedData.unitCategory}
-                    unitType={slicedData.unitType}
-                    dealStatus={slicedData.dealStatus}
-                    offerId={slicedData.offerId}
+                   
                   />
                 </div>
               </div>

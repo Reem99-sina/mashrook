@@ -14,7 +14,7 @@ export default function TermsAndConditions() {
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
   };
-
+ 
   const handleButtonClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     if (!isChecked) {
       e.preventDefault();

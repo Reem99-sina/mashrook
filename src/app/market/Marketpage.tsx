@@ -12,7 +12,8 @@ import { TbArrowsSort } from "react-icons/tb";
 import { RiEqualizerFill } from "react-icons/ri";
 import { IoIosSearch } from "react-icons/io";
 import Link from "next/link";
-
+import {Tune} from "../assets/svg"
+import { Modal, ModalRef } from "../components/shared/modal.component";
 const MarketPage: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [sortOption, setSortOption] = useState<string>("");
@@ -125,10 +126,10 @@ const MarketPage: React.FC = () => {
   return (
     <div dir="">
       <div className="bg-white">
-        <div dir="ltr">
+        <div dir="ltr" className="relative">
           <MainHeader />
         </div>
-        <div className="opacity-100 z-0">
+      
           {/* Filter Modal */}
           {isFilterModalOpen && (
             <FilterModal
@@ -137,9 +138,10 @@ const MarketPage: React.FC = () => {
                 // Filter logic to be added later
                 setIsFilterModalOpen(false);
               }}
+              open={isFilterModalOpen}
             />
           )}
-        </div>
+        
         <div className="flex items-center justify-between">
           <Link href={"./"} className="mr-4">
             <FaChevronRight className="text-xl" />
@@ -165,11 +167,11 @@ const MarketPage: React.FC = () => {
 
           <div className="flex flex-row">
             <button
-              onClick={() => setIsFilterModalOpen(true)}
+              onClick={() => setIsFilterModalOpen(!isFilterModalOpen)}
               className="flex items-center"
             >
-              <div className="py-1 rounded-md border-2 border-blue-500 bg-blue-450">
-                <RiEqualizerFill className="text-xl mx-2 text-white" />
+              <div className={`py-1 rounded-md border-2 border-blue-500 ${isFilterModalOpen?"bg-blue-450":"bg-white"}`}>
+                <Tune className={`text-xl mx-2  ${isFilterModalOpen?"text-white ":"text-blue-450"}`} />
               </div>
             </button>
             <button
@@ -184,27 +186,9 @@ const MarketPage: React.FC = () => {
           </div>
         </div>
 
-        {currentOffers.map((offer, index) => (
-          <PropertyCard
-            key={offer.offerId}
-            offerId={[offer.offerId]}
-            offersCount={[offer.offersCount]}
-            date={[offer.date]}
-            seller={[offer.seller]}
-            unitStatus={[offer.unitStatus]}
-            requestId={[offer.requestId]}
-            licenseNumber={[offer.licenseNumber]}
-            city={[offer.city]}
-            district={[offer.district]}
-            offeredShare={[offer.offeredShare]}
-            area={[offer.area]}
-            price={[offer.price]}
-            currency={[offer.currency]}
-            unitCategory={[offer.unitCategory]}
-            unitType={[offer.unitType]}
-            dealStatus={[offer.dealStatus]}
-          />
-        ))}
+       
+          <PropertyCard/>
+       
 
         <div className="flex justify-center items-center p-6">
           <button
@@ -250,6 +234,7 @@ const MarketPage: React.FC = () => {
             }}
             style={{ top: popupPosition.top, left: popupPosition.left }}
             ref={popupRef}
+            option={sortOption}
           />
         )}
       </div>

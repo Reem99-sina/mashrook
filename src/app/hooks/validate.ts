@@ -23,7 +23,7 @@ export async function validateForm<Fields>(formData: { [Key in keyof Fields]: Fi
         }).catch(({errors,inner})=>{
             let index=0
             let error={} as any
-            while(index<errors.length){
+            while(index<errors?.length){
                 error[inner[index]?.path]=errors[index]
                 index++
             }
