@@ -38,7 +38,7 @@ export default function SideBar({ sidebarOpen, toggleSidebar }: SideBarProps) {
                   </Link>
                 </li>
                 <li className="mb-4 hover:bg-gray-800">
-                  <Link href="/" className=" ">
+                  <Link href="/my-offer" className=" ">
                     طلباتي
                   </Link>
                 </li>
