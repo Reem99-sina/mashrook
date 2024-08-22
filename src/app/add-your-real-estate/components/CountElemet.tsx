@@ -1,5 +1,5 @@
 import {Button} from "../../components/shared/button.component"
-import { Add, Sub } from "../../assets/svg";
+import { Add, Sub } from "@/app/assets/svg";
 import Image from "next/image"
 interface CountElementInter{
     value:string,

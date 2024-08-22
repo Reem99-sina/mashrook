@@ -135,6 +135,9 @@ export let villaOwnSchema = object().shape({
   // apartment_floor: string().required("حدد  دور "),
   property_type_id: number().required("حدد نوع العقار"),
 });
+export let amountSchema = object().shape({
+  amount:number().notOneOf([0], "ادخل مساحة شراكة؟").required("ادخل مساحة شراكة؟")
+ });
 export let paymentSchema = object().shape({
  method:string().required("ادخل طريقة دفع؟"),
  name:string().required("ادخل اسم ؟"),

@@ -2,7 +2,7 @@
 import clsx from "clsx";
 import React, { useState } from "react";
 import { TextInput } from "../components/shared/text-input.component";
-import { Block, MessageIcon, Search } from "../assets/svg";
+import { Block, MessageIcon, Search } from "@/app/assets/svg";
 import { ChatCard } from "./ChatCard";
 import { useRouter } from "next/navigation";
 

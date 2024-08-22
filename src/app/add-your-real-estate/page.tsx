@@ -1,14 +1,14 @@
 "use client";
 
 import React, { useRef, useState, useEffect } from "react";
-import { AddButton, CloseIconSmall, Succeeded } from "../assets/svg";
+import { AddButton, Add, CloseIconSmall, Succeeded } from "@/app/assets/svg";
 import { RadioInput } from "../components/shared/radio.component";
 import { Button } from "../components/shared/button.component";
 import { Modal, ModalRef } from "../components/shared/modal.component";
 import ImageAppear from "../components/shared/ImageAppear";
 
 import AccordionComponent from "../components/shared/Accordion.component";
-
+import Image from "next/image";
 import NumberRoom from "./components/NumberRoom";
 import Footer from "../components/header/Footer2";
 import MainHeader from "../components/header/MainHeader";
@@ -160,9 +160,9 @@ const AddYourRealEstate: React.FC = () => {
     kitchen: true, // مزايا اضافية مطبخ راكب
     garage: true,
     car_entrance: true,
-    stage:"",
-    available_percentage:0,
-    available_price:0
+    stage: "",
+    available_percentage: 0,
+    available_price: 0,
   }));
   const [villa, setvilla] = useState<earthInter[]>(initialVillaData);
 
@@ -525,7 +525,7 @@ const AddYourRealEstate: React.FC = () => {
               piece_number: "", // في حالة اختيار ارض (رقم القطعة)
               plan_number: "",
               area: 0,
-              price: 0
+              price: 0,
             },
           ]
         : [...prev]
@@ -803,10 +803,12 @@ const AddYourRealEstate: React.FC = () => {
               </div>
               <div className="flex items-end gap-2 justify-end flex-row mt-5">
                 <p className="text-sm text-[#3B73B9] font-bold">إضافة الموقع</p>
-                <AddButton
+                <div
                   onClick={() => modalRef.current?.open()}
-                  className="cursor-pointer"
-                />
+                  className="cursor-pointer bg-[#3B73B9]"
+                >
+                  <Image src={Add} width={21} height={21} alt={"add"} />
+                </div>
               </div>
               {(errors?.address || errors?.lat || errors?.long) && (
                 <p className="text-xs text-red-600 dark:text-red-500 text-right">
@@ -1556,12 +1558,15 @@ const AddYourRealEstate: React.FC = () => {
                 selectedPropertyType?.title == "أرض سكنية تجارية") && (
                 <div className="mb-4" style={{ direction: "rtl" }}>
                   <div className="flex gap-2  flex-row mt-5">
-                    <AddButton
-                      className="cursor-pointer"
-                      onClick={() => {
-                        setCount((prev) => ({ nums: prev.nums + 1 }));
-                      }}
-                    />
+                    <div
+                      onClick={() =>
+                        setCount((prev) => ({ nums: prev.nums + 1 }))
+                      }
+                      className="cursor-pointer bg-[#3B73B9]"
+                    >
+                      <Image src={Add} width={21} height={21} alt={"add"} />
+                    </div>
+
                     <p className="text-sm text-[#3B73B9] font-bold">
                       إضافة عقار اخر
                     </p>
@@ -1586,7 +1591,7 @@ const AddYourRealEstate: React.FC = () => {
                         event?.target?.value == "نعم" ? true : false,
                     })
                   }
-                  checked={dataSend?.is_divisible==true}
+                  checked={dataSend?.is_divisible == true}
                   value="نعم"
                   label="نعم"
                 />
@@ -1599,7 +1604,7 @@ const AddYourRealEstate: React.FC = () => {
                         event?.target?.value == "نعم" ? true : false,
                     })
                   }
-                  checked={dataSend?.is_divisible==false}
+                  checked={dataSend?.is_divisible == false}
                   value="لا"
                   label="لا"
                 />
@@ -1622,10 +1627,13 @@ const AddYourRealEstate: React.FC = () => {
                   <p className="text-sm text-[#3B73B9] font-bold">
                     أضف صورة / صور
                   </p>
-                  <AddButton
-                    className="cursor-pointer"
-                    onClick={() => refImage?.current?.click()}
-                  />
+
+                  <div
+                    onClick={() => refImage.current?.click()}
+                    className="cursor-pointer bg-[#3B73B9]"
+                  >
+                    <Image src={Add} width={21} height={21} alt={"add"} />
+                  </div>
                   <input
                     type="file"
                     className="hidden"
@@ -1660,14 +1668,14 @@ const AddYourRealEstate: React.FC = () => {
                     name="haveNumber"
                     onChange={() => setHaveNumber(true)}
                     value="نعم"
-                    checked={haveNumber==true}
+                    checked={haveNumber == true}
                     label="نعم"
                   />
                   <RadioInput
                     name="haveNumber"
                     onChange={() => setHaveNumber(false)}
                     value="لا"
-                    checked={haveNumber==false}
+                    checked={haveNumber == false}
                     label="لا"
                   />
                 </div>
@@ -1715,7 +1723,6 @@ const AddYourRealEstate: React.FC = () => {
                   type="checkbox"
                   className="h-4 w-4 rounded-2xl accent-[#3B73B9]"
                   onChange={(event) => setDeal(event?.target?.checked)}
-                  
                 />
               </div>
               <div className="p-7">

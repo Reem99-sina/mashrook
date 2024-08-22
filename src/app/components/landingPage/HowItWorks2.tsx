@@ -6,7 +6,7 @@ import {
   Onlinebooking9471687,
   Realestatagent,
   Truckicon,
-} from "../../assets/svg";
+} from "@/app/assets/svg";
 import Step from './Step';
 
 export default function HowItWorks2() {

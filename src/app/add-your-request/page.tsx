@@ -2,7 +2,7 @@
 
 import React, { useRef, useState, useEffect } from "react";
 
-import { Add, CloseIconSmall, Succeeded } from "../assets/svg";
+import { Add, CloseIconSmall, Succeeded } from "@/app/assets/svg";
 
 import { RadioInput } from "../components/shared/radio.component";
 import { Button } from "../components/shared/button.component";
@@ -334,7 +334,7 @@ const AddYourRequest: React.FC = () => {
             <p className="text-2xl font-medium text-[#374151]">أضف طلبك</p>
           </div>
           <div className="p-4 w-full flex gap-4 flex-col">
-            <div className="bg-white rounded-lg border border-[#E5E7EB] w-full mb-4 items-start justify-start p-4">
+            <div className="bg-white rounded-lg border border-[#E5E7EB] w-full  items-start justify-start p-4">
               {dataReal.map((item, index) => (
                 <div key={index}>
                   <div className="flex items-center justify-end">
@@ -367,7 +367,8 @@ const AddYourRequest: React.FC = () => {
             </div>
           </div>
           {titleSection && detailsSection && (
-            <div className="bg-white rounded-lg border border-[#E5E7EB] w-full mb-4 items-start justify-start p-4 mt-4">
+            <div className=" w-full items-start justify-start p-4 ">
+              <div className="bg-white rounded-lg border border-[#E5E7EB] p-4">
               <div className="flex items-center justify-end">
                 <p className="text-base font-bold text-[#4B5563]">
                   {titleSection}
@@ -397,8 +398,10 @@ const AddYourRequest: React.FC = () => {
                 </p>
               )}
             </div>
+            </div>
           )}
-          <div className="bg-white rounded-lg border border-[#E5E7EB] w-full mb-4 items-start justify-start p-4">
+          <div className=" w-full  items-start justify-start p-4">
+            <div className="bg-white rounded-lg border border-[#E5E7EB] p-4 mb-4">
             <div className="flex items-center justify-end">
               <p className="text-base font-bold text-[#4B5563]">
                 {" "}
@@ -427,8 +430,7 @@ const AddYourRequest: React.FC = () => {
                   {errors?.city}
                 </p>
               )}
-            </div>
-            <div className="flex items-end gap-2 justify-end flex-row mt-5 ">
+               <div className="flex items-end gap-2 justify-end flex-row mt-5 ">
               <p
                 className={`cursor-pointer text-[#3B73B9]  ${
                   selectedCites ? "" : "text-gray-500"
@@ -443,6 +445,7 @@ const AddYourRequest: React.FC = () => {
               >
                 <Image src={Add} width={21} height={21} alt={"add"} />
               </div>
+            </div>
             </div>
             <div className="flex flex-row gap-3 items-center justify-end flex-wrap mb-5">
               {selectedCites.map((cite) => (
@@ -466,6 +469,8 @@ const AddYourRequest: React.FC = () => {
                 </p>
               )}
             </div>
+            </div>
+           
             <div className="bg-white rounded-lg border border-[#E5E7EB] w-full mb-4 items-start justify-start p-4">
               {(selectedPropertyType?.title === "شقة" ||
                 selectedPropertyType?.title === "فيلا" ||

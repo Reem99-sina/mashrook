@@ -12,12 +12,8 @@ export default function Market() {
     dispatch(getRequest())
   },[dispatch])
   return (
-    <div dir="rtl">
-
-
+    <div dir="rtl" className="font-[Cairo]">
 <MarketPage />
-
-
     </div>
   );
 }

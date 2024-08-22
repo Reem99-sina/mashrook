@@ -7,7 +7,7 @@ import {
   Block,
   MashrookLogoChat,
   Search,
-} from "../assets/svg";
+} from "@/app/assets/svg";
 import { IoAttach } from "react-icons/io5";
 import { useRouter } from "next/navigation";
 

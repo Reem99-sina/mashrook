@@ -2,7 +2,7 @@
 import {useEffect,useState} from "react"
 import Image from "next/image"
 import {Button} from "./button.component"
-import {X} from "../../assets/svg"
+import {X} from "@/app/assets/svg"
 const ImageAppear: React.FC<{images?:any,onDelete:(index:Number)=>void}>=({images,onDelete})=>{
  
     let [urls,setUrls]=useState<{ name: string; url: string | ArrayBuffer|null  }[]>([])

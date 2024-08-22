@@ -3,10 +3,12 @@
 import Link from "next/link";
 import React, { useState, useRef, useEffect,useMemo } from "react";
 import { RxArrowLeft } from "react-icons/rx";
-
+import {useRouter} from "next/navigation"
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
+import { validateForm } from "@/app/hooks/validate";
 import { dataReturn, addUnqiue, typePay } from "@/redux/features/getRequest";
+import {amountSchema} from "@/typeSchema/schema"
 type JoinStatusButtonsProps = {
   currentDealStatus: boolean;
   data: typePay;
@@ -21,6 +23,7 @@ const JoinStatusButtons: React.FC<JoinStatusButtonsProps> = ({
   const [showDialog, setShowDialog] = useState(false);
   const [token, setToken] = useState<string | null>(null);
   const [partnershipPercentage, setPartnershipPercentage] = useState(0);
+  const router=useRouter()
   const availableAmount = 600000;
   const dispatch = useDispatch<AppDispatch>();
   const tooltipRef = useRef<HTMLDivElement>(null);
@@ -30,11 +33,32 @@ const JoinStatusButtons: React.FC<JoinStatusButtonsProps> = ({
     data: dataReturn[];
     selectData: dataReturn;
   };
+  const [errors, setErrors] = useState<{
+   
+   amount:string,
+   
+  }>();
 
   const handleDialogToggle = () => {
     setShowDialog(!showDialog);
   };
-
+  const handleSubmit=async()=>{
+   const status=await validateForm({amount:partnershipAmount},amountSchema,setErrors)
+   if(status==true){
+    dispatch(
+      addUnqiue({
+        id: dataMain?.id,
+        detail_id: data?.id,
+        title: dataMain?.propertyType?.title,
+        numberPiece: data?.piece_number,
+        type: Boolean(data?.type) ? false : true,
+        propertyOwnerType:dataMain?.propertyOwnerType?.title
+      })
+    );
+    router.push("/termsandconditions")
+   }
+  }
+  console.log(errors,"Erros")
   const handlePercentageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPartnershipPercentage(Number(e.target.value));
   };
@@ -183,28 +207,23 @@ const JoinStatusButtons: React.FC<JoinStatusButtonsProps> = ({
                 <span className="bg-blue-450 text-white py-2 px-4 rounded-l-lg border-2 border-r-0">
                   ريال
                 </span>
+               
               </div>
+              {errors?.amount && (
+                <p className="text-xs text-red-600 dark:text-red-500 text-right">
+                  {String(errors?.amount)}
+                </p>
+              )}
             </div>
             <div className="flex justify-between">
-              <Link
-                href="/termsandconditions"
+              <button
+                // href="/termsandconditions"
                 type="button"
                 className="flex-grow bg-blue-450 text-white px-4 py-2 mx-2 rounded-lg text-center"
-                onClick={() => {
-                  dispatch(
-                    addUnqiue({
-                      id: dataMain?.id,
-                      detail_id: data?.id,
-                      title: dataMain?.propertyType?.title,
-                      numberPiece: data?.piece_number,
-                      type: Boolean(data?.type) ? false : true,
-                      propertyOwnerType:dataMain?.propertyOwnerType?.title
-                    })
-                  );
-                }}
+                onClick={handleSubmit}
               >
                 متابعة
-              </Link>
+              </button>
               <button
                 type="button"
                 className="flex-grow border-2 text-gray-800 px-4 py-2 rounded-lg"

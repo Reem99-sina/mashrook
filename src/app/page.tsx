@@ -1,6 +1,6 @@
 "use client";
 import MainHeader from "./components/header/MainHeader";
-import { Addbutton, Addrequest, CTA } from "./assets/svg";
+import { Addbutton, Addrequest, CTA } from "@/app/assets/svg";
 import CarouselTransition from "../app/components/landingPage/Carousel2";
 import FAQCollapse from "../app/components/landingPage/FAQCollapse";
 import Footer from "./components/header/Footer2";
@@ -69,7 +69,7 @@ export default function Home() {
                   </div>
                 </div>
 
-                <div className="flex justify-center space-x-2 space-y-2">
+                <div className="flex justify-center space-x-2 space-y-2 items-end">
                   <button
                     // href={"add-your-real-estate"}
                     className="flex "

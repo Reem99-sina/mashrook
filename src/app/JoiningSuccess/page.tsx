@@ -3,7 +3,7 @@ import React from "react";
 import MainHeader from "../components/header/MainHeader";
 import Footer from "../components/header/Footer2";
 
-import { Check } from "../assets/svg";
+import { Check } from "@/app/assets/svg";
 
 export default function JoiningSuccess() {
   return (
