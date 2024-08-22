@@ -3,10 +3,9 @@ import React from "react";
 import { TextInput } from "../components/shared/text-input.component";
 import { Filter, Note, Search } from "../assets/svg";
 import { useRouter } from "next/navigation";
-import { MyOfferCard } from "./MyOfferCard";
 import Pagination from "../components/shared/pagination";
-
 import FilterDropdown from "../components/shared/FilterDropdown";
+import { MyOrdersCard } from "./MyOrdersCard";
 
 const data = [
   {
@@ -44,7 +43,7 @@ const data = [
   },
 ];
 
-export const GitMyOffer = () => {
+export const GitMyOrders = () => {
   const router = useRouter();
 
   const handleSelect = (option: string) => {
@@ -92,7 +91,7 @@ export const GitMyOffer = () => {
           <div>
             <div>
               {data.map((offer, index) => (
-                <MyOfferCard
+                <MyOrdersCard
                   key={index}
                   title={offer.title}
                   count={offer.count}

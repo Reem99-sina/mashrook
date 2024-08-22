@@ -28,7 +28,7 @@ interface ChatCardProps {
   type: string;
 }
 
-export const MyOfferCard: React.FC<ChatCardProps> = ({
+export const MyOrdersCard: React.FC<ChatCardProps> = ({
   onEdit,
   onUpdate,
   onDelete,

@@ -6,8 +6,8 @@ import MainHeader from "../components/header/MainHeader";
 import { Tabs } from "../components/shared/tabs";
 import { useRouter } from "next/navigation";
 import { BackButtonOutline } from "../assets/svg";
-import { GitMyOffer } from "./gitMyOffer";
 import { GitMyPartners } from "./gitMyPartners";
+import { GitMyOrders } from "./gitMyOrders";
 
 const Chat: React.FC = () => {
   const router = useRouter();
@@ -38,7 +38,7 @@ const Chat: React.FC = () => {
               <Tabs
                 tabs={[
                   {
-                    Component: <GitMyOffer />,
+                    Component: <GitMyOrders />,
                     title: "طلباتي",
                   },
 
