@@ -1,13 +1,11 @@
 "use client";
-import clsx from "clsx";
-import React, { useState } from "react";
+import React from "react";
 import { TextInput } from "../components/shared/text-input.component";
-import { ArrowDropUp, Block, Filter, Note, Search } from "../assets/svg";
+import { Filter, Note, Search } from "../assets/svg";
 import { useRouter } from "next/navigation";
 import { MyOfferCard } from "./MyOfferCard";
 import Pagination from "../components/shared/pagination";
-import { SelectCustomer } from "../components/shared/select.component";
-import SortPopup from "../market/SortPopup";
+
 import FilterDropdown from "../components/shared/FilterDropdown";
 
 const data = [
@@ -61,7 +59,6 @@ export const GitMyOffer = () => {
           <Filter />
         </span>
         <span>
-          {/* <ArrowDropUp /> */}
           <FilterDropdown
             options={[
               "الأحدث الى الأقدم",
@@ -79,7 +76,6 @@ export const GitMyOffer = () => {
           المحدثة
         </span>
         <span className="rounded-md border border-[#E5E7EB] text-sm font-normal text-[#6B7280] pl-3 pr-3 pt-1 pb-1">
-          {" "}
           تحت التقدم
         </span>
 
@@ -87,7 +83,6 @@ export const GitMyOffer = () => {
           المنتهية
         </span>
         <span className="rounded-md border border-[#E5E7EB] text-sm font-normal text-[#6B7280] pl-3 pr-3 pt-1 pb-1">
-          {" "}
           مكتملة
         </span>
       </div>
