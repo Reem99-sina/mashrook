@@ -68,3 +68,8 @@ export { default as ChatIconSmall } from "./chat-icon.svg";
 export { default as Arrow } from "./arrow.svg";
 export { default as Filter } from "./filter.svg";
 export { default as ArrowDropUp } from "./arrow-drop-up.svg";
+export { default as PartnersIcon } from "./partners-icon.svg";
+export { default as Sell } from "./sell.svg";
+export { default as Realestatagenteal } from "./real-estate-agent.svg";
+export { default as Undo } from "./undo.svg";
+export { default as InfoOutLine } from "./info-outline.svg";

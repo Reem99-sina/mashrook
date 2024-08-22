@@ -7,6 +7,7 @@ import { Tabs } from "../components/shared/tabs";
 import { useRouter } from "next/navigation";
 import { BackButtonOutline } from "../assets/svg";
 import { GitMyOffer } from "./gitMyOffer";
+import { GitMyPartners } from "./gitMyPartners";
 
 const Chat: React.FC = () => {
   const router = useRouter();
@@ -42,7 +43,7 @@ const Chat: React.FC = () => {
                   },
 
                   {
-                    Component: <></>,
+                    Component: <GitMyPartners />,
                     title: "شراكاتي",
                   },
                   {
