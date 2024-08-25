@@ -99,7 +99,17 @@ const initialstate = {
 const properityTypeSlice = createSlice({
   name: "properityType",
   initialState: initialstate,
-  reducers: {},
+  reducers: {
+    removeState: (state) => {
+      state.loading=false,
+      state.message= "",
+      state.data=  null
+    },
+    removeStatePayment: (state) => {
+      state.messagePayment="",
+      state.dataPayment=null
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(postProperityType.fulfilled, (state, action) => {
       state.loading = false;
@@ -126,4 +136,5 @@ const properityTypeSlice = createSlice({
       });
   },
 });
+export const { removeState ,removeStatePayment} = properityTypeSlice.actions;
 export default properityTypeSlice.reducer;

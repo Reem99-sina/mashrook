@@ -22,7 +22,8 @@ import {
 import {
   postProperityType,
   properityTypeInter,
-  properityErrorTypeInter
+  properityErrorTypeInter,
+  removeState
 } from "@/redux/features/postRequest";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
@@ -297,6 +298,9 @@ const AddYourRequest: React.FC = () => {
 
   useEffect(() => {
     dispatch(getproperityType({ num: 1 }));
+    return () => {
+      dispatch(removeState())
+     };
   }, [dispatch]);
   useEffect(() => {
     dispatch(

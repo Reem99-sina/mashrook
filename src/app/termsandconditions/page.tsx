@@ -6,11 +6,20 @@ import Link from "next/link";
 import { FaChevronRight } from "react-icons/fa";
 import { MdOutlineInfo } from "react-icons/md";
 import BackButton from "../paymentpage/backButton";
-
+import { AppDispatch,RootState } from "@/redux/store";
+import { useDispatch,useSelector } from "react-redux";
 export default function TermsAndConditions() {
   const [isChecked, setIsChecked] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
-
+  let { selectData } = useSelector<RootState>(
+    (state) => state.getRequest
+  ) as { loading: boolean; message: string; data: dataReturn[], selectData:{
+    id:number,detail_id?:number,title:string,numberPiece:number,
+    type:boolean,
+    propertyOwnerType:string,
+    propertyPurpose:string
+  }
+};
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
   };
@@ -24,7 +33,7 @@ export default function TermsAndConditions() {
       }, 5000);
     }
   };
-
+console.log(selectData,"selectData")
   return (
     <div className="flex justify-center w-dvh h-max">
       <div className="w-full bg-white rounded text-black shadow">
@@ -102,7 +111,7 @@ export default function TermsAndConditions() {
                   </div>
                   <div className="flex flex-row items-center align-middle justify-center p-2 text-blue-450">
                     <Link
-                      href="/paymentpage"
+                      href={selectData?.propertyPurpose==1?"/paymentpage":"/JoiningSuccess"}
                       onClick={handleButtonClick}
                       className="bg-blue-450 text-white px-4 py-2 rounded-2xl p-2 m-2 flex-grow text-center"
                     >
