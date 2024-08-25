@@ -50,8 +50,10 @@ export default function SideBar({ sidebarOpen, toggleSidebar }: SideBarProps) {
                     السوق
                   </Link>
                 </li>
-                <li className="mb-4 hover:bg-gray-200">
-                  <Link href="/" className=" ">
+
+                <li className="mb-4 hover:bg-gray-800">
+                  <Link href="/my-offer" className=" ">
+
                     طلباتي
                   </Link>
                 </li>

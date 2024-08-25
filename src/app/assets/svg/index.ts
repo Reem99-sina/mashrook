@@ -58,6 +58,21 @@ export { default as Block } from "./Block.svg";
 export { default as MessageIcon } from "./message-icon.svg";
 export { default as MashrookLogoChat } from "./MashrookLogoChat.svg";
 export { default as BackButtonOutline } from "./state-layer.svg";
+export { default as Note } from "./note.svg";
+export { default as OtherOffer } from "./other-offer.svg";
+export { default as Accreditation } from "./accreditation-mark.svg";
+export { default as EditIcon } from "./edit.svg";
+export { default as UpdateIcon } from "./update.svg";
+export { default as DeleteIcon } from "./delete.svg";
+export { default as ChatIconSmall } from "./chat-icon.svg";
+export { default as Arrow } from "./arrow.svg";
+export { default as Filter } from "./filter.svg";
+export { default as ArrowDropUp } from "./arrow-drop-up.svg";
+export { default as PartnersIcon } from "./partners-icon.svg";
+export { default as Sell } from "./sell.svg";
+export { default as Realestatagenteal } from "./real-estate-agent.svg";
+export { default as Undo } from "./undo.svg";
+export { default as InfoOutLine } from "./info-outline.svg";
 export { default as Vector } from "./Vector.svg";
 export { default as Money } from "./money.svg";
 export { default as Diagram } from "./Diagram.svg";
@@ -65,9 +80,15 @@ export { default as Dance } from "./dance-floor.svg";
 export { default as Shower } from "./shower.svg";
 export { default as Kitchen } from "./Kitchen.svg";
 export { default as CheckOut } from "./check_outlined.svg";
+
 export {default as Tune} from "./tune.svg"
 export {default as User} from "./user.svg"
 export {default as MenuWhite} from "./menuWhite.svg"
+export {default as Rebuild} from "./rebuild.svg"
+export {default as Dots} from "./dots.svg"
+
+
+
 
 
 
