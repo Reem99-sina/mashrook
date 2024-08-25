@@ -32,6 +32,7 @@ import {
   RealEstateErrrorTypeInter,
   postrealEstateType,
   earthInter,
+  removeState
 } from "@/redux/features/postRealEstate";
 import { cites } from "@/typeSchema/schema";
 import { validateForm } from "../hooks/validate";
@@ -480,6 +481,9 @@ const AddYourRealEstate: React.FC = () => {
     dispatch(getproperityPurposeType());
     dispatch(getproperityOwnerType());
     dispatch(getproperityTypeMore({ num: 1, type: "offer" }));
+    return () => {
+     dispatch(removeState())
+    };
   }, [dispatch]);
   useEffect(() => {
     dispatch(getproperityType({ num: dataSend?.property_purpose_id || 1 }));

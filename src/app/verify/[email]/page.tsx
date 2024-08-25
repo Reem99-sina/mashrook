@@ -74,11 +74,11 @@ const Verify: React.FC = () => {
                 />
               ))}
             </div>
-            <p className="text-center text-sm text-gray-500 mb-4">
+            <p className="text-center text-sm text-gray-500 mb-4" >
               لم يصلك الرمز؟{" "}
-              <a href="#" className="text-[#98CC5D]">
+              <button  className="text-[#98CC5D]">
                 إعادة إرسال الرمز خلال 60 ثانية
-              </a>
+              </button>
             </p>
           </div>
           <div>

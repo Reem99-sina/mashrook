@@ -3,6 +3,9 @@
 import { Whatsapp } from "@/app/assets/svg";
 import Link from "next/link";
 import {useEffect,useState} from "react"
+import { AppDispatch, RootState } from "@/redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import {removeLogin} from "@/redux/features/loginSlice"
 interface SideBarProps {
   sidebarOpen: boolean;
   toggleSidebar: () => void;
@@ -10,6 +13,7 @@ interface SideBarProps {
 
 export default function SideBar({ sidebarOpen, toggleSidebar }: SideBarProps) {
   const [token, setToken] = useState<string | null>(null);
+  const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
     if (typeof window !== "undefined") {
       const storedToken = sessionStorage.getItem("token");
@@ -93,7 +97,7 @@ export default function SideBar({ sidebarOpen, toggleSidebar }: SideBarProps) {
                   <Link
                     href="/"
                     className=" text-black hover:text-[#3B73B9] "
-                    onClick={()=>{sessionStorage.removeItem("token"); setToken("");sessionStorage.removeItem("user");}}
+                    onClick={()=>{sessionStorage.removeItem("token"); setToken("");sessionStorage.removeItem("user");dispatch(removeLogin())}}
                   >
                     تسجيل خروج
                   </Link>

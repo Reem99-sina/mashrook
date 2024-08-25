@@ -209,7 +209,13 @@ const initialstate = {
 const realEstateTypeSlice = createSlice({
   name: "realEstateType",
   initialState: initialstate,
-  reducers: {},
+  reducers: {
+    removeState: (state) => {
+      state.loading=false,
+      state.message= "",
+      state.data=  null
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(postrealEstateType.fulfilled, (state, action) => {
       state.loading = false;
@@ -230,4 +236,5 @@ const realEstateTypeSlice = createSlice({
       });
   },
 });
+export const { removeState } = realEstateTypeSlice.actions;
 export default realEstateTypeSlice.reducer;

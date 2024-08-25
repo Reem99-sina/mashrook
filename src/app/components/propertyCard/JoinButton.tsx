@@ -44,6 +44,7 @@ const JoinStatusButtons: React.FC<JoinStatusButtonsProps> = ({
   };
   const handleSubmit=async()=>{
    const status=await validateForm({amount:partnershipAmount},amountSchema,setErrors)
+
    if(status==true){
     dispatch(
       addUnqiue({
@@ -52,13 +53,14 @@ const JoinStatusButtons: React.FC<JoinStatusButtonsProps> = ({
         title: dataMain?.propertyType?.title,
         numberPiece: data?.piece_number,
         type: Boolean(data?.type) ? false : true,
-        propertyOwnerType:dataMain?.propertyOwnerType?.title
+        propertyOwnerType:dataMain?.propertyOwnerType?.title,
+        propertyPurpose:dataMain?.propertyPurpose?.id
       })
     );
     router.push("/termsandconditions")
    }
   }
-  console.log(errors,"Erros")
+
   const handlePercentageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPartnershipPercentage(Number(e.target.value));
   };

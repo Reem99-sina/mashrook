@@ -8,7 +8,7 @@ import Link from "next/link";
 import { AppDispatch,RootState } from "@/redux/store";
 import { useDispatch,useSelector } from "react-redux";
 import {dataReturn,addUnqiue} from "@/redux/features/getRequest"
-import {postPaymentType} from "@/redux/features/postRequest"
+import {postPaymentType,removeStatePayment} from "@/redux/features/postRequest"
 import toast from "react-hot-toast";
 import {paymentSchema} from "@/typeSchema/schema"
 import {useState,useEffect} from "react"
@@ -21,7 +21,8 @@ export default function Payment() {
   ) as { loading: boolean; message: string; data: dataReturn[], selectData:{
     id:number,detail_id?:number,title:string,numberPiece:number,
     type:boolean,
-    propertyOwnerType:string
+    propertyOwnerType:string,
+    propertyPurpose:string
   }
 };
   let {  messagePayment,
@@ -73,7 +74,10 @@ let dispatch=useDispatch<AppDispatch>()
       
       router.push("/JoiningSuccess")
     }
-  },[messagePayment,dataPayment,router])
+    return ()=>{
+      dispatch(removeStatePayment())
+    }
+  },[messagePayment,dataPayment,router,dispatch])
   return (
     <div className="flex justify-center w-dvh h-max  ">
       <div className="w-full bg-white rounded text-black shadow ">
