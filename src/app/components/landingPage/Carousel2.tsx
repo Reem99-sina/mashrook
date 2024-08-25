@@ -37,7 +37,7 @@ export default function CarouselTransition() {
   }, []);
 
   return (
-    <div className="relative w-full h-64 rounded-xl">
+    <div className="relative w-full h-auto rounded-xl">
       {images.map((image, index) => (
         <div
           key={index}
