@@ -32,7 +32,7 @@ const properityOwnerTypeSlice=createSlice({
         }),
         builder.addCase(getproperityOwnerType.pending,(state,action)=>{
             state.loading=true
-            state.message="pending..."
+            state.message="loading..."
             state.data=null
         }),
         builder.addCase(getproperityOwnerType.rejected,(state,action)=>{

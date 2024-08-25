@@ -226,7 +226,7 @@ const realEstateTypeSlice = createSlice({
     }),
       builder.addCase(postrealEstateType.pending, (state, action) => {
         state.loading = true;
-        state.message = "pending...";
+        state.message = "loading...";
         state.data = null;
       }),
       builder.addCase(postrealEstateType.rejected, (state, action) => {
