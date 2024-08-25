@@ -38,7 +38,7 @@ export default function MainHeader() {
     if(token){
       dispatch(getUserRequest())
     }
-  },[token])
+  },[token,dispatch])
   return (
     <header className="border-b-2 mb-4 w-full bg-white">
       <div className="flex items-center justify-between">

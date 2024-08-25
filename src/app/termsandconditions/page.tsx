@@ -8,6 +8,7 @@ import { MdOutlineInfo } from "react-icons/md";
 import BackButton from "../paymentpage/backButton";
 import { AppDispatch,RootState } from "@/redux/store";
 import { useDispatch,useSelector } from "react-redux";
+import { dataReturn } from "@/redux/features/getRequest";
 export default function TermsAndConditions() {
   const [isChecked, setIsChecked] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
@@ -17,7 +18,7 @@ export default function TermsAndConditions() {
     id:number,detail_id?:number,title:string,numberPiece:number,
     type:boolean,
     propertyOwnerType:string,
-    propertyPurpose:string
+    propertyPurpose:string|number
   }
 };
   const handleCheckboxChange = () => {

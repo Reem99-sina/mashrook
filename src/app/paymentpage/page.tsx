@@ -77,7 +77,7 @@ let dispatch=useDispatch<AppDispatch>()
     return ()=>{
       dispatch(removeStatePayment())
     }
-  },[messagePayment,dataPayment,router])
+  },[messagePayment,dataPayment,router,dispatch])
   return (
     <div className="flex justify-center w-dvh h-max  ">
       <div className="w-full bg-white rounded text-black shadow ">
