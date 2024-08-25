@@ -31,7 +31,7 @@ const userSlice=createSlice({
         }),
         builder.addCase(register.pending,(state,action)=>{
             state.loading=true
-            state.message="pending..."
+            state.message="loading..."
             state.data=null
         }),
         builder.addCase(register.rejected,(state,action)=>{

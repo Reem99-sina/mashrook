@@ -36,7 +36,7 @@ const verifySlice=createSlice({
         }),
         builder.addCase(verifyRequest.pending,(state,action)=>{
             state.loading=true
-            state.message="pending..."
+            state.message="loading..."
             state.data=null
         }),
         builder.addCase(verifyRequest.rejected,(state,action)=>{

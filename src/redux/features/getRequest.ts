@@ -199,7 +199,7 @@ const requestGetSlice = createSlice({
     }),
       builder.addCase(getRequest.pending, (state, action) => {
         state.loading = true;
-        state.message = "pending...";
+        state.message = "loading...";
         state.data = null;
       }),
       builder.addCase(getRequest.rejected, (state, action) => {

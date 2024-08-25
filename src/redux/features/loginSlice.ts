@@ -43,7 +43,7 @@ const loginSlice=createSlice({
         }),
         builder.addCase(login.pending,(state,action)=>{
             state.loading=true
-            state.message="pending..."
+            state.message="loading..."
             state.data=null
         }),
         builder.addCase(login.rejected,(state,action)=>{
