@@ -7,7 +7,7 @@ import {
   EditIcon,
   OtherOffer,
   UpdateIcon,
-  Rebuild
+  Rebuild,
 } from "../assets/svg";
 import { Button } from "../components/shared/button.component";
 import Stepper from "../components/shared/Stepper";
@@ -19,6 +19,7 @@ interface ChatCardProps {
   onEdit?: () => void;
   onUpdate?: () => void;
   onDelete?: () => void;
+  onRetreating?: () => void;
   inProgress?: boolean;
   active?: boolean;
   expired?: boolean;
@@ -33,6 +34,7 @@ export const MyOrdersCard: React.FC<ChatCardProps> = ({
   onEdit,
   onUpdate,
   onDelete,
+  onRetreating,
   title,
   inProgress,
   active,
@@ -146,18 +148,22 @@ export const MyOrdersCard: React.FC<ChatCardProps> = ({
           onClick={onEdit}
         />
         <span className="text-[#D1D5DB]">|</span>
-        {inProgress? <Button
-          startIcon={<Rebuild />}
-          text="انسحاب"
-          className="!bg-white !flex !flex-row-reverse !text-[#3B73B9] !text-sm !font-medium !gap-1 "
-          onClick={onUpdate}
-        />: <Button
-          startIcon={<UpdateIcon />}
-          text="تحديث"
-          className="!bg-white !flex !flex-row-reverse !text-[#3B73B9] !text-sm !font-medium !gap-1 "
-          onClick={onUpdate}
-        />}
-       
+        {inProgress ? (
+          <Button
+            startIcon={<Rebuild />}
+            text="انسحاب"
+            className="!bg-white !flex !flex-row-reverse !text-[#3B73B9] !text-sm !font-medium !gap-1 "
+            onClick={onRetreating}
+          />
+        ) : (
+          <Button
+            startIcon={<UpdateIcon />}
+            text="تحديث"
+            className="!bg-white !flex !flex-row-reverse !text-[#3B73B9] !text-sm !font-medium !gap-1 "
+            onClick={onUpdate}
+          />
+        )}
+
         <span className="text-[#D1D5DB]">|</span>
 
         <Button
