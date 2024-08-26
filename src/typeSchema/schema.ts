@@ -1,4 +1,4 @@
-import { object, string, number, date, InferType, array, boolean } from "yup";
+import { object, string, number, date, InferType, array, boolean,ref } from "yup";
 export const cities = [
   {
     id: 1,
@@ -169,3 +169,14 @@ cvv:string()
 .required('CVV مطلوب') // Ensure CVV is provided  
 .matches(/^\d{3,4}$/,"لازم تدخل 3 ارقام او  4 ارقام")
 });
+export let registerSchema=object().shape({
+  username:string().required("ادخل اسم ؟"),
+  email:string().email().matches(/^(?!.*@[^,]*,)/,"يجب ادخال البريد الالكتروني صحيح").required("يجب ادخال البريد الالكتروني صحيح"),
+  password:string().min(8,"يجب ادخال 8 حروف او ارقام").required("يجب ادخال 8 حروف او ارقام"),
+  repeate_password:string().oneOf([ref('password')], 'لا يوجد تشابة بينه وبين كلمة السر').min(8,"يجب ادخال 8 حروف او ارقام").required("لا يوجد تشابة بينه وبين كلمة السر")
+})
+export let loginSchema=object().shape({
+  
+  email:string().email().matches(/^(?!.*@[^,]*,)/,"يجب ادخال البريد الالكتروني صحيح").required("يجب ادخال البريد الالكتروني صحيح"),
+  password:string().min(8,"يجب ادخال 8 حروف او ارقام").required("يجب ادخال 8 حروف او ارقام"),
+})

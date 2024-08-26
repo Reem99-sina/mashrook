@@ -9,7 +9,7 @@ export default function ShowProperty() {
   const router = useParams();
   const { id } = router;
   const dispatch = useDispatch<AppDispatch>();
-  console.log(id, "id");
+  
   useEffect(() => {
     if (id) {
       dispatch(getRequestByid({ id: Number(id) }));

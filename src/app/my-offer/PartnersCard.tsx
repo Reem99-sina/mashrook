@@ -9,9 +9,12 @@ import {
 } from "../assets/svg";
 import { Button } from "../components/shared/button.component";
 import Stepper from "../components/shared/Stepper";
+import {
 
+  IoMdCloseCircleOutline,
+} from "react-icons/io";
 interface PartnersCardProps {
-  title: string;
+  title?: string;
   date: string;
   count: number;
   onShow?: () => void;
@@ -27,6 +30,8 @@ interface PartnersCardProps {
   realEstate: string;
   bidRequestNumber: number;
   partnershipRatio: number;
+  purpose:string,
+  finance:boolean
 }
 
 export const PartnersCard: React.FC<PartnersCardProps> = ({
@@ -46,6 +51,8 @@ export const PartnersCard: React.FC<PartnersCardProps> = ({
   realEstate,
   bidRequestNumber,
   partnershipRatio,
+  purpose,finance
+
 }) => {
   const steps = ["التعبئة", "الإفراغ", "الإرسال"];
   const currentStep = 1;
@@ -66,7 +73,7 @@ export const PartnersCard: React.FC<PartnersCardProps> = ({
 
       <div className="flex gap-2 mt-2">
         <span className="rounded-xl bg-[#98CC5D] pl-2 pr-2 pt-[2px] pb-[2px] text-xs font-normal text-white">
-          للبيع
+          {purpose}
         </span>
 
         <span className="rounded-xl bg-[#F3F4F6] pl-2 pr-2 pt-[2px] pb-[2px] text-xs font-normal text-[#6B7280]">
@@ -120,7 +127,7 @@ export const PartnersCard: React.FC<PartnersCardProps> = ({
           <p className="font-normal text-[#6B7280] text-sm">
             أرغب في تمويل عقاري
           </p>
-          <Accreditation />
+          {finance?<Accreditation />:<IoMdCloseCircleOutline/>}
         </div>
 
         <div className=" flex items-center justify-between bg-[#F3F4F6] rounded-lg p-2">

@@ -10,7 +10,8 @@ import { useDispatch,useSelector } from "react-redux";
 import { useState,useEffect } from "react";
 import { login } from "@/redux/features/loginSlice";
 import toast from "react-hot-toast";
-
+import {loginSchema} from "@/typeSchema/schema"
+import { validateForm } from "@/app/hooks/validate";
 export interface userLogin {
   email: string;
   password: string;
@@ -23,19 +24,21 @@ const Login: React.FC = () => {
     email: "",
     password: ""
   });
+  const [errors, setErrors] = useState<{
+   
+    email: string,
+    password: string
+  }|undefined>();
   let {loading, message, data}=useSelector<RootState>((state)=>state.login)as {loading:boolean, message:string,data:any}
-  const onSubmit=(e:React.FormEvent<HTMLFormElement>)=>{
+  const onSubmit=async(e:React.FormEvent<HTMLFormElement>)=>{
     e.preventDefault();
+    const status=await validateForm(user,loginSchema,setErrors)
+    
     let {  email, password } = user;
-    if (
-      email != "" &&
-      password != "" 
-    ) {
-      dispatch(login(user))
-      
-    }else{
-      toast.error("you need to fill the information")
-    }
+   if(status==true){
+    dispatch(login(user))
+    setErrors({ email: '', password: '' })
+   }    
   }
   useEffect(()=>{
       if(message&&Boolean(data)==false){
@@ -84,6 +87,11 @@ const Login: React.FC = () => {
                   }
                   disabled={loading}
                 />
+                {errors?.email && (
+                      <p className="text-xs text-red-600 dark:text-red-500 text-right">
+                        {errors?.email}
+                      </p>
+                    )}
               </div>
               <div>
                 <TextInput
@@ -96,6 +104,11 @@ const Login: React.FC = () => {
                   }
                   disabled={loading}
                 />
+                 {errors?.password && (
+                      <p className="text-xs text-red-600 dark:text-red-500 text-right">
+                        {errors?.password}
+                      </p>
+                    )}
               </div>
             </div>
           </div>

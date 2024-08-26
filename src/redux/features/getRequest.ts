@@ -208,7 +208,7 @@ const requestGetSlice = createSlice({
         state.data = null;
       }),
       builder.addCase(getRequestByid.fulfilled, (state, action) => {
-        console.log("data", action.payload);
+       
         state.loading = false;
         state.message = action.payload.message
           ? action.payload.message

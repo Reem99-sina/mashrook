@@ -13,7 +13,9 @@ import loginReducer from "./features/loginSlice"
 
 import { Action } from '@reduxjs/toolkit';
 import  getRequest  from './features/getRequest';
-
+import getRequestSlice from "./features/getOrders"
+import getPartnerSlice from "./features/getPartners"
+import getOfferSlice from "./features/getOffers"
 const store = configureStore({
   reducer: {
     register:userReducer,
@@ -23,10 +25,12 @@ const store = configureStore({
     properityRequest:properityRequest,
 
     getRequest:getRequest,
-
+    offers:getOfferSlice,
     properityPurpose:properityPurpose,
     properityOwnerType:properityOwnerType,
-    realEstateRequest:postrealEstateType
+    realEstateRequest:postrealEstateType,
+    requests:getRequestSlice,
+    partners:getPartnerSlice
   }
 
 });

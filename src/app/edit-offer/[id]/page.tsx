@@ -158,7 +158,8 @@ const EditOffer=()=>{
             },
           ]
     },[dataOwnerType,dataPurpose,data]);
-    const handleBack=()=>{
+    const handleBack=(e:React.MouseEvent<HTMLButtonElement>)=>{
+        e.preventDefault()
         router.push("/my-offer")
     }
     const handleOptionChange = (option: any, title: string) => {
@@ -223,7 +224,7 @@ const EditOffer=()=>{
             : [...prev]
         );
       }, [count.nums]);
-      console.log(details,"details")
+     
     return (
         <form className="bg-white flex w-full h-full min-h-screen  flex-col p-5">
         <MainHeader />

@@ -41,6 +41,9 @@ const Verify: React.FC = () => {
 
     }
   },[message,links,data])
+  useEffect(()=>{
+    toast("رمز الكود في الرسائل غير مرغوب فيها")
+  },[])
   return (
     <div className="flex items-center  min-h-screen h-full  w-full flex-col bg-white">
       <div className="w-full max-w-md h-full   space-y-8 bg-white p-8  lg:p-16 md:max-w-lg lg:max-w-xl ">

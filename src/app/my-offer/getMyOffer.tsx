@@ -1,14 +1,21 @@
 "use client";
-import React,{useState,useEffect} from "react";
+import React,{useState,useEffect,useMemo} from "react";
 import { TextInput } from "../components/shared/text-input.component";
 import { Filter, Note, Search } from "../assets/svg";
 import { useRouter } from "next/navigation";
 import Pagination from "../components/shared/pagination";
 import FilterDropdown from "../components/shared/FilterDropdown";
 import { OfferCard } from "./offerCard";
+import { format } from "date-fns";
 import {Tune,MenuWhite} from "@/app/assets/svg"
 import FilterModalOffer from "./filterModalOffer";
 import { FaRegUserCircle } from "react-icons/fa";
+import {getOffer}from "@/redux/features/getOffers"
+import { AppDispatch, RootState } from "@/redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  RealEstateTypeInter
+} from "@/redux/features/postRealEstate";
 const data = [
   {
     title: "أرض تجارية",
@@ -104,19 +111,47 @@ export const GitMyOffers = () => {
   const router = useRouter();
   const [isFilterModalOpen, setIsFilterModalOpen] = useState<boolean>(false);
   const [optionFilter, setOption] = useState<string>("");
-
+  const dispatch = useDispatch<AppDispatch>();
+  let { loading, message, data:dataOffer } =
+  useSelector<RootState>((state) => state.offers) as {
+    loading: boolean;
+    message: string;
+    data: any;   
+  };
   const handleSelect = (option: string) => {
     setOption(option)
-    console.log("Selected:", option);
+   
   };
   const [token, setToken] = useState<string | null>(null);
+  let dataOffers=useMemo(()=>{
+    return dataOffer?.map((dataOrderOne:RealEstateTypeInter)=>({
+      title: dataOrderOne?.propertyTypeDetails?.title||dataOrderOne?.propertyType?.title,
+      inProgress: true,
+      date:dataOrderOne?.createdAt?format(new Date( dataOrderOne?.createdAt), "yyyy-MM-dd"):"",
+      requestNumber: dataOrderOne?.id,
+      count: 8,
+      city: dataOrderOne?.propertyLocation?.city,
+      district: dataOrderOne?.propertyLocation?.district,
+      budget: (dataOrderOne?.details&&dataOrderOne?.details?.length>0)?`${ dataOrderOne?.details[0]?.min_price} ريال -${dataOrderOne?.details[0]?.price} ريال`
+      : (dataOrderOne?.landDetails&&dataOrderOne?.landDetails?.length>0)&&`${ dataOrderOne?.landDetails[0]?.min_price} ريال -${dataOrderOne?.landDetails[0]?.price} ريال`,
+      type: (dataOrderOne?.details&&dataOrderOne?.details?.length>0)?`${dataOrderOne?.details[0]?.status}`:(dataOrderOne?.landDetails&&dataOrderOne?.landDetails?.length>0)&&`${dataOrderOne?.landDetails[0]?.status}`,
+      lisNumber:dataOrderOne?.license_number,
+      details:(dataOrderOne?.details&&dataOrderOne?.details?.length>0)?dataOrderOne?.details:(dataOrderOne?.landDetails&&dataOrderOne?.landDetails?.length>0)&&dataOrderOne?.landDetails
+    }))
+      
+  },[dataOffer])
+
   useEffect(() => {
     if (typeof window !== "undefined") {
       const storedToken = sessionStorage.getItem("token");
       setToken(storedToken);
     }
   }, []);
-  
+  useEffect(()=>{
+    if(token){
+      dispatch(getOffer())
+    }
+  },[token,dispatch])
   return (
     <div className="p-4 bg-white">
         {isFilterModalOpen && (
@@ -132,7 +167,7 @@ export const GitMyOffers = () => {
       <div className="flex flex-row items-center justify-center gap-2">
         <TextInput inputProps={{ placeholder: "بحث" }} icon={<Search />} />
         <button
-              onClick={(e) => {e.preventDefault();setIsFilterModalOpen(!isFilterModalOpen)}}
+              onClick={(e:React.MouseEvent<HTMLButtonElement>) => {e.preventDefault();setIsFilterModalOpen(!isFilterModalOpen)}}
               className="flex items-center"
             >
               <div className={`py-1 rounded-md border-2 border-blue-500 ${isFilterModalOpen?"bg-blue-450":"bg-white"}`}>
@@ -202,10 +237,10 @@ export const GitMyOffers = () => {
             </button>
           </div>
   
-</>:data.length > 0 ? (
+</>:dataOffers.length > 0 ? (
           <div>
             <div>
-              {data.map((offer, index) => (
+              {dataOffers.map((offer:any, index:number) => (
                 <OfferCard
                   key={index}
                   title={offer.title}
