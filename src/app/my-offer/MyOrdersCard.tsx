@@ -11,7 +11,7 @@ import {
 } from "../assets/svg";
 import { Button } from "../components/shared/button.component";
 import Stepper from "../components/shared/Stepper";
-
+import Link from "next/link"
 interface ChatCardProps {
   title: string;
   date: string;
@@ -56,13 +56,13 @@ export const MyOrdersCard: React.FC<ChatCardProps> = ({
         <p className="text-xl font-bold text-[#374151]">{title} </p>
 
         {active ? (
-          <span className="items-center justify-center flex border border-[#E5E7EB] p-2 rounded-md gap-1 ">
+          <Link className="items-center justify-center flex border border-[#E5E7EB] p-2 rounded-md gap-1 " href={`/my-offer/otherOffer/${1}`}>
             <p className="font-medium text-sm text-[#3B73B9]">عروض بديله</p>
             <OtherOffer />
             <span className=" flex items-center justify-center p-1 w-4 h-4 absolute left-[-9px] top-[-2px] text-[11px] text-white bg-[#F05252] rounded-full">
               2
             </span>
-          </span>
+          </Link>
         ) : inProgress ? (
           <span className="items-center justify-center flex border border-[#E5E7EB] p-2 rounded-md gap-1 ">
             <p className="font-medium text-sm text-[#3B73B9]">عرض المحادثات </p>
