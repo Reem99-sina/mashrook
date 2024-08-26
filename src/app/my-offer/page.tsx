@@ -1,23 +1,24 @@
 "use client";
 
-import React from "react";
+import React,{useState,useEffect} from "react";
 import Footer from "../components/header/Footer2";
 import MainHeader from "../components/header/MainHeader";
 import { Tabs } from "../components/shared/tabs";
 import { useRouter } from "next/navigation";
-import { BackButtonOutline } from "../assets/svg";
+import { BackButtonOutline,IconNoData } from "../assets/svg";
 import { GitMyPartners } from "./gitMyPartners";
 import { GitMyOrders } from "./gitMyOrders";
 import {GitMyOffers} from "./getMyOffer"
+
 const Chat: React.FC = () => {
   const router = useRouter();
   const handleBack = () => {
     router.back();
   };
-
+ 
   return (
     <>
-      <form className="flex flex-col items-center min-h-screen h-full w-full bg-white">
+    <form className="flex flex-col items-center min-h-screen h-full w-full bg-white">
         <MainHeader />
         <div style={{ direction: "rtl" }} className=" w-full">
           <div>
@@ -60,6 +61,7 @@ const Chat: React.FC = () => {
           <Footer />
         </footer>
       </form>
+     
     </>
   );
 };

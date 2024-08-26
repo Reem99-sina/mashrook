@@ -9,18 +9,26 @@ import {
   UpdateIcon,
   Rebuild,
   ChatIconSmall,
-} from "../assets/svg";
+} from "@/app/assets/svg";
+import Link from "next/link";
+import {
+  FaRegCalendarAlt,
+  FaBookmark,
+  FaEllipsisH,
+  FaAngleDoubleLeft,
+} from "react-icons/fa";
+
 import { BsChatSquareText } from "react-icons/bs";
-import { Button } from "../components/shared/button.component";
-import Stepper from "../components/shared/Stepper";
+import { RxArrowLeft } from "react-icons/rx";
+import { Button } from "@/app/components/shared/button.component";
+import Stepper from "@/app/components/shared/Stepper";
 import { CgSmartphoneShake } from "react-icons/cg";
-import CircularProgressBar from "../components/propertyCard/RadialProgressBar";
+import CircularProgressBar from "@/app/components/propertyCard/RadialProgressBar";
 import { FinishedShares } from "@/app/assets/svg";
 import { GoLocation } from "react-icons/go";
 import { LuTag } from "react-icons/lu";
 import { BiArea } from "react-icons/bi";
 import { CiLocationOn } from "react-icons/ci";
-import {useRouter} from "next/navigation"
 interface ChatCardProps {
   title: string;
   date: string;
@@ -53,7 +61,7 @@ interface ChatCardProps {
   }[];
 }
 
-export const OfferCard: React.FC<ChatCardProps> = ({
+export const OtherOfferCard: React.FC<ChatCardProps> = ({
   onEdit,
   onUpdate,
   onDelete,
@@ -74,16 +82,15 @@ export const OfferCard: React.FC<ChatCardProps> = ({
 }) => {
   const steps = ["الانتهاء", "السعي", "دفع الرسوم", "انضمام الشركاء"];
   const currentStep = 1;
-let router=useRouter()
+
   return (
     <div className="mt-4 w-full border-2 border-[#E5E7EB] rounded-lg mb-4 flex flex-col p-4">
       <div className="items-center justify-between  flex-row flex relative">
         <p className="text-xl font-bold text-[#374151]">{title} </p>
 
-        <span className="items-center justify-center flex border border-[#E5E7EB] p-2 rounded-md gap-1 ">
-          <p className="font-medium text-sm text-[#3B73B9]">عرض التفاصيل </p>
-          <Dots />
-        </span>
+        <div className="w-[40px] h-[40px] border-2 rounded-full flex items-center justify-center">
+                <CiLocationOn className="text-5xl w-[24px] h-[24px]" />
+              </div>
       </div>
       <div className="flex gap-2 mt-2">
         <div className="flex flex-row gap-x-2 text-xs">
@@ -106,19 +113,7 @@ let router=useRouter()
           </span>
         </div>
 
-        {inProgress ? (
-          <span className="rounded-xl bg-[#FEECDC] pl-2 pr-2 pt-[2px] pb-[2px] text-xs font-normal text-[#FF8A4C]">
-            تحت التقدم{" "}
-          </span>
-        ) : active ? (
-          <span className="rounded-xl bg-[#F3F4F6] pl-2 pr-2 pt-[2px] pb-[2px] text-xs font-normal text-[#6B7280]">
-            {count} ايام للانتهاء
-          </span>
-        ) : (
-          <span className="rounded-xl bg-[#FDE8E8] pl-2 pr-2 pt-[2px] pb-[2px] text-xs font-normal text-[#F98080]">
-            منتهي
-          </span>
-        )}
+       
       </div>
 
       <div className=" mt-2">
@@ -203,38 +198,9 @@ let router=useRouter()
                   )}
                 </div>
               </div>
-              {/* {inProgress ? ( */}
-              {/* <> */}
-              <div className="p-4 w-full">
-                <Stepper steps={steps} currentStep={detail?.currentStep} />
-              </div>
-              <div className="flex items-center justify-center ">
-                <p className="text-xs text-[#6B7280] font-semibold">
-                  مراحل الشراكة
-                </p>
-              </div>
-              {/* </> */}
-              {/* ) : null} */}
-              <hr className="border-gray-200 dark:border-white my-2" />
-              <div className="flex flex-row items-center justify-center   gap-3 border-[#E5E7EB] my-5">
-                <Button
-                  startIcon={<EditIcon />}
-                  text="تعديل"
-                  className="!bg-white disabled:!bg-gray-200 flex flex-row-reverse !text-[#3B73B9] disabled:!text-gray-500 !text-sm !font-medium !gap-1  !border-[#3B73B9] disabled:!border-gray-500 border-solid rounded-md border-2"
-                  onClick={detail?.onEdit}
-                  disabled={detail?.currentStep > 1}
-                />
-
-                <Button
-                  startIcon={
-                    <DeleteIcon className="disabled:!text-gray-500 !text-[#F05252]" />
-                  }
-                  text="حذف"
-                  className="!bg-white disabled:!bg-gray-200 flex flex-row-reverse !text-[#F05252] disabled:!text-gray-500 !text-sm !font-medium !gap-1  !border-red-500 disabled:!border-gray-500 border-solid rounded-md border-2"
-                  onClick={detail?.onDelete}
-                  disabled={detail?.currentStep > 1}
-                />
-              </div>
+            
+              
+            
               <button
                 type="button"
                 className={`${
@@ -245,8 +211,8 @@ let router=useRouter()
                 disabled={detail?.stage === "finished"}
                 //   onClick={handleDialogToggle}
               >
-                عرض المحادثات
-                <BsChatSquareText
+               انظم كشريك
+                <RxArrowLeft
                   className={`mr-4 text-xl ${
                     detail?.stage === "finished"
                       ? "text-gray-600"
@@ -257,41 +223,31 @@ let router=useRouter()
             </div>
           </>
         ))}
+          <hr className="h-px  bg-gray-200 border-0" />
+            <div className="flex justify-around items-center mt-2">
+              <div className="flex flex-row   items-center justify-center">
+                <Link href={`/showproperty/${1}`} onClick={() => {}}>
+                  <button className="text-blue-500 mx-4 align-middle">
+                    عرض التفاصيل
+                  </button>
+                </Link>
+                <FaEllipsisH className="text-blue-500 mx-2 align-middle" />
+              </div>
+              <div className="bg-gray-300 inline-block h-12 w-0.5 self-stretch"></div>
+
+              <div className="flex flex-row py-1 items-center justify-center">
+                <button
+                  // onClick={handleSaveClick}
+                  className="text-blue-500 mx-2 align-middle"
+                >
+                  {"حفظ"}
+                </button>
+                <FaBookmark className="text-blue-500 mx-2 text-xl align-middle" />
+              </div>
+              </div>
       </div>
 
-      <div className="flex flex-row items-center justify-center border-t-2 mt-5 border-[#E5E7EB]">
-        <Button
-          startIcon={<EditIcon />}
-          text="تعديل"
-          className="!bg-white !flex !flex-row-reverse !text-[#3B73B9] !text-sm !font-medium !gap-1 "
-          onClick={()=>router.push("/edit-offer/1")}
-        />
-        <span className="text-[#D1D5DB]">|</span>
-        {inProgress ? (
-          <Button
-            startIcon={<Rebuild />}
-            text="انسحاب"
-            className="!bg-white !flex !flex-row-reverse !text-[#3B73B9] !text-sm !font-medium !gap-1 "
-            onClick={onUpdate}
-          />
-        ) : (
-          <Button
-            startIcon={<UpdateIcon />}
-            text="تحديث"
-            className="!bg-white !flex !flex-row-reverse !text-[#3B73B9] !text-sm !font-medium !gap-1 "
-            onClick={onUpdate}
-          />
-        )}
-
-        <span className="text-[#D1D5DB]">|</span>
-
-        <Button
-          startIcon={<DeleteIcon />}
-          text="حذف"
-          className="!bg-white flex flex-row-reverse !text-[#F05252] !text-sm !font-medium gap-1 "
-          onClick={onDelete}
-        />
-      </div>
+      
     </div>
   );
 };

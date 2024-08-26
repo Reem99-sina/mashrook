@@ -1,4 +1,26 @@
 import { object, string, number, date, InferType, array, boolean } from "yup";
+export const cities = [
+  {
+    id: 1,
+    name: "الرياض",
+  },
+  {
+    id: 2,
+    name: "الدمام",
+  },
+  {
+    id: 3,
+    name: "جدة",
+  },
+  {
+    id: 4,
+    name: "تبوك",
+  },
+  {
+    id: 5,
+    name: "الطائف",
+  },
+];
 export const cites: { id: number; name: string }[] = [
   { id: 1, name: "حي النرجس" },
   { id: 2, name: "حي العليا" },

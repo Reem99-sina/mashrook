@@ -1,20 +1,24 @@
 "use client";
-import React, { useRef } from "react";
+import React, { useRef,useState ,useEffect} from "react";
 import { TextInput } from "../components/shared/text-input.component";
+import { FaRegUserCircle } from "react-icons/fa";
 import {
   CloseIconSmall,
   Filter,
   InfoOutLine,
   PartnersIcon,
   Search,
+  Note
 } from "../assets/svg";
 import Pagination from "../components/shared/pagination";
 
+import { useRouter } from "next/navigation";
 import FilterDropdown from "../components/shared/FilterDropdown";
 import { PartnersCard } from "./PartnersCard";
 import { Modal, ModalRef } from "../components/shared/modal.component";
 import { Button } from "../components/shared/button.component";
-
+import {Tune,MenuWhite} from "@/app/assets/svg"
+import FilterModalPartner from "./filterModalPartner"
 const data = [
   {
     title: "ارض سكنية - قطعة رقم 1256",
@@ -49,16 +53,38 @@ export const GitMyPartners = () => {
   const handleSelect = (option: string) => {
     console.log("Selected:", option);
   };
-
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState<boolean>(false);
   const modalRef = useRef<ModalRef>(null);
-
+  const router = useRouter();
+  const [token, setToken] = useState<string | null>(null);
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedToken = sessionStorage.getItem("token");
+      setToken(storedToken);
+    }
+  }, []);
   return (
     <div className="p-4 bg-white">
+      {isFilterModalOpen && (
+            <FilterModalPartner
+              onClose={() => setIsFilterModalOpen(false)}
+              onFilter={(criteria) => {
+                // Filter logic to be added later
+                setIsFilterModalOpen(false);
+              }}
+              open={isFilterModalOpen}
+            />
+          )}
       <div className="flex flex-row items-center justify-center gap-2">
         <TextInput inputProps={{ placeholder: "بحث" }} icon={<Search />} />
-        <span className="border border-[#E5E7EB] rounded-lg p-3">
-          <Filter />
-        </span>
+        <button
+              onClick={(e) => {e.preventDefault();setIsFilterModalOpen(!isFilterModalOpen)}}
+              className="flex items-center"
+            >
+              <div className={`py-1 rounded-md border-2 border-blue-500 ${isFilterModalOpen?"bg-blue-450":"bg-white"}`}>
+                {isFilterModalOpen?<MenuWhite  className={`text-xl mx-2 my-1`}/>:<Tune className={`text-xl mx-2`} />}
+              </div>
+            </button>
         <span>
           <FilterDropdown
             options={[
@@ -83,7 +109,37 @@ export const GitMyPartners = () => {
       </div>
 
       <div>
-        {data.length > 0 ? (
+
+        {!token? <>
+        <div className="flex flex-col items-center justify-center p-9 w-full gap-y-3">
+            <Note />
+            <p className="font-medium text-3xl text-[#6B7280] mt-6">
+             قم بمتابعة طلباتك هنا
+            </p>
+            <p className="text-base font-normal text-[#9CA3AF] mt-3">
+            قم بتسجيل الدخول لعرض طلباتي
+            </p>
+            <button
+                type="button"
+                className={`${"bg-blue-450 text-white hover:bg-blue-800 border-2 border-blue-500"
+                }  font-medium rounded-lg text-sm px-5 py-2.5 flex justify-center  rtl:flex-row-reverse dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
+                
+                  onClick={()=>router.push("/login")}
+              >
+                تسجيل الدخول
+                <FaRegUserCircle
+                  className={`mr-4 text-xl ${
+                  
+                       "text-white"
+                  }`}
+                />
+              </button>
+            <button>
+              
+            </button>
+          </div>
+  
+</>:data.length > 0 ? (
           <div>
             <div>
               {data.map((offer, index) => (

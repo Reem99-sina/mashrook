@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useRef, useState ,useEffect} from "react";
 import MainHeader from "../components/header/MainHeader";
 import { Button } from "../components/shared/button.component";
 import Footer from "../components/header/Footer2";
@@ -8,7 +8,14 @@ import { RadioInput } from "../components/shared/radio.component";
 import { AddButton, CloseIconSmall, InfoOutLine } from "../assets/svg";
 import { Range, getTrackBackground } from "react-range";
 import { Modal, ModalRef } from "../components/shared/modal.component";
-
+import { BackButtonOutline } from "@/app/assets/svg";
+import {useRouter} from "next/navigation"
+import { AppDispatch, RootState } from "@/redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getproperityType,
+  getproperityTypeMore,
+} from "@/redux/features/getProperity";
 const cities = [
   {
     id: 1,
@@ -44,17 +51,32 @@ const EditMyOrderBadge = () => {
     desiredRow: [1, 1],
     floorType: "",
   });
-
+  const dispatch = useDispatch<AppDispatch>();
   const handleShareRangeChange = (values: number[]) => {
     setCriteria({ ...criteria, shareRange: values });
   };
   const modalRef = useRef<ModalRef>(null);
-
+  useEffect(() => {
+    dispatch(getproperityType({ num: 1 }));
+    return () => {
+      // dispatch(removeState())
+     };
+  }, [dispatch]);
+  let { loading, message, data:dataType, title, details, titleSection, detailsSection } =
+    useSelector<RootState>((state) => state.properityType) as {
+      loading: boolean;
+      message: string;
+      data: any;
+      title: string;
+      details: any;
+      titleSection: string;
+      detailsSection: any;
+    };
   const data = [
     {
       id: 1,
       title: "نوع العقار",
-      option: ["أرض سكنية", "أرض تجارية", "فيلا", "دور", "شقة"],
+      option: dataType?.data?.map((ele:{id:number,title:string})=>ele),
     },
     {
       id: 2,
@@ -186,13 +208,31 @@ const EditMyOrderBadge = () => {
       option: ["نعم", "لا"],
     },
   ];
+  const router = useRouter();
+ 
+  const handleBack = (e:React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+    router.push("/my-offer");
+  };
 
   return (
     <form className="bg-white flex w-full h-full min-h-screen  flex-col p-5">
       <MainHeader />
-      <div className="flex items-center justify-center">
-        <p className="text-xl font-bold text-[#36343B]">تعديل طلب رقم (2022)</p>
-      </div>
+      <div style={{direction:"rtl"}}>
+            <div className="flex items-center justify-center">
+              <div>
+                <button onClick={handleBack}>
+                  <BackButtonOutline />
+                </button>
+              </div>
+              <div className="flex flex-1  items-center justify-center">
+                <p className="flex items-center justify-center text-[#36343B] font-bold text-xl">
+                تعديل طلب رقم (2020)
+                </p>
+              </div>
+            </div>
+         </div>
+      
 
       <div className="bg-white rounded-lg border border-[#E5E7EB] w-full mb-4 items-start justify-start p-4 mt-6">
         {data.map((item) => (
@@ -204,9 +244,9 @@ const EditMyOrderBadge = () => {
               {item.title}
             </h2>
             {item.option && (
-              <div className="flex flex-row justify-end  flex-wrap">
-                {item.option.map((option, index) => (
-                  <RadioInput key={index} label={option} />
+              <div className="flex flex-row-reverse justify-start  flex-wrap">
+                {item.option.map((option:any, index:number) => (
+                  <RadioInput key={index} label={option?.title||option} />
                 ))}
               </div>
             )}
