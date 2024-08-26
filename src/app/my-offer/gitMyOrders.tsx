@@ -65,6 +65,7 @@ export const GitMyOrders = () => {
 
   const modalRef = useRef<ModalRef>(null);
   const modalRefUpdate = useRef<ModalRef>(null);
+  const modalRefRetreating = useRef<ModalRef>(null);
 
   return (
     <div className="p-4 bg-white">
@@ -154,6 +155,7 @@ export const GitMyOrders = () => {
                   onDelete={() => modalRef.current?.open()}
                   onUpdate={() => modalRefUpdate.current?.open()}
                   onEdit={() => router.push("/edit-my-order")}
+                  onRetreating={() => modalRefRetreating.current?.open()}
                 />
               ))}
             </div>
@@ -206,6 +208,58 @@ export const GitMyOrders = () => {
                   <Button
                     text="الغاء"
                     onClick={() => modalRef.current?.close()}
+                    className="!bg-white !text-[#1F2A37] !border !border-[#E5E7EB] !rounded-lg !text-xs !font-medium"
+                  />
+                </div>
+              </div>
+            </Modal>
+
+            <Modal ref={modalRefRetreating} size="xs">
+              <div
+                className="items-start flex justify-center flex-col p-4 "
+                style={{ direction: "rtl" }}
+              >
+                <div className="flex flex-row items-center justify-center mb-3  w-full">
+                  <div
+                    className="flex flex-1 cursor-pointer "
+                    onClick={() => modalRefRetreating.current?.close()}
+                  >
+                    <CloseIconSmall />
+                  </div>
+                  <div className="flex  w-full items-center justify-center">
+                    <p className="font-bold text-base text-[#374151]">تحذير!</p>
+                  </div>
+                </div>
+
+                <div className="border border-[#E5E7EB] w-full mb-4" />
+
+                <div>
+                  <span>
+                    <p className="text-base font-normal text-[#4B5563]">
+                      هل أنت متأكد من رغبتك في تنفيذ الانسحاب من الطلب رقم
+                      (2022) ؟
+                    </p>
+                  </span>
+                  <div className="bg-[#FDE8E8] rounded-md mt-5 mb-5 flex items-center justify-start p-1 flex-row gap-1 ">
+                    <InfoOutLine />
+                    <p className="font-medium text-[10px] text-[#4B5563]">
+                      في حال قمت بالانسحاب من الطلب لن يتم ارجاع رسوم الخدمة
+                      المدفوعة
+                    </p>
+                  </div>
+                </div>
+
+                <div className="border border-[#E5E7EB] w-full mb-4" />
+
+                <div className="flex flex-row items-center justify-center gap-3  w-full">
+                  <Button
+                    text=" تأكيد الانسحاب"
+                    onClick={() => modalRefRetreating.current?.close()}
+                    className="!text-xs !font-medium"
+                  />
+                  <Button
+                    text="الغاء"
+                    onClick={() => modalRefRetreating.current?.close()}
                     className="!bg-white !text-[#1F2A37] !border !border-[#E5E7EB] !rounded-lg !text-xs !font-medium"
                   />
                 </div>
