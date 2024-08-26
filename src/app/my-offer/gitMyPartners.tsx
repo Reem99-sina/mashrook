@@ -1,7 +1,8 @@
 "use client";
-import React, { useRef,useState ,useEffect} from "react";
+import React, { useRef,useState ,useEffect,useMemo} from "react";
 import { TextInput } from "../components/shared/text-input.component";
 import { FaRegUserCircle } from "react-icons/fa";
+import { format } from "date-fns";
 import {
   CloseIconSmall,
   Filter,
@@ -11,7 +12,7 @@ import {
   Note
 } from "../assets/svg";
 import Pagination from "../components/shared/pagination";
-
+import {getPartner }from "@/redux/features/getPartners"
 import { useRouter } from "next/navigation";
 import FilterDropdown from "../components/shared/FilterDropdown";
 import { PartnersCard } from "./PartnersCard";
@@ -19,6 +20,11 @@ import { Modal, ModalRef } from "../components/shared/modal.component";
 import { Button } from "../components/shared/button.component";
 import {Tune,MenuWhite} from "@/app/assets/svg"
 import FilterModalPartner from "./filterModalPartner"
+import { AppDispatch, RootState } from "@/redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  RealEstateTypeInter
+} from "@/redux/features/postRealEstate";
 const data = [
   {
     title: "ارض سكنية - قطعة رقم 1256",
@@ -33,6 +39,7 @@ const data = [
     realEstate: "قطعة رقم 1256",
     bidRequestNumber: 2020,
     partnershipRatio: 50,
+    purpose:"للبيع"
   },
   {
     title: "ارض سكنية - قطعة رقم 1256",
@@ -46,23 +53,70 @@ const data = [
     realEstate: "قطعة رقم 1256",
     bidRequestNumber: 2020,
     partnershipRatio: 50,
+    purpose:"للبيع"
   },
 ];
 
 export const GitMyPartners = () => {
   const handleSelect = (option: string) => {
-    console.log("Selected:", option);
+   
   };
+  const dispatch = useDispatch<AppDispatch>();
   const [isFilterModalOpen, setIsFilterModalOpen] = useState<boolean>(false);
   const modalRef = useRef<ModalRef>(null);
+  const [currentPage, setCurrentPage] = useState(1);
   const router = useRouter();
   const [token, setToken] = useState<string | null>(null);
+  let [newData,setNewData]=useState([])
+  let { loading, message, data:dataPartner } =
+  useSelector<RootState>((state) => state.partners) as {
+    loading: boolean;
+    message: string;
+    data: any;   
+  };
+  let dataOrders=useMemo(()=>{
+     dataPartner?.map((dataPartnerOne:RealEstateTypeInter)=>(
+      setNewData(dataPartnerOne?.propertyDetailsOwnership?.map((ele:any)=>{
+        let id=ele?.details_id
+        let idLand=ele?.land_details_id
+        let title=(dataPartnerOne?.propertyTypeDetails?.title||dataPartnerOne?.propertyType?.title)+" "+(ele?.details?.type||ele?.landDetails?.type)
+       
+        return({ title: title?title:"",
+        date:dataPartnerOne?.createdAt?format(new Date( dataPartnerOne?.createdAt), "yyyy-MM-dd"):"",
+        requestNumber: ele?.id,
+        count: 8,
+        city: dataPartnerOne?.propertyLocation?.city,
+        district: dataPartnerOne?.propertyLocation?.district,
+        budget: `${ele?.amount} ريال`,
+        PartnershipNumber: 2020,
+        realEstate: ele?.details?.type||ele?.landDetails?.type,
+        bidRequestNumber: 2020,
+        partnershipRatio: ele?.percentage,
+        purpose:dataPartnerOne?.propertyPurpose?.title,
+        finance:dataPartnerOne?.finance
+      })
+      }
+      ))))
+      
+  },[dataPartner])
+  let dataPagination=useMemo(()=>{
+    return newData?.slice(
+      (currentPage - 1) * 3,
+      currentPage * 3
+    )
+      
+  },[newData,currentPage])
   useEffect(() => {
     if (typeof window !== "undefined") {
       const storedToken = sessionStorage.getItem("token");
       setToken(storedToken);
     }
   }, []);
+  useEffect(()=>{
+    if(token){
+      dispatch(getPartner())
+    }
+  },[token,dispatch])
   return (
     <div className="p-4 bg-white">
       {isFilterModalOpen && (
@@ -78,7 +132,7 @@ export const GitMyPartners = () => {
       <div className="flex flex-row items-center justify-center gap-2">
         <TextInput inputProps={{ placeholder: "بحث" }} icon={<Search />} />
         <button
-              onClick={(e) => {e.preventDefault();setIsFilterModalOpen(!isFilterModalOpen)}}
+              onClick={(e:React.MouseEvent<HTMLButtonElement>) => {e.preventDefault();setIsFilterModalOpen(!isFilterModalOpen)}}
               className="flex items-center"
             >
               <div className={`py-1 rounded-md border-2 border-blue-500 ${isFilterModalOpen?"bg-blue-450":"bg-white"}`}>
@@ -139,19 +193,21 @@ export const GitMyPartners = () => {
             </button>
           </div>
   
-</>:data.length > 0 ? (
+</>:dataPagination.length > 0 ? (
           <div>
             <div>
-              {data.map((offer, index) => (
+              {dataPagination.map((offer:any, index:number) => (
                 <PartnersCard
                   key={index}
-                  title={offer.title}
+                  title={offer?.title}
                   count={offer.count}
                   date={offer.date}
                   requestNumber={offer.requestNumber}
                   city={offer.city}
                   district={offer.district}
                   budget={offer.budget}
+                  purpose={offer.purpose}
+                  finance={offer.finance}
                   PartnershipNumber={offer.PartnershipNumber}
                   inProgress={offer.inProgress}
                   realEstate={offer.realEstate}
@@ -212,7 +268,7 @@ export const GitMyPartners = () => {
             </Modal>
 
             <div>
-              <Pagination pageCount={4} onPageChange={() => {}} />
+            <Pagination pageCount={Math.ceil(newData?.length/3)} onPageChange={(p) =>setCurrentPage(p)} />
             </div>
           </div>
         ) : (

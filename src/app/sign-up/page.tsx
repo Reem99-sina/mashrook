@@ -10,6 +10,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import { register } from "@/redux/features/userSlice";
 import toast from "react-hot-toast";
+import {registerSchema} from "@/typeSchema/schema"
+import { validateForm } from "@/app/hooks/validate";
 export interface userRegister {
   username: string;
   email: string;
@@ -29,19 +31,24 @@ const SignUp: React.FC = () => {
   let { loading, message, data } = useSelector<RootState>(
     (state) => state.register
   ) as { loading: boolean; message: string; data: any };
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const [errors, setErrors] = useState<{
+    username: string,
+    email: string,
+    password: string,
+    repeate_password: string,
+  }>();
+
+  const onSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const status=await validateForm(user,registerSchema,setErrors)
+    
     if (checkBox) {
-      let { username, email, password, repeate_password } = user;
-      if (
-        username != "" &&
-        email != "" &&
-        password != "" &&
-        repeate_password != ""
-      ) {
+      if(status==true){
         dispatch(register(user));
-      } else {
-        toast.error("you need to fill the information");
+        setErrors({  username: "",
+          email: "",
+          password: "",
+          repeate_password: "" })
       }
     } else {
       toast.error("لازم تقبل بشروط الاستخدام وسياسية الخصوصية");
@@ -58,9 +65,9 @@ const SignUp: React.FC = () => {
 useEffect(() => {
     if (typeof window !== 'undefined') {
       const storedToken = sessionStorage.removeItem('token');
-     
     }
   }, []);
+
   return (
     <div className="flex items-center justify-center min-h-screen h-full  w-full flex-col">
       {/* <div className="flex items-end justify-start p-4 w-full h-full lg:hidden bg-white ">
@@ -97,6 +104,11 @@ useEffect(() => {
                   }
                   disabled={loading}
                 />
+                {errors?.username && (
+                      <p className="text-xs text-red-600 dark:text-red-500 text-right">
+                        {errors?.username}
+                      </p>
+                    )}
               </div>
               <div className="!mb-2">
                 <TextInput
@@ -109,6 +121,11 @@ useEffect(() => {
                   }
                   disabled={loading}
                 />
+                {errors?.email && (
+                      <p className="text-xs text-red-600 dark:text-red-500 text-right">
+                        {errors?.email}
+                      </p>
+                    )}
               </div>
               <div className="!mb-2">
                 <TextInput
@@ -121,6 +138,11 @@ useEffect(() => {
                   }
                   disabled={loading}
                 />
+                 {errors?.password && (
+                      <p className="text-xs text-red-600 dark:text-red-500 text-right">
+                        {errors?.password}
+                      </p>
+                    )}
               </div>
               <div className="!mb-2">
                 <TextInput
@@ -133,6 +155,11 @@ useEffect(() => {
                   }
                   disabled={loading}
                 />
+                 {errors?.repeate_password && (
+                      <p className="text-xs text-red-600 dark:text-red-500 text-right">
+                        {errors?.repeate_password}
+                      </p>
+                    )}
               </div>
             </div>
           </div>
