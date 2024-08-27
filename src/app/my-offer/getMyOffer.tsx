@@ -1,15 +1,31 @@
 "use client";
-import React, { useState, useEffect, useMemo } from "react";
+
+import React, { useState, useEffect, useMemo, useRef } from "react";
+
 import { TextInput } from "../components/shared/text-input.component";
-import { Filter, Note, Search } from "../assets/svg";
+import {
+  CloseIconSmall,
+  Filter,
+  InfoOutLine,
+  Note,
+  Search,
+} from "../assets/svg";
 import { useRouter } from "next/navigation";
 import Pagination from "../components/shared/pagination";
 import FilterDropdown from "../components/shared/FilterDropdown";
 import { OfferCard } from "./offerCard";
+
 import { format } from "date-fns";
+
+
 import { Tune, MenuWhite } from "@/app/assets/svg";
 import FilterModalOffer from "./filterModalOffer";
 import { FaRegUserCircle } from "react-icons/fa";
+import { Modal, ModalRef } from "../components/shared/modal.component";
+import { Button } from "../components/shared/button.component";
+
+
+
 import { getOffer } from "@/redux/features/getOffers";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
@@ -51,6 +67,9 @@ const data = [
     type: "مشاع (صك مشترك)",
     purpose: "للبيع",
     lisNumber: "45678",
+
+    house: true,
+
     details: [
       {
         piece_number: "",
@@ -130,6 +149,7 @@ export const GitMyOffers = () => {
   const [token, setToken] = useState<string | null>(null);
   let dataOffers = useMemo(() => {
     return dataOffer?.map((dataOrderOne: RealEstateTypeInter) => ({
+      id:dataOrderOne?.id,
       title:
         dataOrderOne?.propertyTypeDetails?.title ||
         dataOrderOne?.propertyType?.title,
@@ -140,7 +160,9 @@ export const GitMyOffers = () => {
       requestNumber: dataOrderOne?.id,
       count: 8,
       city: dataOrderOne?.propertyLocation?.city,
+
       district: dataOrderOne?.propertyLocation?.district?.replace(/[\[\]\\"]/g, ''),
+      house: true,
       budget:
         dataOrderOne?.details && dataOrderOne?.details?.length > 0
           ? `${dataOrderOne?.details[0]?.min_price} ريال -${dataOrderOne?.details[0]?.price} ريال`
@@ -169,11 +191,16 @@ export const GitMyOffers = () => {
       setToken(storedToken);
     }
   }, []);
+
+
+  const modalRef = useRef<ModalRef>(null);
+
   useEffect(() => {
     if (token) {
       dispatch(getOffer());
     }
   }, [token, dispatch]);
+
   return (
     <div className="p-4 bg-white">
       {isFilterModalOpen && (
@@ -207,10 +234,6 @@ export const GitMyOffers = () => {
             )}
           </div>
         </button>
-        {/* <span className="border border-[#E5E7EB] rounded-lg p-3">
-          <Filter />
-        </span> */}
-
         <span>
           <FilterDropdown
             options={[
@@ -260,10 +283,12 @@ export const GitMyOffers = () => {
               <button></button>
             </div>
           </>
+
         ) : dataOffers?.length > 0 ? (
           <div>
             <div>
               {dataOffers?.map((offer: any, index: number) => (
+
                 <OfferCard
                   key={offer.title+index}
                   title={offer.title}
@@ -280,6 +305,9 @@ export const GitMyOffers = () => {
                   purpose={offer.purpose}
                   lisNumber={offer.lisNumber}
                   details={offer.details}
+                  onDelete={() => modalRef.current?.open()}
+                  house={offer.house}
+                  id={offer.id}
                 />
               ))}
             </div>
@@ -299,6 +327,56 @@ export const GitMyOffers = () => {
           </div>
         )}
       </div>
+      <Modal ref={modalRef} size="xs">
+        <div
+          className="items-start flex justify-center flex-col p-4 "
+          style={{ direction: "rtl" }}
+        >
+          <div className="flex flex-row items-center justify-center mb-3  w-full">
+            <div
+              className="flex flex-1 cursor-pointer "
+              onClick={() => modalRef.current?.close()}
+            >
+              <CloseIconSmall />
+            </div>
+            <div className="flex  w-full items-center justify-center">
+              <p className="font-bold text-base text-[#374151]">تحذير!</p>
+            </div>
+          </div>
+
+          <div className="border border-[#E5E7EB] w-full mb-4" />
+
+          <div>
+            <span>
+              <p className="text-base font-normal text-[#4B5563]">
+                هل أنت متأكد من رغبتك في تنفيذ اجراء حذف العرض رقم (2022) ؟
+              </p>
+            </span>
+            <div className="bg-[#FDE8E8] rounded-md mt-5 mb-5 flex items-center justify-start p-1 flex-row gap-1 ">
+              <InfoOutLine />
+              <p className="font-medium text-[10px] text-[#4B5563]">
+                في حال قمت بحذف الطلب سيتم حذف البيانات المتعلقة بالعرض ولن
+                تتمكن من استرجاع الطلب
+              </p>
+            </div>
+          </div>
+
+          <div className="border border-[#E5E7EB] w-full mb-4" />
+
+          <div className="flex flex-row items-center justify-center gap-3  w-full">
+            <Button
+              text=" حذف"
+              onClick={() => modalRef.current?.close()}
+              className="!text-xs !font-medium"
+            />
+            <Button
+              text="الغاء"
+              onClick={() => modalRef.current?.close()}
+              className="!bg-white !text-[#1F2A37] !border !border-[#E5E7EB] !rounded-lg !text-xs !font-medium"
+            />
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };

@@ -72,7 +72,7 @@ const EditMyOrderBadge = () => {
     loading: boolean;
     message: string;
     data: dataReturn[];
-    selectData: dataReturn;
+    selectData: any;
   };
   let { data: dataType,titleSection, detailsSection } = useSelector<RootState>(
     (state) => state.properityType
@@ -104,14 +104,18 @@ const EditMyOrderBadge = () => {
         return [...prevSelectedCites, cite];
       }
     });
-    setCriteria({...criteria,district:criteria?.district?.some((c) => c == cite.name)? criteria?.district?.filter((c) => c != cite.name):[...criteria?.district, cite?.name]})
+    setCriteria({...criteria,district:criteria?.district?.some((c:any) => c == cite.name)? criteria?.district?.filter((c:any) => c != cite.name):[...criteria?.district, cite?.name]})
   };
   const handleShareRangeChange = (values: number[]) => {
     setCriteria({ ...criteria, shareRange: values });
   };
   const modalRef = useRef<ModalRef>(null);
   const citiesRef = useRef<ModalRef>(null);
-
+  const handleRemoveCite = (cit: any) => {
+    setSelectedCites(selectedCites.filter((cite) => cite.name !== cit));
+    setCriteria({...criteria,district:criteria?.district?.filter((c:any) => c != cit)})
+    // 
+  };
   useEffect(() => {
     if (id) {
       dispatch(getRequestByid({ id: Number(id) }));
@@ -178,7 +182,7 @@ const EditMyOrderBadge = () => {
             </div>
           </div>
           <div className="flex flex-row-reverse gap-3 items-center justify-end flex-wrap mb-5">
-              {criteria?.district?.map((cite) => (
+              {criteria?.district?.map((cite:any) => (
                 <div
                   key={cite}
                   className="flex items-center border-[#F3F4F6]  w-32 h-11 p-3 rounded-md gap-2 justify-between border shadow-sm flex-row mt-5"
@@ -475,7 +479,7 @@ const EditMyOrderBadge = () => {
                       <span className="mr-2">{cite.name}</span>
                       <input
                         type="checkbox"
-                        checked={selectedCites.some((c) => c.id === cite.id)||criteria?.district?.some((c)=>c==cite.name)}
+                        checked={selectedCites.some((c:any) => c.id === cite.id)||criteria?.district?.some((c:any)=>c==cite.name)}
                         onChange={() => handleCiteChange(cite)}
                         className="checked:accent-[#3B73B9] w-[16px] h-[16px]"
                       />

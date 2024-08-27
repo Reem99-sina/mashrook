@@ -6,7 +6,7 @@ interface RadioInputProps {
   name?: string;
   value?: string | number;
   checked?: boolean;
-
+  disabled?:boolean;
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -15,6 +15,7 @@ export const RadioInput: FC<RadioInputProps> = ({
   name,
   value,
   checked,
+  disabled,
   onChange,
 }) => {
   return (
@@ -35,6 +36,7 @@ export const RadioInput: FC<RadioInputProps> = ({
         onChange={onChange}
         className={clsx("h-4 w-4")}
         id={String(value)}
+        disabled={disabled}
       />
     </div>
   );

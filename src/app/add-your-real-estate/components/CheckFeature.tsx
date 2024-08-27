@@ -3,11 +3,12 @@ import {ChangeEvent} from "react"
 interface CheckFeatureInter{
     onChange:(event: ChangeEvent<HTMLInputElement>) => void,
     title:string,
-   
+   checked?:boolean
 }
 const CheckFeature:React.FC<CheckFeatureInter>=({
     title,
-    onChange
+    onChange,
+    checked
 })=> {
   return (
     <div
@@ -18,6 +19,7 @@ const CheckFeature:React.FC<CheckFeatureInter>=({
       type="checkbox"
       className="h-4 w-4 rounded-2xl accent-[#3B73B9]"
       onChange={onChange}
+      checked={checked}
     />
     <p>{title}</p>
   </div>
