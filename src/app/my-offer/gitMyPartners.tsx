@@ -86,7 +86,7 @@ export const GitMyPartners = () => {
         requestNumber: ele?.id,
         count: 8,
         city: dataPartnerOne?.propertyLocation?.city,
-        district: dataPartnerOne?.propertyLocation?.district,
+        district: dataPartnerOne?.propertyLocation?.district?.replace(/[\[\]\\"]/g, ''),
         budget: `${ele?.amount} ريال`,
         PartnershipNumber: 2020,
         realEstate: ele?.details?.type||ele?.landDetails?.type,
@@ -193,10 +193,10 @@ export const GitMyPartners = () => {
             </button>
           </div>
   
-</>:dataPagination.length > 0 ? (
+</>:dataPagination?.length > 0 ? (
           <div>
             <div>
-              {dataPagination.map((offer:any, index:number) => (
+              {dataPagination?.map((offer:any, index:number) => (
                 <PartnersCard
                   key={index}
                   title={offer?.title}

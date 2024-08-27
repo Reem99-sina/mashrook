@@ -1,5 +1,5 @@
 "use client";
-import React,{useState,useEffect,useMemo} from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { TextInput } from "../components/shared/text-input.component";
 import { Filter, Note, Search } from "../assets/svg";
 import { useRouter } from "next/navigation";
@@ -7,15 +7,13 @@ import Pagination from "../components/shared/pagination";
 import FilterDropdown from "../components/shared/FilterDropdown";
 import { OfferCard } from "./offerCard";
 import { format } from "date-fns";
-import {Tune,MenuWhite} from "@/app/assets/svg"
+import { Tune, MenuWhite } from "@/app/assets/svg";
 import FilterModalOffer from "./filterModalOffer";
 import { FaRegUserCircle } from "react-icons/fa";
-import {getOffer}from "@/redux/features/getOffers"
+import { getOffer } from "@/redux/features/getOffers";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  RealEstateTypeInter
-} from "@/redux/features/postRealEstate";
+import { RealEstateTypeInter } from "@/redux/features/postRealEstate";
 const data = [
   {
     title: "أرض تجارية",
@@ -27,17 +25,19 @@ const data = [
     district: "المروج,البطحاء",
     budget: "300,000 ريال - 500,000 ريال",
     type: "مشاع (صك مشترك)",
-    purpose:"للبيع",
-    lisNumber:"45678",
-    details:[{
-        piece_number:"5644347",
-        price:"45672",
-        area:"456728",
-        stage:"finished",
-        available_price:"45637",
-        available_percentage:"98",
-        currentStep:2
-    }]
+    purpose: "للبيع",
+    lisNumber: "45678",
+    details: [
+      {
+        piece_number: "5644347",
+        price: "45672",
+        area: "456728",
+        stage: "finished",
+        available_price: "45637",
+        available_percentage: "98",
+        currentStep: 2,
+      },
+    ],
   },
   {
     title: "شقة (داخل فيلا) ",
@@ -49,38 +49,40 @@ const data = [
     district: "المروج,البطحاء",
     budget: "300,000 ريال - 500,000 ريال",
     type: "مشاع (صك مشترك)",
-     purpose:"للبيع",
-     lisNumber:"45678",
-     details:[{
-        piece_number:"",
-        price:"45672",
-        area:"456728",
-        stage:"pending",
-        available_price:"45637",
-        available_percentage:"98",
-        title:"دور ارضي",
-        currentStep:1
-
-    },{
-        piece_number:"",
-        price:"45672",
-        area:"456728",
-        stage:"pending",
-        available_price:"45637",
-        available_percentage:"98",
-        title:"دور علوي",
-        currentStep:1
-    },{
-        piece_number:"",
-        price:"45672",
-        area:"456728",
-        stage:"pending",
-        available_price:"45637",
-        available_percentage:"98",
-        title:"شقة",
-        currentStep:2
-
-    }]
+    purpose: "للبيع",
+    lisNumber: "45678",
+    details: [
+      {
+        piece_number: "",
+        price: "45672",
+        area: "456728",
+        stage: "pending",
+        available_price: "45637",
+        available_percentage: "98",
+        title: "دور ارضي",
+        currentStep: 1,
+      },
+      {
+        piece_number: "",
+        price: "45672",
+        area: "456728",
+        stage: "pending",
+        available_price: "45637",
+        available_percentage: "98",
+        title: "دور علوي",
+        currentStep: 1,
+      },
+      {
+        piece_number: "",
+        price: "45672",
+        area: "456728",
+        stage: "pending",
+        available_price: "45637",
+        available_percentage: "98",
+        title: "شقة",
+        currentStep: 2,
+      },
+    ],
   },
   {
     title: "أرض تجارية",
@@ -92,18 +94,19 @@ const data = [
     district: "المروج,البطحاء",
     budget: "300,000 ريال - 500,000 ريال",
     type: "مشاع (صك مشترك)",
-     purpose:"للبيع",
-     lisNumber:"45678",
-     details:[{
-        piece_number:"5644347",
-        price:"45672",
-        area:"456728",
-        stage:"pending",
-        available_price:"45637",
-        available_percentage:"98",
-        currentStep:2
-
-    }]
+    purpose: "للبيع",
+    lisNumber: "45678",
+    details: [
+      {
+        piece_number: "5644347",
+        price: "45672",
+        area: "456728",
+        stage: "pending",
+        available_price: "45637",
+        available_percentage: "98",
+        currentStep: 2,
+      },
+    ],
   },
 ];
 
@@ -112,34 +115,53 @@ export const GitMyOffers = () => {
   const [isFilterModalOpen, setIsFilterModalOpen] = useState<boolean>(false);
   const [optionFilter, setOption] = useState<string>("");
   const dispatch = useDispatch<AppDispatch>();
-  let { loading, message, data:dataOffer } =
-  useSelector<RootState>((state) => state.offers) as {
+  let {
+    loading,
+    message,
+    data: dataOffer,
+  } = useSelector<RootState>((state) => state.offers) as {
     loading: boolean;
     message: string;
-    data: any;   
+    data: any;
   };
   const handleSelect = (option: string) => {
-    setOption(option)
-   
+    setOption(option);
   };
   const [token, setToken] = useState<string | null>(null);
-  let dataOffers=useMemo(()=>{
-    return dataOffer?.map((dataOrderOne:RealEstateTypeInter)=>({
-      title: dataOrderOne?.propertyTypeDetails?.title||dataOrderOne?.propertyType?.title,
+  let dataOffers = useMemo(() => {
+    return dataOffer?.map((dataOrderOne: RealEstateTypeInter) => ({
+      title:
+        dataOrderOne?.propertyTypeDetails?.title ||
+        dataOrderOne?.propertyType?.title,
       inProgress: true,
-      date:dataOrderOne?.createdAt?format(new Date( dataOrderOne?.createdAt), "yyyy-MM-dd"):"",
+      date: dataOrderOne?.createdAt
+        ? format(new Date(dataOrderOne?.createdAt), "yyyy-MM-dd")
+        : "",
       requestNumber: dataOrderOne?.id,
       count: 8,
       city: dataOrderOne?.propertyLocation?.city,
-      district: dataOrderOne?.propertyLocation?.district,
-      budget: (dataOrderOne?.details&&dataOrderOne?.details?.length>0)?`${ dataOrderOne?.details[0]?.min_price} ريال -${dataOrderOne?.details[0]?.price} ريال`
-      : (dataOrderOne?.landDetails&&dataOrderOne?.landDetails?.length>0)&&`${ dataOrderOne?.landDetails[0]?.min_price} ريال -${dataOrderOne?.landDetails[0]?.price} ريال`,
-      type: (dataOrderOne?.details&&dataOrderOne?.details?.length>0)?`${dataOrderOne?.details[0]?.status}`:(dataOrderOne?.landDetails&&dataOrderOne?.landDetails?.length>0)&&`${dataOrderOne?.landDetails[0]?.status}`,
-      lisNumber:dataOrderOne?.license_number,
-      details:(dataOrderOne?.details&&dataOrderOne?.details?.length>0)?dataOrderOne?.details:(dataOrderOne?.landDetails&&dataOrderOne?.landDetails?.length>0)&&dataOrderOne?.landDetails
-    }))
-      
-  },[dataOffer])
+      district: dataOrderOne?.propertyLocation?.district?.replace(/[\[\]\\"]/g, ''),
+      budget:
+        dataOrderOne?.details && dataOrderOne?.details?.length > 0
+          ? `${dataOrderOne?.details[0]?.min_price} ريال -${dataOrderOne?.details[0]?.price} ريال`
+          : dataOrderOne?.landDetails &&
+            dataOrderOne?.landDetails?.length > 0 &&
+            `${dataOrderOne?.landDetails[0]?.min_price} ريال -${dataOrderOne?.landDetails[0]?.price} ريال`,
+      type:
+        dataOrderOne?.details && dataOrderOne?.details?.length > 0
+          ? `${dataOrderOne?.details[0]?.status}`
+          : dataOrderOne?.landDetails &&
+            dataOrderOne?.landDetails?.length > 0 &&
+            `${dataOrderOne?.landDetails[0]?.status}`,
+      lisNumber: dataOrderOne?.license_number,
+      details:
+        dataOrderOne?.details && dataOrderOne?.details?.length > 0
+          ? dataOrderOne?.details
+          : dataOrderOne?.landDetails &&
+            dataOrderOne?.landDetails?.length > 0 &&
+            dataOrderOne?.landDetails,
+    }));
+  }, [dataOffer]);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -147,39 +169,49 @@ export const GitMyOffers = () => {
       setToken(storedToken);
     }
   }, []);
-  useEffect(()=>{
-    if(token){
-      dispatch(getOffer())
+  useEffect(() => {
+    if (token) {
+      dispatch(getOffer());
     }
-  },[token,dispatch])
+  }, [token, dispatch]);
   return (
     <div className="p-4 bg-white">
-        {isFilterModalOpen && (
-            <FilterModalOffer
-              onClose={() => setIsFilterModalOpen(false)}
-              onFilter={(criteria) => {
-                // Filter logic to be added later
-                setIsFilterModalOpen(false);
-              }}
-              open={isFilterModalOpen}
-            />
-          )}
+      {isFilterModalOpen && (
+        <FilterModalOffer
+          onClose={() => setIsFilterModalOpen(false)}
+          onFilter={(criteria) => {
+            // Filter logic to be added later
+            setIsFilterModalOpen(false);
+          }}
+          open={isFilterModalOpen}
+        />
+      )}
       <div className="flex flex-row items-center justify-center gap-2">
         <TextInput inputProps={{ placeholder: "بحث" }} icon={<Search />} />
         <button
-              onClick={(e:React.MouseEvent<HTMLButtonElement>) => {e.preventDefault();setIsFilterModalOpen(!isFilterModalOpen)}}
-              className="flex items-center"
-            >
-              <div className={`py-1 rounded-md border-2 border-blue-500 ${isFilterModalOpen?"bg-blue-450":"bg-white"}`}>
-                {isFilterModalOpen?<MenuWhite  className={`text-xl mx-2 my-1`}/>:<Tune className={`text-xl mx-2`} />}
-              </div>
-            </button>
+          onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+            e.preventDefault();
+            setIsFilterModalOpen(!isFilterModalOpen);
+          }}
+          className="flex items-center"
+        >
+          <div
+            className={`py-1 rounded-md border-2 border-blue-500 ${
+              isFilterModalOpen ? "bg-blue-450" : "bg-white"
+            }`}
+          >
+            {isFilterModalOpen ? (
+              <MenuWhite className={`text-xl mx-2 my-1`} />
+            ) : (
+              <Tune className={`text-xl mx-2`} />
+            )}
+          </div>
+        </button>
         {/* <span className="border border-[#E5E7EB] rounded-lg p-3">
           <Filter />
         </span> */}
-        
+
         <span>
-       
           <FilterDropdown
             options={[
               "الأحدث الى الأقدم",
@@ -197,7 +229,6 @@ export const GitMyOffers = () => {
         <span className="rounded-md border border-[#E5E7EB] text-sm font-normal text-[#6B7280] pl-3 pr-3 pt-1 pb-1">
           متاحة
         </span>
-        
 
         <span className="rounded-md border border-[#E5E7EB] text-sm font-normal text-[#6B7280] pl-3 pr-3 pt-1 pb-1">
           المنتهية
@@ -208,41 +239,33 @@ export const GitMyOffers = () => {
       </div>
 
       <div>
-      {!token? <>
-        <div className="flex flex-col items-center justify-center p-9 w-full gap-y-3">
-            <Note />
-            <p className="font-medium text-3xl text-[#6B7280] mt-6">
-             قم بمتابعة طلباتك هنا
-            </p>
-            <p className="text-base font-normal text-[#9CA3AF] mt-3">
-            قم بتسجيل الدخول لعرض طلباتي
-            </p>
-            <button
+        {!token ? (
+          <>
+            <div className="flex flex-col items-center justify-center p-9 w-full gap-y-3">
+              <Note />
+              <p className="font-medium text-3xl text-[#6B7280] mt-6">
+                قم بمتابعة طلباتك هنا
+              </p>
+              <p className="text-base font-normal text-[#9CA3AF] mt-3">
+                قم بتسجيل الدخول لعرض طلباتي
+              </p>
+              <button
                 type="button"
-                className={`${"bg-blue-450 text-white hover:bg-blue-800 border-2 border-blue-500"
-                }  font-medium rounded-lg text-sm px-5 py-2.5 flex justify-center  rtl:flex-row-reverse dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
-                
-                  onClick={()=>router.push("/login")}
+                className={`${"bg-blue-450 text-white hover:bg-blue-800 border-2 border-blue-500"}  font-medium rounded-lg text-sm px-5 py-2.5 flex justify-center  rtl:flex-row-reverse dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
+                onClick={() => router.push("/login")}
               >
                 تسجيل الدخول
-                <FaRegUserCircle
-                  className={`mr-4 text-xl ${
-                  
-                       "text-white"
-                  }`}
-                />
+                <FaRegUserCircle className={`mr-4 text-xl ${"text-white"}`} />
               </button>
-            <button>
-              
-            </button>
-          </div>
-  
-</>:dataOffers.length > 0 ? (
+              <button></button>
+            </div>
+          </>
+        ) : dataOffers?.length > 0 ? (
           <div>
             <div>
-              {dataOffers.map((offer:any, index:number) => (
+              {dataOffers?.map((offer: any, index: number) => (
                 <OfferCard
-                  key={index}
+                  key={offer.title+index}
                   title={offer.title}
                   count={offer.count}
                   date={offer.date}
