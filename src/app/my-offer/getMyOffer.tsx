@@ -1,14 +1,23 @@
 "use client";
-import React,{useState,useEffect} from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { TextInput } from "../components/shared/text-input.component";
-import { Filter, Note, Search } from "../assets/svg";
+import {
+  CloseIconSmall,
+  Filter,
+  InfoOutLine,
+  Note,
+  Search,
+} from "../assets/svg";
 import { useRouter } from "next/navigation";
 import Pagination from "../components/shared/pagination";
 import FilterDropdown from "../components/shared/FilterDropdown";
 import { OfferCard } from "./offerCard";
-import {Tune,MenuWhite} from "@/app/assets/svg"
+import { Tune, MenuWhite } from "@/app/assets/svg";
 import FilterModalOffer from "./filterModalOffer";
 import { FaRegUserCircle } from "react-icons/fa";
+import { Modal, ModalRef } from "../components/shared/modal.component";
+import { Button } from "../components/shared/button.component";
+
 const data = [
   {
     title: "أرض تجارية",
@@ -20,17 +29,19 @@ const data = [
     district: "المروج,البطحاء",
     budget: "300,000 ريال - 500,000 ريال",
     type: "مشاع (صك مشترك)",
-    purpose:"للبيع",
-    lisNumber:"45678",
-    details:[{
-        piece_number:"5644347",
-        price:"45672",
-        area:"456728",
-        stage:"finished",
-        available_price:"45637",
-        available_percentage:"98",
-        currentStep:2
-    }]
+    purpose: "للبيع",
+    lisNumber: "45678",
+    details: [
+      {
+        piece_number: "5644347",
+        price: "45672",
+        area: "456728",
+        stage: "finished",
+        available_price: "45637",
+        available_percentage: "98",
+        currentStep: 2,
+      },
+    ],
   },
   {
     title: "شقة (داخل فيلا) ",
@@ -42,38 +53,41 @@ const data = [
     district: "المروج,البطحاء",
     budget: "300,000 ريال - 500,000 ريال",
     type: "مشاع (صك مشترك)",
-     purpose:"للبيع",
-     lisNumber:"45678",
-     details:[{
-        piece_number:"",
-        price:"45672",
-        area:"456728",
-        stage:"pending",
-        available_price:"45637",
-        available_percentage:"98",
-        title:"دور ارضي",
-        currentStep:1
-
-    },{
-        piece_number:"",
-        price:"45672",
-        area:"456728",
-        stage:"pending",
-        available_price:"45637",
-        available_percentage:"98",
-        title:"دور علوي",
-        currentStep:1
-    },{
-        piece_number:"",
-        price:"45672",
-        area:"456728",
-        stage:"pending",
-        available_price:"45637",
-        available_percentage:"98",
-        title:"شقة",
-        currentStep:2
-
-    }]
+    purpose: "للبيع",
+    lisNumber: "45678",
+    house: true,
+    details: [
+      {
+        piece_number: "",
+        price: "45672",
+        area: "456728",
+        stage: "pending",
+        available_price: "45637",
+        available_percentage: "98",
+        title: "دور ارضي",
+        currentStep: 1,
+      },
+      {
+        piece_number: "",
+        price: "45672",
+        area: "456728",
+        stage: "pending",
+        available_price: "45637",
+        available_percentage: "98",
+        title: "دور علوي",
+        currentStep: 1,
+      },
+      {
+        piece_number: "",
+        price: "45672",
+        area: "456728",
+        stage: "pending",
+        available_price: "45637",
+        available_percentage: "98",
+        title: "شقة",
+        currentStep: 2,
+      },
+    ],
   },
   {
     title: "أرض تجارية",
@@ -85,18 +99,19 @@ const data = [
     district: "المروج,البطحاء",
     budget: "300,000 ريال - 500,000 ريال",
     type: "مشاع (صك مشترك)",
-     purpose:"للبيع",
-     lisNumber:"45678",
-     details:[{
-        piece_number:"5644347",
-        price:"45672",
-        area:"456728",
-        stage:"pending",
-        available_price:"45637",
-        available_percentage:"98",
-        currentStep:2
-
-    }]
+    purpose: "للبيع",
+    lisNumber: "45678",
+    details: [
+      {
+        piece_number: "5644347",
+        price: "45672",
+        area: "456728",
+        stage: "pending",
+        available_price: "45637",
+        available_percentage: "98",
+        currentStep: 2,
+      },
+    ],
   },
 ];
 
@@ -106,7 +121,7 @@ export const GitMyOffers = () => {
   const [optionFilter, setOption] = useState<string>("");
 
   const handleSelect = (option: string) => {
-    setOption(option)
+    setOption(option);
     console.log("Selected:", option);
   };
   const [token, setToken] = useState<string | null>(null);
@@ -116,35 +131,47 @@ export const GitMyOffers = () => {
       setToken(storedToken);
     }
   }, []);
-  
+
+  const modalRef = useRef<ModalRef>(null);
+
   return (
     <div className="p-4 bg-white">
-        {isFilterModalOpen && (
-            <FilterModalOffer
-              onClose={() => setIsFilterModalOpen(false)}
-              onFilter={(criteria) => {
-                // Filter logic to be added later
-                setIsFilterModalOpen(false);
-              }}
-              open={isFilterModalOpen}
-            />
-          )}
+      {isFilterModalOpen && (
+        <FilterModalOffer
+          onClose={() => setIsFilterModalOpen(false)}
+          onFilter={(criteria) => {
+            // Filter logic to be added later
+            setIsFilterModalOpen(false);
+          }}
+          open={isFilterModalOpen}
+        />
+      )}
       <div className="flex flex-row items-center justify-center gap-2">
         <TextInput inputProps={{ placeholder: "بحث" }} icon={<Search />} />
         <button
-              onClick={(e) => {e.preventDefault();setIsFilterModalOpen(!isFilterModalOpen)}}
-              className="flex items-center"
-            >
-              <div className={`py-1 rounded-md border-2 border-blue-500 ${isFilterModalOpen?"bg-blue-450":"bg-white"}`}>
-                {isFilterModalOpen?<MenuWhite  className={`text-xl mx-2 my-1`}/>:<Tune className={`text-xl mx-2`} />}
-              </div>
-            </button>
+          onClick={(e) => {
+            e.preventDefault();
+            setIsFilterModalOpen(!isFilterModalOpen);
+          }}
+          className="flex items-center"
+        >
+          <div
+            className={`py-1 rounded-md border-2 border-blue-500 ${
+              isFilterModalOpen ? "bg-blue-450" : "bg-white"
+            }`}
+          >
+            {isFilterModalOpen ? (
+              <MenuWhite className={`text-xl mx-2 my-1`} />
+            ) : (
+              <Tune className={`text-xl mx-2`} />
+            )}
+          </div>
+        </button>
         {/* <span className="border border-[#E5E7EB] rounded-lg p-3">
           <Filter />
         </span> */}
-        
+
         <span>
-       
           <FilterDropdown
             options={[
               "الأحدث الى الأقدم",
@@ -162,7 +189,6 @@ export const GitMyOffers = () => {
         <span className="rounded-md border border-[#E5E7EB] text-sm font-normal text-[#6B7280] pl-3 pr-3 pt-1 pb-1">
           متاحة
         </span>
-        
 
         <span className="rounded-md border border-[#E5E7EB] text-sm font-normal text-[#6B7280] pl-3 pr-3 pt-1 pb-1">
           المنتهية
@@ -173,36 +199,28 @@ export const GitMyOffers = () => {
       </div>
 
       <div>
-      {!token? <>
-        <div className="flex flex-col items-center justify-center p-9 w-full gap-y-3">
-            <Note />
-            <p className="font-medium text-3xl text-[#6B7280] mt-6">
-             قم بمتابعة طلباتك هنا
-            </p>
-            <p className="text-base font-normal text-[#9CA3AF] mt-3">
-            قم بتسجيل الدخول لعرض طلباتي
-            </p>
-            <button
+        {!token ? (
+          <>
+            <div className="flex flex-col items-center justify-center p-9 w-full gap-y-3">
+              <Note />
+              <p className="font-medium text-3xl text-[#6B7280] mt-6">
+                قم بمتابعة طلباتك هنا
+              </p>
+              <p className="text-base font-normal text-[#9CA3AF] mt-3">
+                قم بتسجيل الدخول لعرض طلباتي
+              </p>
+              <button
                 type="button"
-                className={`${"bg-blue-450 text-white hover:bg-blue-800 border-2 border-blue-500"
-                }  font-medium rounded-lg text-sm px-5 py-2.5 flex justify-center  rtl:flex-row-reverse dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
-                
-                  onClick={()=>router.push("/login")}
+                className={`${"bg-blue-450 text-white hover:bg-blue-800 border-2 border-blue-500"}  font-medium rounded-lg text-sm px-5 py-2.5 flex justify-center  rtl:flex-row-reverse dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
+                onClick={() => router.push("/login")}
               >
                 تسجيل الدخول
-                <FaRegUserCircle
-                  className={`mr-4 text-xl ${
-                  
-                       "text-white"
-                  }`}
-                />
+                <FaRegUserCircle className={`mr-4 text-xl ${"text-white"}`} />
               </button>
-            <button>
-              
-            </button>
-          </div>
-  
-</>:data.length > 0 ? (
+              <button></button>
+            </div>
+          </>
+        ) : data.length > 0 ? (
           <div>
             <div>
               {data.map((offer, index) => (
@@ -222,6 +240,8 @@ export const GitMyOffers = () => {
                   purpose={offer.purpose}
                   lisNumber={offer.lisNumber}
                   details={offer.details}
+                  onDelete={() => modalRef.current?.open()}
+                  house={offer.house}
                 />
               ))}
             </div>
@@ -241,6 +261,56 @@ export const GitMyOffers = () => {
           </div>
         )}
       </div>
+      <Modal ref={modalRef} size="xs">
+        <div
+          className="items-start flex justify-center flex-col p-4 "
+          style={{ direction: "rtl" }}
+        >
+          <div className="flex flex-row items-center justify-center mb-3  w-full">
+            <div
+              className="flex flex-1 cursor-pointer "
+              onClick={() => modalRef.current?.close()}
+            >
+              <CloseIconSmall />
+            </div>
+            <div className="flex  w-full items-center justify-center">
+              <p className="font-bold text-base text-[#374151]">تحذير!</p>
+            </div>
+          </div>
+
+          <div className="border border-[#E5E7EB] w-full mb-4" />
+
+          <div>
+            <span>
+              <p className="text-base font-normal text-[#4B5563]">
+                هل أنت متأكد من رغبتك في تنفيذ اجراء حذف العرض رقم (2022) ؟
+              </p>
+            </span>
+            <div className="bg-[#FDE8E8] rounded-md mt-5 mb-5 flex items-center justify-start p-1 flex-row gap-1 ">
+              <InfoOutLine />
+              <p className="font-medium text-[10px] text-[#4B5563]">
+                في حال قمت بحذف الطلب سيتم حذف البيانات المتعلقة بالعرض ولن
+                تتمكن من استرجاع الطلب
+              </p>
+            </div>
+          </div>
+
+          <div className="border border-[#E5E7EB] w-full mb-4" />
+
+          <div className="flex flex-row items-center justify-center gap-3  w-full">
+            <Button
+              text=" حذف"
+              onClick={() => modalRef.current?.close()}
+              className="!text-xs !font-medium"
+            />
+            <Button
+              text="الغاء"
+              onClick={() => modalRef.current?.close()}
+              className="!bg-white !text-[#1F2A37] !border !border-[#E5E7EB] !rounded-lg !text-xs !font-medium"
+            />
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };
