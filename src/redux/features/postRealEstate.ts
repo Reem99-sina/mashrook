@@ -209,6 +209,32 @@ export const postrealEstateType = createAsyncThunk<
 
   return response;
 });
+export const putrealEstateType = createAsyncThunk<
+  returnType,
+  RealEstateTypeInter
+>("RealEstateType/put", async (data: RealEstateTypeInter, { rejectWithValue }) => {
+  let images = data?.images;
+  if (data?.images) {
+    delete data["images"];
+  }
+  const response = await axios
+    .put("https://server.mashrook.sa/property/offer", data, {
+      headers: {
+        Authorization: sessionStorage.getItem("token"),
+      },
+    })
+    .then(async (response) => {
+      // postImageRealEstate(response.data)
+      const res = await imageRequest({
+        id: response?.data?.data?.id,
+        images: images,
+      });
+      return response.data;
+    })
+    .catch((error) => error?.response?.data);
+
+  return response;
+});
 export const imageRequest = async (data: imageInter) => {
   const formData = new FormData();
   data?.images?.forEach((image) => formData.append("images", image));
@@ -257,7 +283,10 @@ const realEstateTypeSlice = createSlice({
         state.loading = false;
         state.message = action.error.message ? action.error.message : "error";
         state.data = null;
-      });
+      }),builder.addCase(putrealEstateType.fulfilled, (state, action) => {
+        console.log(action?.payload)
+      
+      })
   },
 });
 export const { removeState } = realEstateTypeSlice.actions;

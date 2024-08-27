@@ -14,7 +14,7 @@ const Chat: React.FC = () => {
   const router = useRouter();
   const handleBack = (e:React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
-    router.back();
+    router.push("/");
   };
  
   return (

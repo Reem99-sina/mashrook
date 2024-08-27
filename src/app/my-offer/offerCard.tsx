@@ -33,6 +33,7 @@ interface ChatCardProps {
   expired?: boolean;
   requestNumber: number;
   city: string;
+  id:number;
   district: string;
   budget: string;
   type: string;
@@ -67,6 +68,7 @@ export const OfferCard: React.FC<ChatCardProps> = ({
   count,
   city,
   district,
+  id,
   budget,
   type,
   purpose,
@@ -220,7 +222,9 @@ export const OfferCard: React.FC<ChatCardProps> = ({
                     startIcon={<EditIcon />}
                     text="تعديل"
                     className="!bg-white disabled:!bg-gray-200 flex flex-row-reverse !text-[#3B73B9] disabled:!text-gray-500 !text-sm !font-medium !gap-1  !border-[#3B73B9] disabled:!border-gray-500 border-solid rounded-md border-2"
-                    onClick={() => router.push("/edit-my-offer")}
+                    onClick={() => {router.push("/edit-my-offer");
+                      sessionStorage.setItem("offer",JSON.stringify({...detail,title:title}))
+                    }}
                     disabled={detail?.currentStep > 1}
                   />
                 ) : (
@@ -272,7 +276,7 @@ export const OfferCard: React.FC<ChatCardProps> = ({
           startIcon={<EditIcon />}
           text="تعديل"
           className="!bg-white !flex !flex-row-reverse !text-[#3B73B9] !text-sm !font-medium !gap-1 "
-          onClick={() => router.push("/edit-offer/1")}
+          onClick={() => router.push(`/edit-offer/${id}`)}
         />
         <span className="text-[#D1D5DB]">|</span>
         {inProgress ? (

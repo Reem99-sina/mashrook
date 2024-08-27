@@ -24,7 +24,7 @@ function AccordionComponent({
         >
           <input
             type="checkbox"
-            // checked={selectedCites.forEach((c) => c.id !== cite.id)}
+            
             // onChange={() => handleCiteChange(cite)}
             className="checked:accent-[#3B73B9] w-[16px] h-[16px]  radioCheck"
             onChange={(e) => {

@@ -36,12 +36,21 @@ const cities = [
 
 const EditMyOffer = () => {
   const modalRef = useRef<ModalRef>(null);
-
+  let [offer,setOffer]=useState<any>()
   const router = useRouter();
-  const handleBack = () => {
-    router.back();
+  const handleBack =  (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    router.push("/my-offer");
   };
-
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const offer = sessionStorage.getItem('offer');  
+  if (offer !== null) {  
+    const storedToken = JSON.parse(offer);  
+    setOffer(storedToken);  
+  }  
+    }
+  }, []);
   return (
     <form className="bg-white flex w-full h-full min-h-screen  flex-col p-5">
       <MainHeader />
@@ -57,23 +66,51 @@ const EditMyOffer = () => {
         </div>
         <div className="flex flex-1  items-center justify-center">
           <p className="font-bold text-xl text-[#36343B]">
-            تعديل طلب رقم (2022) - دور أرضي
+            تعديل طلب رقم ({offer?.id}) - {offer?.type||offer?.title}
           </p>
         </div>
       </div>
 
-      <div className="bg-white rounded-lg border border-[#E5E7EB] w-full mb-4 items-start justify-start p-5 mt-6">
-        <InputAreaPrice title="المساحة" onChange={() => {}} measurement="متر" />
+      <div className="bg-white rounded-lg border border-[#E5E7EB] w-full mb-4 items-start justify-start p-5 mt-6"dir="rtl">
+        {!offer?.type? <><div className="flex items-start gap-2 justify-end flex-col mt-5">
+                        <p className="text-base text-[#4B5563] font-medium">
+                          رقم المخطط{" "}
+                        </p>
+                        <input
+                         
+                          placeholder= "-- الرجاء الادخال --" 
+                           className="w-full p-2 border border-gray-300 rounded-lg"
+                          onChange={(event) =>{}}
+                          value={offer?.piece_number}
+                        />
+                        </div>
+                        <div className="mb-4">
+                        <label className="block mb-2 font-medium mt-2">
+                          رقم القطعة{" "}
+                        </label>
+                        <div className="flex items-center">
+                          <input
+                            type="text"
+                            className="w-full p-2 border border-gray-300 rounded-lg"
+                            placeholder="-- الرجاء الادخال --"
+                            onChange={(event) =>{}}
+                            value={offer?.plan_number}
+                          />
+                        </div>
+                        </div>
+                        </>:<></>}
+        <InputAreaPrice title="المساحة" onChange={() => {}} measurement="متر"value={offer?.area} />
 
         <InputAreaPrice
           title="السعر"
           onChange={() => {}}
           measurement="ريال"
+          value={offer?.price}
           desc="(بدون القيمة المضافة والسعي)"
         />
-
-        <NumberRoom
-          value={1}
+        {offer?.type?<>
+          <NumberRoom
+          value={offer?.rooms_number}
           onChange={() => {}}
           name="rooms_number"
           title={"عدد الغرف"}
@@ -82,7 +119,7 @@ const EditMyOffer = () => {
           max={10}
         />
         <NumberRoom
-          value={1}
+          value={offer?.halls_number}
           onChange={() => {}}
           name="halls_number"
           title={"عدد الصالات"}
@@ -91,7 +128,7 @@ const EditMyOffer = () => {
           max={3}
         />
         <NumberRoom
-          value={1}
+           value={offer?.bathrooms_number}
           onChange={() => {}}
           name="bathrooms_number"
           title={"عدد دورات المياه"}
@@ -100,7 +137,7 @@ const EditMyOffer = () => {
           max={3}
         />
         <NumberRoom
-          value={1}
+          value={offer?.kitchens_number}
           onChange={() => {}}
           name="kitchens_number"
           title={" عدد المطابخ"}
@@ -108,6 +145,9 @@ const EditMyOffer = () => {
           secondNumber={"3+ مطابخ"}
           max={3}
         />
+        </>:<></>}
+       
+        {offer?.type&&offer?.type!="الفيلا"?<>
 
         <div className="mt-2">
           <div
@@ -122,12 +162,38 @@ const EditMyOffer = () => {
             className=" flex flex-row flex-wrap gap-8"
             style={{ direction: "rtl" }}
           >
-            <CheckFeature title="مكيفة" onChange={() => {}} />
-            <CheckFeature title="مدخل سيارة" onChange={() => {}} />
-            <CheckFeature title="مطبخ راكب" onChange={() => {}} />
-            <CheckFeature title="مؤثثة" onChange={() => {}} />
+            
+              <CheckFeature title="مكيفة" onChange={() => {}} checked={offer?.amenities?.ac}/>
+            <CheckFeature title="مدخل سيارة" onChange={() => {}} checked={offer?.amenities?.car_entrance}/>
+            <CheckFeature title="مطبخ راكب" onChange={() => {}}checked={offer?.amenities?.kitchen} />
+            <CheckFeature title="مؤثثة" onChange={() => {}}checked={offer?.amenities?.finance} />
+            
+            
+          </div>
+        </div></>:offer?.type&&offer?.type=="الفيلا"?<>
+        <div className="mt-2">
+          <div
+            className="flex justify-between text-sm mt-2"
+            style={{ direction: "rtl" }}
+          >
+            <p className="font-medium text-base text-[#4B5563]">
+              مزايا إضافية:
+            </p>
+          </div>
+          <div
+            className=" flex flex-row flex-wrap gap-8"
+            style={{ direction: "rtl" }}
+          >
+            
+              <CheckFeature title="مسبح" onChange={() => {}} checked={offer?.amenities?.pool}/>
+            <CheckFeature title="كراج للسيارات" onChange={() => {}} checked={offer?.amenities?.garage}/>
+            <CheckFeature title="غرفة خدم" onChange={() => {}}checked={offer?.amenities?.servants_room} />
+            <CheckFeature title="مؤثثة" onChange={() => {}}checked={offer?.amenities?.finance} />
+            
+            
           </div>
         </div>
+        </>:<></>}
       </div>
 
       <div className="bg-white rounded-lg border border-[#E5E7EB] w-full mb-4 items-start justify-start p-4 mt-6">

@@ -7,9 +7,10 @@ interface InputAreaPriceInter{
     onChange?:(event: ChangeEvent<HTMLInputElement>) => void,
     title:string,
     desc?:string,
-    measurement:string
+    measurement:string,
+    value?:string|number
 }
-const InputAreaPrice:React.FC<InputAreaPriceInter>=({title,onChange,errors,desc,measurement})=>{
+const InputAreaPrice:React.FC<InputAreaPriceInter>=({title,onChange,errors,desc,measurement, value})=>{
     return (<>
      <div className="mb-4" style={{ direction: "rtl" }}>
     <label className="block mb-2 font-medium">{title}
@@ -23,6 +24,7 @@ const InputAreaPrice:React.FC<InputAreaPriceInter>=({title,onChange,errors,desc,
                     className="  p-2 border border-gray-300 rounded-r-lg w-full "
                     placeholder="-- الرجاء الادخال --"
                     onChange={onChange}
+                    value={value}
                   />
                   <span className="bg-blue-450 text-white  py-2 px-4  rounded-l-lg border-2 border-r-0">
                     {measurement}

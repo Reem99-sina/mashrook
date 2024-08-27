@@ -1,5 +1,7 @@
 "use client";
+
 import React, { useState, useEffect, useMemo, useRef } from "react";
+
 import { TextInput } from "../components/shared/text-input.component";
 import {
   CloseIconSmall,
@@ -12,13 +14,17 @@ import { useRouter } from "next/navigation";
 import Pagination from "../components/shared/pagination";
 import FilterDropdown from "../components/shared/FilterDropdown";
 import { OfferCard } from "./offerCard";
+
+import { format } from "date-fns";
+
+
 import { Tune, MenuWhite } from "@/app/assets/svg";
 import FilterModalOffer from "./filterModalOffer";
 import { FaRegUserCircle } from "react-icons/fa";
 import { Modal, ModalRef } from "../components/shared/modal.component";
 import { Button } from "../components/shared/button.component";
 
-import { format } from "date-fns";
+
 
 import { getOffer } from "@/redux/features/getOffers";
 import { AppDispatch, RootState } from "@/redux/store";
@@ -61,7 +67,9 @@ const data = [
     type: "مشاع (صك مشترك)",
     purpose: "للبيع",
     lisNumber: "45678",
+
     house: true,
+
     details: [
       {
         piece_number: "",
@@ -141,6 +149,7 @@ export const GitMyOffers = () => {
   const [token, setToken] = useState<string | null>(null);
   let dataOffers = useMemo(() => {
     return dataOffer?.map((dataOrderOne: RealEstateTypeInter) => ({
+      id:dataOrderOne?.id,
       title:
         dataOrderOne?.propertyTypeDetails?.title ||
         dataOrderOne?.propertyType?.title,
@@ -151,7 +160,9 @@ export const GitMyOffers = () => {
       requestNumber: dataOrderOne?.id,
       count: 8,
       city: dataOrderOne?.propertyLocation?.city,
-      district: dataOrderOne?.propertyLocation?.district,
+
+      district: dataOrderOne?.propertyLocation?.district?.replace(/[\[\]\\"]/g, ''),
+      house: true,
       budget:
         dataOrderOne?.details && dataOrderOne?.details?.length > 0
           ? `${dataOrderOne?.details[0]?.min_price} ريال -${dataOrderOne?.details[0]?.price} ريال`
@@ -180,6 +191,7 @@ export const GitMyOffers = () => {
       setToken(storedToken);
     }
   }, []);
+
 
   const modalRef = useRef<ModalRef>(null);
 
@@ -222,7 +234,6 @@ export const GitMyOffers = () => {
             )}
           </div>
         </button>
-
         <span>
           <FilterDropdown
             options={[
@@ -272,12 +283,14 @@ export const GitMyOffers = () => {
               <button></button>
             </div>
           </>
-        ) : dataOffers.length > 0 ? (
+
+        ) : dataOffers?.length > 0 ? (
           <div>
             <div>
-              {dataOffers.map((offer: any, index: number) => (
+              {dataOffers?.map((offer: any, index: number) => (
+
                 <OfferCard
-                  key={index}
+                  key={offer.title+index}
                   title={offer.title}
                   count={offer.count}
                   date={offer.date}
@@ -294,6 +307,7 @@ export const GitMyOffers = () => {
                   details={offer.details}
                   onDelete={() => modalRef.current?.open()}
                   house={offer.house}
+                  id={offer.id}
                 />
               ))}
             </div>
