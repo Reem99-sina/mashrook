@@ -20,7 +20,7 @@ import { GoLocation } from "react-icons/go";
 import { LuTag } from "react-icons/lu";
 import { BiArea } from "react-icons/bi";
 import { CiLocationOn } from "react-icons/ci";
-import {useRouter} from "next/navigation"
+import { useRouter } from "next/navigation";
 interface ChatCardProps {
   title: string;
   date: string;
@@ -38,6 +38,7 @@ interface ChatCardProps {
   type: string;
   purpose: string;
   lisNumber: string;
+  house?: boolean;
   details: {
     piece_number: string;
     price: string;
@@ -71,10 +72,11 @@ export const OfferCard: React.FC<ChatCardProps> = ({
   purpose,
   lisNumber,
   details,
+  house,
 }) => {
   const steps = ["الانتهاء", "السعي", "دفع الرسوم", "انضمام الشركاء"];
   const currentStep = 1;
-let router=useRouter()
+  let router = useRouter();
   return (
     <div className="mt-4 w-full border-2 border-[#E5E7EB] rounded-lg mb-4 flex flex-col p-4">
       <div className="items-center justify-between  flex-row flex relative">
@@ -213,13 +215,23 @@ let router=useRouter()
               {/* ) : null} */}
               <hr className="border-gray-200 dark:border-white my-2" />
               <div className="flex flex-row items-center justify-center   gap-3 border-[#E5E7EB] my-5">
-                <Button
-                  startIcon={<EditIcon />}
-                  text="تعديل"
-                  className="!bg-white disabled:!bg-gray-200 flex flex-row-reverse !text-[#3B73B9] disabled:!text-gray-500 !text-sm !font-medium !gap-1  !border-[#3B73B9] disabled:!border-gray-500 border-solid rounded-md border-2"
-                  onClick={detail?.onEdit}
-                  disabled={detail?.currentStep > 1}
-                />
+                {house ? (
+                  <Button
+                    startIcon={<EditIcon />}
+                    text="تعديل"
+                    className="!bg-white disabled:!bg-gray-200 flex flex-row-reverse !text-[#3B73B9] disabled:!text-gray-500 !text-sm !font-medium !gap-1  !border-[#3B73B9] disabled:!border-gray-500 border-solid rounded-md border-2"
+                    onClick={() => router.push("/edit-my-offer")}
+                    disabled={detail?.currentStep > 1}
+                  />
+                ) : (
+                  <Button
+                    startIcon={<EditIcon />}
+                    text="تعديل"
+                    className="!bg-white disabled:!bg-gray-200 flex flex-row-reverse !text-[#3B73B9] disabled:!text-gray-500 !text-sm !font-medium !gap-1  !border-[#3B73B9] disabled:!border-gray-500 border-solid rounded-md border-2"
+                    onClick={detail?.onEdit}
+                    disabled={detail?.currentStep > 1}
+                  />
+                )}
 
                 <Button
                   startIcon={
@@ -227,7 +239,7 @@ let router=useRouter()
                   }
                   text="حذف"
                   className="!bg-white disabled:!bg-gray-200 flex flex-row-reverse !text-[#F05252] disabled:!text-gray-500 !text-sm !font-medium !gap-1  !border-red-500 disabled:!border-gray-500 border-solid rounded-md border-2"
-                  onClick={detail?.onDelete}
+                  onClick={onDelete}
                   disabled={detail?.currentStep > 1}
                 />
               </div>
@@ -260,7 +272,7 @@ let router=useRouter()
           startIcon={<EditIcon />}
           text="تعديل"
           className="!bg-white !flex !flex-row-reverse !text-[#3B73B9] !text-sm !font-medium !gap-1 "
-          onClick={()=>router.push("/edit-offer/1")}
+          onClick={() => router.push("/edit-offer/1")}
         />
         <span className="text-[#D1D5DB]">|</span>
         {inProgress ? (
