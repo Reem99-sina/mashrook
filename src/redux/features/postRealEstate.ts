@@ -57,6 +57,7 @@ export interface RealEstateTypeInter {
   kitchen?: boolean; // مزايا اضافية مطبخ راكب
   partnership_amount?: number; // في حالة الاستثمار
   images?: File[];
+  status?:string;
   apartment?: {
     area?: number | string;
     price?: number | string;
@@ -65,13 +66,33 @@ export interface RealEstateTypeInter {
     bathrooms_number?: number; // في حالة الفيلا عدد دورات المياه
     kitchens_number?: number;
   };
+  propertyDetailsOwnership?:any;
+  propertyPurpose?:any;
+  finance?:boolean;
   landDetails?: {
     area?: number | string;
     price?: number | string;
     piece_number?: string;
     plan_number?: string;
+ 
+    min_price?:number;
+    status?:string;
   }[];
+  createdAt?:string;
+  id?:string;
   details?: earthInter[];
+  propertyTypeDetails?:{
+    id?:number,
+    title?:string
+  },
+  propertyLocation?:{
+    city:string,
+    district:string
+  }
+  propertyType?:{
+    id?:number,
+    title?:string
+  }
 }
 export interface RealEstateErrrorTypeInter {
   property_owner_type_id?: number; // وسيط عقاري, مطور عقاري, وسيط
@@ -109,6 +130,7 @@ export interface RealEstateErrrorTypeInter {
   kitchen?: boolean; // مزايا اضافية مطبخ راكب
   partnership_amount?: number; // في حالة الاستثمار
   images?: string;
+  status?:string;
   "apartment.area"?: string;
   "apartment.price"?: string;
   "apartment.rooms_number"?: string;
@@ -154,6 +176,8 @@ export interface earthInter {
   kitchen: boolean; // مزايا اضافية مطبخ راكب
   garage: boolean;
   car_entrance: boolean;
+ status?:string;
+  min_price?:number;
 }
 interface imageInter {
   id: number;

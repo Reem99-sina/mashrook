@@ -9,8 +9,10 @@ import BackButton from "../paymentpage/backButton";
 import { AppDispatch,RootState } from "@/redux/store";
 import { useDispatch,useSelector } from "react-redux";
 import { dataReturn } from "@/redux/features/getRequest";
+import {postPaymentType,removeStatePayment} from "@/redux/features/postRequest"
 export default function TermsAndConditions() {
   const [isChecked, setIsChecked] = useState(false);
+  let dispatch=useDispatch<AppDispatch>()
   const [showNotification, setShowNotification] = useState(false);
   let { selectData } = useSelector<RootState>(
     (state) => state.getRequest
@@ -32,9 +34,24 @@ export default function TermsAndConditions() {
       setTimeout(() => {
         setShowNotification(false);
       }, 5000);
+    }else if(selectData?.propertyPurpose!=1){
+      if(selectData?.type){
+        dispatch(postPaymentType({
+          property_id: selectData?.id,
+          land_details_id: selectData?.detail_id,
+      // land_details_id: selectData?.detail_id,
+      amount:Number(sessionStorage.getItem("amount"))
+        }))
+      }else{
+        dispatch(postPaymentType({
+          property_id: selectData?.id,
+          details_id: selectData?.detail_id,
+      // land_details_id: selectData?.detail_id,
+      amount:Number(sessionStorage.getItem("amount"))
+        }))
+      }
     }
   };
-console.log(selectData,"selectData")
   return (
     <div className="flex justify-center w-dvh h-max">
       <div className="w-full bg-white rounded text-black shadow">

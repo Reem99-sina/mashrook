@@ -106,7 +106,7 @@ const PropertyDetails: React.FC = () => {
       setShowNotification(false);
     }, 3000);
   };
-  console.log(selectData,"selectData")
+
 
   const detailsContent = (
     <div className="mt-4">

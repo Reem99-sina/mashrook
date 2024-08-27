@@ -322,7 +322,7 @@ const AddYourRequest: React.FC = () => {
       setToken(storedToken);
     }
   }, []);
-  console.log(errors, "details", criteria?.unitType, detailsVilla);
+ 
   // let router=useRouter()
   useEffect(() => {
     return () => {

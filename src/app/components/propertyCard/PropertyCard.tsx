@@ -241,15 +241,16 @@ let dataPage=useMemo(()=>{
                   <p>رقم الطلب: {ele?.id}</p>
                 </div>
                 <div className="pt-1 mr-4 text-sm text-gray-700 mt-2">
-                  <div className="flex items-center justify-start">
+                  {ele?.license_number&&<div className="flex items-center justify-start">
                     <CgSmartphoneShake className="w-[16px]"/>
                     <p className="px-2">ترخيص رقم: {ele?.license_number}</p>
-                  </div>
+                  </div>}
+                  
                   <div className="flex items-center  justify-start">
                     <GoLocation />
                     <p className="px-2">
                       مدينة {ele?.propertyLocation?.city}،{" "}
-                      {ele?.propertyLocation?.district}
+                      {ele?.propertyLocation?.district?.replace(/[\[\]\\"]/g, '')}
                     </p>
                   </div>
                 </div>

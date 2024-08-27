@@ -46,7 +46,7 @@ interface ChatCardProps {
     stage: string;
     available_price: string;
     available_percentage: string;
-    title?: string;
+    type?: string;
     onUpdate?: () => void;
     onDelete?: () => void;
     onEdit?: () => void;
@@ -96,11 +96,7 @@ export const OfferCard: React.FC<ChatCardProps> = ({
           >
             {purpose === "للبيع" ? purpose : "تطوير"}
           </span>
-          <span
-            className={`text-black text-right px-4 py-1 rounded-2xl ${"bg-gray-200"}`}
-          >
-            {purpose}
-          </span>
+         
           <span
             className={`text-black text-right px-4 py-1 rounded-2xl ${"bg-gray-200"}`}
           >
@@ -141,7 +137,7 @@ export const OfferCard: React.FC<ChatCardProps> = ({
         </div>
       </div>
       <div className="gap-1 mt-2 flex flex-col">
-        {details.map((detail, index) => (
+        {details.map((detail:any, index:number) => (
           <>
             <div
               key={`detail-${index}`}
@@ -151,8 +147,8 @@ export const OfferCard: React.FC<ChatCardProps> = ({
                 <div className="ml-auto text-right py-1 ">
                   <div className="flex flex-row">
                     <p className="text-2xl px-4 text-black font-bold">
-                      {detail?.title
-                        ? detail?.title
+                      {detail?.type
+                        ? detail?.type
                         : detail?.piece_number &&
                           `قطعة رقم  ${detail?.piece_number}`}
                     </p>

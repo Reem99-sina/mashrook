@@ -12,7 +12,8 @@ import {GitMyOffers} from "./getMyOffer"
 
 const Chat: React.FC = () => {
   const router = useRouter();
-  const handleBack = () => {
+  const handleBack = (e:React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
     router.back();
   };
  
