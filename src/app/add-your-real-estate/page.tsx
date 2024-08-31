@@ -31,7 +31,7 @@ import {
   RealEstateErrrorTypeInter,
   postrealEstateType,
   earthInter,
-  removeState
+  removeState,
 } from "@/redux/features/postRealEstate";
 import { cites } from "@/typeSchema/schema";
 import { validateForm } from "../hooks/validate";
@@ -467,7 +467,7 @@ const AddYourRealEstate: React.FC = () => {
         router.push("/login");
       }
     } else {
-      toast.error("لازم تقبل بشروط الاستخدام وسياسية الخصوصية");
+      toast.error(" يجب الموافقه علي شروط الاستخدام وسياسية الخصوصية");
     }
     // setSentYourRequest(true);
   };
@@ -481,7 +481,7 @@ const AddYourRealEstate: React.FC = () => {
     dispatch(getproperityOwnerType());
     dispatch(getproperityTypeMore({ num: 1, type: "offer" }));
     return () => {
-     dispatch(removeState())
+      dispatch(removeState());
     };
   }, [dispatch]);
   useEffect(() => {

@@ -23,7 +23,7 @@ import {
   postProperityType,
   properityTypeInter,
   properityErrorTypeInter,
-  removeState
+  removeState,
 } from "@/redux/features/postRequest";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
@@ -216,7 +216,7 @@ const AddYourRequest: React.FC = () => {
       price: criteria?.shareRange[1],
       min_price: criteria?.shareRange[0],
       finance: criteria?.dealStatus,
-    } as properityTypeInter
+    } as properityTypeInter;
     if (deal) {
       if (token) {
         if (selectedPropertyType?.title == "شقة" && criteria?.unitType == "5") {
@@ -292,15 +292,15 @@ const AddYourRequest: React.FC = () => {
         router.push("/login");
       }
     } else {
-      toast.error("لازم تقبل بشروط الاستخدام وسياسية الخصوصية");
+      toast.error(" يجب الموافقه علي شروط الاستخدام وسياسية الخصوصية");
     }
   };
 
   useEffect(() => {
     dispatch(getproperityType({ num: 1 }));
     return () => {
-      dispatch(removeState())
-     };
+      dispatch(removeState());
+    };
   }, [dispatch]);
   useEffect(() => {
     dispatch(
@@ -322,7 +322,7 @@ const AddYourRequest: React.FC = () => {
       setToken(storedToken);
     }
   }, []);
- 
+
   // let router=useRouter()
   useEffect(() => {
     return () => {
@@ -373,108 +373,110 @@ const AddYourRequest: React.FC = () => {
           {titleSection && detailsSection && (
             <div className=" w-full items-start justify-start p-4 ">
               <div className="bg-white rounded-lg border border-[#E5E7EB] p-4">
-              <div className="flex items-center justify-end">
-                <p className="text-base font-bold text-[#4B5563]">
-                  {titleSection}
-                </p>
-              </div>
-              <div className="flex flex-row flex-wrap justify-end mt-6 gap-8 items-end">
-                <div className="mb-4 flex-row-reverse flex flex-wrap">
-                  {detailsSection?.map((ele: { id: number; title: string }) => (
-                    <RadioInput
-                      key={ele?.id}
-                      name="property_type_details_id"
-                      onChange={(event) =>
-                        setCriteria({
-                          ...criteria,
-                          unitType: Number(event?.target?.value),
-                        })
-                      }
-                      value={ele.id}
-                      label={ele?.title}
-                    />
-                  ))}
+                <div className="flex items-center justify-end">
+                  <p className="text-base font-bold text-[#4B5563]">
+                    {titleSection}
+                  </p>
                 </div>
+                <div className="flex flex-row flex-wrap justify-end mt-6 gap-8 items-end">
+                  <div className="mb-4 flex-row-reverse flex flex-wrap">
+                    {detailsSection?.map(
+                      (ele: { id: number; title: string }) => (
+                        <RadioInput
+                          key={ele?.id}
+                          name="property_type_details_id"
+                          onChange={(event) =>
+                            setCriteria({
+                              ...criteria,
+                              unitType: Number(event?.target?.value),
+                            })
+                          }
+                          value={ele.id}
+                          label={ele?.title}
+                        />
+                      )
+                    )}
+                  </div>
+                </div>
+                {errors?.property_type_details_id && (
+                  <p className="text-xs text-red-600 dark:text-red-500 text-right">
+                    {String(errors?.property_type_details_id)}
+                  </p>
+                )}
               </div>
-              {errors?.property_type_details_id && (
-                <p className="text-xs text-red-600 dark:text-red-500 text-right">
-                  {String(errors?.property_type_details_id)}
-                </p>
-              )}
-            </div>
             </div>
           )}
           <div className=" w-full  items-start justify-start p-4">
             <div className="bg-white rounded-lg border border-[#E5E7EB] p-4 mb-4">
-            <div className="flex items-center justify-end">
-              <p className="text-base font-bold text-[#4B5563]">
-                {" "}
-                موقع العقار{" "}
-              </p>
-            </div>
-            <div className="flex items-end gap-2 justify-end flex-col mt-5">
-              <p className="text-base font-medium text-[#4B5563]">المدينة</p>
-              <div className=" w-full">
-                <select
-                  className="border w-full text-right border-[#D1D5DB] rounded-lg"
-                  onChange={(event) =>
-                    setCriteria({ ...criteria, city: event?.target?.value })
-                  }
-                >
-                  {cities.map((city) => (
-                    <option key={city.id} value={city.name}>
-                      {city.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {errors?.city && (
-                <p className="text-xs text-red-600 dark:text-red-500 text-right">
-                  {errors?.city}
+              <div className="flex items-center justify-end">
+                <p className="text-base font-bold text-[#4B5563]">
+                  {" "}
+                  موقع العقار{" "}
                 </p>
-              )}
-               <div className="flex items-end gap-2 justify-end flex-row mt-5 ">
-              <p
-                className={`cursor-pointer text-[#3B73B9]  ${
-                  selectedCites ? "" : "text-gray-500"
-                }`}
-              >
-                إضافة حي/ أحياء
-              </p>
-
-              <div
-                onClick={() => modalRef.current?.open()}
-                className="cursor-pointer bg-[#3B73B9]"
-              >
-                <Image src={Add} width={21} height={21} alt={"add"} />
               </div>
-            </div>
-            </div>
-            <div className="flex flex-row gap-3 items-center justify-end flex-wrap mb-5">
-              {selectedCites.map((cite) => (
-                <div
-                  key={cite.id}
-                  className="flex items-center border-[#F3F4F6]  w-32 h-11 p-3 rounded-md gap-2 justify-between border shadow-sm flex-row mt-5"
-                >
-                  <CloseIconSmall
-                    className="cursor-pointer w-4 h-4"
-                    onClick={() => handleRemoveCite(cite.id)}
-                  />
-                  <p className="text-xs font-normal text-[#9CA3AF]">
-                    {cite.name}
-                  </p>
+              <div className="flex items-end gap-2 justify-end flex-col mt-5">
+                <p className="text-base font-medium text-[#4B5563]">المدينة</p>
+                <div className=" w-full">
+                  <select
+                    className="border w-full text-right border-[#D1D5DB] rounded-lg"
+                    onChange={(event) =>
+                      setCriteria({ ...criteria, city: event?.target?.value })
+                    }
+                  >
+                    {cities.map((city) => (
+                      <option key={city.id} value={city.name}>
+                        {city.name}
+                      </option>
+                    ))}
+                  </select>
                 </div>
-              ))}
 
-              {errors?.district && (
-                <p className="text-xs text-red-600 dark:text-red-500 text-right">
-                  {errors?.district}
-                </p>
-              )}
+                {errors?.city && (
+                  <p className="text-xs text-red-600 dark:text-red-500 text-right">
+                    {errors?.city}
+                  </p>
+                )}
+                <div className="flex items-end gap-2 justify-end flex-row mt-5 ">
+                  <p
+                    className={`cursor-pointer text-[#3B73B9]  ${
+                      selectedCites ? "" : "text-gray-500"
+                    }`}
+                  >
+                    إضافة حي/ أحياء
+                  </p>
+
+                  <div
+                    onClick={() => modalRef.current?.open()}
+                    className="cursor-pointer bg-[#3B73B9]"
+                  >
+                    <Image src={Add} width={21} height={21} alt={"add"} />
+                  </div>
+                </div>
+              </div>
+              <div className="flex flex-row gap-3 items-center justify-end flex-wrap mb-5">
+                {selectedCites.map((cite) => (
+                  <div
+                    key={cite.id}
+                    className="flex items-center border-[#F3F4F6]  w-32 h-11 p-3 rounded-md gap-2 justify-between border shadow-sm flex-row mt-5"
+                  >
+                    <CloseIconSmall
+                      className="cursor-pointer w-4 h-4"
+                      onClick={() => handleRemoveCite(cite.id)}
+                    />
+                    <p className="text-xs font-normal text-[#9CA3AF]">
+                      {cite.name}
+                    </p>
+                  </div>
+                ))}
+
+                {errors?.district && (
+                  <p className="text-xs text-red-600 dark:text-red-500 text-right">
+                    {errors?.district}
+                  </p>
+                )}
+              </div>
             </div>
-            </div>
-           
+
             <div className="bg-white rounded-lg border border-[#E5E7EB] w-full mb-4 items-start justify-start p-4">
               {(selectedPropertyType?.title === "شقة" ||
                 selectedPropertyType?.title === "فيلا" ||
