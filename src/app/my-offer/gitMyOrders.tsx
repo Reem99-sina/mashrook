@@ -115,6 +115,7 @@ export const GitMyOrders = () => {
           : dataOrderOne?.landDetails &&
             dataOrderOne?.landDetails?.length > 0 &&
             `${dataOrderOne?.landDetails[0]?.status}`,
+            finance:dataOrderOne?.finance
     }));
   }, [dataOrder]);
   let dataPagination = useMemo(() => {
@@ -236,6 +237,7 @@ export const GitMyOrders = () => {
                     onUpdate={() => modalRefUpdate.current?.open()}
                     onEdit={() => router.push(`/edit-my-order/${offer?.id}`)}
                     onRetreating={() => modalRefRetreating.current?.open()}
+                    finance={offer.finance}
                   />
                 ))}
               </div>

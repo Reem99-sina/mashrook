@@ -67,38 +67,46 @@ export const GitMyPartners = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const router = useRouter();
   const [token, setToken] = useState<string | null>(null);
-  let [newData,setNewData]=useState([])
+  let [newData,setNewData]=useState<any>([])
   let { loading, message, data:dataPartner } =
   useSelector<RootState>((state) => state.partners) as {
     loading: boolean;
     message: string;
     data: any;   
   };
-  let dataOrders=useMemo(()=>{
+  useEffect(()=>{
      dataPartner?.map((dataPartnerOne:RealEstateTypeInter)=>(
-      setNewData(dataPartnerOne?.propertyDetailsOwnership?.map((ele:any)=>{
+      (dataPartnerOne?.propertyDetailsOwnership?.map((ele:any)=>{
         let id=ele?.details_id
         let idLand=ele?.land_details_id
-        let title=(dataPartnerOne?.propertyTypeDetails?.title||dataPartnerOne?.propertyType?.title)+" "+(ele?.details?.type||ele?.landDetails?.type)
+        let title=(dataPartnerOne?.propertyTypeDetails?.title||dataPartnerOne?.propertyType?.title)+" "+(ele?.details?.type||ele?.landDetails?.type||ele?.landDetails?.piece_number)
        
-        return({ title: title?title:"",
+        setNewData((prev:any)=>[...prev,{ id:dataPartnerOne?.id,title: title?title:"",
         date:dataPartnerOne?.createdAt?format(new Date( dataPartnerOne?.createdAt), "yyyy-MM-dd"):"",
         requestNumber: ele?.id,
         count: 8,
         city: dataPartnerOne?.propertyLocation?.city,
         district: dataPartnerOne?.propertyLocation?.district?.replace(/[\[\]\\"]/g, ''),
         budget: `${ele?.amount} ريال`,
-        PartnershipNumber: 2020,
-        realEstate: ele?.details?.type||ele?.landDetails?.type,
-        bidRequestNumber: 2020,
+        PartnershipNumber: ele?.id,
+        realEstate: (ele?.details?.type)||(ele?.landDetails?.type?ele?.landDetails?.type:"قطعة رقم "+ele?.landDetails?.piece_number),
+        bidRequestNumber: dataPartnerOne?.id,
         partnershipRatio: ele?.percentage,
         purpose:dataPartnerOne?.propertyPurpose?.title,
         finance:dataPartnerOne?.finance
-      })
+      }])
       }
       ))))
-      
+      return ()=>{
+        setNewData([])
+      }
   },[dataPartner])
+  let dataNew=useMemo(()=>{
+    console.log(newData,"newData")
+  },[
+    newData
+  ])
+  
   let dataPagination=useMemo(()=>{
     return newData?.slice(
       (currentPage - 1) * 3,
@@ -214,6 +222,7 @@ export const GitMyPartners = () => {
                   bidRequestNumber={offer.bidRequestNumber}
                   partnershipRatio={offer.partnershipRatio}
                   onRetreat={() => modalRef.current?.open()}
+                  onShow={()=>router.push(`/showpartner/${offer?.id}`)}
                 />
               ))}
             </div>

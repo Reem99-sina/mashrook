@@ -51,7 +51,7 @@ export default function Home() {
     }
   }, []);
   useEffect(() => {
-   dispatch(getRequest())
+   dispatch(getRequest({}))
   }, [dispatch]);
   return (
     <div className="flex justify-center w-dvh h-max ">

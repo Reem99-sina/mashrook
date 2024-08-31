@@ -7,8 +7,8 @@ export interface returnType{
     data:any
 }
 
-export const getPartner=createAsyncThunk<returnType>("partners/get", async (_, { rejectWithValue }) => {  
-        const response = await axios.get(`https://server.mashrook.sa/property/get/mine/partners`,{
+export const getDetailsType=createAsyncThunk<returnType>("Offer/get", async (_, { rejectWithValue }) => {  
+        const response = await axios.get(`https://server.mashrook.sa/property-type/get/details`,{
             headers: {
               Authorization: sessionStorage.getItem("token"),
             },
@@ -25,30 +25,26 @@ const initialstate={
    
 }
 
-const getPartnerSlice=createSlice({
-    name:"getpartner",
+const getDetailTypesSlice=createSlice({
+    name:"getDetails",
     initialState:initialstate,
     reducers:{
-        removepartners:(state) => {
-            state.data=null
-          }
     },extraReducers:(builder)=>{
-        builder.addCase(getPartner.fulfilled,(state,action)=>{
+        builder.addCase(getDetailsType.fulfilled,(state,action)=>{
             state.loading=false
             state.message=action?.payload?.message?action.payload.message:"success"
             state.data=action?.payload?.data
         }),
-        builder.addCase(getPartner.pending,(state,action)=>{
+        builder.addCase(getDetailsType.pending,(state,action)=>{
             state.loading=true
             state.message="loading..."
             state.data=null
         }),
-        builder.addCase(getPartner.rejected,(state,action)=>{
+        builder.addCase(getDetailsType.rejected,(state,action)=>{
             state.loading=false
             state.message=action.error.message?action.error.message:"error"
             state.data=null
         })
     }
 })
-export const { removepartners } = getPartnerSlice.actions;
-export default getPartnerSlice.reducer
+export default getDetailTypesSlice.reducer

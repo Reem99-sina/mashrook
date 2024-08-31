@@ -9,7 +9,7 @@ import {useEffect} from "react"
 export default function Market() {
   let dispatch=useDispatch<AppDispatch>()
   useEffect(()=>{
-    dispatch(getRequest())
+    dispatch(getRequest({}))
   },[dispatch])
   return (
     <div dir="rtl" className="font-[Cairo]">

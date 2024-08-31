@@ -25,7 +25,7 @@ export const Modal = forwardRef<ModalRef, Props>(
       open: () => setIsVisible(true),
       close: () => setIsVisible(false),
     }));
-      console.log(isVisible,"isVisible")
+    
     return (
       <Dialog
         open={isVisible}

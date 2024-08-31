@@ -5,6 +5,12 @@ export interface returnType {
   loading: boolean;
   message: string | undefined;
   data: any;
+  status:number
+}
+interface typeofReport{
+    
+  property_id: number,
+  message: string
 }
 export interface dataReturn {
   id: number;
@@ -150,11 +156,22 @@ export interface typePay {
   available_price:number;
   property_id?: number;
 }
-export const getRequest = createAsyncThunk<returnType>(
+interface paramsInput{
+  min_price?:number|null,
+max_price?:number|null,
+property_type_details_id?:number|null,
+
+property_purpose_id?:number|null|string,
+
+min_percentage?:number|null,
+max_percentage?:number|null
+,status?:string|null
+}
+export const getRequest = createAsyncThunk<returnType,(paramsInput|null)>(
   "requestGet",
-  async (_, { rejectWithValue }) => {
+  async (data:(paramsInput|null), { rejectWithValue }) => {
     const response = await axios
-      .get("https://server.mashrook.sa/property/offer", { headers: {} })
+      .get("https://server.mashrook.sa/property/offer", { headers: {} ,params:data?data:{}})
       .then((response) => response.data)
       .catch((error) => error?.response?.data);
 
@@ -166,7 +183,7 @@ export const getRequestByid = createAsyncThunk<returnType, { id: number }>(
   async (data: { id: number }, { rejectWithValue }) => {
     const response = await axios
       .get(`https://server.mashrook.sa/property/get/${data?.id}`, {
-        headers: {},
+        headers: {}
       })
       .then((response) => response.data)
       .catch((error) => error?.response?.data);
@@ -174,11 +191,25 @@ export const getRequestByid = createAsyncThunk<returnType, { id: number }>(
     return response;
   }
 );
+export const postReport=createAsyncThunk<returnType,typeofReport>("postReport", async (data:{
+    
+  property_id: number,
+  message: string
+}, { rejectWithValue }) => {  
+  const response = await axios.post("https://server.mashrook.sa/property-report",data,{headers: {
+    Authorization: sessionStorage.getItem("token"),
+  },})
+  .then((response)=>response.data)
+  .catch((error)=>error?.response?.data) 
+  return response;
+})
 const initialstate = {
   loading: false,
   message: "",
   data: null,
   selectData: null,
+  messageReport:"",
+  status:200
 };
 
 const requestGetSlice = createSlice({
@@ -210,14 +241,17 @@ const requestGetSlice = createSlice({
       builder.addCase(getRequestByid.fulfilled, (state, action) => {
        
         state.loading = false;
-        state.message = action.payload.message
+        state.message = action?.payload?.message
           ? action.payload.message
           : "success";
-        state.selectData = action.payload.data;
+        state.selectData = action?.payload?.data;
       }),
       builder.addCase(getRequestByid.rejected, (state, action) => {
         console.log("data", action.error.message);
-      });
+      }),builder.addCase(postReport.fulfilled,(state,action)=>{
+        state.messageReport=action?.payload?.message?action?.payload?.message:""
+        state.status=action?.payload?.status?action?.payload?.status:200
+      })
   },
 });
 

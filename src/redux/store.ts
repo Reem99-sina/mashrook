@@ -7,10 +7,10 @@ import properityType from "./features/getProperity"
 import properityRequest from "./features/postRequest"
 import properityPurpose from "./features/getproperityPurpose"
 import properityOwnerType from "./features/getProperityOwnerType"
-
+import getDetailTypesSlice from "./features/getDetailsType"
 import postrealEstateType from "./features/postRealEstate"
 import loginReducer from "./features/loginSlice"
-
+import getCitySlice from "./features/getCity"
 import { Action } from '@reduxjs/toolkit';
 import  getRequest  from './features/getRequest';
 import getRequestSlice from "./features/getOrders"
@@ -30,7 +30,9 @@ const store = configureStore({
     properityOwnerType:properityOwnerType,
     realEstateRequest:postrealEstateType,
     requests:getRequestSlice,
-    partners:getPartnerSlice
+    partners:getPartnerSlice,
+    detailsType:getDetailTypesSlice,
+    city:getCitySlice
   }
 
 });

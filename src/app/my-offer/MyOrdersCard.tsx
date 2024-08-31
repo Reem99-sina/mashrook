@@ -9,6 +9,9 @@ import {
   UpdateIcon,
   Rebuild,
 } from "../assets/svg";
+import {
+  IoMdCloseCircleOutline,
+} from "react-icons/io";
 import { Button } from "../components/shared/button.component";
 import Stepper from "../components/shared/Stepper";
 import Link from "next/link"
@@ -28,6 +31,7 @@ interface ChatCardProps {
   district: string;
   budget: string;
   type: string;
+  finance:boolean
 }
 
 export const MyOrdersCard: React.FC<ChatCardProps> = ({
@@ -46,6 +50,7 @@ export const MyOrdersCard: React.FC<ChatCardProps> = ({
   district,
   budget,
   type,
+  finance
 }) => {
   const steps = ["التعبئة", "الإفراغ", "الإرسال"];
   const currentStep = 1;
@@ -126,7 +131,7 @@ export const MyOrdersCard: React.FC<ChatCardProps> = ({
           <p className="font-normal text-[#6B7280] text-sm">
             أرغب في تمويل عقاري
           </p>
-          <Accreditation />
+          {finance?<Accreditation />:<IoMdCloseCircleOutline color="red"/>}
         </div>
       </div>
       {inProgress ? (

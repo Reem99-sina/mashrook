@@ -3,13 +3,13 @@
 import React, { useRef, useState, useEffect } from "react";
 
 import { Add, CloseIconSmall, Succeeded } from "@/app/assets/svg";
-
+import RangeComponent from "@/app/components/shared/range.component"
 import { RadioInput } from "../components/shared/radio.component";
 import { Button } from "../components/shared/button.component";
 import { Modal, ModalRef } from "../components/shared/modal.component";
 import Footer from "../components/header/Footer2";
 import MainHeader from "../components/header/MainHeader";
-
+import { getCity,getDistrict} from "@/redux/features/getCity"
 import Image from "next/image";
 
 import { AppDispatch, RootState } from "@/redux/store";
@@ -44,7 +44,7 @@ const dataReal = [
     children: ["أرض سكنية", "أرض تجارية", "فيلا", "دور", "شقة"],
   },
 ];
-const floorsVilla = [
+ const floorsVilla = [
   { name: "دور الارضي" },
   { name: "دور علوي" },
   { name: "شقة" },
@@ -173,7 +173,11 @@ const AddYourRequest: React.FC = () => {
     message: string;
     data: any;
   };
-
+  let {  city,district } =
+  useSelector<RootState>((state) => state.city) as {
+    district:any
+    city:any
+  };
   const dispatch = useDispatch<AppDispatch>();
 
   const handlePropertyTypeChange = (value: typeSelect) => {
@@ -219,7 +223,7 @@ const AddYourRequest: React.FC = () => {
     } as properityTypeInter
     if (deal) {
       if (token) {
-        if (selectedPropertyType?.title == "شقة" && criteria?.unitType == "5") {
+        if (selectedPropertyType?.title == "شقة" && criteria?.unitType == "8") {
           const status = await validateForm(
             {
               ...datasend,
@@ -255,7 +259,7 @@ const AddYourRequest: React.FC = () => {
           }
         } else if (
           selectedPropertyType?.title == "فيلا" &&
-          criteria?.unitType == 2
+          criteria?.unitType == 4
         ) {
           const status = await validateForm(
             { ...datasend, details: detailsVilla },
@@ -298,6 +302,7 @@ const AddYourRequest: React.FC = () => {
 
   useEffect(() => {
     dispatch(getproperityType({ num: 1 }));
+    dispatch(getCity())
     return () => {
       dispatch(removeState())
      };
@@ -322,7 +327,11 @@ const AddYourRequest: React.FC = () => {
       setToken(storedToken);
     }
   }, []);
- 
+  useEffect(()=>{
+    if(criteria?.city){
+      dispatch(getDistrict({name:criteria?.city}));
+    }
+  },[criteria?.city,dispatch])
   // let router=useRouter()
   useEffect(() => {
     return () => {
@@ -421,9 +430,9 @@ const AddYourRequest: React.FC = () => {
                     setCriteria({ ...criteria, city: event?.target?.value })
                   }
                 >
-                  {cities.map((city) => (
-                    <option key={city.id} value={city.name}>
-                      {city.name}
+                  {city?.map((city:any) => (
+                    <option key={city.id} value={city.nameAr}>
+                      {city?.nameAr}
                     </option>
                   ))}
                 </select>
@@ -535,184 +544,39 @@ const AddYourRequest: React.FC = () => {
                 </>
               )}
               {selectedPropertyType?.title === "شقة" &&
-                criteria?.unitType == 5 && (
+                criteria?.unitType == 8 && (
                   <>
-                    <div className="flex items-center justify-end">
-                      <p className="text-base font-bold text-[#4B5563]">
-                        الادوار المرغوبة{" "}
-                      </p>
-                    </div>
-                    <div className="mb-4" style={{ direction: "rtl" }}>
-                      <div className="flex flex-col">
-                        <div className="flex justify-between mb-2 text-sm text-gray-500 w-full p-4">
-                          <span>1 دور</span>
-                          <span>+10 دور </span>
-                        </div>
-
-                        <Range
-                          step={1}
-                          min={1}
-                          max={10}
-                          values={criteria.desiredRow}
-                          onChange={handleDesiredRowChange}
-                          rtl
-                          renderTrack={({ props, children }) => (
-                            <div
-                              onMouseDown={props.onMouseDown}
-                              onTouchStart={props.onTouchStart}
-                              style={{
-                                ...props.style,
-                                height: "36px",
-                                display: "flex",
-                                width: "100%",
-                              }}
-                            >
-                              <div
-                                ref={props.ref}
-                                style={{
-                                  height: "5px",
-                                  width: "100%",
-                                  borderRadius: "4px",
-                                  background: getTrackBackground({
-                                    values: criteria.desiredRow,
-                                    colors: ["#ccc", "#548BF4", "#ccc"],
-                                    min: 1,
-                                    max: 10,
-                                    rtl: true,
-                                  }),
-                                  alignSelf: "center",
-                                }}
-                              >
-                                {children}
-                              </div>
-                            </div>
-                          )}
-                          renderThumb={({ index, props }) => (
-                            <div
-                              {...props}
-                              style={{
-                                ...props.style,
-                                height: "20px",
-                                width: "20px",
-                                borderRadius: "50%",
-                                backgroundColor: "#548BF4",
-                                display: "flex",
-                                justifyContent: "center",
-                                alignItems: "center",
-                                boxShadow: "0px 2px 6px #AAA",
-                              }}
-                            >
-                              <div
-                                style={{
-                                  position: "absolute",
-                                  top: "-28px",
-                                  color: "#fff",
-                                  fontWeight: "bold",
-                                  fontSize: "12px",
-                                  fontFamily:
-                                    "Arial,Helvetica Neue,Helvetica,sans-serif",
-                                  padding: "4px",
-                                  borderRadius: "4px",
-                                  backgroundColor: "#548BF4",
-                                }}
-                              >
-                                {criteria.desiredRow[index]}دور
-                              </div>
-                            </div>
-                          )}
-                        />
-                      </div>
-                    </div>
+                     <RangeComponent 
+                      title="الادوار المرغوبة"
+                      firstNumDes="1"
+                      secondNumDes="+10"
+                      step={1}
+                      min={1}
+                      max={10}
+                      values={criteria?.desiredRow}
+                      handleShareRangeChange={(values: number[]) =>{
+                        setCriteria({ ...criteria, desiredRow: values });
+                      }}
+                      unit="دور"
+                      />
                   </>
                 )}
 
-              {criteria?.unitType != 2 ? (
+              {criteria?.unitType != 4 ? (
                 <>
-                  <div className="flex items-center justify-end">
-                    <p className="text-base font-bold text-[#4B5563]">
-                      ميزانيتك{" "}
-                    </p>
-                  </div>
-                  <div className="mb-4" style={{ direction: "rtl" }}>
-                    <div className="flex flex-col">
-                      <div className="flex justify-between mb-2 text-sm text-gray-500 w-full p-4">
-                        <span>500,000 ريال</span>
-                        <span>+20,000,000 ريال </span>
-                      </div>
-                      <Range
-                        step={500000}
-                        min={500000}
-                        max={20000000}
-                        values={criteria.shareRange}
-                        onChange={handleShareRangeChange}
-                        rtl
-                        renderTrack={({ props, children }) => (
-                          <div
-                            onMouseDown={props.onMouseDown}
-                            onTouchStart={props.onTouchStart}
-                            style={{
-                              ...props.style,
-                              height: "36px",
-                              display: "flex",
-                              width: "100%",
-                            }}
-                          >
-                            <div
-                              ref={props.ref}
-                              style={{
-                                height: "5px",
-                                width: "100%",
-                                borderRadius: "4px",
-                                background: getTrackBackground({
-                                  values: criteria.shareRange,
-                                  colors: ["#ccc", "#548BF4", "#ccc"],
-                                  min: 1000000,
-                                  max: 20000000,
-                                  rtl: true,
-                                }),
-                                alignSelf: "center",
-                              }}
-                            >
-                              {children}
-                            </div>
-                          </div>
-                        )}
-                        renderThumb={({ index, props }) => (
-                          <div
-                            {...props}
-                            style={{
-                              ...props.style,
-                              height: "20px",
-                              width: "20px",
-                              borderRadius: "50%",
-                              backgroundColor: "#548BF4",
-                              display: "flex",
-                              justifyContent: "center",
-                              alignItems: "center",
-                              boxShadow: "0px 2px 6px #AAA",
-                            }}
-                          >
-                            <div
-                              style={{
-                                position: "absolute",
-                                top: "-28px",
-                                color: "#fff",
-                                fontWeight: "bold",
-                                fontSize: "12px",
-                                fontFamily:
-                                  "Arial,Helvetica Neue,Helvetica,sans-serif",
-                                padding: "4px",
-                                borderRadius: "4px",
-                                backgroundColor: "#548BF4",
-                              }}
-                            >
-                              {criteria.shareRange[index]}ريال
-                            </div>
-                          </div>
-                        )}
+                      <RangeComponent 
+                      title="ميزانيتك"
+                      firstNumDes="500,000"
+                      secondNumDes="+20,000,000"
+                      step={500000}
+                      min={500000}
+                      max={20000000}
+                      values={criteria?.shareRange}
+                      handleShareRangeChange={(values: number[]) =>{
+                        setCriteria({ ...criteria, shareRange: values });
+                      }}
+                      unit="ريال"
                       />
-                    </div>
-                  </div>
                 </>
               ) : (
                 <>
@@ -732,112 +596,31 @@ const AddYourRequest: React.FC = () => {
                       value={floor?.name}
                     >
                       <>
-                        <div className="flex items-center justify-end">
-                          <p className="text-base font-bold text-[#4B5563]">
-                            ميزانيتك{" "}
-                          </p>
-                        </div>
-                        <div className="mb-4" style={{ direction: "rtl" }}>
-                          <div className="flex flex-col">
-                            <div className="flex justify-between mb-2 text-sm text-gray-500 w-full p-4">
-                              <span>500,000 ريال</span>
-                              <span>+20,000,000 ريال </span>
-                            </div>
-                            <Range
-                              step={500000}
-                              min={500000}
-                              max={20000000}
-                              values={[
-                                detailsVilla[ind]?.min_price,
-                                detailsVilla[ind]?.price,
-                              ]}
-                              onChange={(values: number[]) =>
-                                setDetails((prev) =>
-                                  prev.map((ele, i) =>
-                                    i == ind
-                                      ? {
-                                          ...ele,
-                                          min_price: values[0],
-                                          price: values[1],
-                                        }
-                                      : ele
-                                  )
-                                )
-                              }
-                              rtl
-                              renderTrack={({ props, children }) => (
-                                <div
-                                  onMouseDown={props.onMouseDown}
-                                  onTouchStart={props.onTouchStart}
-                                  style={{
-                                    ...props.style,
-                                    height: "36px",
-                                    display: "flex",
-                                    width: "100%",
-                                  }}
-                                >
-                                  <div
-                                    ref={props.ref}
-                                    style={{
-                                      height: "5px",
-                                      width: "100%",
-                                      borderRadius: "4px",
-                                      background: getTrackBackground({
-                                        values: [
-                                          detailsVilla[ind]?.min_price,
-                                          detailsVilla[ind]?.price,
-                                        ],
-                                        colors: ["#ccc", "#548BF4", "#ccc"],
-                                        min: 1000000,
-                                        max: 20000000,
-                                        rtl: true,
-                                      }),
-                                      alignSelf: "center",
-                                    }}
-                                  >
-                                    {children}
-                                  </div>
-                                </div>
-                              )}
-                              renderThumb={({ index, props }) => (
-                                <div
-                                  {...props}
-                                  style={{
-                                    ...props.style,
-                                    height: "20px",
-                                    width: "20px",
-                                    borderRadius: "50%",
-                                    backgroundColor: "#548BF4",
-                                    display: "flex",
-                                    justifyContent: "center",
-                                    alignItems: "center",
-                                    boxShadow: "0px 2px 6px #AAA",
-                                  }}
-                                >
-                                  <div
-                                    style={{
-                                      position: "absolute",
-                                      top: "-28px",
-                                      color: "#fff",
-                                      fontWeight: "bold",
-                                      fontSize: "12px",
-                                      fontFamily:
-                                        "Arial,Helvetica Neue,Helvetica,sans-serif",
-                                      padding: "4px",
-                                      borderRadius: "4px",
-                                      backgroundColor: "#548BF4",
-                                    }}
-                                  >
-                                    {index == 0
-                                      ? detailsVilla[ind]?.min_price
-                                      : detailsVilla[ind]?.price}
-                                    ريال
-                                  </div>
-                                </div>
-                              )}
-                            />
-                          </div>
-                        </div>
+                      {(detailsVilla&&detailsVilla[ind])&&<RangeComponent 
+                      title="ميزانيتك"
+                      firstNumDes="500,000"
+                      secondNumDes="+20,000,000"
+                      step={500000}
+                      min={500000}
+                      max={20000000}
+                      values={[
+                        detailsVilla[ind]?.min_price,
+                        detailsVilla[ind]?.price,
+                      ]}
+                      handleShareRangeChange={(values: number[]) =>
+                        setDetails((prev) =>
+                          prev?.map((ele, i) =>
+                            i == ind
+                              ? {
+                                  ...ele,
+                                  min_price: values[0],
+                                  price: values[1],
+                                }
+                              : ele
+                          )
+                        )}
+                      unit="ريال"
+                      />}
                       </>
                     </AccordionComponent>
                   ))}
@@ -960,7 +743,7 @@ const AddYourRequest: React.FC = () => {
                   />
                 </div>
                 <div className="flex flex-col items-end h-[500px] overflow-scroll  w-full">
-                  {filteredCites.map((cite) => (
+                  {district?.map((cite:any) => (
                     <div
                       key={cite.id}
                       className="flex justify-end items-center w-full py-2"
