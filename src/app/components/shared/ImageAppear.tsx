@@ -3,35 +3,41 @@ import {useEffect,useState} from "react"
 import Image from "next/image"
 import {Button} from "./button.component"
 import {X} from "@/app/assets/svg"
-const ImageAppear: React.FC<{images?:any,onDelete:(index:Number)=>void,links?:any}>=({images,onDelete,links})=>{
+const ImageAppear: React.FC<{images?:any,onDelete:(index:string)=>void,links?:any}>=({images,onDelete,links})=>{
  
-    let [urls,setUrls]=useState<{ name: string; link: string | ArrayBuffer|null  }[]>([])
-    function readAndPreview(file:File) {
+    let [urls,setUrls]=useState<{ name: string; link: string | ArrayBuffer|null  }[]>(links)
+    function readAndPreview(file:any) {
         // Make sure `file.name` matches our extensions criteria
-        if (/\.(jpe?g|png|gif)$/i.test(file.name)) {
-          const reader = new FileReader();
-    
-          reader.addEventListener(
-            "load",
-            () => {
-            if(reader?.result){
-                setUrls((prevs)=>[...prevs,{name:file?.name,link:reader?.result}])
-            }
-            //   preview.appendChild(image);
-            },
-            false,
-          );
-    
-          reader.readAsDataURL(file);
+        console.log(file instanceof File,"file")
+        if((file instanceof File)==true){
+          if (/\.(jpe?g|png|gif)$/i.test(file.name)) {
+            const reader = new FileReader();
+      
+            reader.addEventListener(
+              "load",
+              () => {
+              if(reader?.result){
+                  setUrls((prevs)=>[...prevs,{name:file?.name,link:reader?.result}])
+              }
+              //   preview.appendChild(image);
+              },
+              false,
+            );
+      
+            reader.readAsDataURL(file);
+        }
+        
+        }else{
+          console.log(file,"filuyuyiyiue")
+          setUrls((prevs)=>[...prevs,file])
         }
       }
-         useEffect(()=>{
-          if(links&&links?.length>0){
-            setUrls(links)
-
-          }
-      
-  },[links])
+  // useEffect(()=>{
+  //         if(links&&links?.length>0){
+  //           setUrls(links)
+  //         }
+  // },[links])
+  console.log(images,"links",urls)
     useEffect(()=>{
         Array.prototype.forEach.call(images, readAndPreview);
         return ()=>{
@@ -43,8 +49,9 @@ const ImageAppear: React.FC<{images?:any,onDelete:(index:Number)=>void,links?:an
     <div className="flex gap-1 flex-row-reverse items-center flex-wrap">
         {urls?.map((url,ind)=><div key={ind} className="flex gap-x-2 shadow-lg shadow-gray-500/40 border-2 border-solid border-gray-500/40 rounded-md p-4">
             <div className="self-start" onClick={()=>{
-               setUrls( urls.filter((img,index)=>img?.name!=url?.name))
-                onDelete(ind)
+              
+               setUrls((prev)=>prev.filter((img,index)=>img?.name!=url?.name))
+                onDelete(url?.name)
             }}>
                 <Image
                   src={X}

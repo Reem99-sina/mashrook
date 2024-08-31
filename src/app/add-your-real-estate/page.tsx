@@ -33,6 +33,7 @@ import {
   earthInter,
   removeState
 } from "@/redux/features/postRealEstate";
+import { getCity,getDistrict} from "@/redux/features/getCity"
 import { cites } from "@/typeSchema/schema";
 import { validateForm } from "../hooks/validate";
 import toast from "react-hot-toast";
@@ -216,6 +217,11 @@ const AddYourRealEstate: React.FC = () => {
       titleSection: string;
       detailsSection: any;
     };
+    let {  city,district } =
+    useSelector<RootState>((state) => state.city) as {
+      district:any
+      city:any
+    };
   let {
     loading: loadingproperty_purpose_id,
     message: messagePurpose,
@@ -396,7 +402,7 @@ const AddYourRealEstate: React.FC = () => {
           }
         } else if (
           selectedPropertyType?.title === "فيلا" &&
-          departmentArch?.property_type_details_id == 2
+          departmentArch?.property_type_details_id == 4
         ) {
           validationMain =
             validationMain &&
@@ -428,7 +434,7 @@ const AddYourRealEstate: React.FC = () => {
           }
         } else if (
           selectedPropertyType?.title === "فيلا" &&
-          departmentArch?.property_type_details_id == 1
+          departmentArch?.property_type_details_id == 3
         ) {
           validationMain =
             validationMain &&
@@ -472,18 +478,25 @@ const AddYourRealEstate: React.FC = () => {
     // setSentYourRequest(true);
   };
 
-  const onDelete = (index: Number) => {
-    setImages(images?.filter((_, ind) => ind != index));
+  const onDelete = (index: string) => {
+    setImages(images?.filter((ele, ind) => ele?.name != index));
   };
   useEffect(() => {
     dispatch(getproperityType({ num: 1 }));
     dispatch(getproperityPurposeType());
     dispatch(getproperityOwnerType());
+    dispatch(getCity());
+
     dispatch(getproperityTypeMore({ num: 1, type: "offer" }));
     return () => {
      dispatch(removeState())
     };
   }, [dispatch]);
+  useEffect(()=>{
+    if(dataSend?.city){
+      dispatch(getDistrict({name:dataSend?.city}));
+    }
+  },[dataSend?.city,dispatch])
   useEffect(() => {
     dispatch(getproperityType({ num: dataSend?.property_purpose_id || 1 }));
   }, [dataSend?.property_purpose_id, dispatch]);
@@ -769,7 +782,7 @@ const AddYourRealEstate: React.FC = () => {
                       })
                     }
                   >
-                    {cites?.map((city) => (
+                    {district?.map((city:any) => (
                       <option key={city?.id} value={city?.name}>
                         {city?.name}
                       </option>
@@ -791,9 +804,9 @@ const AddYourRealEstate: React.FC = () => {
                       setDataSend({ ...dataSend, city: event?.target?.value })
                     }
                   >
-                    {cities.map((city) => (
-                      <option key={city.id} value={city.name}>
-                        {city.name}
+                    {city?.map((cit:any) => (
+                      <option key={cit.id} value={cit?.nameAr}>
+                        {cit?.nameAr}
                       </option>
                     ))}
                   </select>
@@ -826,7 +839,7 @@ const AddYourRealEstate: React.FC = () => {
                 </p>
               </div>
               <div className="mb-4" style={{ direction: "rtl" }}>
-                {departmentArch?.property_type_details_id == 5 && (
+                {departmentArch?.property_type_details_id == 8 && (
                   <>
                     <div className="flex flex-col gap-5 my-3">
                       <p>رقم الشقة </p>
@@ -1066,7 +1079,7 @@ const AddYourRealEstate: React.FC = () => {
                 )
               )}
               {selectedPropertyType?.title === "فيلا" &&
-                departmentArch?.property_type_details_id == 2 && (
+                departmentArch?.property_type_details_id == 4 && (
                   <>
                     {floorsVilla?.map((floor, index) => (
                       <AccordionComponent
@@ -1289,7 +1302,7 @@ const AddYourRealEstate: React.FC = () => {
                   </>
                 )}
               {selectedPropertyType?.title === "فيلا" &&
-                departmentArch?.property_type_details_id == 1 && (
+                departmentArch?.property_type_details_id == 3 && (
                   <>
                     <div className="mt-2">
                       <div
@@ -1448,7 +1461,7 @@ const AddYourRealEstate: React.FC = () => {
                   </>
                 )}
               {selectedPropertyType?.title === "فيلا" &&
-              departmentArch?.property_type_details_id == 1 ? (
+              departmentArch?.property_type_details_id == 3 ? (
                 <div className="mt-2">
                   <div
                     className="flex justify-between text-sm mt-2"
@@ -1740,7 +1753,7 @@ const AddYourRealEstate: React.FC = () => {
                 <MapLocation
                   lat={dataSend?.lat}
                   long={dataSend?.long}
-                  onChange={setDataSend}
+                  onChange={({lat,long,address}:{lat:number,long:number,address:string})=>setDataSend({...dataSend,lat:lat,long:long,address:address})}
                 />
                 {/* <Map /> */}
                 {/* <div></div> */}

@@ -58,6 +58,10 @@ const properityTypeSlice=createSlice({
     name:"properityType",
     initialState:initialstate,
     reducers:{
+        removeStatus:(state) => {
+            state.titleSection="",
+            state.detailsSection=null
+          }
     },extraReducers:(builder)=>{
         builder.addCase(getproperityType.fulfilled,(state,action)=>{
             state.loading=false
@@ -81,4 +85,5 @@ const properityTypeSlice=createSlice({
         })
     }
 })
+export const { removeStatus } = properityTypeSlice.actions;
 export default properityTypeSlice.reducer

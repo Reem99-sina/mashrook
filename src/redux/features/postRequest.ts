@@ -7,13 +7,20 @@ export interface returnType {
   data: any;
   
 }
-
 export interface paymentType {
     property_id: number,
     land_details_id?: number,
     amount:number
     details_id?: number
   }
+export interface properityInfo{
+  property_id: number,
+  city: string,
+  district: string[],
+  lat?: number,
+  long?: number,
+  address?: string
+}
 export interface properityTypeInter {
   property_type_id?: Number | String |undefined; /// get the ids from property type getAll
   city?: String;

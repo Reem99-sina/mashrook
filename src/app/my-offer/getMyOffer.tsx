@@ -131,6 +131,7 @@ const data = [
 
 export const GitMyOffers = () => {
   const router = useRouter();
+  const [currentPage, setCurrentPage] = useState(1);
   const [isFilterModalOpen, setIsFilterModalOpen] = useState<boolean>(false);
   const [optionFilter, setOption] = useState<string>("");
   const dispatch = useDispatch<AppDispatch>();
@@ -184,7 +185,9 @@ export const GitMyOffers = () => {
             dataOrderOne?.landDetails,
     }));
   }, [dataOffer]);
-
+  let dataPagination = useMemo(() => {
+    return dataOffers?.slice((currentPage - 1) * 3, currentPage * 3);
+  }, [dataOffers, currentPage]);
   useEffect(() => {
     if (typeof window !== "undefined") {
       const storedToken = sessionStorage.getItem("token");
@@ -192,7 +195,7 @@ export const GitMyOffers = () => {
     }
   }, []);
 
-
+console.log(dataOffers,"dataOffers")
   const modalRef = useRef<ModalRef>(null);
 
   useEffect(() => {
@@ -284,10 +287,10 @@ export const GitMyOffers = () => {
             </div>
           </>
 
-        ) : dataOffers?.length > 0 ? (
+        ) : dataPagination?.length > 0 ? (
           <div>
             <div>
-              {dataOffers?.map((offer: any, index: number) => (
+              {dataPagination?.map((offer: any, index: number) => (
 
                 <OfferCard
                   key={offer.title+index}
@@ -312,7 +315,8 @@ export const GitMyOffers = () => {
               ))}
             </div>
             <div>
-              <Pagination pageCount={4} onPageChange={() => {}} />
+              <Pagination   pageCount={Math.ceil(dataOffers?.length / 3)}
+                  onPageChange={(p) => setCurrentPage(p)}/>
             </div>
           </div>
         ) : (

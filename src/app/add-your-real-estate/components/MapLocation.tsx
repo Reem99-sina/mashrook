@@ -25,13 +25,12 @@ const MapLocation:React.FC<any>=({lat,long,onChange})=>{
             longitude: lng,  
             zoom: 14,  
           });
-          onChange((prev:typeInput)=>({...prev,lat: lat,  
-            long: lng})) 
           const response = await axios.get(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`);  
           const data = response.data;  
           if (data) { 
             setSearchQuery(data.display_name)
-              onChange((prev:typeInput)=>({...prev,address:data.display_name}))
+              onChange({lat: lat,  
+                long: lng,address:data.display_name})
              
           } else {  
             toast.error('Location not found');  

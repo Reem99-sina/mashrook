@@ -27,7 +27,7 @@ import { useDispatch,useSelector } from "react-redux";
 import {dataReturn} from "@/redux/features/getRequest"
 import {useRouter} from "next/navigation"
 import {Vector,Money,Diagram,Dance,Shower,Kitchen,CheckOut} from "@/app/assets/svg"
-const PropertyDetails: React.FC<{id:number}> = ({id}:{id:number}) => {
+const PropertyDetails: React.FC<{id:any}> = ({id}:{id:any}) => {
   const [activeTab, setActiveTab] = useState<"location" | "details">(
     "location"
   );

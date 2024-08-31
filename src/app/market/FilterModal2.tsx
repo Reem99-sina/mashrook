@@ -4,25 +4,34 @@ import React, { useState,useEffect,useRef } from "react";
 import { Range, getTrackBackground } from "react-range";
 import {cites} from "@/typeSchema/schema"
 import {CloseIconSmall } from "@/app/assets/svg";
+import { AppDispatch, RootState } from "@/redux/store";
+
+import { useDispatch, useSelector } from "react-redux";
+import { getproperityPurposeType } from "@/redux/features/getproperityPurpose";
 import { Modal, ModalRef } from "../components/shared/modal.component";
+import {criteriaInfo} from "./Marketpage"
 type FilterModalProps = {
   onClose: () => void;
   onFilter: (criteria: any) => void;
-  open:boolean
+  open:boolean;
+  setCriteria:(prev:criteriaInfo)=>void;
+  criteria:criteriaInfo,
+  onCloseModal:()=>void
 };
 
-const FilterModal: React.FC<FilterModalProps> = ({ onClose, onFilter,open }) => {
+const FilterModal: React.FC<FilterModalProps> = ({ onClose, onFilter,open,setCriteria,criteria,onCloseModal }) => {
   let refFilter=useRef<ModalRef>(null)
-  const [criteria, setCriteria] = useState<any>({
-    dealStatus: "",
-    city: "",
-    district: "",
-    unitType: "",
-    unitStatus: "",
-    priceRange: [0, 20000000],
-    shareRange: [10, 90],
-  });
-
+  const dispatch = useDispatch<AppDispatch>();
+  
+  let {
+    loading: loadingproperty_purpose_id,
+    message: messagePurpose,
+    data: dataPurpose,
+  } = useSelector<RootState>((state) => state.properityPurpose) as {
+    loading: boolean;
+    message: string;
+    data: any;
+  };
   // Example data for dropdowns
   const cities = ["الرياض", "الدمام", "جدة"];
   const districts = ["الياسمين", "البنفسج", "الورود"];
@@ -54,7 +63,7 @@ const FilterModal: React.FC<FilterModalProps> = ({ onClose, onFilter,open }) => 
 
   const handleApplyFilters = () => {
     onFilter(criteria);
-    onClose();
+    onCloseModal();
   };
 useEffect(()=>{
 if(open==true){
@@ -63,6 +72,8 @@ if(open==true){
   refFilter.current?.close()
 }
 },[open])
+
+
   return (
    
     <Modal ref={refFilter} className="flex rounded-lg items-start justify-center font-[Cairo] w-full " size="xs">
@@ -98,15 +109,15 @@ if(open==true){
         <div className="mb-4">
           <h3 className="font-semibold mb-2">الغرض من عرض العقار</h3>
           <div className="flex">
-            {unitStatuses.map((status) => (
+            {dataPurpose?.map((status:any) => (
               <button
-                key={status}
+                key={status?.id}
                 className={`px-4 py-2 m-1 rounded-md text-sm border ${
-                  criteria.unitStatus === status ? "bg-blue-450 text-white" : "bg-white text-gray-900"
+                  criteria.unitStatus === status?.id ? "bg-blue-450 text-white" : "bg-white text-gray-900"
                 }`}
-                onClick={() => setCriteria({ ...criteria, unitStatus: status })}
+                onClick={() => setCriteria({ ...criteria, unitStatus: status?.id })}
               >
-                {status}
+                {status?.title}
               </button>
             ))}
           </div>
@@ -179,7 +190,7 @@ if(open==true){
               step={100000}
               min={0}
               max={20000000}
-              values={criteria.priceRange}
+              values={criteria?.priceRange}
               onChange={handlePriceRangeChange}
               rtl
               renderTrack={({ props, children }) => (
@@ -202,7 +213,7 @@ if(open==true){
                       width: "100%",
                       borderRadius: "4px",
                       background: getTrackBackground({
-                        values: criteria.priceRange,
+                        values: criteria?.priceRange,
                         colors: ["#ccc", "#548BF4", "#ccc"],
                         min: 0,
                         max: 20000000,
@@ -243,7 +254,7 @@ if(open==true){
                       backgroundColor: "#548BF4",
                     }}
                   >
-                    {formatNumber(criteria.priceRange[index])}
+                    {formatNumber(criteria?.priceRange[index])}
                   </div>
                 </div>
               )}
@@ -270,7 +281,7 @@ if(open==true){
               step={5}
               min={10}
               max={90}
-              values={criteria.shareRange}
+              values={criteria?.shareRange}
               onChange={handleShareRangeChange}
               rtl
               renderTrack={({ props, children }) => (
@@ -292,7 +303,7 @@ if(open==true){
                       width: "100%",
                       borderRadius: "4px",
                       background: getTrackBackground({
-                        values: criteria.shareRange,
+                        values: criteria?.shareRange,
                         colors: ["#ccc", "#548BF4", "#ccc"],
                         min: 10,
                         max: 90,
@@ -333,7 +344,7 @@ if(open==true){
                       backgroundColor: "#548BF4",
                     }}
                   >
-                    {criteria.shareRange[index]}%
+                    {criteria?.shareRange[index]}%
                   </div>
                 </div>
               )}
