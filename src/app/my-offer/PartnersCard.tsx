@@ -80,7 +80,7 @@ export const PartnersCard: React.FC<PartnersCardProps> = ({
           {date}
         </span>
 
-        {inProgress ? (
+        {partnershipRatio!=100 ? (
           <span className="rounded-xl bg-[#F3F4F6] pl-2 pr-2 pt-[2px] pb-[2px] text-xs font-normal text-[#6B7280]">
             تحت التقدم{" "}
           </span>

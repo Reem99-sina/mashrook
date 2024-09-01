@@ -29,6 +29,9 @@ const getRequestSlice=createSlice({
     name:"getrequest",
     initialState:initialstate,
     reducers:{
+        deleteOrder:(state,action)=>{
+            state.data=action.payload.data
+        }
     },extraReducers:(builder)=>{
         builder.addCase(getRequest.fulfilled,(state,action)=>{
             state.loading=false
@@ -47,4 +50,5 @@ const getRequestSlice=createSlice({
         })
     }
 })
+export const { deleteOrder } = getRequestSlice.actions;
 export default getRequestSlice.reducer

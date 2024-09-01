@@ -29,6 +29,9 @@ const getOfferSlice=createSlice({
     name:"getOffer",
     initialState:initialstate,
     reducers:{
+        deleteOffer:(state,action)=>{
+            state.data=action.payload.data
+        }
     },extraReducers:(builder)=>{
         builder.addCase(getOffer.fulfilled,(state,action)=>{
             state.loading=false
@@ -47,4 +50,5 @@ const getOfferSlice=createSlice({
         })
     }
 })
+export const { deleteOffer } = getOfferSlice.actions;
 export default getOfferSlice.reducer

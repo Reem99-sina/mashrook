@@ -279,21 +279,14 @@ export const OfferCard: React.FC<ChatCardProps> = ({
           onClick={() => router.push(`/edit-offer/${id}`)}
         />
         <span className="text-[#D1D5DB]">|</span>
-        {inProgress ? (
-          <Button
-            startIcon={<Rebuild />}
-            text="انسحاب"
-            className="!bg-white !flex !flex-row-reverse !text-[#3B73B9] !text-sm !font-medium !gap-1 "
-            onClick={onUpdate}
-          />
-        ) : (
+        
           <Button
             startIcon={<UpdateIcon />}
             text="تحديث"
             className="!bg-white !flex !flex-row-reverse !text-[#3B73B9] !text-sm !font-medium !gap-1 "
             onClick={onUpdate}
           />
-        )}
+        
 
         <span className="text-[#D1D5DB]">|</span>
 

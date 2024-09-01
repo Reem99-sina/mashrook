@@ -31,7 +31,7 @@ import {
   RealEstateErrrorTypeInter,
   postrealEstateType,
   earthInter,
-  removeState
+  removeState,
 } from "@/redux/features/postRealEstate";
 import { getCity,getDistrict} from "@/redux/features/getCity"
 import { cites } from "@/typeSchema/schema";
@@ -49,28 +49,6 @@ import {
 } from "@/typeSchema/schemaRealestate";
 // import Map from "../components/shared/map";
 import MapLocation from "./components/MapLocation";
-const cities = [
-  {
-    id: 1,
-    name: "الرياض",
-  },
-  {
-    id: 2,
-    name: "الدمام",
-  },
-  {
-    id: 3,
-    name: "جدة",
-  },
-  {
-    id: 4,
-    name: "تبوك",
-  },
-  {
-    id: 5,
-    name: "الطائف",
-  },
-];
 
 const dataa = [
   {
@@ -473,7 +451,7 @@ const AddYourRealEstate: React.FC = () => {
         router.push("/login");
       }
     } else {
-      toast.error("لازم تقبل بشروط الاستخدام وسياسية الخصوصية");
+      toast.error(" يجب الموافقه علي شروط الاستخدام وسياسية الخصوصية");
     }
     // setSentYourRequest(true);
   };
@@ -489,7 +467,7 @@ const AddYourRealEstate: React.FC = () => {
 
     dispatch(getproperityTypeMore({ num: 1, type: "offer" }));
     return () => {
-     dispatch(removeState())
+      dispatch(removeState());
     };
   }, [dispatch]);
   useEffect(()=>{

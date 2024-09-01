@@ -159,7 +159,7 @@ export interface typePay {
 interface paramsInput{
   min_price?:number|null,
 max_price?:number|null,
-property_type_details_id?:number|null,
+property_type_details_id?:number|null|string,
 
 property_purpose_id?:number|null|string,
 

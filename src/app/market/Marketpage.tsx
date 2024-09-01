@@ -11,6 +11,7 @@ import FilterModal from "./FilterModal2";
 import { TbArrowsSort } from "react-icons/tb";
 import { RiEqualizerFill } from "react-icons/ri";
 import { getRequest } from "@/redux/features/getRequest";
+import {getDetailsType} from "@/redux/features/getDetailsType"
 import { IoIosSearch } from "react-icons/io";
 import Link from "next/link";
 import {Tune,MenuWhite} from "@/app/assets/svg"
@@ -23,7 +24,7 @@ export interface criteriaInfo{
   dealStatus: string,
     city: string,
     district: string,
-    unitType: string,
+    unitType: string|number,
     unitStatus: string,
     priceRange: number[],
     shareRange: number[],
@@ -37,7 +38,7 @@ const MarketPage: React.FC = () => {
     dealStatus: "",
     city: "",
     district: "",
-    unitType: "",
+    unitType: 0,
     unitStatus: "",
     priceRange: [0,200000],
     shareRange: [10,50],
@@ -56,6 +57,7 @@ const MarketPage: React.FC = () => {
       min_price:criteria?.priceRange[0]!=0?criteria?.priceRange[0]:null,
       max_price:criteria?.priceRange[1]!=200000?criteria?.priceRange[1]:null,
       property_purpose_id:status||criteria?.unitStatus,
+      property_type_details_id:criteria?.unitType,
       min_percentage:criteria?.shareRange[0]!=10?criteria?.shareRange[0]:null,
       max_percentage:criteria?.shareRange[1]!=50?criteria?.shareRange[0]:null
       ,status:criteria?.dealStatus=="متاح"?"available":criteria?.dealStatus?"complete":"",
@@ -187,7 +189,10 @@ const MarketPage: React.FC = () => {
   }, []);
   useEffect(()=>{
     dispatch(getproperityPurposeType());
+    dispatch(getDetailsType());
+
   },[dispatch])
+  
   useEffect(()=>{
     dispatch(getRequest(fiterData))
   },[status,sortOption,dispatch,fiterData])
