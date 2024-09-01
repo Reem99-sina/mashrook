@@ -31,7 +31,7 @@ import {
   RealEstateErrrorTypeInter,
   postrealEstateType,
   earthInter,
-  removeState
+  removeState,
 } from "@/redux/features/postRealEstate";
 import { getCity,getDistrict} from "@/redux/features/getCity"
 import { cites } from "@/typeSchema/schema";
@@ -451,7 +451,7 @@ const AddYourRealEstate: React.FC = () => {
         router.push("/login");
       }
     } else {
-      toast.error("لازم تقبل بشروط الاستخدام وسياسية الخصوصية");
+      toast.error(" يجب الموافقه علي شروط الاستخدام وسياسية الخصوصية");
     }
     // setSentYourRequest(true);
   };
@@ -467,7 +467,7 @@ const AddYourRealEstate: React.FC = () => {
 
     dispatch(getproperityTypeMore({ num: 1, type: "offer" }));
     return () => {
-     dispatch(removeState())
+      dispatch(removeState());
     };
   }, [dispatch]);
   useEffect(()=>{

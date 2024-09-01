@@ -1,14 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import React, { useState, useRef, useEffect,useMemo } from "react";
+import React, { useState, useRef, useEffect, useMemo } from "react";
 import { RxArrowLeft } from "react-icons/rx";
-import {useRouter} from "next/navigation"
+import { useRouter } from "next/navigation";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { validateForm } from "@/app/hooks/validate";
 import { dataReturn, addUnqiue, typePay } from "@/redux/features/getRequest";
-import {amountSchema} from "@/typeSchema/schema"
+import { amountSchema } from "@/typeSchema/schema";
 type JoinStatusButtonsProps = {
   currentDealStatus: boolean;
   data: typePay;
@@ -23,7 +23,7 @@ const JoinStatusButtons: React.FC<JoinStatusButtonsProps> = ({
   const [showDialog, setShowDialog] = useState(false);
   const [token, setToken] = useState<string | null>(null);
   const [partnershipPercentage, setPartnershipPercentage] = useState(0);
-  const router=useRouter()
+  const router = useRouter();
   const availableAmount = 600000;
   const dispatch = useDispatch<AppDispatch>();
   const tooltipRef = useRef<HTMLDivElement>(null);
@@ -34,37 +34,38 @@ const JoinStatusButtons: React.FC<JoinStatusButtonsProps> = ({
     selectData: dataReturn;
   };
   const [errors, setErrors] = useState<{
-   
-   amount:string,
-   
+    amount: string;
   }>();
 
   const handleDialogToggle = () => {
     setShowDialog(!showDialog);
   };
-  const handleSubmit=async()=>{
-   const status=await validateForm({amount:partnershipAmount},amountSchema,setErrors)
-
-   if(status==true){
-    dispatch(
-      addUnqiue({
-        id: dataMain?.id,
-        detail_id: data?.id,
-        title: dataMain?.propertyType?.title,
-        numberPiece: data?.piece_number,
-        type: Boolean(data?.type) ? false : true,
-        propertyOwnerType:dataMain?.propertyOwnerType?.title,
-        propertyPurpose:dataMain?.propertyPurpose?.id
-      })
+  const handleSubmit = async () => {
+    const status = await validateForm(
+      { amount: partnershipAmount },
+      amountSchema,
+      setErrors
     );
-    router.push("/termsandconditions")
-   }
-  }
+
+    if (status == true) {
+      dispatch(
+        addUnqiue({
+          id: dataMain?.id,
+          detail_id: data?.id,
+          title: dataMain?.propertyType?.title,
+          numberPiece: data?.piece_number,
+          type: Boolean(data?.type) ? false : true,
+          propertyOwnerType: dataMain?.propertyOwnerType?.title,
+          propertyPurpose: dataMain?.propertyPurpose?.id,
+        })
+      );
+      router.push("/termsandconditions");
+    }
+  };
 
   const handlePercentageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPartnershipPercentage(Number(e.target.value));
   };
-
   useEffect(() => {
     const inputElement = document.querySelector('input[type="range"]');
     const tooltipElement = tooltipRef.current;
@@ -90,9 +91,10 @@ const JoinStatusButtons: React.FC<JoinStatusButtonsProps> = ({
       setToken(storedToken);
     }
   }, []);
-  const partnershipAmount = useMemo(()=>{
+
+  const partnershipAmount = useMemo(() => {
     return (data?.available_price * partnershipPercentage) / 100;
-  },[data?.available_price,partnershipPercentage])
+  }, [data?.available_price, partnershipPercentage]);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -100,6 +102,18 @@ const JoinStatusButtons: React.FC<JoinStatusButtonsProps> = ({
       sessionStorage.setItem("element", JSON.stringify(data));
     }
   }, [partnershipAmount, data]);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputAmount = Number(e.target.value.replace(/,/g, ""));
+
+    if (inputAmount > data?.available_price) {
+      setPartnershipPercentage(100);
+    } else {
+      const newPercentage = (inputAmount / data?.available_price) * 100;
+      setPartnershipPercentage(newPercentage);
+    }
+  };
+
   return (
     <div id="joinStatus" className="py-4">
       {/* {currentDealStatus === "محجوز" ? (
@@ -126,9 +140,7 @@ const JoinStatusButtons: React.FC<JoinStatusButtonsProps> = ({
               ? "bg-gray-300 text-gray-800"
               : "bg-blue-450 text-white hover:bg-blue-800 border-2 border-blue-500"
           } w-3/4 font-medium rounded-lg text-sm px-5 py-2.5 flex justify-center rtl:flex-row-reverse dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
-          disabled={
-            data?.stage === "finished" || Boolean(token) == false
-          }
+          disabled={data?.stage === "finished" || Boolean(token) == false}
           onClick={handleDialogToggle}
         >
           <RxArrowLeft
@@ -193,7 +205,7 @@ const JoinStatusButtons: React.FC<JoinStatusButtonsProps> = ({
                   ref={tooltipRef}
                   className="absolute -top-6 left-0 bg-blue-450 text-white text-xs px-3 py-1 rounded-full"
                 >
-                  {partnershipPercentage}%
+                  {partnershipPercentage.toFixed(2)}%
                 </div>
               </div>
             </div>
@@ -203,13 +215,12 @@ const JoinStatusButtons: React.FC<JoinStatusButtonsProps> = ({
                 <input
                   type="text"
                   value={partnershipAmount.toLocaleString()}
-                  readOnly
+                  onChange={handleInputChange}
                   className="w-full p-2 border border-gray-300 rounded-r-lg"
                 />
                 <span className="bg-blue-450 text-white py-2 px-4 rounded-l-lg border-2 border-r-0">
                   ريال
                 </span>
-               
               </div>
               {errors?.amount && (
                 <p className="text-xs text-red-600 dark:text-red-500 text-right">

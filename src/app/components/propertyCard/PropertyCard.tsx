@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState ,useMemo} from "react";
+import React, { useState, useMemo } from "react";
 import {
   FaRegCalendarAlt,
   FaBookmark,
@@ -25,16 +25,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { dataReturn, addUnqiue } from "@/redux/features/getRequest";
 
 type PropertyCardProps = {
-  page?:number,limit?:number
+  page?: number;
+  limit?: number;
 };
 
-const PropertyCard: React.FC<PropertyCardProps> = ({page,limit}) => {
+const PropertyCard: React.FC<PropertyCardProps> = ({ page, limit }) => {
   const [saved, setSaved] = useState(false);
   let router = useRouter();
   let dispatch = useDispatch();
   const [showNotification, setShowNotification] = useState(false);
-  ;
-
   const [show, setShow] = useState(false);
 
   const [notificationMessage, setNotificationMessage] = useState("");
@@ -53,12 +52,12 @@ const PropertyCard: React.FC<PropertyCardProps> = ({page,limit}) => {
       setShowNotification(false);
     }, 5000);
   };
- 
+
   const renderCards = (ele: dataReturn, offerIndex: number) => {
     const cards = [];
     // landDetails
-   
-    for (let i = 0; i < (ele?.details?.length); i++) {
+
+    for (let i = 0; i < ele?.details?.length; i++) {
       cards.push(
         <div
           key={`${ele?.details[i]?.id}-0`}
@@ -74,14 +73,17 @@ const PropertyCard: React.FC<PropertyCardProps> = ({page,limit}) => {
                 </p>
               </div>
               <div className="flex flex-col gap-y-2 my-2 flex-wrap items-start">
-                <div className="bg-gray-200 rounded-xl px-2 flex items-center">
+                <div className="bg-gray-200 rounded-xl  flex items-center p-2">
                   <LuTag />
                   <p className="text-base  md:text-xs lg:text-sm mx-2">
                     {ele?.details[i]?.price || ele?.price} {"ريال"}
-                    <span className="text-[#3B73B9]"> (بدون القيمة المضافة أو السعي)</span>
+                    <span className="text-[#3B73B9]">
+                      {" "}
+                      (بدون القيمة المضافة أو السعي)
+                    </span>
                   </p>
                 </div>
-                <div className="bg-gray-200 rounded-xl px-2 mr-4 flex items-center">
+                <div className="bg-gray-200 rounded-xl p-2 mr-4 flex items-center">
                   <BiArea />
                   <p className="text-base md:text-xs lg:text-sm mx-2 ">
                     {ele?.details[i]?.area || ele?.area} م<sup>2</sup>
@@ -90,7 +92,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({page,limit}) => {
               </div>
             </div>
             <div className="flex flex-col items-center justify-center  rounded-full p-2">
-              {(ele?.details[i]?.stage == "finished") ? (
+              {ele?.details[i]?.stage == "finished" ? (
                 <>
                   <FinishedShares />
                   <div className="w-12">
@@ -109,8 +111,10 @@ const PropertyCard: React.FC<PropertyCardProps> = ({page,limit}) => {
                     />
                   </span>
                   <div className="">
-                  <p className="text-xs text-gray-500">متاح</p>
-                  <p className="text-xs text-gray-500">{ele?.details[i]?.available_price}ريال</p>
+                    <p className="text-xs text-gray-500">متاح</p>
+                    <p className="text-xs text-gray-500">
+                      {ele?.details[i]?.available_price}ريال
+                    </p>
                   </div>
                 </>
               )}
@@ -126,8 +130,14 @@ const PropertyCard: React.FC<PropertyCardProps> = ({page,limit}) => {
       );
     }
     if (ele?.details?.length == 0) {
-      
-      for (let i = 0; i < (ele?.landDetails?.length>2&&show==false?2:ele?.landDetails?.length); i++) {
+      for (
+        let i = 0;
+        i <
+        (ele?.landDetails?.length > 2 && show == false
+          ? 2
+          : ele?.landDetails?.length);
+        i++
+      ) {
         cards.push(
           <div
             key={`${ele?.landDetails[i]?.id}-`}
@@ -146,7 +156,10 @@ const PropertyCard: React.FC<PropertyCardProps> = ({page,limit}) => {
                     <LuTag />
                     <p className="text-base md:text-xs lg:text-sm mx-2">
                       {ele?.landDetails[i]?.price} {"ريال"}
-                      <span className="text-[#3B73B9]"> (بدون القيمة المضافة أو السعي)</span>
+                      <span className="text-[#3B73B9]">
+                        {" "}
+                        (بدون القيمة المضافة أو السعي)
+                      </span>
                     </p>
                   </div>
                   <div className="bg-gray-200 rounded-xl px-2 mr-4 flex items-center">
@@ -178,8 +191,9 @@ const PropertyCard: React.FC<PropertyCardProps> = ({page,limit}) => {
                     </span>
                     <div className="">
                       <p className="text-xs text-gray-500">متاح</p>
-                      <p className="text-xs text-gray-500">{ele?.landDetails[i]?.available_price}ريال</p>
-
+                      <p className="text-xs text-gray-500">
+                        {ele?.landDetails[i]?.available_price}ريال
+                      </p>
                     </div>
                   </>
                 )}
@@ -198,12 +212,9 @@ const PropertyCard: React.FC<PropertyCardProps> = ({page,limit}) => {
 
     return cards;
   };
-let dataPage=useMemo(()=>{
-  return page&&limit?  data?.slice(
-    (page - 1) * limit,
-    page * limit
-  ):data
-},[data,page,limit])
+  let dataPage = useMemo(() => {
+    return page && limit ? data?.slice((page - 1) * limit, page * limit) : data;
+  }, [data, page, limit]);
   return (
     <div className="mb-4">
       {dataPage?.map((ele: dataReturn, offerIndex: number) => (
@@ -241,16 +252,21 @@ let dataPage=useMemo(()=>{
                   <p>رقم الطلب: {ele?.id}</p>
                 </div>
                 <div className="pt-1 mr-4 text-sm text-gray-700 mt-2">
-                  {ele?.license_number&&<div className="flex items-center justify-start">
-                    <CgSmartphoneShake className="w-[16px]"/>
-                    <p className="px-2">ترخيص رقم: {ele?.license_number}</p>
-                  </div>}
-                  
+                  {ele?.license_number && (
+                    <div className="flex items-center justify-start">
+                      <CgSmartphoneShake className="w-[16px]" />
+                      <p className="px-2">ترخيص رقم: {ele?.license_number}</p>
+                    </div>
+                  )}
+
                   <div className="flex items-center  justify-start">
                     <GoLocation />
                     <p className="px-2">
                       مدينة {ele?.propertyLocation?.city}،{" "}
-                      {ele?.propertyLocation?.district?.replace(/[\[\]\\"]/g, '')}
+                      {ele?.propertyLocation?.district?.replace(
+                        /[\[\]\\"]/g,
+                        ""
+                      )}
                     </p>
                   </div>
                 </div>
@@ -274,13 +290,13 @@ let dataPage=useMemo(()=>{
                 </span>
               </div>
             </div> */}
-            
-            {(ele?.landDetails?.length > 2) && (
+
+            {ele?.landDetails?.length > 2 && (
               <div className="flex justify-center mb-2 items-center">
                 <button
                   type="button"
                   className="text-blue-500 w-3/4 font-bold text-xl px-5 py-2 flex justify-center items-center"
-                  onClick={()=>setShow(!show)}
+                  onClick={() => setShow(!show)}
                 >
                   عرض كل العقارات
                   <FaAngleDoubleLeft className="mr-4 text-xl text-blue-500" />
