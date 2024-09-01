@@ -3,12 +3,12 @@ import {useEffect,useState} from "react"
 import Image from "next/image"
 import {Button} from "./button.component"
 import {X} from "@/app/assets/svg"
-const ImageAppear: React.FC<{images?:any,onDelete:(index:string)=>void,links?:any}>=({images,onDelete,links})=>{
+const ImageAppear: React.FC<{images?:any,onDelete:(index:any)=>void,links?:any}>=({images,onDelete,links})=>{
  
     let [urls,setUrls]=useState<{ name: string; link: string | ArrayBuffer|null  }[]>(links)
     function readAndPreview(file:any) {
         // Make sure `file.name` matches our extensions criteria
-        console.log(file instanceof File,"file")
+        
         if((file instanceof File)==true){
           if (/\.(jpe?g|png|gif)$/i.test(file.name)) {
             const reader = new FileReader();
@@ -28,7 +28,7 @@ const ImageAppear: React.FC<{images?:any,onDelete:(index:string)=>void,links?:an
         }
         
         }else{
-          console.log(file,"filuyuyiyiue")
+          
           setUrls((prevs)=>[...prevs,file])
         }
       }
@@ -37,7 +37,6 @@ const ImageAppear: React.FC<{images?:any,onDelete:(index:string)=>void,links?:an
   //           setUrls(links)
   //         }
   // },[links])
-  console.log(images,"links",urls)
     useEffect(()=>{
         Array.prototype.forEach.call(images, readAndPreview);
         return ()=>{
@@ -51,7 +50,7 @@ const ImageAppear: React.FC<{images?:any,onDelete:(index:string)=>void,links?:an
             <div className="self-start" onClick={()=>{
               
                setUrls((prev)=>prev.filter((img,index)=>img?.name!=url?.name))
-                onDelete(url?.name)
+                onDelete(url)
             }}>
                 <Image
                   src={X}

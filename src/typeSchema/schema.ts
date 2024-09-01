@@ -177,6 +177,15 @@ export let registerSchema=object().shape({
 })
 export let loginSchema=object().shape({
   
-  email:string().email().matches(/^(?!.*@[^,]*,)/,"يجب ادخال البريد الالكتروني صحيح").required("يجب ادخال البريد الالكتروني صحيح"),
+  email:string().email("يجب ادخال البريد الالكتروني صحيح").matches(/^(?!.*@[^,]*,)/,"يجب ادخال البريد الالكتروني صحيح").required("يجب ادخال البريد الالكتروني صحيح"),
   password:string().min(8,"يجب ادخال 8 حروف او ارقام").required("يجب ادخال 8 حروف او ارقام"),
+})
+export let ForgetSchema=object().shape({
+  
+  email:string().email("يجب ادخال البريد الالكتروني صحيح").matches(/^(?!.*@[^,]*,)/,"يجب ادخال البريد الالكتروني صحيح").required("يجب ادخال البريد الالكتروني صحيح"),
+  
+})
+export let ResetSchema=object().shape({
+  new_password:string().min(8,"يجب ادخال 8 حروف او ارقام").required("يجب ادخال 8 حروف او ارقام"),
+  repeate_new_password:string().oneOf([ref('new_password')], 'لا يوجد تشابة بينه وبين كلمة السر').min(8,"يجب ادخال 8 حروف او ارقام").required("لا يوجد تشابة بينه وبين كلمة السر")
 })

@@ -36,29 +36,8 @@ import {
   getproperityTypeMore,
   removeStatus
 } from "@/redux/features/getProperity";
-import { cites } from "@/typeSchema/schema"
-const cities = [
-  {
-    id: 1,
-    name: "الرياض",
-  },
-  {
-    id: 2,
-    name: "الدمام",
-  },
-  {
-    id: 3,
-    name: "جدة",
-  },
-  {
-    id: 4,
-    name: "تبوك",
-  },
-  {
-    id: 5,
-    name: "الطائف",
-  },
-];
+import { getCity,getDistrict} from "@/redux/features/getCity"
+
 
 const EditMyOrderBadge = () => {
   const [criteria, setCriteria] = useState<any>({
@@ -68,7 +47,7 @@ const EditMyOrderBadge = () => {
     unitType: 0,
     status: "",
     shareRange: [1000000, 2000000],
-    desiredRow:[1,10],
+    desiredRow: [1, 10],
     finance: false
   });
   const [dataSend, setDataSend] = useState({
@@ -133,22 +112,27 @@ const EditMyOrderBadge = () => {
   };
   let {
     dataPut,
-  messagePut,
-  dataPutLocat,
-  messagePutLocat,
-   dataPutDetail,
-  messagePutDetail
+    messagePut,
+    dataPutLocat,
+    messagePutLocat,
+    dataPutDetail,
+    messagePutDetail
   } = useSelector<RootState>((state) => state.realEstateRequest) as {
-    dataPut:any,
-  messagePut:string,
-  dataPutLocat:any,
-  messagePutLocat:string,
-   dataPutDetail:any,
-  messagePutDetail:string
+    dataPut: any,
+    messagePut: string,
+    dataPutLocat: any,
+    messagePutLocat: string,
+    dataPutDetail: any,
+    messagePutDetail: string
+  };
+  let {  city,district } =
+  useSelector<RootState>((state) => state.city) as {
+    district:any
+    city:any
   };
   const propertyType = useMemo(() => {
     return {
-      id:selectData?.details[0]?.id,
+      id: selectData?.details[0]?.id,
       property_type_id: selectData?.propertyType?.id,
       unitType: selectData?.propertyTypeDetails?.id,
       city: selectData?.propertyLocation?.city,
@@ -156,7 +140,7 @@ const EditMyOrderBadge = () => {
       status: selectData?.details[0]?.status || selectData?.landDetails[0]?.status,
       shareRange: [selectData?.details[0]?.min_price || selectData?.landDetails[0]?.min_price, selectData?.details[0]?.price || selectData?.landDetails[0]?.price],
       finance: selectData?.finance,
-      desiredRow:[selectData?.details[0]?.min_apartment_floor,selectData?.details[0]?.apartment_floor]
+      desiredRow: [selectData?.details[0]?.min_apartment_floor, selectData?.details[0]?.apartment_floor]
     }
   }, [selectData])
   const handleCiteChange = (cite: { id: number; name: string }) => {
@@ -167,8 +151,8 @@ const EditMyOrderBadge = () => {
         return [...prevSelectedCites, cite];
       }
     });
-    setCriteria((prev:any)=>({...prev,district: criteria?.district?.some((c: any) => c == cite.name) ? criteria?.district?.filter((c: any) => c != cite.name) : [...criteria?.district, cite?.name]}))
-    console.log(selectedCites,"selectedCites",criteria?.district)
+    setCriteria((prev: any) => ({ ...prev, district: criteria?.district?.some((c: any) => c == cite.name) ? criteria?.district?.filter((c: any) => c != cite.name) : [...criteria?.district, cite?.name] }))
+    console.log(selectedCites, "selectedCites", criteria?.district)
     // setCriteria({ ...criteria,  })
   };
   const handleShareRangeChange = (values: number[]) => {
@@ -193,9 +177,9 @@ const EditMyOrderBadge = () => {
     };
   }, [dispatch]);
   useEffect(() => {
-    if(!(titleSection&&detailsSection)){
-      console.log(titleSection&&detailsSection,"titleSection&&detailsSection")
-      if(criteria?.property_type_id){
+    if (!(titleSection && detailsSection)) {
+      console.log(titleSection && detailsSection, "titleSection&&detailsSection")
+      if (criteria?.property_type_id) {
         dispatch(
           getproperityTypeMore({
             num: criteria?.property_type_id || 1,
@@ -204,26 +188,25 @@ const EditMyOrderBadge = () => {
         );
       }
     }
-   
-  }, [criteria?.property_type_id, dispatch,detailsSection,titleSection]);
+
+  }, [criteria?.property_type_id, dispatch, detailsSection, titleSection]);
   useEffect(() => {
     // if(propertyType){
     setCriteria({ ...propertyType })
 
     // }
   }, [propertyType])
-  useEffect(()=>{
-    if(criteria?.unitType==4){
-      setDetails(selectData?.details?.map((detail:any)=>({
-        id:detail?.id,
+  useEffect(() => {
+    if (criteria?.unitType == 4) {
+      setDetails(selectData?.details?.map((detail: any) => ({
+        id: detail?.id,
         type: detail?.type,
         price: detail?.price,
         min_price: detail?.min_price,
       })))
     }
-  },[criteria?.unitType,selectData])
+  }, [criteria?.unitType, selectData])
   useEffect(() => {
-    console.log(messagePut,dataPut)
     if (messagePut && Boolean(dataPut) == true) {
       toast.success(messagePut);
       router.push("/my-offer");
@@ -239,12 +222,12 @@ const EditMyOrderBadge = () => {
       router.push("/my-offer");
       // setSentYourRequest(true);
     }
-  }, [dataPut, messagePut,dataPutLocat,messagePutLocat, dataPutDetail,
-    messagePutDetail,router]);
-  useEffect(()=>{
-    return ()=>{
+  }, [dataPut, messagePut, dataPutLocat, messagePutLocat, dataPutDetail,
+    messagePutDetail, router]);
+  useEffect(() => {
+    return () => {
       setCriteria({
-        id:0,
+        id: 0,
         property_type_id: 0,
         city: "",
         district: null,
@@ -255,12 +238,20 @@ const EditMyOrderBadge = () => {
       })
       dispatch(removeStatus())
     }
-  },[dispatch])
-  useEffect(()=>{
-    return ()=>{
+  }, [dispatch])
+  useEffect(() => {
+    return () => {
       dispatch(removeStateEdit())
     }
+  }, [dispatch])
+  useEffect(()=>{
+    dispatch(getCity());
   },[dispatch])
+  useEffect(()=>{
+    if(criteria?.city){
+      dispatch(getDistrict({name:criteria?.city}));
+    }
+  },[criteria?.city,dispatch])
   const data = [
     {
       id: 1,
@@ -288,9 +279,9 @@ const EditMyOrderBadge = () => {
                 setCriteria({ ...criteria, city: event?.target?.value })
               }
             >
-              {cities.map((city) => (
-                <option key={city.id} value={city.name}>
-                  {city.name}
+              {city?.map((city:any) => (
+                <option key={city?.id} value={city?.nameAr}>
+                  {city?.nameAr}
                 </option>
               ))}
             </select>
@@ -330,92 +321,92 @@ const EditMyOrderBadge = () => {
       id: 5,
       title: "",
       english: "shareRange",
-      copmonent: (criteria?.unitType == 4?
-       floorsVilla?.map((floor, ind) => (
-                    <AccordionComponent
-                      title={floor?.name}
-                      key={ind}
-                      floors={floorsVilla}
-                     
-                      onChange={(e) => {
-                        setDetails((prev) =>
-                          prev?.map((ele, i) =>
-                            i == ind ? { ...ele, type: e.target.value } : ele
-                          )
-                        );
-                      }}
-                      value={floor?.name}
-                    >
-                      <>
-                      {(detailsVilla&&detailsVilla[ind])&&<RangeComponent 
-                      title="ميزانيتك"
-                      firstNumDes="500,000"
-                      secondNumDes="+20,000,000"
-                      step={500000}
-                      min={500000}
-                      max={20000000}
-                      values={[
-                        detailsVilla[ind]?.min_price,
-                        detailsVilla[ind]?.price,
-                      ]}
-                      handleShareRangeChange={(values: number[]) =>
-                        setDetails((prev) =>
-                          prev?.map((ele, i) =>
-                            i == ind
-                              ? {
-                                  ...ele,
-                                  min_price: values[0],
-                                  price: values[1],
-                                }
-                              : ele
-                          )
-                        )}
-                      unit="ريال"
-                      />}
-                      </>
-                    </AccordionComponent>
-                  )):criteria?.unitType == 8?<>
-                       <RangeComponent 
-                      title="الادوار المرغوبة"
-                      firstNumDes="1"
-                      secondNumDes="+10"
-                      step={1}
-                      min={1}
-                      max={10}
-                      values={criteria?.desiredRow}
-                      handleShareRangeChange={(values: number[]) =>{
-                        setCriteria({ ...criteria, desiredRow: values });
-                      }}
-                      unit="دور"
-                      />
-                      <RangeComponent 
-                      title="ميزانيتك"
-                      firstNumDes="500,000"
-                      secondNumDes="+20,000,000"
-                      step={500000}
-                      min={500000}
-                      max={20000000}
-                      values={criteria?.shareRange}
-                      handleShareRangeChange={(values: number[]) =>{
-                        setCriteria({ ...criteria, shareRange: values });
-                      }}
-                      unit="ريال"
-                      />
-                </>: <>
-                <RangeComponent 
-                      title="ميزانيتك"
-                      firstNumDes="500,000"
-                      secondNumDes="+20,000,000"
-                      step={500000}
-                      min={500000}
-                      max={20000000}
-                      values={criteria?.shareRange}
-                      handleShareRangeChange={(values: number[]) =>{
-                        setCriteria({ ...criteria, shareRange: values });
-                      }}
-                      unit="ريال"
-                      />
-                </>
+      copmonent: (criteria?.unitType == 4 ?
+        floorsVilla?.map((floor, ind) => (
+          <AccordionComponent
+            title={floor?.name}
+            key={ind}
+            floors={floorsVilla}
+
+            onChange={(e) => {
+              setDetails((prev) =>
+                prev?.map((ele, i) =>
+                  i == ind ? { ...ele, type: e.target.value } : ele
+                )
+              );
+            }}
+            value={floor?.name}
+          >
+            <>
+              {(detailsVilla && detailsVilla[ind]) && <RangeComponent
+                title="ميزانيتك"
+                firstNumDes="500,000"
+                secondNumDes="+20,000,000"
+                step={500000}
+                min={500000}
+                max={20000000}
+                values={[
+                  detailsVilla[ind]?.min_price,
+                  detailsVilla[ind]?.price,
+                ]}
+                handleShareRangeChange={(values: number[]) =>
+                  setDetails((prev) =>
+                    prev?.map((ele, i) =>
+                      i == ind
+                        ? {
+                          ...ele,
+                          min_price: values[0],
+                          price: values[1],
+                        }
+                        : ele
+                    )
+                  )}
+                unit="ريال"
+              />}
+            </>
+          </AccordionComponent>
+        )) : criteria?.unitType == 8 ? <>
+          <RangeComponent
+            title="الادوار المرغوبة"
+            firstNumDes="1"
+            secondNumDes="+10"
+            step={1}
+            min={1}
+            max={10}
+            values={criteria?.desiredRow}
+            handleShareRangeChange={(values: number[]) => {
+              setCriteria({ ...criteria, desiredRow: values });
+            }}
+            unit="دور"
+          />
+          <RangeComponent
+            title="ميزانيتك"
+            firstNumDes="500,000"
+            secondNumDes="+20,000,000"
+            step={500000}
+            min={500000}
+            max={20000000}
+            values={criteria?.shareRange}
+            handleShareRangeChange={(values: number[]) => {
+              setCriteria({ ...criteria, shareRange: values });
+            }}
+            unit="ريال"
+          />
+        </> : <>
+          <RangeComponent
+            title="ميزانيتك"
+            firstNumDes="500,000"
+            secondNumDes="+20,000,000"
+            step={500000}
+            min={500000}
+            max={20000000}
+            values={criteria?.shareRange}
+            handleShareRangeChange={(values: number[]) => {
+              setCriteria({ ...criteria, shareRange: values });
+            }}
+            unit="ريال"
+          />
+        </>
       ),
     },
     {
@@ -430,74 +421,74 @@ const EditMyOrderBadge = () => {
     e.preventDefault();
     router.push("/my-offer");
   };
-  const onSubmit=()=>{
-    console.log(selectedCites,"selectedCites")
+  const onSubmit = () => {
+    console.log(selectedCites, "selectedCites")
     const datasend = {
       property_id: Number(id),
       city: criteria?.city,
-      district: criteria?.district?.map((dis:any) => dis)
+      district: criteria?.district?.map((dis: any) => dis)
     } as properityInfo
     dispatch(
       putLocation({
         ...datasend,
       })
-    );    
-     if (
+    );
+    if (
       criteria?.property_type_id == 1 ||
       criteria?.property_type_id == 2
     ) {
-        dispatch(
-          putLandDetailsType({
-    price: criteria?.shareRange[1],
-    min_price: criteria?.shareRange[0],
-    finance:criteria?.finance=="false"?false:true,
-  
-    status:criteria?.status, /// مشاع او حر
-    land_details_id: selectData?.landDetails[0]?.id
-          })
-        );
-      
-    } else{
-      if(selectData?.details?.length==1){
-        selectData?.details.map((ele:any)=> dispatch(
+      dispatch(
+        putLandDetailsType({
+          price: criteria?.shareRange[1],
+          min_price: criteria?.shareRange[0],
+          finance: criteria?.finance == "false" ? false : true,
 
-          putDetailsType(ele?.min_apartment_floor&&ele?.apartment_floor?{
-            
+          status: criteria?.status, /// مشاع او حر
+          land_details_id: selectData?.landDetails[0]?.id
+        })
+      );
+
+    } else {
+      if (selectData?.details?.length == 1) {
+        selectData?.details.map((ele: any) => dispatch(
+
+          putDetailsType(ele?.min_apartment_floor && ele?.apartment_floor ? {
+
             // finance: criteria?.finance=="false"?false:true,
-           
-            status:criteria?.status,
+
+            status: criteria?.status,
             details_id: ele?.id,
             price: criteria?.shareRange[1],
             min_price: criteria?.shareRange[0],
-            min_apartment_floor:criteria?.desiredRow[0],
-            apartment_floor:String(criteria?.desiredRow[1])
+            min_apartment_floor: criteria?.desiredRow[0],
+            apartment_floor: String(criteria?.desiredRow[1])
             // details: detailsVilla,
-          }:{
-            status:criteria?.status,
+          } : {
+            status: criteria?.status,
             details_id: ele?.id,
             price: criteria?.shareRange[1],
             min_price: criteria?.shareRange[0],
           })
         ))
-      }else if(selectData?.details?.length>1){
-        detailsVilla?.map((ele:any)=>{
+      } else if (selectData?.details?.length > 1) {
+        detailsVilla?.map((ele: any) => {
           dispatch(
             putDetailsType({
-             
-              status:criteria?.status,
+
+              status: criteria?.status,
               details_id: ele?.id,
-              price:ele?.price,
+              price: ele?.price,
               min_price: ele?.min_price
               // details: detailsVilla,
             })
           );
         })
-        
+
       }
-        
-      
-    } 
-    
+
+
+    }
+
   }
   return (
     <form className="bg-white flex w-full h-full min-h-screen  flex-col p-5">
@@ -534,7 +525,7 @@ const EditMyOrderBadge = () => {
                     label={option?.title || option}
                     name={item?.english}
                     value={item?.english + option?.id}
-                    disabled={(item.english=="property_type_id")||(item.english=="unitType")}
+                    disabled={(item.english == "property_type_id") || (item.english == "unitType")}
                     checked={item?.english + criteria[item.english] == item?.english + option?.id}
                     onChange={(e) => { setCriteria({ ...criteria, [item.english]: e.target.value.replace(item?.english, "") }); console.log(item?.english, e.target.value.replace(item?.english, "")) }}
                   />
@@ -559,8 +550,8 @@ const EditMyOrderBadge = () => {
                     value={item?.english + option?.id}
                     checked={item?.english + criteria[item.english] == item?.english + option?.id}
                     onChange={(e) => { setCriteria({ ...criteria, [item.english]: e.target.value.replace(item?.english, "") }); console.log(item?.english) }}
-                    disabled={(item.english=="property_type_id")||(item.english=="unitType")}
-                  
+                    disabled={(item.english == "property_type_id") || (item.english == "unitType")}
+
                   />
                 ))}
               </div>
@@ -627,7 +618,7 @@ const EditMyOrderBadge = () => {
           <div className="flex flex-row items-center justify-center gap-3  w-full">
             <Button
               text=" تعديل"
-              onClick={() => {modalRef.current?.close(); onSubmit()}}
+              onClick={() => { modalRef.current?.close(); onSubmit() }}
               className="!text-xs !font-medium"
             />
             <Button
@@ -663,15 +654,15 @@ const EditMyOrderBadge = () => {
             />
           </div>
           <div className="flex flex-col items-end h-[500px] overflow-scroll  w-full">
-            {cites.map((cite) => (
+            {district?.map((cite:any) => (
               <div
-                key={cite.id}
+                key={cite?.id}
                 className="flex justify-end items-center w-full py-2"
               >
-                <span className="mr-2">{cite.name}</span>
+                <span className="mr-2">{cite?.name}</span>
                 <input
                   type="checkbox"
-                  checked={criteria?.district?.some((c: any) => c == cite.name)}
+                  checked={criteria?.district?.some((c: any) => c == cite?.name)}
                   onChange={() => handleCiteChange(cite)}
                   className="checked:accent-[#3B73B9] w-[16px] h-[16px]"
                 />

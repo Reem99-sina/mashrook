@@ -2,7 +2,7 @@
 import React from "react";
 import MainHeader from "../components/header/MainHeader";
 import Footer from "../components/header/Footer2";
-
+import Link from "next/link"
 import { Check } from "@/app/assets/svg";
 
 export default function JoiningSuccess() {
@@ -36,12 +36,13 @@ export default function JoiningSuccess() {
                 >
                   عرض المحادثات
                 </button>
-                <button
-                  type="button"
+                <Link
+                  href="/my-offer"
                   className=" text-blue-450 border-2 border-blue-600 font-medium rounded-lg text-sm px-5 py-2.5 mx-4 my-4 flex justify-center"
+                  
                 >
                   الذهاب الى طلباتي
-                </button>
+                </Link>
               </div>
 
               <div className="pt-8">

@@ -14,33 +14,12 @@ import toast from "react-hot-toast";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  
+
   putDetailsType,
   putLandDetailsType,
   removeStateEdit
 } from "@/redux/features/postRealEstate";
-const cities = [
-  {
-    id: 1,
-    name: "الرياض",
-  },
-  {
-    id: 2,
-    name: "الدمام",
-  },
-  {
-    id: 3,
-    name: "جدة",
-  },
-  {
-    id: 4,
-    name: "تبوك",
-  },
-  {
-    id: 5,
-    name: "الطائف",
-  },
-];
+
 
 const EditMyOffer = () => {
   const modalRef = useRef<ModalRef>(null);
@@ -49,16 +28,16 @@ const EditMyOffer = () => {
   const dispatch = useDispatch<AppDispatch>();
   let {
     dataPut,
-  messagePut,
+    messagePut,
 
-   dataPutDetail,
-  messagePutDetail
+    dataPutDetail,
+    messagePutDetail
   } = useSelector<RootState>((state) => state.realEstateRequest) as {
-    dataPut:any,
-  messagePut:string,
+    dataPut: any,
+    messagePut: string,
 
-   dataPutDetail:any,
-  messagePutDetail:string
+    dataPutDetail: any,
+    messagePutDetail: string
   };
   const handleBack = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -74,7 +53,7 @@ const EditMyOffer = () => {
     }
   }, []);
   useEffect(() => {
-    console.log(messagePut,dataPut)
+    console.log(messagePut, dataPut)
     if (messagePut && Boolean(dataPut) == true) {
       toast.success(messagePut);
       router.push("/my-offer");
@@ -86,36 +65,36 @@ const EditMyOffer = () => {
       // setSentYourRequest(true);
     }
   }, [dataPut, messagePut, dataPutDetail,
-    messagePutDetail,router]);
-    useEffect(()=>{
-      return ()=>{
-        dispatch(removeStateEdit())
-      }
-    },[dispatch])
-  const onSubmit=()=>{
-    if(offer?.type){
+    messagePutDetail, router]);
+  useEffect(() => {
+    return () => {
+      dispatch(removeStateEdit())
+    }
+  }, [dispatch])
+  const onSubmit = () => {
+    if (offer?.type) {
       dispatch(
         putDetailsType({
 
-         area: offer?.area,
-  price: offer?.price,
-  rooms_number: offer?.rooms_number,
-  halls_number:offer?.halls_number,
-  bathrooms_number: offer?.bathrooms_number,
-  kitchens_number:offer?.kitchens_number,
+          area: offer?.area,
+          price: offer?.price,
+          rooms_number: offer?.rooms_number,
+          halls_number: offer?.halls_number,
+          bathrooms_number: offer?.bathrooms_number,
+          kitchens_number: offer?.kitchens_number,
 
-  pool: offer?.amenities?.pool,
-  garden: offer?.amenities?.garden,
-  servants_room: offer?.amenities?.servants_room,
-  ac: offer?.amenities?.ac,
-  furnished: offer?.amenities?.furnished,
-  car_entrance:  offer?.amenities?.car_entrance,
-  garage: offer?.amenities?.garage,
-  kitchen: offer?.amenities?.kitchen,
-  details_id: offer?.id
+          pool: offer?.amenities?.pool,
+          garden: offer?.amenities?.garden,
+          servants_room: offer?.amenities?.servants_room,
+          ac: offer?.amenities?.ac,
+          furnished: offer?.amenities?.furnished,
+          car_entrance: offer?.amenities?.car_entrance,
+          garage: offer?.amenities?.garage,
+          kitchen: offer?.amenities?.kitchen,
+          details_id: offer?.id
         })
       )
-    }else{
+    } else {
       dispatch(
         putLandDetailsType({
 
@@ -158,7 +137,7 @@ const EditMyOffer = () => {
 
             placeholder="-- الرجاء الادخال --"
             className="w-full p-2 border border-gray-300 rounded-lg"
-            onChange={(event) => setOffer((prev:any)=>({...prev,piece_number:event?.target?.value}))}
+            onChange={(event) => setOffer((prev: any) => ({ ...prev, piece_number: event?.target?.value }))}
             value={offer?.piece_number}
           />
         </div>
@@ -171,17 +150,17 @@ const EditMyOffer = () => {
                 type="text"
                 className="w-full p-2 border border-gray-300 rounded-lg"
                 placeholder="-- الرجاء الادخال --"
-                onChange={(event) => setOffer((prev:any)=>({...prev,plan_number:event?.target?.value}))}
+                onChange={(event) => setOffer((prev: any) => ({ ...prev, plan_number: event?.target?.value }))}
                 value={offer?.plan_number}
               />
             </div>
           </div>
         </> : <></>}
-        <InputAreaPrice title="المساحة"  onChange={(event) => setOffer((prev:any)=>({...prev,area:Number(event?.target?.value)}))} measurement="متر" value={offer?.area} />
+        <InputAreaPrice title="المساحة" onChange={(event) => setOffer((prev: any) => ({ ...prev, area: Number(event?.target?.value) }))} measurement="متر" value={offer?.area} />
 
         <InputAreaPrice
           title="السعر"
-          onChange={(event) => setOffer((prev:any)=>({...prev,price:Number(event?.target?.value)}))}
+          onChange={(event) => setOffer((prev: any) => ({ ...prev, price: Number(event?.target?.value) }))}
           measurement="ريال"
           value={offer?.price}
           desc="(بدون القيمة المضافة والسعي)"
@@ -189,7 +168,7 @@ const EditMyOffer = () => {
         {offer?.type ? <>
           <NumberRoom
             value={offer?.rooms_number}
-            onChange={(event) => setOffer((prev:any)=>({...prev,rooms_number:Number(event?.target?.value)}))}
+            onChange={(event) => setOffer((prev: any) => ({ ...prev, rooms_number: Number(event?.target?.value) }))}
             name="rooms_number"
             title={"عدد الغرف"}
             firstNumber={"غرفة"}
@@ -198,7 +177,7 @@ const EditMyOffer = () => {
           />
           <NumberRoom
             value={offer?.halls_number}
-            onChange={(event) => setOffer((prev:any)=>({...prev,halls_number:Number(event?.target?.value)}))}
+            onChange={(event) => setOffer((prev: any) => ({ ...prev, halls_number: Number(event?.target?.value) }))}
 
             name="halls_number"
             title={"عدد الصالات"}
@@ -208,7 +187,7 @@ const EditMyOffer = () => {
           />
           <NumberRoom
             value={offer?.bathrooms_number}
-            onChange={(event) => setOffer((prev:any)=>({...prev,bathrooms_number:Number(event?.target?.value)}))}
+            onChange={(event) => setOffer((prev: any) => ({ ...prev, bathrooms_number: Number(event?.target?.value) }))}
             name="bathrooms_number"
             title={"عدد دورات المياه"}
             firstNumber={"دورة مياه"}
@@ -217,7 +196,7 @@ const EditMyOffer = () => {
           />
           <NumberRoom
             value={offer?.kitchens_number}
-            onChange={(event) => setOffer((prev:any)=>({...prev,kitchens_number:Number(event?.target?.value)}))}
+            onChange={(event) => setOffer((prev: any) => ({ ...prev, kitchens_number: Number(event?.target?.value) }))}
             name="kitchens_number"
             title={" عدد المطابخ"}
             firstNumber={"مطبخ"}
@@ -242,19 +221,28 @@ const EditMyOffer = () => {
               style={{ direction: "rtl" }}
             >
 
-              <CheckFeature title="مكيفة" onChange={(event) => setOffer((prev:any)=>(
-                {...prev,amenities:{...prev.amenities,ac:event?.target?.checked}}
-                ))} checked={offer?.amenities?.ac} />
-              <CheckFeature title="مدخل سيارة" onChange={(event) => setOffer((prev:any)=>(
-                {...prev,amenities:{...prev.amenities,car_entrance:event?.target?.checked}}
-                ))} checked={offer?.amenities?.car_entrance} />
-              <CheckFeature title="مطبخ راكب" onChange={(event) => setOffer((prev:any)=>(
-                {...prev,amenities:{...prev.amenities,kitchen:event?.target?.checked}}
-                ))} checked={offer?.amenities?.kitchen} />
-              <CheckFeature title="مؤثثة" onChange={(event) => setOffer((prev:any)=>(
-                {...prev,amenities:{...prev.amenities,finance:event?.target?.checked}}
-                ))} checked={offer?.amenities?.finance} />
-
+              <CheckFeature title="مكيفة" onChange={(event) => setOffer((prev: any) => (
+                { ...prev, amenities: { ...prev.amenities, ac: event?.target?.checked } }
+              ))} checked={offer?.amenities?.ac} />
+              <CheckFeature title="مدخل سيارة" onChange={(event) => setOffer((prev: any) => (
+                { ...prev, amenities: { ...prev.amenities, car_entrance: event?.target?.checked } }
+              ))} checked={offer?.amenities?.car_entrance} />
+              <CheckFeature title="مطبخ راكب" onChange={(event) => setOffer((prev: any) => (
+                { ...prev, amenities: { ...prev.amenities, kitchen: event?.target?.checked } }
+              ))} checked={offer?.amenities?.kitchen} />
+              <CheckFeature title="مؤثثة" onChange={(event) => setOffer((prev: any) => (
+                { ...prev, amenities: { ...prev.amenities, finance: event?.target?.checked } }
+              ))} checked={offer?.amenities?.finance} />
+              <CheckFeature title="مسبح" onChange={(event) => setOffer((prev: any) => (
+                  { ...prev, amenities: { ...prev.amenities, pool: event?.target?.checked } }
+                ))} checked={offer?.amenities?.pool} />
+                <CheckFeature title="كراج للسيارات" onChange={(event) => setOffer((prev: any) => (
+                  { ...prev, amenities: { ...prev.amenities, garage: event?.target?.checked } }
+                ))} checked={offer?.amenities?.garage} />
+                <CheckFeature title="غرفة خدم" onChange={(event) => setOffer((prev: any) => (
+                  { ...prev, amenities: { ...prev.amenities, servants_room: event?.target?.checked } }
+                ))} checked={offer?.amenities?.servants_room} />
+                
 
             </div>
           </div></> : offer?.type && offer?.type == "الفيلا" ? <>
@@ -272,18 +260,28 @@ const EditMyOffer = () => {
                 style={{ direction: "rtl" }}
               >
 
-                <CheckFeature title="مسبح" onChange={(event) => setOffer((prev:any)=>(
-                  {...prev,amenities:{...prev.amenities,pool:event?.target?.checked}}
-                  ))} checked={offer?.amenities?.pool} />
-                <CheckFeature title="كراج للسيارات" onChange={(event) => setOffer((prev:any)=>(
-                  {...prev,amenities:{...prev.amenities,garage:event?.target?.checked}}
-                  ))} checked={offer?.amenities?.garage} />
-                <CheckFeature title="غرفة خدم" onChange={(event) => setOffer((prev:any)=>(
-                  {...prev,amenities:{...prev.amenities,servants_room:event?.target?.checked}}
-                  ))} checked={offer?.amenities?.servants_room} />
-                <CheckFeature title="مؤثثة" onChange={(event) => setOffer((prev:any)=>(
-                  {...prev,amenities:{...prev.amenities,finance:event?.target?.checked}}
-                  ))} checked={offer?.amenities?.finance} />
+<CheckFeature title="مكيفة" onChange={(event) => setOffer((prev: any) => (
+                { ...prev, amenities: { ...prev.amenities, ac: event?.target?.checked } }
+              ))} checked={offer?.amenities?.ac} />
+              <CheckFeature title="مدخل سيارة" onChange={(event) => setOffer((prev: any) => (
+                { ...prev, amenities: { ...prev.amenities, car_entrance: event?.target?.checked } }
+              ))} checked={offer?.amenities?.car_entrance} />
+              <CheckFeature title="مطبخ راكب" onChange={(event) => setOffer((prev: any) => (
+                { ...prev, amenities: { ...prev.amenities, kitchen: event?.target?.checked } }
+              ))} checked={offer?.amenities?.kitchen} />
+              <CheckFeature title="مؤثثة" onChange={(event) => setOffer((prev: any) => (
+                { ...prev, amenities: { ...prev.amenities, finance: event?.target?.checked } }
+              ))} checked={offer?.amenities?.finance} />
+              <CheckFeature title="مسبح" onChange={(event) => setOffer((prev: any) => (
+                  { ...prev, amenities: { ...prev.amenities, pool: event?.target?.checked } }
+                ))} checked={offer?.amenities?.pool} />
+                <CheckFeature title="كراج للسيارات" onChange={(event) => setOffer((prev: any) => (
+                  { ...prev, amenities: { ...prev.amenities, garage: event?.target?.checked } }
+                ))} checked={offer?.amenities?.garage} />
+                <CheckFeature title="غرفة خدم" onChange={(event) => setOffer((prev: any) => (
+                  { ...prev, amenities: { ...prev.amenities, servants_room: event?.target?.checked } }
+                ))} checked={offer?.amenities?.servants_room} />
+             
 
 
               </div>
@@ -349,7 +347,7 @@ const EditMyOffer = () => {
           <div className="flex flex-row items-center justify-center gap-3  w-full">
             <Button
               text=" تعديل"
-              onClick={() =>{ modalRef.current?.close();onSubmit()}}
+              onClick={() => { modalRef.current?.close(); onSubmit() }}
               className="!text-xs !font-medium"
             />
             <Button

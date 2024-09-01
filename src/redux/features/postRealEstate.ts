@@ -195,7 +195,7 @@ export interface earthInter {
 }
 interface imageInter {
   id: number;
-  images?: File[];
+  images: File[];
 }
 export const postrealEstateType = createAsyncThunk<
   returnType,
@@ -213,10 +213,13 @@ export const postrealEstateType = createAsyncThunk<
     })
     .then(async (response) => {
       // postImageRealEstate(response.data)
-      const res = await imageRequest({
-        id: response?.data?.data?.id,
-        images: images,
-      });
+      if(images){
+        const res = await imageRequest({
+          id: response?.data?.data?.id,
+          images: images,
+        });
+      }
+     
       return response.data;
     })
     .catch((error) => error?.response?.data);
@@ -285,7 +288,6 @@ export const putLocation = createAsyncThunk<
 export const imageRequest = async (data: imageInter) => {
   const formData = new FormData();
   data?.images?.forEach((image) => formData.append("images", image));
-
   const response = await axios
     .post(`https://server.mashrook.sa/property-media/${data.id}`, formData, {
       headers: {
@@ -297,6 +299,39 @@ export const imageRequest = async (data: imageInter) => {
     .catch((error) => error?.response?.data);
   return response;
 };
+export const imageDeleteRequest = createAsyncThunk<
+returnType,
+any
+>("image/delete",  async (data: imageInter) => {
+
+  const response = await axios
+    .delete(`https://server.mashrook.sa/property-media/${data?.id}`, {
+      headers: {
+        Authorization: sessionStorage.getItem("token")
+      },
+    })
+    .then((response) => response.data)
+    .catch((error) => error?.response?.data);
+  return response;
+})
+export const imageUpdateRequest = createAsyncThunk<
+returnType,
+any
+>("image/update",  async (data: any) => {
+  const formData = new FormData();
+  formData.append("image", data?.images)
+
+  const response = await axios
+    .post(`https://server.mashrook.sa/property-media/upload-single/${data?.id}`,formData, {
+      headers: {
+        Authorization: sessionStorage.getItem("token")
+      },
+    })
+    .then((response) => response.data)
+    .catch((error) => error?.response?.data);
+  return response;
+})
+
 const initialstate = {
   loading: false,
   message: "",
@@ -306,7 +341,10 @@ const initialstate = {
   dataPutLocat:null,
   messagePutLocat:"",
   dataPutDetail:null,
-  messagePutDetail:""
+  messagePutDetail:"",
+  messageDeleteImage:"",
+  messageUpdateImage:""
+
 };
 
 const realEstateTypeSlice = createSlice({
@@ -369,6 +407,16 @@ const realEstateTypeSlice = createSlice({
       }),builder.addCase(putDetailsType.rejected,(state,action)=>{
         state.dataPutDetail=null
         state.messagePutDetail=action.error.message ? action.error.message : "error";
+      }),builder.addCase(imageDeleteRequest.fulfilled,(state, action)=>{
+        state.messageDeleteImage=action?.payload?.message
+        ? action.payload.message
+        : "success"
+      }),builder.addCase(imageDeleteRequest.rejected,(state, action)=>{
+        state.messageDeleteImage=action?.error?.message ? action.error.message : "error";
+      }),builder.addCase(imageUpdateRequest?.fulfilled,(state,action)=>{
+        state.messageUpdateImage=action?.payload?.message
+        ? action.payload.message
+        : "success"
       })
   },
 });

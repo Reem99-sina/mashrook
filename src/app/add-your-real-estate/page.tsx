@@ -49,28 +49,6 @@ import {
 } from "@/typeSchema/schemaRealestate";
 // import Map from "../components/shared/map";
 import MapLocation from "./components/MapLocation";
-const cities = [
-  {
-    id: 1,
-    name: "الرياض",
-  },
-  {
-    id: 2,
-    name: "الدمام",
-  },
-  {
-    id: 3,
-    name: "جدة",
-  },
-  {
-    id: 4,
-    name: "تبوك",
-  },
-  {
-    id: 5,
-    name: "الطائف",
-  },
-];
 
 const dataa = [
   {

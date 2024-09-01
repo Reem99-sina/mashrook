@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect,useMemo } from "react";
 
 import { Add, CloseIconSmall, Succeeded } from "@/app/assets/svg";
 import RangeComponent from "@/app/components/shared/range.component"
@@ -49,64 +49,7 @@ const dataReal = [
   { name: "دور علوي" },
   { name: "شقة" },
 ];
-const cites: { id: number; name: string }[] = [
-  { id: 1, name: "حي النرجس" },
-  { id: 2, name: "حي العليا" },
-  { id: 3, name: "حي المروج" },
-  { id: 4, name: "حي العارض" },
-  { id: 5, name: "حي الصحافة" },
-  { id: 6, name: "حي الندى" },
-  {
-    id: 7,
-    name: "حي الندى ",
-  },
-  {
-    id: 8,
-    name: "حي النرجس",
-  },
-  {
-    id: 9,
-    name: "حي العليا",
-  },
-  {
-    id: 10,
-    name: "حي المروج",
-  },
-  {
-    id: 11,
-    name: "حي العارض",
-  },
-  {
-    id: 12,
-    name: "حي الصحافة ",
-  },
-  {
-    id: 13,
-    name: "حي الندى ",
-  },
-];
-const cities = [
-  {
-    id: 1,
-    name: "الرياض",
-  },
-  {
-    id: 2,
-    name: "الدمام",
-  },
-  {
-    id: 3,
-    name: "جدة",
-  },
-  {
-    id: 4,
-    name: "تبوك",
-  },
-  {
-    id: 5,
-    name: "الطائف",
-  },
-];
+
 interface typeSelect {
   id: number;
   title: string;
@@ -198,9 +141,10 @@ const AddYourRequest: React.FC = () => {
     setSelectedCites(selectedCites.filter((cite) => cite.id !== id));
   };
 
-  const filteredCites = cites.filter((cite) =>
-    cite.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredCites = useMemo(()=>{
+    return district?.filter((cite:any) =>
+    cite?.name?.toLowerCase()?.includes(searchTerm?.toLowerCase())
+  )},[district,searchTerm]);
 
   const handleShareRangeChange = (values: number[]) => {
     setCriteria({ ...criteria, shareRange: values });
@@ -743,7 +687,7 @@ const AddYourRequest: React.FC = () => {
                   />
                 </div>
                 <div className="flex flex-col items-end h-[500px] overflow-scroll  w-full">
-                  {district?.map((cite:any) => (
+                  {filteredCites?.map((cite:any) => (
                     <div
                       key={cite.id}
                       className="flex justify-end items-center w-full py-2"

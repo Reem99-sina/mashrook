@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useMemo, useRef } from "react";
-
+import toast from "react-hot-toast"
 import { TextInput } from "../components/shared/text-input.component";
 import {
   CloseIconSmall,
@@ -14,22 +14,17 @@ import { useRouter } from "next/navigation";
 import Pagination from "../components/shared/pagination";
 import FilterDropdown from "../components/shared/FilterDropdown";
 import { OfferCard } from "./offerCard";
-
 import { format } from "date-fns";
-
-
 import { Tune, MenuWhite } from "@/app/assets/svg";
 import FilterModalOffer from "./filterModalOffer";
 import { FaRegUserCircle } from "react-icons/fa";
 import { Modal, ModalRef } from "../components/shared/modal.component";
 import { Button } from "../components/shared/button.component";
-
-
-
-import { getOffer } from "@/redux/features/getOffers";
+import { getOffer,deleteOffer } from "@/redux/features/getOffers";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { RealEstateTypeInter } from "@/redux/features/postRealEstate";
+import {deleteProperty,removeDelete} from "@/redux/features/getPartners"
 const data = [
   {
     title: "أرض تجارية",
@@ -134,6 +129,7 @@ export const GitMyOffers = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [isFilterModalOpen, setIsFilterModalOpen] = useState<boolean>(false);
   const [optionFilter, setOption] = useState<string>("");
+  const [idDelete, setId] = useState<number>();
   const dispatch = useDispatch<AppDispatch>();
   let {
     loading,
@@ -143,6 +139,13 @@ export const GitMyOffers = () => {
     loading: boolean;
     message: string;
     data: any;
+  };
+  let {
+    messageDelete
+  } = useSelector<RootState>((state) => state.partners) as {
+   
+    messageDelete: string;
+  
   };
   const handleSelect = (option: string) => {
     setOption(option);
@@ -188,16 +191,31 @@ export const GitMyOffers = () => {
   let dataPagination = useMemo(() => {
     return dataOffers?.slice((currentPage - 1) * 3, currentPage * 3);
   }, [dataOffers, currentPage]);
+  const onDelete=()=>{
+    if(idDelete){
+      dispatch(deleteProperty({id:idDelete}))
+      modalRef.current?.close()
+    }
+  
+  }
   useEffect(() => {
     if (typeof window !== "undefined") {
       const storedToken = sessionStorage.getItem("token");
       setToken(storedToken);
     }
   }, []);
-
-console.log(dataOffers,"dataOffers")
   const modalRef = useRef<ModalRef>(null);
-
+  useEffect(()=>{
+    if(messageDelete=="تم حذف العقار بنجاح"){
+      toast.success(messageDelete)
+      dispatch(deleteOffer({data:dataOffer?.filter((dataOrderOne:any)=>dataOrderOne?.id!==idDelete)}))
+    }else if(messageDelete){
+      toast.error(messageDelete)
+    }
+    return ()=>{
+      dispatch(removeDelete())
+    }
+  },[messageDelete,dataOffer,idDelete,dispatch])
   useEffect(() => {
     if (token) {
       dispatch(getOffer());
@@ -308,7 +326,7 @@ console.log(dataOffers,"dataOffers")
                   purpose={offer.purpose}
                   lisNumber={offer.lisNumber}
                   details={offer.details}
-                  onDelete={() => modalRef.current?.open()}
+                  onDelete={() => {modalRef.current?.open();setId(offer?.id)}}
                   house={offer.house}
                   id={offer.id}
                 />
@@ -353,7 +371,7 @@ console.log(dataOffers,"dataOffers")
           <div>
             <span>
               <p className="text-base font-normal text-[#4B5563]">
-                هل أنت متأكد من رغبتك في تنفيذ اجراء حذف العرض رقم (2022) ؟
+                هل أنت متأكد من رغبتك في تنفيذ اجراء حذف العرض رقم ({idDelete}) ؟
               </p>
             </span>
             <div className="bg-[#FDE8E8] rounded-md mt-5 mb-5 flex items-center justify-start p-1 flex-row gap-1 ">
@@ -370,7 +388,7 @@ console.log(dataOffers,"dataOffers")
           <div className="flex flex-row items-center justify-center gap-3  w-full">
             <Button
               text=" حذف"
-              onClick={() => modalRef.current?.close()}
+              onClick={onDelete}
               className="!text-xs !font-medium"
             />
             <Button

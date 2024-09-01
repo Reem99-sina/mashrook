@@ -10,8 +10,9 @@ interface propsRange{
     handleShareRangeChange:any,
     unit:string
 }
+
 const RangeComponent:React.FC<propsRange>=({title, firstNumDes,secondNumDes,step,min,max,values,handleShareRangeChange,unit})=>{
-    return (
+  return (
         <>
                   <div className="flex items-center justify-end">
                     <p className="text-base font-bold text-[#4B5563]">{title} </p>
@@ -88,7 +89,7 @@ const RangeComponent:React.FC<propsRange>=({title, firstNumDes,secondNumDes,step
                                 backgroundColor: "#548BF4",
                               }}
                             >
-                              {values[index]}ريال
+                              {values[index]}{unit}
                             </div>
                           </div>
                         )}

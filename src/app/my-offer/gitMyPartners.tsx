@@ -11,8 +11,9 @@ import {
   Search,
   Note
 } from "../assets/svg";
+import toast from "react-hot-toast"
 import Pagination from "../components/shared/pagination";
-import {getPartner }from "@/redux/features/getPartners"
+import {getPartner,withDrawProperty,withdrawData,removeMessageWithDraw }from "@/redux/features/getPartners"
 import { useRouter } from "next/navigation";
 import FilterDropdown from "../components/shared/FilterDropdown";
 import { PartnersCard } from "./PartnersCard";
@@ -65,14 +66,27 @@ export const GitMyPartners = () => {
   const [isFilterModalOpen, setIsFilterModalOpen] = useState<boolean>(false);
   const modalRef = useRef<ModalRef>(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [idDelete, setId] = useState<any>({
+    land_details_id:0,details_id:0,
+    requestNumber:0
+  });
   const router = useRouter();
   const [token, setToken] = useState<string | null>(null);
   let [newData,setNewData]=useState<any>([])
-  let { loading, message, data:dataPartner } =
+  const onWithDraw=()=>{
+    modalRef.current?.close()
+    dispatch(withDrawProperty(idDelete?.details_id?{
+      details_id:idDelete?.details_id
+    }:{
+      land_details_id:idDelete?.land_details_id
+    }))
+  }
+  let { loading, message, data:dataPartner ,messageWithDraw} =
   useSelector<RootState>((state) => state.partners) as {
     loading: boolean;
     message: string;
-    data: any;   
+    data: any; 
+    messageWithDraw:string  
   };
   useEffect(()=>{
      dataPartner?.map((dataPartnerOne:RealEstateTypeInter)=>(
@@ -93,7 +107,9 @@ export const GitMyPartners = () => {
         bidRequestNumber: dataPartnerOne?.id,
         partnershipRatio: ele?.percentage,
         purpose:dataPartnerOne?.propertyPurpose?.title,
-        finance:dataPartnerOne?.finance
+        finance:dataPartnerOne?.finance,
+        details_id:ele?.details_id,
+        land_details_id:ele?.land_details_id
       }])
       }
       ))))
@@ -120,6 +136,20 @@ export const GitMyPartners = () => {
       setToken(storedToken);
     }
   }, []);
+  useEffect(()=>{
+    if(messageWithDraw=="تم الإنسحاب من الطلب بنجاح."){
+
+      toast.success(messageWithDraw)
+
+      dispatch(withdrawData({data:dataPartner?.map((dataPartnerOne:any)=>({...dataPartnerOne,propertyDetailsOwnership:dataPartnerOne?.propertyDetailsOwnership?.filter((ele:any)=>ele?.id!=idDelete?.requestNumber)}))}))
+    }else if(messageWithDraw){
+      toast.error(messageWithDraw)
+    }
+    return ()=>{
+      dispatch(removeMessageWithDraw())
+    }
+  },[messageWithDraw,dataPartner,dispatch,idDelete?.requestNumber])
+
   useEffect(()=>{
     if(token){
       dispatch(getPartner())
@@ -221,7 +251,7 @@ export const GitMyPartners = () => {
                   realEstate={offer.realEstate}
                   bidRequestNumber={offer.bidRequestNumber}
                   partnershipRatio={offer.partnershipRatio}
-                  onRetreat={() => modalRef.current?.open()}
+                  onRetreat={() => {modalRef.current?.open();setId({land_details_id:offer?.land_details_id,details_id:offer?.details_id,requestNumber:offer?.requestNumber})}}
                   onShow={()=>router.push(`/showpartner/${offer?.id}`)}
                 />
               ))}
@@ -247,7 +277,7 @@ export const GitMyPartners = () => {
                   <span>
                     <p className="text-base font-normal text-[#4B5563]">
                       هل أنت متأكد من رغبتك في تنفيذ الانسحاب من الطلب رقم
-                      (2022)؟
+                      ({idDelete?.id})؟
                     </p>
                   </span>
                   <div className="bg-[#FDE8E8] rounded-md mt-5 mb-5 flex items-center justify-start p-1 flex-row gap-1 ">
@@ -264,7 +294,7 @@ export const GitMyPartners = () => {
                 <div className="flex flex-row items-center justify-center gap-3  w-full">
                   <Button
                     text="تأكيد الانسحاب"
-                    onClick={() => modalRef.current?.close()}
+                    onClick={onWithDraw}
                     className="!text-xs !font-medium"
                   />
                   <Button

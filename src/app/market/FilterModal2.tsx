@@ -5,7 +5,7 @@ import { Range, getTrackBackground } from "react-range";
 import {cites} from "@/typeSchema/schema"
 import {CloseIconSmall } from "@/app/assets/svg";
 import { AppDispatch, RootState } from "@/redux/store";
-
+import { getCity,getDistrict} from "@/redux/features/getCity"
 import { useDispatch, useSelector } from "react-redux";
 import { getproperityPurposeType } from "@/redux/features/getproperityPurpose";
 import { Modal, ModalRef } from "../components/shared/modal.component";
@@ -22,7 +22,11 @@ type FilterModalProps = {
 const FilterModal: React.FC<FilterModalProps> = ({ onClose, onFilter,open,setCriteria,criteria,onCloseModal }) => {
   let refFilter=useRef<ModalRef>(null)
   const dispatch = useDispatch<AppDispatch>();
-  
+  let {  city,district } =
+  useSelector<RootState>((state) => state.city) as {
+    district:any
+    city:any
+  };
   let {
     loading: loadingproperty_purpose_id,
     message: messagePurpose,
@@ -32,7 +36,16 @@ const FilterModal: React.FC<FilterModalProps> = ({ onClose, onFilter,open,setCri
     message: string;
     data: any;
   };
-  // Example data for dropdowns
+  let {
+    loading: loadingDetails,
+    message: messageDetails,
+    data: dataDetails,
+  } = useSelector<RootState>((state) => state.detailsType) as {
+    loading: boolean;
+    message: string;
+    data: any;
+  };
+  // Example data for dropdowns  detailsType
   const cities = ["الرياض", "الدمام", "جدة"];
   const districts = ["الياسمين", "البنفسج", "الورود"];
   const unitTypes = [
@@ -72,7 +85,14 @@ if(open==true){
   refFilter.current?.close()
 }
 },[open])
-
+useEffect(()=>{
+  dispatch(getCity());
+},[dispatch])
+useEffect(()=>{
+  if(criteria?.city){
+    dispatch(getDistrict({name:criteria?.city}));
+  }
+},[criteria?.city,dispatch])
 
   return (
    
@@ -132,9 +152,9 @@ if(open==true){
             className="border rounded p-1 w-full"
           >
             <option value="" className="text-sm">اختيار المدينة</option>
-            {cities.map((city) => (
-              <option key={city} value={city} className="text-sm">
-                {city}
+            {city?.map((city:any) => (
+              <option key={city?.id} value={city?.nameAr} className="text-sm">
+                {city?.nameAr}
               </option>
             ))}
           </select>
@@ -149,7 +169,7 @@ if(open==true){
             className="border rounded p-1 w-full"
           >
             <option value=""className="text-sm">اختيار الحي</option>
-            {cites.map((district) => (
+            {district?.map((district:any) => (
               <option key={district?.id} value={district?.name} className="text-sm">
                 {district?.name}
               </option>
@@ -161,15 +181,15 @@ if(open==true){
         <div className="mb-4">
           <h3 className="font-semibold mb-2">نوع العقار</h3>
           <div className="flex flex-wrap">
-            {unitTypes.map((type) => (
+            {dataDetails?.map((type:any) => (
               <button
-                key={type}
+                key={type?.id}
                 className={`px-4 py-2 m-1 text-sm rounded-md border ${
-                  criteria.unitType === type ? "bg-blue-450 text-white" : "bg-white text-gray-900"
+                  criteria.unitType === type?.id ? "bg-blue-450 text-white" : "bg-white text-gray-900"
                 }`}
-                onClick={() => setCriteria({ ...criteria, unitType: type })}
+                onClick={() => setCriteria({ ...criteria, unitType: type?.id })}
               >
-                {type}
+                {type?.title}
               </button>
             ))}
           </div>

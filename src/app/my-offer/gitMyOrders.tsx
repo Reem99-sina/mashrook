@@ -10,6 +10,7 @@ import {
   Note,
   Search,
 } from "../assets/svg";
+import toast from "react-hot-toast"
 import { useRouter,useParams } from "next/navigation";
 import Pagination from "../components/shared/pagination";
 import FilterDropdown from "../components/shared/FilterDropdown";
@@ -18,10 +19,11 @@ import { Tune, MenuWhite } from "@/app/assets/svg";
 import FilterModal from "./filterModal";
 import { Modal, ModalRef } from "../components/shared/modal.component";
 import { Button } from "../components/shared/button.component";
-import { getRequest } from "@/redux/features/getOrders";
+import { getRequest,deleteOrder } from "@/redux/features/getOrders";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { RealEstateTypeInter } from "@/redux/features/postRealEstate";
+import {deleteProperty,removeDelete} from "@/redux/features/getPartners"
 const data = [
   {
     title: "أرض تجارية",
@@ -65,6 +67,7 @@ export const GitMyOrders = () => {
   const [optionFilter, setOption] = useState<string>("");
   const [token, setToken] = useState<string | null>(null);
   const dispatch = useDispatch<AppDispatch>();
+  const [idDelete, setId] = useState<number>();
   const [currentPage, setCurrentPage] = useState(1);
   let {
     loading,
@@ -74,6 +77,13 @@ export const GitMyOrders = () => {
     loading: boolean;
     message: string;
     data: any;
+  };
+  let {
+    messageDelete
+  } = useSelector<RootState>((state) => state.partners) as {
+   
+    messageDelete: string;
+  
   };
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -121,11 +131,28 @@ export const GitMyOrders = () => {
   let dataPagination = useMemo(() => {
     return dataOrders?.slice((currentPage - 1) * 3, currentPage * 3);
   }, [dataOrders, currentPage]);
+  const onDelete=()=>{
+    if(idDelete){
+      dispatch(deleteProperty({id:idDelete}))
+      modalRef.current?.close()
+    }
+  }
   useEffect(() => {
     if (token) {
       dispatch(getRequest());
     }
   }, [token, dispatch]);
+  useEffect(()=>{
+    if(messageDelete=="تم حذف العقار بنجاح"){
+      toast.success(messageDelete)
+      dispatch(deleteOrder({data:dataOrder?.filter((dataOrderOne:any)=>dataOrderOne?.id!==idDelete)}))
+    }else if(messageDelete){
+      toast.error(messageDelete)
+    }
+    return ()=>{
+      dispatch(removeDelete())
+    }
+  },[messageDelete,dataOrder,idDelete,dispatch])
   return (
     <>
       <div className="p-4 bg-white">
@@ -193,7 +220,6 @@ export const GitMyOrders = () => {
             مكتملة
           </span>
         </div>
-
         <div>
           {!token ? (
             <>
@@ -221,7 +247,7 @@ export const GitMyOrders = () => {
               <div>
                 {dataPagination?.map((offer: any, index: number) => (
                   <MyOrdersCard
-                    key={index}
+                    key={offer?.id}
                     title={offer.title}
                     count={offer.count}
                     date={offer.date}
@@ -233,7 +259,7 @@ export const GitMyOrders = () => {
                     inProgress={offer.inProgress}
                     active={offer.active}
                     expired={offer.expired}
-                    onDelete={() => modalRef.current?.open()}
+                    onDelete={() => {modalRef.current?.open();setId(offer?.id)}}
                     onUpdate={() => modalRefUpdate.current?.open()}
                     onEdit={() => router.push(`/edit-my-order/${offer?.id}`)}
                     onRetreating={() => modalRefRetreating.current?.open()}
@@ -272,7 +298,7 @@ export const GitMyOrders = () => {
                     <span>
                       <p className="text-base font-normal text-[#4B5563]">
                         هل أنت متأكد من رغبتك في تنفيذ اجراء حذف الطلب رقم
-                        (2022) ؟
+                        ({idDelete}) ؟
                       </p>
                     </span>
                     <div className="bg-[#FDE8E8] rounded-md mt-5 mb-5 flex items-center justify-start p-1 flex-row gap-1 ">
@@ -289,7 +315,7 @@ export const GitMyOrders = () => {
                   <div className="flex flex-row items-center justify-center gap-3  w-full">
                     <Button
                       text=" حذف"
-                      onClick={() => modalRef.current?.close()}
+                      onClick={onDelete}
                       className="!text-xs !font-medium"
                     />
                     <Button
@@ -413,6 +439,7 @@ export const GitMyOrders = () => {
             </div>
           )}
         </div>
+       
       </div>
     </>
   );
