@@ -57,7 +57,7 @@ const MarketPage: React.FC = () => {
       min_price: criteria?.priceRange[0] != 0 ? criteria?.priceRange[0] : null,
       max_price: criteria?.priceRange[1] != 200000 ? criteria?.priceRange[1] : null,
       property_purpose_id: status || criteria?.unitStatus,
-      property_type_details_id: criteria?.unitType,
+      property_type_details_id: criteria?.unitType!=0?criteria?.unitType:null,
       min_percentage: criteria?.shareRange[0] != 10 ? criteria?.shareRange[0] : null,
       max_percentage: criteria?.shareRange[1] != 50 ? criteria?.shareRange[0] : null
       , status: criteria?.dealStatus == "متاح" ? "available" : criteria?.dealStatus ? "complete" : "",
