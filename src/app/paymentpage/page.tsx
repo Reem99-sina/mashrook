@@ -1,10 +1,15 @@
 "use client";
-import React from "react";
+import React,{useRef} from "react";
 import MainHeader from "../components/header/MainHeader";
 import Footer from "../components/header/Footer2";
 import ImageRadioButtons from "./PaymentMethod";
 import BackButton from "./backButton";
 import Link from "next/link";
+import Image from "next/image";
+import {  Add } from "@/app/assets/svg";
+import { IoDocumentText } from "react-icons/io5";
+import { IoMdClose } from "react-icons/io";
+import { GoDownload } from "react-icons/go";
 import { AppDispatch,RootState } from "@/redux/store";
 import { useDispatch,useSelector } from "react-redux";
 import {dataReturn,addUnqiue} from "@/redux/features/getRequest"
@@ -44,6 +49,9 @@ const [errors, setErrors] = useState<{
 cvv:string
 }>();
 let dispatch=useDispatch<AppDispatch>()
+let refImage = useRef<HTMLInputElement>(null);
+let refA = useRef<any>(null);
+let [url,setUrl]=useState<any>()
   async function onSubmit(e:React.MouseEvent<HTMLButtonElement>){
     e.preventDefault()
     const status=await validateForm(data,paymentSchema,setErrors)
@@ -66,6 +74,31 @@ let dispatch=useDispatch<AppDispatch>()
      
     }
   }
+  function readAndPreview(file:any) {
+    // Make sure `file.name` matches our extensions criteria
+    
+    if((file instanceof File)==true){
+      if (/\.(pdf?g|pdf)$/i.test(file.name)) {
+        const reader = new FileReader();
+      
+        reader.addEventListener(
+          "load",
+          () => {
+          if(reader?.result){
+          
+            setUrl({name:file?.name,link:reader?.result})
+          }
+          //   preview.appendChild(image);
+          },
+          false,
+        );
+  
+        reader.readAsDataURL(file);
+    }
+    
+    }
+  }
+ 
   useEffect(()=>{
     if(messagePayment&&Boolean(dataPayment)==false){
       toast.error(messagePayment)
@@ -78,6 +111,7 @@ let dispatch=useDispatch<AppDispatch>()
       dispatch(removeStatePayment())
     }
   },[messagePayment,dataPayment,router,dispatch])
+
   return (
     <div className="flex justify-center w-dvh h-max  ">
       <div className="w-full bg-white rounded text-black shadow ">
@@ -130,7 +164,92 @@ let dispatch=useDispatch<AppDispatch>()
                   <div className="text-right p-4 mb-4 rounded-xl bg-gray-200">
                     <p className="text-xl font-bold">بيانات الدفع</p>
                   </div>
-                  <div className="border-2 shadow-md p-4 rounded-xl">
+                  {data?.method=="bank"?url?<>
+                    <div className="my-2 border-2 shadow-md p-4 rounded-xl flex flex-row-reverse items-center justify-between">
+              <div className="flex flex-row-reverse items-center gap-x-3">
+              <IoDocumentText/>
+              <div className="text-gray-500 text-xs flex-col items-center  justify-start">
+              <p>
+                 {url?.name}
+              </p>
+              <p>
+                PDF file
+              </p>
+              </div>
+              </div>
+              <div className="cursor-pointer items-start">
+                <IoMdClose className="text-blue-450 text-md" onClick={()=>setUrl({})}/>
+              </div>
+            </div>
+                    <div className="my-2 border-2 shadow-md p-4 rounded-xl flex flex-row-reverse items-center justify-between">
+              <div className="flex flex-row-reverse items-center gap-x-3">
+              <IoDocumentText/>
+              <div className="text-gray-500 text-xs flex-col items-center  justify-start">
+              <p>
+                فاتورة الدفع
+              </p>
+              <p>
+                انقر للتحميل
+              </p>
+              </div>
+              </div>
+              <div className="cursor-pointer items-start">
+                <GoDownload className="text-blue-450 text-md" onClick={()=>refA?.current?.click()}/>
+                  <a href="/منصة مشروك الإجراءات والسياسات.pdf" download ref={refA} ></a>
+              </div>
+            </div>
+                  </>:<>
+                    <div className="border-2 shadow-md p-4 rounded-xl">
+                    <h3 className="my-2 font-bold">صورة السند</h3>
+                    <div className="flex gap-2  flex-row-reverse mt-5">
+              <div
+                onClick={() => refImage.current?.click()}
+                className="cursor-pointer bg-[#3B73B9]"
+              >
+                <Image src={Add} width={21} height={21} alt={"add"} />
+              </div>
+              <p className="text-sm text-[#3B73B9] font-bold">
+                أضف صورة / ملف
+              </p>
+              <input
+                type="file"
+                className="hidden"
+                ref={refImage}
+                accept="application/pdf"
+                onChange={(event) => {
+                  const files = event.target.files;
+                  if(files){
+                    readAndPreview(files[0])
+                    
+                  }
+                }}
+              />
+            </div>
+            <div className="my-2">
+              <p className="text-gray-500 text-xs">
+              قم بتحميل الفاتورة ادناه للقيام بالدفع
+              </p>
+            </div>
+            <div className="my-2 border-2 shadow-md p-4 rounded-xl flex flex-row-reverse items-center justify-between">
+              <div className="flex flex-row-reverse items-center gap-x-3">
+              <IoDocumentText/>
+              <div className="text-gray-500 text-xs flex-col items-center  justify-start">
+              <p>
+                فاتورة الدفع
+              </p>
+              <p>
+                انقر للتحميل
+              </p>
+              </div>
+              </div>
+              <div className="cursor-pointer items-start">
+                <GoDownload className="text-blue-450 text-md" onClick={()=>refA?.current?.click()}/>
+                  <a href="/منصة مشروك الإجراءات والسياسات.pdf" download ref={refA} ></a>
+              </div>
+            </div>
+                    </div>
+                  </>:<>
+                    <div className="border-2 shadow-md p-4 rounded-xl">
                     <h3 className="my-2">اسم صاحب البطاقة</h3>
                     <input
                       type="text"
@@ -196,6 +315,8 @@ let dispatch=useDispatch<AppDispatch>()
                       </div>
                     </div>
                   </div>
+                  </>}
+                  
 
                   <div className="flex flex-row items-center align-middle justify-center  p-2 text-blue-450">
                     <button 

@@ -147,8 +147,8 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ page, limit }) => {
               <div className="ml-auto text-right py-1 ">
                 <div className="flex flex-row">
                   <p className="text-2xl px-4 text-black font-bold">
-                    {ele?.landDetails[i]?.piece_number &&
-                      `قطعة رقم  ${ele?.landDetails[i]?.piece_number}`}
+                    {ele?.landDetails[i]?.plan_number &&
+                      `قطعة رقم  ${ele?.landDetails[i]?.plan_number}`}
                   </p>
                 </div>
                 <div className="flex flex-col gap-y-2  my-2  items-start flex-wrap ">

@@ -1,13 +1,21 @@
 "use client";
 
-import React from "react";
+import React ,{useEffect}from "react";
 import Footer from "../components/header/Footer2";
 import MainHeader from "../components/header/MainHeader";
 import { Tabs } from "../components/shared/tabs";
 import { MyOffer } from "./MyOffer";
 import { MyPartnerships } from "./MyPartnerships";
-
+import { AppDispatch, RootState } from "@/redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import {getMessageOrders } from "@/redux/features/getMessages"
+import {getMessagePartners } from "@/redux/features/getMessagePartner"
 const Chat: React.FC = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  useEffect(() => {
+    dispatch(getMessageOrders())
+    dispatch(getMessagePartners())
+  }, [dispatch]);
   return (
     <>
       <form className="flex flex-col items-center min-h-screen h-full w-full bg-white">

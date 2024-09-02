@@ -152,7 +152,6 @@ const EditMyOrderBadge = () => {
       }
     });
     setCriteria((prev: any) => ({ ...prev, district: criteria?.district?.some((c: any) => c == cite.name) ? criteria?.district?.filter((c: any) => c != cite.name) : [...criteria?.district, cite?.name] }))
-    console.log(selectedCites, "selectedCites", criteria?.district)
     // setCriteria({ ...criteria,  })
   };
   const handleShareRangeChange = (values: number[]) => {

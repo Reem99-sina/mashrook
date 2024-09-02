@@ -168,8 +168,8 @@ export let villaOwnSchema = object().shape({
 });
 export let amountSchema = object().shape({
   amount: number()
-    .notOneOf([0], "ادخل مساحة شراكة؟")
-    .required("ادخل مساحة شراكة؟"),
+    .notOneOf([0], "ادخل مبلغ شراكة؟")
+    .required("ادخل مبلغ شراكة؟"),
 });
 export let paymentSchema = object().shape({
   method: string().required("ادخل طريقة دفع؟"),

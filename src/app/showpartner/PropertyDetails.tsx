@@ -284,7 +284,7 @@ const PropertyDetails: React.FC<{id:any}> = ({id}:{id:any}) => {
         <div className="mt-2">
           <div className="flex justify-between bg-gray-100 w-full items-center rounded-lg ml-2 mt-4 px-2  py-2">
             <span>رقم المخطط</span>
-            {/* <span>{selectData?.landDetails?.plan_number}</span> */}
+           
           </div>
           <div className="flex justify-between bg-gray-100 w-full items-center rounded-lg ml-2 mt-4 px-2  py-2">
             <span>المدينة</span>
