@@ -26,9 +26,9 @@ const Login: React.FC = () => {
   });
   const [errors, setErrors] = useState<
     | {
-        email: string;
-        password: string;
-      }
+      email: string;
+      password: string;
+    }
     | undefined
   >();
   let { loading, message, data } = useSelector<RootState>(

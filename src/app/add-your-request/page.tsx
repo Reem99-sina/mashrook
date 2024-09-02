@@ -392,29 +392,8 @@ const AddYourRequest: React.FC = () => {
                   {errors?.city}
 
                 </p>)}
-              </div>
-              <div className="flex items-end gap-2 justify-end flex-col mt-5">
-                <p className="text-base font-medium text-[#4B5563]">المدينة</p>
-                <div className=" w-full">
-                  <select
-                    className="border w-full text-right border-[#D1D5DB] rounded-lg"
-                    onChange={(event) =>
-                      setCriteria({ ...criteria, city: event?.target?.value })
-                    }
-                  >
-                    {city?.map((city:any) => (
-                      <option key={city?.id} value={city?.nameAr}>
-                        {city?.nameAr}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                {errors?.city && (
-                  <p className="text-xs text-red-600 dark:text-red-500 text-right">
-                    {errors?.city}
-                  </p>
-                )}
+             
+              
                 <div className="flex items-end gap-2 justify-end flex-row mt-5 ">
                   <p
                     className={`cursor-pointer text-[#3B73B9]  ${

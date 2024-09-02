@@ -25,7 +25,7 @@ import {
   imageUpdateRequest
 } from "@/redux/features/postRealEstate";
 import Image from "next/image";
-import { getCity,getDistrict} from "@/redux/features/getCity"
+import { getCity, getDistrict } from "@/redux/features/getCity"
 import { FaEdit } from "react-icons/fa";
 import { compare } from "@/app/hooks/compare"
 import { CiLocationOn } from "react-icons/ci";
@@ -80,11 +80,11 @@ const EditOffer = () => {
     dataPutDetail: any,
     messagePutDetail: string
   };
-  let {  city,district } =
-  useSelector<RootState>((state) => state.city) as {
-    district:any
-    city:any
-  };
+  let { city, district } =
+    useSelector<RootState>((state) => state.city) as {
+      district: any
+      city: any
+    };
   const [deal, setDeal] = useState(false);
   const [dataCom, setData] = useState<RealEstateTypeInter>();
   const [parent, setParent] = useState({})
@@ -141,8 +141,8 @@ const EditOffer = () => {
   }, [dataOwnerType, dataPurpose, data]);
   const onDelete = (index: any) => {
     setImages(images?.filter((ele, ind) => ele?.name != index?.name));
-    if(index?.id){
-      dispatch(imageDeleteRequest({id:index?.id}))
+    if (index?.id) {
+      dispatch(imageDeleteRequest({ id: index?.id }))
     }
   };
   const handleBack = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -201,9 +201,9 @@ const EditOffer = () => {
         ...datasend
       })
     );
-    if(images&&images?.length>0&&Array.isArray(images)){
-      let newImages=images.filter(item => item instanceof File)
-      newImages.map((image:File)=>dispatch(imageUpdateRequest({id:dataCom?.id,images:image})))
+    if (images && images?.length > 0 && Array.isArray(images)) {
+      let newImages = images.filter(item => item instanceof File)
+      newImages.map((image: File) => dispatch(imageUpdateRequest({ id: dataCom?.id, images: image })))
     }
     if (dataCom?.details && dataCom?.details?.length > 0) {
       dataCom?.details?.map((detail: any) => {
@@ -289,14 +289,14 @@ const EditOffer = () => {
     }
   }, [dataPut, messagePut, dataPutLocat, messagePutLocat, dataPutDetail,
     messagePutDetail, router]);
-    useEffect(()=>{
-      dispatch(getCity());
-    },[dispatch])
-    useEffect(()=>{
-      if(dataCom?.propertyLocation?.city){
-        dispatch(getDistrict({name:dataCom?.propertyLocation?.city}));
-      }
-    },[dataCom?.propertyLocation?.city,dispatch])
+  useEffect(() => {
+    dispatch(getCity());
+  }, [dispatch])
+  useEffect(() => {
+    if (dataCom?.propertyLocation?.city) {
+      dispatch(getDistrict({ name: dataCom?.propertyLocation?.city }));
+    }
+  }, [dataCom?.propertyLocation?.city, dispatch])
   useEffect(() => {
     return () => {
       dispatch(removeStateEdit())
@@ -483,7 +483,7 @@ const EditOffer = () => {
                       })
                     }
                   >
-                    {district?.map((city:any) => (
+                    {district?.map((city: any) => (
                       <option key={city?.id} value={city?.name}>
                         {city?.name}
                       </option>
@@ -509,7 +509,7 @@ const EditOffer = () => {
                       })
                     }
                   >
-                    {city?.map((city:any) => (
+                    {city?.map((city: any) => (
                       <option key={city?.id} value={city?.nameAr}>
                         {city?.nameAr}
                       </option>
@@ -1377,7 +1377,7 @@ const EditOffer = () => {
                   const files = event.target.files;
                   if (files) {
                     const imageFiles = Array.from(files) as File[];
-                    setImages((prev:any)=>([...prev,...imageFiles]));
+                    setImages((prev: any) => ([...prev, ...imageFiles]));
                   }
                 }}
               />
