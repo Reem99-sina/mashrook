@@ -1,11 +1,11 @@
 "use client";
 
-import React ,{useState}from "react";
+import React, { useState } from "react";
 import { TextInput } from "../components/shared/text-input.component";
-interface ForgetInfo{
-  email:string,onChange:(email:string)=>void,error?:string
+interface ForgetInfo {
+  email: string, onChange: (email: string) => void, error?: string
 }
-export const ForgetNewPassword: React.FC<ForgetInfo> = ({email,onChange,error}) => {
+export const ForgetNewPassword: React.FC<ForgetInfo> = ({ email, onChange, error }) => {
 
   return (
     <div className="w-full  gap-y-4 flex flex-col">
@@ -15,15 +15,15 @@ export const ForgetNewPassword: React.FC<ForgetInfo> = ({email,onChange,error}) 
         type="email"
         value={email}
         onChange={(event) =>
-          onChange( event.target.value )
+          onChange(event.target.value)
         }
-        // disabled={loading}
+      // disabled={loading}
       />
       {error && (
-                        <p className="text-xs text-red-600 dark:text-red-500 text-right">
-                          {error}
-                        </p>
-                      )}
+        <p className="text-xs text-red-600 dark:text-red-500 text-right">
+          {error}
+        </p>
+      )}
     </div>
   );
 };
