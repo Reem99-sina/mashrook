@@ -59,23 +59,19 @@ const ForgetPassword: React.FC = () => {
     ]
   },[errors,data])
   useEffect(()=>{
-    if (messageRest && Boolean(dataRest) == true) {
+    if (messageRest=="Password is updated successfully.") {
       toast.success(messageRest);
       router.push("/")
       // setActiveStep(activeStep + 1)
       // setSentYourRequest(true);
-    }else if (
-      messageRest &&
-      Boolean(dataRest) == false
-    ) {
+    }else if(messageRest) {
       toast.error(messageRest);
     }
    
     return ()=>{
       dispatch(removeForget())
     }
-  },[ messageRest,
-    dataRest,dispatch,router])
+  },[ messageRest,dispatch,router])
   return (
     
     <div className="flex items-center lg:justify-center min-h-screen h-full  w-full flex-col">
