@@ -4,14 +4,17 @@ interface verifyEmail{
     email:string,
     code:string
 }
-interface verifyEmail{
-   
+interface verifyCodeEmail{
+    email:string,
 }
 export const verifyRequest=createAsyncThunk("verify", async (data:verifyEmail, { rejectWithValue }) => {  
         const response = await axios.put("https://server.mashrook.sa/auth/code", data).then((response)=>response.data).catch((error)=>error?.response?.data)// Adjust your endpoint as necessary
         return response // Return the user data from API response  
 })
-
+export const resendCodeRequest=createAsyncThunk("resendcode", async (data:verifyCodeEmail, { rejectWithValue }) => {  
+    const response = await axios.put("https://server.mashrook.sa/auth/send-code", data).then((response)=>response.data).catch((error)=>error?.response?.data)// Adjust your endpoint as necessary
+    return response // Return the user data from API response  
+})
 const initialstate={
     loading:false,
     message:"",
@@ -44,6 +47,21 @@ const verifySlice=createSlice({
             state.loading=false
             state.message=action.error.message?action.error.message:"error"
             state.data=null
+        }),builder.addCase(resendCodeRequest.fulfilled,(state,action)=>{
+           
+
+            state.message=action?.payload?.message?action.payload.message:"success"
+           
+        }),
+        builder.addCase(resendCodeRequest.pending,(state,action)=>{
+            
+            state.message="loading..."
+            
+        }),
+        builder.addCase(resendCodeRequest.rejected,(state,action)=>{
+           
+            state.message=action.error.message?action.error.message:"error"
+          
         })
     }
 })

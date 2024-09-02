@@ -8,7 +8,7 @@ import { useParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
-import { verifyRequest } from "@/redux/features/vierfySlice";
+import { verifyRequest,resendCodeRequest } from "@/redux/features/vierfySlice";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 const Verify: React.FC = () => {
@@ -38,18 +38,21 @@ const Verify: React.FC = () => {
       toast.error("you need email and code");
     }
   };
+  const onResend=()=>{
+    dispatch(resendCodeRequest({email:String(email)?.replace("%40", "@")}))
+  }
   useEffect(() => {
-    if (message && Boolean(data) == false) {
+    if (message && Boolean(data) == false&&message!="تم إرسال الكود اللي الايميل.") {
       toast.error(message);
     } else if (Boolean(data) == true) {
       toast.success(message);
       sessionStorage.setItem("token", data?.token);
       links.push(`/`);
+    }else if(message=="تم إرسال الكود اللي الايميل." && Boolean(data) == false){
+      toast.success(message)
     }
   }, [message, links, data]);
-  useEffect(() => {
-    toast("رمز الكود في الرسائل غير مرغوب فيها");
-  }, []);
+
   return (
     <div className="flex items-center  min-h-screen h-full  w-full flex-col bg-white">
       <div className="w-full max-w-md h-full   space-y-8 bg-white p-8  lg:p-16 md:max-w-lg lg:max-w-xl ">
@@ -82,7 +85,7 @@ const Verify: React.FC = () => {
             </div>
             <p className="text-center text-sm text-gray-500 mb-4">
               لم يصلك الرمز؟{" "}
-              <button className="text-[#98CC5D]">
+              <button className="text-[#98CC5D]" onClick={onResend} type="button">
                 إعادة إرسال الرمز خلال 60 ثانية
               </button>
             </p>

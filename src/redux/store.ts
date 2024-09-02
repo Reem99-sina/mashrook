@@ -16,6 +16,8 @@ import  getRequest  from './features/getRequest';
 import getRequestSlice from "./features/getOrders"
 import getPartnerSlice from "./features/getPartners"
 import getOfferSlice from "./features/getOffers"
+import getMessageSlice from "./features/getMessages"
+import getPartnerMessageSlice from "./features/getMessagePartner"
 const store = configureStore({
   reducer: {
     register:userReducer,
@@ -23,7 +25,6 @@ const store = configureStore({
     login:loginReducer,
     properityType:properityType,
     properityRequest:properityRequest,
-
     getRequest:getRequest,
     offers:getOfferSlice,
     properityPurpose:properityPurpose,
@@ -32,7 +33,9 @@ const store = configureStore({
     requests:getRequestSlice,
     partners:getPartnerSlice,
     detailsType:getDetailTypesSlice,
-    city:getCitySlice
+    city:getCitySlice,
+    messageOrders:getMessageSlice,
+    messagePartners:getPartnerMessageSlice
   }
 
 });

@@ -81,7 +81,7 @@ export default function SideBar({ sidebarOpen, toggleSidebar }: SideBarProps) {
                   <hr className="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700" />
                   <li className="mb-4 text-xl hover:text-gray-800 ">
                   <Link
-                    href="/"
+                    href="/my-account"
                     className=" text-blue-450 hover:text-[#3B73B9] "
                   >
                     حسابي
