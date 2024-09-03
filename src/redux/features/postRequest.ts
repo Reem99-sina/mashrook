@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import React from "react";
+import Cookie from 'js-cookie';
 export interface returnType {
   loading: boolean;
   message: string | undefined;
@@ -67,7 +68,7 @@ export const postProperityType = createAsyncThunk<
     const response = await axios
       .post("https://server.mashrook.sa/property/request", data, {
         headers: {
-          Authorization: sessionStorage.getItem("token"),
+          Authorization: Cookie.get("token"),
         },
       })
       .then((response) => response.data)
@@ -85,7 +86,7 @@ export const postPaymentType = createAsyncThunk<
     const response = await axios
       .post("https://server.mashrook.sa/payment/property", data, {
         headers: {
-          Authorization: sessionStorage.getItem("token"),
+          Authorization: Cookie.get("token"),
         },
       })
       .then((response) => response.data)

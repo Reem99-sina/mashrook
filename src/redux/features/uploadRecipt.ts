@@ -1,3 +1,5 @@
+// 
+
 import { createSlice,createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import React from "react";
@@ -7,11 +9,17 @@ export interface returnType{
     message:string | undefined,
     data:any
 }
-interface getType{
-    name:string
+interface comeType{
+    receipt:File,
+property_id:number
+land_details_id:number
+amount:number
+[key: string]: any;
 }
-export const getMessageOrders=createAsyncThunk<returnType>("messageorder/get", async (_, { rejectWithValue }) => {  
-        const response = await axios.get(`https://server.mashrook.sa/room/property`,{
+export const uploadReciptPut=createAsyncThunk<returnType,comeType>("recipt/update", async (data:comeType, { rejectWithValue }) => {  
+    const formData = new FormData();
+  Object.keys(data).map((ele:string)=>formData.append(ele, data[ele]) )  
+    const response = await axios.post(`https://server.mashrook.sa/payment/upload-receipt`,formData,{
             headers: {
               Authorization: Cookie.get("token"),
             },
@@ -25,29 +33,33 @@ const initialstate={
     loading:false,
     message:"",
     data:null,
-  
+   
 }
 
-const getMessageSlice=createSlice({
-    name:"getMessgae",
+const uploadReciptSlice=createSlice({
+    name:"uploadRecipt",
     initialState:initialstate,
     reducers:{
+        // deleteOffer:(state,action)=>{
+        //     state.data=action.payload.data
+        // }
     },extraReducers:(builder)=>{
-        builder.addCase(getMessageOrders.fulfilled,(state,action)=>{
+        builder.addCase(uploadReciptPut.fulfilled,(state,action)=>{
             state.loading=false
             state.message=action?.payload?.message?action.payload.message:"success"
             state.data=action?.payload?.data
         }),
-        builder.addCase(getMessageOrders.pending,(state,action)=>{
+        builder.addCase(uploadReciptPut.pending,(state,action)=>{
             state.loading=true
             state.message="loading..."
             state.data=null
         }),
-        builder.addCase(getMessageOrders.rejected,(state,action)=>{
+        builder.addCase(uploadReciptPut.rejected,(state,action)=>{
             state.loading=false
             state.message=action.error.message?action.error.message:"error"
             state.data=null
         })
     }
 })
-export default getMessageSlice.reducer
+
+export default uploadReciptSlice.reducer

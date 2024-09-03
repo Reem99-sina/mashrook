@@ -8,6 +8,7 @@ import { Modal, ModalRef } from "../components/shared/modal.component";
 import ImageAppear from "../components/shared/ImageAppear";
 import AccordionComponent from "../components/shared/Accordion.component";
 import Image from "next/image";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import NumberRoom from "./components/NumberRoom";
 import Footer from "../components/header/Footer2";
 import MainHeader from "../components/header/MainHeader";
@@ -24,6 +25,7 @@ import {
   getproperityType,
   getproperityTypeMore,
 } from "@/redux/features/getProperity";
+import Cookie from 'js-cookie';
 import { getproperityPurposeType } from "@/redux/features/getproperityPurpose";
 import { getproperityOwnerType } from "@/redux/features/getProperityOwnerType";
 import {
@@ -487,10 +489,11 @@ const AddYourRealEstate: React.FC = () => {
     );
   }, [dataSend?.property_type_id, dispatch]);
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const storedToken = sessionStorage.getItem("token");
-      setToken(storedToken);
-    }
+   
+      const storedToken = Cookie.get("token");
+      if(storedToken){
+        setToken(storedToken);
+      }
   }, []);
 
   useEffect(() => {
@@ -1720,7 +1723,12 @@ const AddYourRealEstate: React.FC = () => {
                 />
               </div>
               <div className="p-7">
-                <Button text="إضافة العقار" onClick={onSubmit} />
+              {loadingrealEstateRequest?<button
+              className="relative flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-[#3B73B9] border border-transparent rounded-md group  focus:outline-none focus:ring-2 focus:ring-offset-2 "
+              disabled={loadingrealEstateRequest}
+            ><AiOutlineLoading3Quarters className="rotate-90 text-gray-500"/>
+            </button>: <Button text="إضافة العقار" onClick={onSubmit} />}
+               
               </div>
             </div>
           </div>
@@ -1773,7 +1781,9 @@ const AddYourRealEstate: React.FC = () => {
             </div>
           </div>
           <div className="w-4/5 mb-28  ">
-            <Button text="الذهاب الى طلباتي" />
+            <Button text="الذهاب الى طلباتي" onClick={() => {
+                router.push("/my-offer");
+              }}/>
             <Button
               text="العودة الى الرئيسية"
               className="!text-[#3B73B9] !bg-white !border !border-[#3B73B9] rounded !mt-5"

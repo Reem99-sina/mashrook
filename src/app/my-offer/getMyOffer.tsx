@@ -10,6 +10,8 @@ import {
   Note,
   Search,
 } from "../assets/svg";
+import Cookie from 'js-cookie';
+
 import { useRouter } from "next/navigation";
 import Pagination from "../components/shared/pagination";
 import FilterDropdown from "../components/shared/FilterDropdown";
@@ -199,11 +201,13 @@ export const GitMyOffers = () => {
   
   }
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const storedToken = sessionStorage.getItem("token");
-      setToken(storedToken);
-    }
-  }, []);
+ 
+      const storedToken = Cookie.get("token");
+      if(storedToken){
+        setToken(storedToken);
+      }
+    
+  }, [ ]);
   const modalRef = useRef<ModalRef>(null);
   useEffect(()=>{
     if(messageDelete=="تم حذف العقار بنجاح"){

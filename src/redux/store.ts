@@ -18,6 +18,7 @@ import getPartnerSlice from "./features/getPartners"
 import getOfferSlice from "./features/getOffers"
 import getMessageSlice from "./features/getMessages"
 import getPartnerMessageSlice from "./features/getMessagePartner"
+import uploadReciptSlice from "./features/uploadRecipt"
 const store = configureStore({
   reducer: {
     register:userReducer,
@@ -35,7 +36,8 @@ const store = configureStore({
     detailsType:getDetailTypesSlice,
     city:getCitySlice,
     messageOrders:getMessageSlice,
-    messagePartners:getPartnerMessageSlice
+    messagePartners:getPartnerMessageSlice,
+    uploadRecipt:uploadReciptSlice
   }
 
 });

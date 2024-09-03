@@ -10,7 +10,7 @@ import { BsSave } from "react-icons/bs";
 import { FaAd } from "react-icons/fa";
 import { CiLogout } from "react-icons/ci";
 import { RiDeleteBinLine } from "react-icons/ri";
-
+import Cookie from 'js-cookie';
 import {removeLogin} from "@/redux/features/loginSlice"
 import MainOtion  from "./component/mainOption"
 const MyAccountPage=()=>{
@@ -40,15 +40,15 @@ const MyAccountPage=()=>{
                 </p>
               </div>
             </div>
-            <MainOtion title={dataUser?.user?.username} subTitle={"عرض الملف الشخصية"} dataUser={dataUser}/>
-            <MainOtion title={"كلمة السر"} subTitle={""} dataUser={dataUser} Icon={BsKey}/>
-            <MainOtion title={"الاشعارات"} subTitle={""} dataUser={dataUser} Icon={IoIosNotificationsOutline}/>
-            <MainOtion title={"رخصة فال"} subTitle={""} dataUser={dataUser} Icon={FaAddressCard}/>
-            <MainOtion title={"محفوظاتي"} subTitle={""} dataUser={dataUser} Icon={BsSave}/>
-            <MainOtion title={"اعلاناتي"} subTitle={""} dataUser={dataUser} Icon={FaAd}/>
+            <MainOtion title={dataUser?.user?.username} subTitle={"عرض الملف الشخصية"} dataUser={dataUser}onClick={()=>router.push("/profile")}/>
+            <MainOtion title={"كلمة السر"} subTitle={""} dataUser={dataUser} Icon={BsKey} onClick={()=>router.push("/")}/>
+            <MainOtion title={"الاشعارات"} subTitle={""} dataUser={dataUser} Icon={IoIosNotificationsOutline}onClick={()=>router.push("/")}/>
+            <MainOtion title={"رخصة فال"} subTitle={""} dataUser={dataUser} Icon={FaAddressCard}onClick={()=>router.push("/")}/>
+            <MainOtion title={"محفوظاتي"} subTitle={""} dataUser={dataUser} Icon={BsSave}onClick={()=>router.push("/")}/>
+            <MainOtion title={"اعلاناتي"} subTitle={""} dataUser={dataUser} Icon={FaAd} onClick={()=>router.push("/")}/>
             <div className="mx-2">
                 <div className="flex flex-row gap-x-2 items-center py-4 cursor-pointer" onClick={()=>{
-                      sessionStorage.removeItem("token");
+                      Cookie.remove("token");
                        sessionStorage.removeItem("user");
                        dispatch(removeLogin())
                        router.push("/")

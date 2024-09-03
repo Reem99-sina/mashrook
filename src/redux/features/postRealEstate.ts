@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import React from "react";
+import Cookie from 'js-cookie';
 export interface returnType {
   loading: boolean;
   message: string | undefined;
@@ -208,7 +209,7 @@ export const postrealEstateType = createAsyncThunk<
   const response = await axios
     .post("https://server.mashrook.sa/property/offer", data, {
       headers: {
-        Authorization: sessionStorage.getItem("token"),
+        Authorization: Cookie.get("token"),
       },
     })
     .then(async (response) => {
@@ -234,7 +235,7 @@ export const putLandDetailsType = createAsyncThunk<
   const response = await axios
     .put("https://server.mashrook.sa/property/land-details", data, {
       headers: {
-        Authorization: sessionStorage.getItem("token"),
+        Authorization: Cookie.get("token"),
       },
     })
     .then(async (response) => {
@@ -254,7 +255,7 @@ export const putDetailsType = createAsyncThunk<
   const response = await axios
     .put("https://server.mashrook.sa/property/details", data, {
       headers: {
-        Authorization: sessionStorage.getItem("token"),
+        Authorization: Cookie.get("token"),
       },
     })
     .then(async (response) => {
@@ -273,7 +274,7 @@ export const putLocation = createAsyncThunk<
   const response = await axios
     .put("https://server.mashrook.sa/property/location", data, {
       headers: {
-        Authorization: sessionStorage.getItem("token"),
+        Authorization: Cookie.get("token"),
       },
     })
     .then(async (response) => {
@@ -291,7 +292,7 @@ export const imageRequest = async (data: imageInter) => {
   const response = await axios
     .post(`https://server.mashrook.sa/property-media/${data.id}`, formData, {
       headers: {
-        Authorization: sessionStorage.getItem("token"),
+        Authorization: Cookie.get("token"),
         "Content-Type": "multipart/form-data",
       },
     })
@@ -307,7 +308,7 @@ any
   const response = await axios
     .delete(`https://server.mashrook.sa/property-media/${data?.id}`, {
       headers: {
-        Authorization: sessionStorage.getItem("token")
+        Authorization: Cookie.get("token")
       },
     })
     .then((response) => response.data)
@@ -324,7 +325,7 @@ any
   const response = await axios
     .post(`https://server.mashrook.sa/property-media/upload-single/${data?.id}`,formData, {
       headers: {
-        Authorization: sessionStorage.getItem("token")
+        Authorization: Cookie.get("token")
       },
     })
     .then((response) => response.data)

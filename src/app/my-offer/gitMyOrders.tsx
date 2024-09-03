@@ -11,6 +11,7 @@ import {
   Search,
 } from "../assets/svg";
 import toast from "react-hot-toast"
+import Cookie from "js-cookie"
 import { useRouter,useParams } from "next/navigation";
 import Pagination from "../components/shared/pagination";
 import FilterDropdown from "../components/shared/FilterDropdown";
@@ -86,11 +87,13 @@ export const GitMyOrders = () => {
   
   };
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const storedToken = sessionStorage.getItem("token");
-      setToken(storedToken);
-    }
-  }, []);
+   
+      const storedToken = Cookie.get("token");
+      if(storedToken){
+        setToken(storedToken);
+      }
+    
+  }, [ ]);
   // propertyTypeDetails  propertyType  propertyLocation city district  details price min_price landDetails
   const handleSelect = (option: string) => {
     setOption(option);
@@ -154,7 +157,6 @@ export const GitMyOrders = () => {
     }
   },[messageDelete,dataOrder,idDelete,dispatch])
   return (
-    <>
       <div className="p-4 bg-white">
         {isFilterModalOpen && (
           <FilterModal
@@ -441,6 +443,6 @@ export const GitMyOrders = () => {
         </div>
        
       </div>
-    </>
+    
   );
 };

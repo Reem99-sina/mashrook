@@ -11,7 +11,7 @@ import Footer from "../components/header/Footer2";
 import MainHeader from "../components/header/MainHeader";
 import { getCity,getDistrict} from "@/redux/features/getCity"
 import Image from "next/image";
-
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { Range, getTrackBackground } from "react-range";
@@ -37,6 +37,7 @@ import {
 } from "@/typeSchema/schema";
 import { validateForm } from "../hooks/validate";
 import AccordionComponent from "../components/shared/Accordion.component";
+import Cookie from 'js-cookie';
 
 const dataReal = [
   {
@@ -266,10 +267,12 @@ const AddYourRequest: React.FC = () => {
     }
   }, [dataRequest, messageRequest]);
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const storedToken = sessionStorage.getItem("token");
-      setToken(storedToken);
-    }
+   
+      const storedToken = Cookie.get("token");
+      if(storedToken){
+        setToken(storedToken);
+      }
+    
   }, []);
 
   useEffect(()=>{
@@ -664,7 +667,12 @@ const AddYourRequest: React.FC = () => {
                 />
               </div>
               <div className="p-7">
-                <Button text="إضافة الطلب" onClick={onSubmit} />
+                {loadingRequest?<button
+              className="relative flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-[#3B73B9] border border-transparent rounded-md group  focus:outline-none focus:ring-2 focus:ring-offset-2 "
+              disabled={loadingRequest}
+            ><AiOutlineLoading3Quarters className="rotate-90 text-gray-500"/>
+            </button>:<Button text="إضافة الطلب" onClick={onSubmit} />}
+                
               </div>
             </div>
           </div>
@@ -745,7 +753,8 @@ const AddYourRequest: React.FC = () => {
             <Button
               text="الذهاب الى طلباتي"
               onClick={() => {
-                router.refresh();
+              
+                router.push("/my-offer")
               }}
             />
             <Button

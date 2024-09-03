@@ -1,6 +1,7 @@
 import { createSlice,createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import React from "react";
+import Cookie from 'js-cookie';
 export interface returnType{
     loading:boolean,
     message:string | undefined,
@@ -10,7 +11,7 @@ export interface returnType{
 export const getRequest=createAsyncThunk<returnType>("request/get", async (_, { rejectWithValue }) => {  
         const response = await axios.get(`https://server.mashrook.sa/property/get/mine/requests`,{
             headers: {
-              Authorization: sessionStorage.getItem("token"),
+              Authorization: Cookie.get("token"),
             },
           })
         .then((response)=>response.data)

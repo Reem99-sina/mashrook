@@ -12,6 +12,7 @@ import {
   Note
 } from "../assets/svg";
 import toast from "react-hot-toast"
+import  Cookie from "js-cookie"
 import Pagination from "../components/shared/pagination";
 import {getPartner,withDrawProperty,withdrawData,removeMessageWithDraw }from "@/redux/features/getPartners"
 import { useRouter } from "next/navigation";
@@ -131,11 +132,13 @@ export const GitMyPartners = () => {
       
   },[newData,currentPage])
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const storedToken = sessionStorage.getItem("token");
-      setToken(storedToken);
-    }
-  }, []);
+    
+      const storedToken = Cookie.get("token");
+      if(storedToken){
+        setToken(storedToken);
+      }
+    
+  }, [ ]);
   useEffect(()=>{
     if(messageWithDraw=="تم الإنسحاب من الطلب بنجاح."){
 

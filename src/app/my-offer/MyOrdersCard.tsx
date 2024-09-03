@@ -85,7 +85,7 @@ export const MyOrdersCard: React.FC<ChatCardProps> = ({
           {date}
         </span>
 
-        {inProgress ? (
+        {/* {inProgress ? (
           <span className="rounded-xl bg-[#FEECDC] pl-2 pr-2 pt-[2px] pb-[2px] text-xs font-normal text-[#FF8A4C]">
             تحت التقدم{" "}
           </span>
@@ -97,7 +97,7 @@ export const MyOrdersCard: React.FC<ChatCardProps> = ({
           <span className="rounded-xl bg-[#FDE8E8] pl-2 pr-2 pt-[2px] pb-[2px] text-xs font-normal text-[#F98080]">
             منتهي
           </span>
-        )}
+        )} */}
       </div>
 
       <div className=" mt-2">
@@ -134,16 +134,7 @@ export const MyOrdersCard: React.FC<ChatCardProps> = ({
           {finance?<Accreditation />:<IoMdCloseCircleOutline color="red"/>}
         </div>
       </div>
-      {inProgress ? (
-        <>
-          <div className="p-4 w-full">
-            <Stepper steps={steps} currentStep={currentStep} />
-          </div>
-          <div className="flex items-center justify-center ">
-            <p className="text-xs text-[#6B7280] font-semibold">مراحل الطلب</p>
-          </div>
-        </>
-      ) : null}
+      
 
       <div className="flex flex-row items-center justify-center border-t-2 mt-5 border-[#E5E7EB]">
         <Button

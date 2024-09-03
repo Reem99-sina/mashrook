@@ -20,8 +20,8 @@ const RangeComponent:React.FC<propsRange>=({title, firstNumDes,secondNumDes,step
                   <div className="mb-4" style={{ direction: "rtl" }}>
                     <div className="flex flex-col">
                       <div className="flex justify-between mb-2 text-sm text-gray-500 w-full p-4">
-                        <span>{firstNumDes} {unit}</span>
-                        <span>{secondNumDes} {unit} </span>
+                        <span>{unit} {firstNumDes} </span>
+                        <span>{unit} {secondNumDes}  </span>
                       </div>
                       <Range
                         step={step}
@@ -89,7 +89,7 @@ const RangeComponent:React.FC<propsRange>=({title, firstNumDes,secondNumDes,step
                                 backgroundColor: "#548BF4",
                               }}
                             >
-                              {values[index]}{unit}
+                              {unit}{values[index]}
                             </div>
                           </div>
                         )}

@@ -5,22 +5,34 @@ import { CloseButton, InfoOutLine, MashrookLogo } from "@/app/assets/svg";
 import { TextInput } from "../../components/shared/text-input.component";
 import { Button } from "../../components/shared/button.component";
 import { useParams } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState, useEffect,useRef } from "react";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { verifyRequest,resendCodeRequest } from "@/redux/features/vierfySlice";
 import toast from "react-hot-toast";
+import Cookie from "js-cookie"
 import { useRouter } from "next/navigation";
 const Verify: React.FC = () => {
   const router = useParams();
   const links = useRouter();
+  const inputRefs = useRef<(HTMLInputElement|null)[]>([]);  
   const { email } = router;
   const [code, setCode] = useState(Array(4).fill(""));
   let dispatch = useDispatch<AppDispatch>();
   let { loading, message, data } = useSelector<RootState>(
     (state) => state.verify
   ) as { loading: boolean; message: string; data: any };
-  const handleChange = (value: string, index: number) => {
+  const handleChange = (value: string, index: number) => { 
+
+            // Move to the next input if the current input is filled  
+            if (value.length === 1 && index < inputRefs.current.length - 1) {  
+                inputRefs?.current[index + 1]?.focus();  
+            }  
+
+            // Move to the previous input if the current input is empty  
+            if (value.length === 0 && index > 0) {  
+                inputRefs?.current[index - 1]?.focus();  
+            }  
     const newCode = [...code];
     newCode[index] = value;
     setCode(newCode);
@@ -46,7 +58,7 @@ const Verify: React.FC = () => {
       toast.error(message);
     } else if (Boolean(data) == true) {
       toast.success(message);
-      sessionStorage.setItem("token", data?.token);
+      Cookie.set("token", data?.token);
       links.push(`/`);
     }else if(message=="تم إرسال الكود اللي الايميل." && Boolean(data) == false){
       toast.success(message)
@@ -71,12 +83,15 @@ const Verify: React.FC = () => {
               <br />
               الرجاء قم بإدخال رمز التحقق لإنشاء حسابك
             </p>
+            
             <div className="flex justify-center mb-4">
               {code.map((digit, index) => (
                 <input
                   key={index}
                   type="text"
+                  ref={(el) => {inputRefs.current[index] = el}} 
                   maxLength={1}
+                  pattern="\d{4}"
                   className="w-12 h-12 m-1 text-center border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   value={digit}
                   onChange={(e) => handleChange(e.target.value, index)}

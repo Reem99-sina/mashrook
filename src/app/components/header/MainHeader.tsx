@@ -5,6 +5,8 @@ import {
   Mashrooklogotextlarge,
   User,
 } from "@/app/assets/svg";
+import Cookie from 'js-cookie';
+
 import Image from "next/image";
 import Link from "next/link";
 import { AppDispatch, RootState } from "@/redux/store";
@@ -27,12 +29,19 @@ export default function MainHeader() {
   const [user, setUser] = useState<string | null>(null);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const storedToken = sessionStorage.getItem("token");
+    
+      const storedToken = Cookie.get("token");
       // const user = sessionStorage.getItem("user");
       // setUser(JSON.parse(user))
+      if(storedToken){
       setToken(storedToken);
-    }
+      }
+    
+  //   setTimeout(() => {  
+  //     sessionStorage.removeItem('token');  
+  //     sessionStorage.removeItem('tokenTime');  
+  //     setToken("");
+  // },  1000);
   }, []);
   useEffect(()=>{
     if(token){

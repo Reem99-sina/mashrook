@@ -1,6 +1,7 @@
 import { createSlice,createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import React from "react";
+import Cookie from 'js-cookie';
 export interface returnType{
     loading:boolean,
     message:string | undefined,
@@ -17,7 +18,7 @@ export interface comeWithdrawType{
 export const getPartner=createAsyncThunk<returnType>("partners/get", async (_, { rejectWithValue }) => {  
         const response = await axios.get(`https://server.mashrook.sa/property/get/mine/partners`,{
             headers: {
-              Authorization: sessionStorage.getItem("token"),
+              Authorization: Cookie.get("token"),
             },
           })
         .then((response)=>response.data)
@@ -27,7 +28,7 @@ export const getPartner=createAsyncThunk<returnType>("partners/get", async (_, {
 export const deleteProperty=createAsyncThunk<returnType,comeType>("property/delete", async (data:{id:number}, { rejectWithValue }) => {  
     const response = await axios.delete(`https://server.mashrook.sa/property/${data?.id}`,{
         headers: {
-          Authorization: sessionStorage.getItem("token"),
+          Authorization: Cookie.get("token"),
         },
       })
     .then((response)=>response.data)
@@ -37,7 +38,7 @@ export const deleteProperty=createAsyncThunk<returnType,comeType>("property/dele
 export const withDrawProperty=createAsyncThunk<returnType,comeWithdrawType>("property/withdraw", async (data:comeWithdrawType, { rejectWithValue }) => {  
     const response = await axios.post(`https://server.mashrook.sa/property-ownership/withdraw`,data,{
         headers: {
-          Authorization: sessionStorage.getItem("token"),
+          Authorization: Cookie.get("token"),
         },
       })
     .then((response)=>response.data)

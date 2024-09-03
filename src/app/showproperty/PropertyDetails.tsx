@@ -339,11 +339,12 @@ const PropertyDetails: React.FC<{id:number}> = ({id}:{id:number}) => {
         <h2 className="text-2xl font-bold mb-4">موقع العقار</h2>
 
         <div className="mt-2">
-          <div className="flex justify-between bg-gray-100 w-full items-center rounded-lg ml-2 mt-4 px-2  py-2">
+          {selectData?.landDetails?.map((ele:any)=>ele?.piece_number)?.join(",")&&<div className="flex justify-between bg-gray-100 w-full items-center rounded-lg ml-2 mt-4 px-2  py-2">
             <span>رقم المخطط</span>
             {/* <span>{selectData?.landDetails?.plan_number}</span> */}
             <span>{selectData?.landDetails?.map((ele:any)=>ele?.piece_number)?.join(",")}</span>
-          </div>
+          </div>}
+          
           <div className="flex justify-between bg-gray-100 w-full items-center rounded-lg ml-2 mt-4 px-2  py-2">
             <span>المدينة</span>
             <span>{selectData?.propertyLocation?.city}</span>

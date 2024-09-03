@@ -36,7 +36,7 @@ const Chat: React.FC = () => {
               </div>
             </div>
 
-            <div className=" w-full">
+            <div className="w-full">
               <Tabs
                 tabs={[
                   {

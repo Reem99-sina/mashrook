@@ -8,10 +8,12 @@ import { useRouter } from "next/navigation";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
-import { login } from "@/redux/features/loginSlice";
+import Cookie from 'js-cookie';
+import { login,removeLogin } from "@/redux/features/loginSlice";
 import toast from "react-hot-toast";
 import { loginSchema } from "@/typeSchema/schema";
 import { validateForm } from "@/app/hooks/validate";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 export interface userLogin {
   email: string;
   password: string;
@@ -45,15 +47,20 @@ const Login: React.FC = () => {
     }
   };
   useEffect(() => {
-    if (message && Boolean(data) == false) {
-      toast.error(message);
-    } else if (Boolean(data) == true) {
+    const currentTime = new Date().getTime(); 
+     if (Boolean(data) == true) {
       toast.success(message);
-      sessionStorage.setItem("token", data?.token);
-      sessionStorage.setItem("user", JSON.stringify(data?.user));
+      // sessionStorage.setItem("token", data?.token);
+      sessionStorage.setItem('tokenTime', String(currentTime));  
+      Cookie.set("user", JSON.stringify(data?.user));
       router.push(`/`);
     }
   }, [data, message, router]);
+  useEffect(()=>{
+    return ()=>{
+    dispatch(removeLogin())
+    }
+  },[dispatch])
   return (
     <div className="flex items-center justify-center min-h-screen h-full min-w-screen lg:w-full bg-white  w-screen flex-col">
       {/* <div className="flex items-end justify-start p-4 w-full h-full lg:hidden bg-white ">
@@ -140,11 +147,19 @@ const Login: React.FC = () => {
           </div>
 
           <div>
+            {loading?<button
+              className="relative flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-[#3B73B9] border border-transparent rounded-md group  focus:outline-none focus:ring-2 focus:ring-offset-2 "
+              disabled={loading}
+            ><AiOutlineLoading3Quarters className="rotate-90 text-gray-500"/>
+            </button>:<>
             <Button
               type="submit"
               text="تسجيل الدخول"
+              disabled={loading}
               className="relative flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-[#3B73B9] border border-transparent rounded-md group  focus:outline-none focus:ring-2 focus:ring-offset-2 "
             ></Button>
+            </>}
+           
           </div>
         </form>
         <div className="mt-auto bg-[#3B73B9] text-center w-full h-[271px] mb-0 lg:h-[40px] flex items-center  lg:gap-2 justify-center flex-col lg:flex-row-reverse">
