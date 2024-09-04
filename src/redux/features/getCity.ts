@@ -1,6 +1,7 @@
 import { createSlice,createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import React from "react";
+import Cookie from 'js-cookie';
 export interface returnType{
     loading:boolean,
     message:string | undefined,
@@ -12,7 +13,7 @@ interface getType{
 export const getCity=createAsyncThunk<returnType>("city/get", async (_, { rejectWithValue }) => {  
         const response = await axios.get(`https://server.mashrook.sa/data/city`,{
             headers: {
-              Authorization: sessionStorage.getItem("token"),
+              Authorization: Cookie.get("token"),
             },
           })
         .then((response)=>response.data)
@@ -22,7 +23,7 @@ export const getCity=createAsyncThunk<returnType>("city/get", async (_, { reject
 export const getDistrict=createAsyncThunk<returnType,getType>("district/get", async (data:{name:string}, { rejectWithValue }) => {  
     const response = await axios.get(`https://server.mashrook.sa/data/district/${data?.name}`,{
         headers: {
-          Authorization: sessionStorage.getItem("token"),
+          Authorization: Cookie.get("token"),
         },
       })
     .then((response)=>response.data)

@@ -269,7 +269,7 @@ const MarketPage: React.FC = () => {
                 }`}
               onClick={() => setstatus(purpose?.id)}
             >
-              {purpose?.title}
+              {purpose?.title=="بيع"?"للبيع":"للتطوير"}
             </button>
           ))}
 

@@ -10,6 +10,8 @@ import {
   Note,
   Search,
 } from "../assets/svg";
+import Cookie from 'js-cookie';
+
 import { useRouter } from "next/navigation";
 import Pagination from "../components/shared/pagination";
 import FilterDropdown from "../components/shared/FilterDropdown";
@@ -24,7 +26,18 @@ import { getOffer,deleteOffer } from "@/redux/features/getOffers";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { RealEstateTypeInter } from "@/redux/features/postRealEstate";
-import {deleteProperty,removeDelete} from "@/redux/features/getPartners"
+import {deleteProperty,removeDelete,UpdataExpiredDateProperty} from "@/redux/features/getPartners"
+interface criteriaInfo {
+  dealStatus: string,
+  city: string,
+  district: string,
+  unitType: string | number,
+  unitStatus: string,
+  realEstateStatus:string,
+  purposeStatus:string,
+  priceRange: number[],
+  shareRange: number[],
+}
 const data = [
   {
     title: "أرض تجارية",
@@ -123,12 +136,25 @@ const data = [
     ],
   },
 ];
-
+let statuses=[{title:"متاح"},{title:"محجوز"},{title:"تحت الشراكة"}]
 export const GitMyOffers = () => {
   const router = useRouter();
+  const modalRef = useRef<ModalRef>(null);
+  const modalRefUpdate = useRef<ModalRef>(null);
   const [currentPage, setCurrentPage] = useState(1);
+  
   const [isFilterModalOpen, setIsFilterModalOpen] = useState<boolean>(false);
   const [optionFilter, setOption] = useState<string>("");
+  const [criteria, setCriteria] = useState<any>({
+    dealStatus: "",
+    city: "",
+    district: "",
+    unitType: "",
+    realEstateStatus: "",
+    purposeStatus:"",
+    priceRange: [500000, 20000000],
+    shareRange: [10, 90]
+  });
   const [idDelete, setId] = useState<number>();
   const dispatch = useDispatch<AppDispatch>();
   let {
@@ -141,11 +167,12 @@ export const GitMyOffers = () => {
     data: any;
   };
   let {
-    messageDelete
+    messageDelete,
+    messsageExpiredDate
   } = useSelector<RootState>((state) => state.partners) as {
    
     messageDelete: string;
-  
+    messsageExpiredDate:string
   };
   const handleSelect = (option: string) => {
     setOption(option);
@@ -188,6 +215,21 @@ export const GitMyOffers = () => {
             dataOrderOne?.landDetails,
     }));
   }, [dataOffer]);
+  let fiterData = useMemo(() => {
+    return {
+      min_price: criteria?.priceRange[0] != 500000 ? criteria?.priceRange[0] : null,
+      max_price: criteria?.priceRange[1] != 20000000 ? criteria?.priceRange[1] : null,
+      min_percentage:criteria?.shareRange[0]!=10?criteria?.shareRange[0]:null,
+      max_percentage:criteria?.shareRange[1]!=90?criteria?.shareRange[1]:null,
+      city:criteria?.city,
+      district:criteria?.district,
+      property_type_details_id: criteria?.unitType!=0?criteria?.unitType:null
+      ,property_purpose_id:criteria?.purposeStatus!=0?criteria?.purposeStatus:null
+      ,status: (criteria?.dealStatus=="متكامل")?"complete":"available" ,
+      sort: optionFilter == "الأحدث الى الأقدم" ? "created_desc" : optionFilter == "الأقدم الى الأحدث" ? "created_asc" : optionFilter == "الميزانية ( الأدنى الى الأعلى)" ? "price_asc" : optionFilter == "الميزانية ( الأعلى الى الأدنى)"?"price_decs":""
+      // option=="الأحدث إلى الأقدم"?handleSelect("latest"):option=="الأقدم الى الأحدث"?handleSelect("oldest"):option=="الميزانية ( الأدنى الى الأعلى)"?handleSelect("priceLowToHigh"):handleSelect("priceHighToLow")
+    }
+  }, [criteria,optionFilter])
   let dataPagination = useMemo(() => {
     return dataOffers?.slice((currentPage - 1) * 3, currentPage * 3);
   }, [dataOffers, currentPage]);
@@ -198,13 +240,21 @@ export const GitMyOffers = () => {
     }
   
   }
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const storedToken = sessionStorage.getItem("token");
-      setToken(storedToken);
+  const onExpiredDate=()=>{
+    if(idDelete){
+      dispatch(UpdataExpiredDateProperty({id:idDelete}))
+      modalRefUpdate.current?.close()
     }
-  }, []);
-  const modalRef = useRef<ModalRef>(null);
+  }
+  useEffect(() => {
+ 
+      const storedToken = Cookie.get("token");
+      if(storedToken){
+        setToken(storedToken);
+      }
+    
+  }, [ ]);
+ 
   useEffect(()=>{
     if(messageDelete=="تم حذف العقار بنجاح"){
       toast.success(messageDelete)
@@ -212,16 +262,26 @@ export const GitMyOffers = () => {
     }else if(messageDelete){
       toast.error(messageDelete)
     }
+    if(messsageExpiredDate=="تم تحديث العقار بنجاح"){
+      toast.success(messsageExpiredDate)
+    }else if(messsageExpiredDate){
+      toast.error(messsageExpiredDate)
+    }
     return ()=>{
       dispatch(removeDelete())
     }
-  },[messageDelete,dataOffer,idDelete,dispatch])
+  },[messageDelete,dataOffer,idDelete,dispatch,messsageExpiredDate])
   useEffect(() => {
     if (token) {
-      dispatch(getOffer());
+      dispatch(getOffer({}));
     }
   }, [token, dispatch]);
-
+  useEffect(() => {
+    dispatch(getOffer({
+      sort: optionFilter == "الأحدث الى الأقدم" ? "created_desc" : optionFilter == "الأقدم الى الأحدث" ? "created_asc" : optionFilter == "الميزانية ( الأدنى الى الأعلى)" ? "price_asc" : optionFilter == "الميزانية ( الأعلى الى الأدنى)"?"price_decs":""
+    }))
+  }, [ optionFilter, dispatch])
+  
   return (
     <div className="p-4 bg-white">
       {isFilterModalOpen && (
@@ -229,9 +289,13 @@ export const GitMyOffers = () => {
           onClose={() => setIsFilterModalOpen(false)}
           onFilter={(criteria) => {
             // Filter logic to be added later
+            dispatch(getOffer(fiterData))
             setIsFilterModalOpen(false);
           }}
+          onCloseRequest={()=>dispatch(getOffer({}))}
           open={isFilterModalOpen}
+          setCriteria={setCriteria}
+          criteria={criteria}
         />
       )}
       <div className="flex flex-row items-center justify-center gap-2">
@@ -270,16 +334,14 @@ export const GitMyOffers = () => {
       </div>
 
       <div className="mt-5 mb-5 flex flex-row gap-2">
-        <span className="rounded-md border border-[#E5E7EB] text-sm font-normal text-[#6B7280] pl-3 pr-3 pt-1 pb-1">
-          متاحة
-        </span>
-
-        <span className="rounded-md border border-[#E5E7EB] text-sm font-normal text-[#6B7280] pl-3 pr-3 pt-1 pb-1">
-          المنتهية
-        </span>
-        <span className="rounded-md border border-[#E5E7EB] text-sm font-normal text-[#6B7280] pl-3 pr-3 pt-1 pb-1">
-          مكتملة
-        </span>
+      {statuses?.map((status:any)=><span key={status?.title} className={`rounded-md border border-[#E5E7EB] text-sm font-normal text-[#6B7280] pl-3 pr-3 pt-1 pb-1 cursor-pointer 
+            ${
+                  criteria.realEstateStatus === status?.title ? "bg-blue-450 text-white" : "bg-white text-gray-900"
+                }
+            `}onClick={()=>setCriteria({...criteria,realEstateStatus:status?.title})}>
+            {status?.title}
+          </span>)}  
+      
       </div>
 
       <div>
@@ -327,6 +389,7 @@ export const GitMyOffers = () => {
                   lisNumber={offer.lisNumber}
                   details={offer.details}
                   onDelete={() => {modalRef.current?.open();setId(offer?.id)}}
+                  onUpdate={() => {modalRefUpdate.current?.open();setId(offer?.id)}}
                   house={offer.house}
                   id={offer.id}
                 />
@@ -399,6 +462,51 @@ export const GitMyOffers = () => {
           </div>
         </div>
       </Modal>
+      <Modal ref={modalRefUpdate} size="xs">
+                <div
+                  className="items-start flex justify-center flex-col p-4 "
+                  style={{ direction: "rtl" }}
+                >
+                  <div className="flex flex-row items-center justify-center mb-3  w-full">
+                    <div
+                      className="flex flex-1 cursor-pointer"
+                      onClick={() => modalRefUpdate.current?.close()}
+                    >
+                      <CloseIconSmall />
+                    </div>
+                    <div className="flex  w-full items-center justify-center">
+                      <p className="font-bold text-base text-[#374151]">
+                        تنويه
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="border border-[#E5E7EB] w-full mb-4" />
+
+                  <div>
+                    <span>
+                      <p className="text-base font-normal text-[#4B5563] mb-2">
+                        سيتم تحديث الطلب رقم ({idDelete}) لمدة 30 يوم من الان
+                      </p>
+                    </span>
+                  </div>
+
+                  <div className="border border-[#E5E7EB] w-full mb-4" />
+
+                  <div className="flex flex-row items-center justify-center gap-3  w-full">
+                    <Button
+                      text="تحديث"
+                      onClick={onExpiredDate}
+                      className="!text-xs !font-medium"
+                    />
+                    <Button
+                      text="الغاء"
+                      onClick={() => modalRefUpdate.current?.close()}
+                      className="!bg-white !text-[#1F2A37] !border !border-[#E5E7EB] !rounded-lg !text-xs !font-medium"
+                    />
+                  </div>
+                </div>
+              </Modal>
     </div>
   );
 };

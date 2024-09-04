@@ -31,7 +31,8 @@ interface ChatCardProps {
   district: string;
   budget: string;
   type: string;
-  finance:boolean
+  finance:boolean;
+  alternativeCount:number
 }
 
 export const MyOrdersCard: React.FC<ChatCardProps> = ({
@@ -50,7 +51,8 @@ export const MyOrdersCard: React.FC<ChatCardProps> = ({
   district,
   budget,
   type,
-  finance
+  finance,
+  alternativeCount
 }) => {
   const steps = ["التعبئة", "الإفراغ", "الإرسال"];
   const currentStep = 1;
@@ -60,32 +62,22 @@ export const MyOrdersCard: React.FC<ChatCardProps> = ({
       <div className="items-center justify-between  flex-row flex relative">
         <p className="text-xl font-bold text-[#374151]">{title} </p>
 
-        {active ? (
-          <Link className="items-center justify-center flex border border-[#E5E7EB] p-2 rounded-md gap-1 " href={`/my-offer/otherOffer/${1}`}>
+        
+          <Link className="items-center justify-center flex border border-[#E5E7EB] p-2 rounded-md gap-1 " href={`/my-offer/otherOffer/${requestNumber}`}>
             <p className="font-medium text-sm text-[#3B73B9]">عروض بديله</p>
             <OtherOffer />
             <span className=" flex items-center justify-center p-1 w-4 h-4 absolute left-[-9px] top-[-2px] text-[11px] text-white bg-[#F05252] rounded-full">
-              2
+              {alternativeCount}
             </span>
           </Link>
-        ) : inProgress ? (
-          <span className="items-center justify-center flex border border-[#E5E7EB] p-2 rounded-md gap-1 ">
-            <p className="font-medium text-sm text-[#3B73B9]">عرض المحادثات </p>
-            <ChatIconSmall />
-          </span>
-        ) : (
-          <span className="items-center justify-center flex border border-[#E5E7EB] p-2 rounded-md gap-1 ">
-            <p className="font-medium text-sm text-[#9CA3AF]">عروض بديله</p>
-            <OtherOffer fill="#9CA3AF" />
-          </span>
-        )}
+        
       </div>
       <div className="flex gap-2 mt-2">
         <span className="rounded-xl bg-[#F3F4F6] pl-2 pr-2 pt-[2px] pb-[2px] text-xs font-normal text-[#6B7280]">
           {date}
         </span>
 
-        {inProgress ? (
+        {/* {inProgress ? (
           <span className="rounded-xl bg-[#FEECDC] pl-2 pr-2 pt-[2px] pb-[2px] text-xs font-normal text-[#FF8A4C]">
             تحت التقدم{" "}
           </span>
@@ -97,7 +89,7 @@ export const MyOrdersCard: React.FC<ChatCardProps> = ({
           <span className="rounded-xl bg-[#FDE8E8] pl-2 pr-2 pt-[2px] pb-[2px] text-xs font-normal text-[#F98080]">
             منتهي
           </span>
-        )}
+        )} */}
       </div>
 
       <div className=" mt-2">
@@ -134,16 +126,7 @@ export const MyOrdersCard: React.FC<ChatCardProps> = ({
           {finance?<Accreditation />:<IoMdCloseCircleOutline color="red"/>}
         </div>
       </div>
-      {inProgress ? (
-        <>
-          <div className="p-4 w-full">
-            <Stepper steps={steps} currentStep={currentStep} />
-          </div>
-          <div className="flex items-center justify-center ">
-            <p className="text-xs text-[#6B7280] font-semibold">مراحل الطلب</p>
-          </div>
-        </>
-      ) : null}
+      
 
       <div className="flex flex-row items-center justify-center border-t-2 mt-5 border-[#E5E7EB]">
         <Button

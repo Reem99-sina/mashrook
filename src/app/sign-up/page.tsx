@@ -10,8 +10,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import { register } from "@/redux/features/userSlice";
 import toast from "react-hot-toast";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { registerSchema } from "@/typeSchema/schema";
 import { validateForm } from "@/app/hooks/validate";
+import Cookie from "js-cookie"
 export interface userRegister {
   username: string;
   email: string;
@@ -57,16 +59,14 @@ const SignUp: React.FC = () => {
     }
   };
   useEffect(() => {
-    if (message && Boolean(data) == false) {
-      toast.error(message);
-    } else if (Boolean(data) == true) {
+    if (message&&Boolean(data) == true) {
       toast.success(message);
       router.push(`/verify/${data?.user?.email}`);
     }
   }, [data, message, router]);
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const storedToken = sessionStorage.removeItem("token");
+      const storedToken =  Cookie.remove("token");
     }
   }, []);
 
@@ -188,12 +188,20 @@ const SignUp: React.FC = () => {
           </div>
 
           <div>
+          {loading?<button
+              className="relative flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-[#3B73B9] border border-transparent rounded-md group  focus:outline-none focus:ring-2 focus:ring-offset-2 "
+              disabled={loading}
+            ><AiOutlineLoading3Quarters className="rotate-90 text-gray-500"/>
+            </button>:<>
             <Button
               text="تسجيل جديد"
               className="relative flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-[#3B73B9] border border-transparent rounded-md group  focus:outline-none focus:ring-2 focus:ring-offset-2 "
               onClick={() => {}}
               type="submit"
             />
+            </>}
+
+           
           </div>
         </form>
         <div className="mt-auto bg-[#3B73B9] text-center w-full h-[271px] mb-0 lg:h-[40px] flex items-center  lg:gap-2 justify-center flex-col lg:flex-row-reverse">

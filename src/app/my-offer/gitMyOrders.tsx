@@ -11,6 +11,7 @@ import {
   Search,
 } from "../assets/svg";
 import toast from "react-hot-toast"
+import Cookie from "js-cookie"
 import { useRouter,useParams } from "next/navigation";
 import Pagination from "../components/shared/pagination";
 import FilterDropdown from "../components/shared/FilterDropdown";
@@ -23,7 +24,16 @@ import { getRequest,deleteOrder } from "@/redux/features/getOrders";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { RealEstateTypeInter } from "@/redux/features/postRealEstate";
-import {deleteProperty,removeDelete} from "@/redux/features/getPartners"
+import {deleteProperty,removeDelete,UpdataExpiredDateProperty} from "@/redux/features/getPartners"
+interface criteriaInfo {
+  dealStatus: string,
+  city: string,
+  district: string,
+  unitType: string | number,
+  unitStatus: string,
+  priceRange: number[],
+  shareRange: number[],
+}
 const data = [
   {
     title: "أرض تجارية",
@@ -59,12 +69,21 @@ const data = [
     type: "مشاع (صك مشترك)",
   },
 ];
-
+let statuses=[{title:"متكامل"},{title:"محدث"},{title:"تحت التقدم"},{title:"منتهي"}]
 export const GitMyOrders = () => {
   const router = useRouter();
 
   const [isFilterModalOpen, setIsFilterModalOpen] = useState<boolean>(false);
   const [optionFilter, setOption] = useState<string>("");
+  const [criteria, setCriteria] = useState<any>({
+    dealStatus: "",
+    city: "",
+    district: "",
+    unitType: "",
+    unitStatus: "",
+    priceRange: [500000, 20000000],
+   
+  });
   const [token, setToken] = useState<string | null>(null);
   const dispatch = useDispatch<AppDispatch>();
   const [idDelete, setId] = useState<number>();
@@ -79,18 +98,19 @@ export const GitMyOrders = () => {
     data: any;
   };
   let {
-    messageDelete
+    messageDelete,
+    messsageExpiredDate
   } = useSelector<RootState>((state) => state.partners) as {
    
     messageDelete: string;
-  
+    messsageExpiredDate:string;
   };
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const storedToken = sessionStorage.getItem("token");
-      setToken(storedToken);
-    }
-  }, []);
+      const storedToken = Cookie.get("token");
+      if(storedToken){
+        setToken(storedToken);
+      }
+  }, [ ]);
   // propertyTypeDetails  propertyType  propertyLocation city district  details price min_price landDetails
   const handleSelect = (option: string) => {
     setOption(option);
@@ -125,9 +145,22 @@ export const GitMyOrders = () => {
           : dataOrderOne?.landDetails &&
             dataOrderOne?.landDetails?.length > 0 &&
             `${dataOrderOne?.landDetails[0]?.status}`,
-            finance:dataOrderOne?.finance
+            finance:dataOrderOne?.finance,
+            alternativeCount:dataOrderOne?.alternativeCount
     }));
   }, [dataOrder]);
+  let fiterData = useMemo(() => {
+    return {
+      min_price: criteria?.priceRange[0] != 0 ? criteria?.priceRange[0] : null,
+      max_price: criteria?.priceRange[1] != 200000 ? criteria?.priceRange[1] : null,
+      city:criteria?.city,
+      district:criteria?.district,
+      property_type_details_id: criteria?.unitType!=0?criteria?.unitType:null
+      , status: (criteria?.dealStatus=="متكامل"||criteria?.dealStatus=="منتهي")?"complete":"available" ,
+      sort: optionFilter == "الأحدث الى الأقدم" ? "created_desc" : optionFilter == "الأقدم الى الأحدث" ? "created_asc" : optionFilter == "الميزانية ( الأدنى الى الأعلى)" ? "price_asc" : optionFilter == "الميزانية ( الأعلى الى الأدنى)"?"price_decs":""
+      // option=="الأحدث إلى الأقدم"?handleSelect("latest"):option=="الأقدم الى الأحدث"?handleSelect("oldest"):option=="الميزانية ( الأدنى الى الأعلى)"?handleSelect("priceLowToHigh"):handleSelect("priceHighToLow")
+    }
+  }, [criteria,optionFilter])
   let dataPagination = useMemo(() => {
     return dataOrders?.slice((currentPage - 1) * 3, currentPage * 3);
   }, [dataOrders, currentPage]);
@@ -137,9 +170,15 @@ export const GitMyOrders = () => {
       modalRef.current?.close()
     }
   }
+  const onExpiredDate=()=>{
+    if(idDelete){
+      dispatch(UpdataExpiredDateProperty({id:idDelete}))
+      modalRefUpdate.current?.close()
+    }
+  }
   useEffect(() => {
     if (token) {
-      dispatch(getRequest());
+      dispatch(getRequest({}));
     }
   }, [token, dispatch]);
   useEffect(()=>{
@@ -149,12 +188,22 @@ export const GitMyOrders = () => {
     }else if(messageDelete){
       toast.error(messageDelete)
     }
+    if(messsageExpiredDate=="تم تحديث العقار بنجاح"){
+      toast.success(messsageExpiredDate)
+    }else if(messsageExpiredDate){
+      toast.error(messsageExpiredDate)
+    }
     return ()=>{
       dispatch(removeDelete())
     }
-  },[messageDelete,dataOrder,idDelete,dispatch])
+  },[messageDelete,dataOrder,idDelete,dispatch,messsageExpiredDate])
+  useEffect(() => {
+    dispatch(getRequest({
+      sort: optionFilter == "الأحدث الى الأقدم" ? "created_desc" : optionFilter == "الأقدم الى الأحدث" ? "created_asc" : optionFilter == "الميزانية ( الأدنى الى الأعلى)" ? "price_asc" : optionFilter == "الميزانية ( الأعلى الى الأدنى)"?"price_decs":""
+    }))
+  }, [ optionFilter, dispatch])
+
   return (
-    <>
       <div className="p-4 bg-white">
         {isFilterModalOpen && (
           <FilterModal
@@ -164,6 +213,9 @@ export const GitMyOrders = () => {
               setIsFilterModalOpen(false);
             }}
             open={isFilterModalOpen}
+            setCriteria={setCriteria}
+            criteria={criteria}
+
           />
         )}
         <div className="flex flex-row items-center justify-center gap-2">
@@ -206,19 +258,14 @@ export const GitMyOrders = () => {
         </div>
 
         <div className="mt-5 mb-5 flex flex-row gap-2">
-          <span className="rounded-md border border-[#E5E7EB] text-sm font-normal text-[#6B7280] pl-3 pr-3 pt-1 pb-1">
-            المحدثة
-          </span>
-          <span className="rounded-md border border-[#E5E7EB] text-sm font-normal text-[#6B7280] pl-3 pr-3 pt-1 pb-1">
-            تحت التقدم
-          </span>
-
-          <span className="rounded-md border border-[#E5E7EB] text-sm font-normal text-[#6B7280] pl-3 pr-3 pt-1 pb-1">
-            المنتهية
-          </span>
-          <span className="rounded-md border border-[#E5E7EB] text-sm font-normal text-[#6B7280] pl-3 pr-3 pt-1 pb-1">
-            مكتملة
-          </span>
+          {statuses?.map((status:any)=><span key={status?.title} className={`rounded-md border border-[#E5E7EB] text-sm font-normal text-[#6B7280] pl-3 pr-3 pt-1 pb-1 cursor-pointer 
+            ${
+                  criteria.dealStatus === status?.title ? "bg-blue-450 text-white" : "bg-white text-gray-900"
+                }
+            `}onClick={()=>setCriteria({...criteria,dealStatus:status?.title})}>
+            {status?.title}
+          </span>)}
+        
         </div>
         <div>
           {!token ? (
@@ -260,10 +307,11 @@ export const GitMyOrders = () => {
                     active={offer.active}
                     expired={offer.expired}
                     onDelete={() => {modalRef.current?.open();setId(offer?.id)}}
-                    onUpdate={() => modalRefUpdate.current?.open()}
+                    onUpdate={() => {modalRefUpdate.current?.open();setId(offer?.id)}}
                     onEdit={() => router.push(`/edit-my-order/${offer?.id}`)}
                     onRetreating={() => modalRefRetreating.current?.open()}
                     finance={offer.finance}
+                    alternativeCount={offer.alternativeCount}
                   />
                 ))}
               </div>
@@ -405,7 +453,7 @@ export const GitMyOrders = () => {
                   <div>
                     <span>
                       <p className="text-base font-normal text-[#4B5563] mb-2">
-                        سيتم تحديث الطلب رقم (2022) لمدة 30 يوم من الان
+                        سيتم تحديث الطلب رقم ({idDelete}) لمدة 30 يوم من الان
                       </p>
                     </span>
                   </div>
@@ -414,8 +462,8 @@ export const GitMyOrders = () => {
 
                   <div className="flex flex-row items-center justify-center gap-3  w-full">
                     <Button
-                      text=" حذف"
-                      onClick={() => modalRefUpdate.current?.close()}
+                      text="تحديث"
+                      onClick={onExpiredDate}
                       className="!text-xs !font-medium"
                     />
                     <Button
@@ -441,6 +489,6 @@ export const GitMyOrders = () => {
         </div>
        
       </div>
-    </>
+    
   );
 };

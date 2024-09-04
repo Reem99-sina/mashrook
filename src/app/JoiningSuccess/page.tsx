@@ -30,12 +30,13 @@ export default function JoiningSuccess() {
                 </div>
               </div>
               <div className=" p-4 py-6 flex flex-col justify-center">
-                <button
-                  type="button"
+                <Link
+                  href="/chat"
                   className="bg-blue-450 text-white border-blue-500  font-medium rounded-lg text-sm px-5 py-2.5 mx-4 flex justify-center"
-                >
+
+                 >
                   عرض المحادثات
-                </button>
+                </Link>
                 <Link
                   href="/my-offer"
                   className=" text-blue-450 border-2 border-blue-600 font-medium rounded-lg text-sm px-5 py-2.5 mx-4 my-4 flex justify-center"

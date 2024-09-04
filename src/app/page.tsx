@@ -9,6 +9,7 @@ import ClientJourney2 from "../app/components/landingPage/ClientJourney2";
 import { sampleData5 } from "../app/assets/data/data";
 import Link from "next/link";
 import { AppDispatch, RootState } from "@/redux/store";
+import Cookie from 'js-cookie';
 import { useDispatch, useSelector } from "react-redux";
 import PropertyCard from "./components/propertyCard/PropertyCard";
 import { MdKeyboardArrowLeft } from "react-icons/md";
@@ -45,11 +46,14 @@ export default function Home() {
   ) as { loading: boolean; message: string; data: any };
   const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const storedToken = sessionStorage.getItem("token");
-      setToken(storedToken);
-    }
+    
+      const storedToken = Cookie.get("token");
+      if(storedToken){
+        setToken(storedToken);
+      }
+// 24 * 60 * 60 * 1000
   }, []);
+
   useEffect(() => {
 
    dispatch(getRequest({}))
@@ -106,7 +110,7 @@ export default function Home() {
               <div className=" p-4 rounded shadow-md w-full">
                 <div dir="rtl">
                   <div className="flex justify-between mx-6">
-                    <h2 className=" font-bold mb-4 text-2xl">آخر الطلبات</h2>
+                    <h2 className=" font-bold mb-4 text-2xl">آخر العقارات</h2>
 
                     <Link href="/market">
                       <h2 className="flex items-center text-2xl font-bold mb-4 text-blue-450">

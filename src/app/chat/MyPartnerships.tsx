@@ -7,6 +7,8 @@ import { useRouter } from "next/navigation";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { format } from 'date-fns';  
+import Cookie from 'js-cookie';
+
 import {
   Note
 } from "../assets/svg";
@@ -68,10 +70,12 @@ export const MyPartnerships = () => {
     data:any
   }
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const storedToken = sessionStorage.getItem("token");
-      setToken(storedToken);
-    }
+   
+      const storedToken = Cookie.get("token");
+      if(storedToken){
+        setToken(storedToken);
+      }
+    
   }, []);
   return (
     <div className="p-4 bg-white">

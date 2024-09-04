@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import React from "react";
+import Cookie from 'js-cookie';
 export interface returnType {
   loading: boolean;
   message: string | undefined;
@@ -197,7 +198,7 @@ export const postReport=createAsyncThunk<returnType,typeofReport>("postReport", 
   message: string
 }, { rejectWithValue }) => {  
   const response = await axios.post("https://server.mashrook.sa/property-report",data,{headers: {
-    Authorization: sessionStorage.getItem("token"),
+    Authorization: Cookie.get("token"),
   },})
   .then((response)=>response.data)
   .catch((error)=>error?.response?.data) 

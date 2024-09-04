@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import React from "react";
+import Cookie from 'js-cookie';
 export interface returnType {
   loading: boolean;
   message: string | undefined;
@@ -12,6 +13,7 @@ export interface paymentType {
     land_details_id?: number,
     amount:number
     details_id?: number
+    [key:string]:any
   }
 export interface properityInfo{
   property_id: number,
@@ -67,7 +69,7 @@ export const postProperityType = createAsyncThunk<
     const response = await axios
       .post("https://server.mashrook.sa/property/request", data, {
         headers: {
-          Authorization: sessionStorage.getItem("token"),
+          Authorization: Cookie.get("token"),
         },
       })
       .then((response) => response.data)
@@ -85,7 +87,7 @@ export const postPaymentType = createAsyncThunk<
     const response = await axios
       .post("https://server.mashrook.sa/payment/property", data, {
         headers: {
-          Authorization: sessionStorage.getItem("token"),
+          Authorization: Cookie.get("token"),
         },
       })
       .then((response) => response.data)
@@ -94,7 +96,27 @@ export const postPaymentType = createAsyncThunk<
     return response;
   }
 );
+export const postPaymentFileType = createAsyncThunk<
+  returnType,
+  paymentType
+>(
+  "paymentfileType/post",
+  async (data: paymentType, { rejectWithValue }) => {
+    const formData = new FormData();
+    Object?.keys(data)?.map((ele:any)=>formData.append(ele, data[ele]))
+    // data?.images?.forEach((image) => );
+    const response = await axios
+      .post("https://server.mashrook.sa/payment/upload-receipt", formData, {
+        headers: {
+          Authorization: Cookie.get("token"),
+        },
+      })
+      .then((response) => response.data)
+      .catch((error) => error?.response?.data);
 
+    return response;
+  }
+);
 const initialstate = {
   loading: false,
   message: "",
@@ -140,7 +162,14 @@ const properityTypeSlice = createSlice({
       })
       ,builder.addCase(postPaymentType.rejected,(state, action) => {
         state.messagePayment=action.error.message ? action.error.message : "error"
-      });
+      }),builder.addCase(postPaymentFileType.fulfilled,(state, action) => {
+        state.messagePayment=action?.payload?.message?action?.payload?.message:"error"
+        state.dataPayment=action?.payload?.data?action?.payload?.data:null
+      })
+      ,builder.addCase(postPaymentFileType.rejected,(state, action) => {
+        state.messagePayment=action.error.message ? action.error.message : "error"
+      })
+      
   },
 });
 export const { removeState ,removeStatePayment} = properityTypeSlice.actions;

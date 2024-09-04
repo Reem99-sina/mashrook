@@ -11,6 +11,7 @@ import {
   ChatIconSmall,
 } from "../assets/svg";
 import { BsChatSquareText } from "react-icons/bs";
+import Link from "next/link"
 import { Button } from "../components/shared/button.component";
 import Stepper from "../components/shared/Stepper";
 import { CgSmartphoneShake } from "react-icons/cg";
@@ -84,10 +85,10 @@ export const OfferCard: React.FC<ChatCardProps> = ({
       <div className="items-center justify-between  flex-row flex relative">
         <p className="text-xl font-bold text-[#374151]">{title} </p>
 
-        <span className="items-center justify-center flex border border-[#E5E7EB] p-2 rounded-md gap-1 ">
+        <Link className="items-center justify-center flex border border-[#E5E7EB] p-2 rounded-md gap-1 " href={`/showproperty/${requestNumber}`}>
           <p className="font-medium text-sm text-[#3B73B9]">عرض التفاصيل </p>
           <Dots />
-        </span>
+        </Link>
       </div>
       <div className="flex gap-2 mt-2">
         <div className="flex flex-row gap-x-2 text-xs">
@@ -106,7 +107,7 @@ export const OfferCard: React.FC<ChatCardProps> = ({
           </span>
         </div>
 
-        {inProgress ? (
+        {/* {inProgress ? (
           <span className="rounded-xl bg-[#FEECDC] pl-2 pr-2 pt-[2px] pb-[2px] text-xs font-normal text-[#FF8A4C]">
             تحت التقدم{" "}
           </span>
@@ -118,7 +119,7 @@ export const OfferCard: React.FC<ChatCardProps> = ({
           <span className="rounded-xl bg-[#FDE8E8] pl-2 pr-2 pt-[2px] pb-[2px] text-xs font-normal text-[#F98080]">
             منتهي
           </span>
-        )}
+        )} */}
       </div>
 
       <div className=" mt-2">
@@ -139,7 +140,7 @@ export const OfferCard: React.FC<ChatCardProps> = ({
         </div>
       </div>
       <div className="gap-1 mt-2 flex flex-col">
-        {details.map((detail:any, index:number) => (
+        {details?.map((detail:any, index:number) => (
           <>
             <div
               key={`detail-${index}`}
@@ -205,14 +206,14 @@ export const OfferCard: React.FC<ChatCardProps> = ({
               </div>
               {/* {inProgress ? ( */}
               {/* <> */}
-              <div className="p-4 w-full">
+              {/* <div className="p-4 w-full">
                 <Stepper steps={steps} currentStep={detail?.currentStep} />
               </div>
               <div className="flex items-center justify-center ">
                 <p className="text-xs text-[#6B7280] font-semibold">
                   مراحل الشراكة
                 </p>
-              </div>
+              </div> */}
               {/* </> */}
               {/* ) : null} */}
               <hr className="border-gray-200 dark:border-white my-2" />
@@ -257,6 +258,7 @@ export const OfferCard: React.FC<ChatCardProps> = ({
                 disabled={detail?.stage === "finished"}
                 //   onClick={handleDialogToggle}
               >
+                
                 عرض المحادثات
                 <BsChatSquareText
                   className={`mr-4 text-xl ${

@@ -1,6 +1,9 @@
 import { createSlice,createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import Cookie from 'js-cookie';
+import { NextResponse } from 'next/server'
 import React from "react";
+
 export interface returnType{
     loading:boolean,
     message:string | undefined,
@@ -16,11 +19,12 @@ export interface userLogin {
   }
   export interface resetLogin {
     new_password: string;
-    repeate_new_password:string
+    repeate_new_password:string,
     token:string
   }
 export const login=createAsyncThunk<returnType,userLogin>("login", async (data:userLogin, { rejectWithValue }) => {  
     const response = await axios.post("https://server.mashrook.sa/auth/login", data).then((response)=>response.data).catch((error)=>error?.response?.data) 
+   
     return response;
 })
 export const forget=createAsyncThunk<returnType,forgetLogin>("forget", async (data:forgetLogin, { rejectWithValue }) => {  
@@ -40,7 +44,7 @@ export const reset=createAsyncThunk<returnType,resetLogin>("reset", async (data:
 })
 export const getUserRequest=createAsyncThunk("putUser", async (_, { rejectWithValue }) => {  
     const response = await axios.put("https://server.mashrook.sa/auth/token", {},{ headers: {
-        Authorization: sessionStorage.getItem("token"),
+        Authorization: Cookie.get("token"),
       }}).then((response)=>response.data).catch((error)=>error?.response?.data)// Adjust your endpoint as necessary
     return response // Return the user data from API response  
 })
@@ -53,6 +57,7 @@ const initialstate={
     dataForget:null,
     messageRest:"",
     dataRest:null
+    // token:sessionStorage.getItem("token")
 }
 
 const loginSlice=createSlice({
@@ -72,6 +77,7 @@ const loginSlice=createSlice({
         }
     },extraReducers:(builder)=>{
         builder.addCase(login.fulfilled,(state,action)=>{
+            Cookie.set("token",action?.payload?.data?.token)
             state.loading=false
             state.message=action.payload.message?action.payload.message:"success"
             state.data=action.payload.data

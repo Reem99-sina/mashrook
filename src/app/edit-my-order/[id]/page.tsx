@@ -177,7 +177,6 @@ const EditMyOrderBadge = () => {
   }, [dispatch]);
   useEffect(() => {
     if (!(titleSection && detailsSection)) {
-      console.log(titleSection && detailsSection, "titleSection&&detailsSection")
       if (criteria?.property_type_id) {
         dispatch(
           getproperityTypeMore({
@@ -421,7 +420,6 @@ const EditMyOrderBadge = () => {
     router.push("/my-offer");
   };
   const onSubmit = () => {
-    console.log(selectedCites, "selectedCites")
     const datasend = {
       property_id: Number(id),
       city: criteria?.city,
@@ -615,6 +613,7 @@ const EditMyOrderBadge = () => {
           <div className="border border-[#E5E7EB] w-full mb-4" />
 
           <div className="flex flex-row items-center justify-center gap-3  w-full">
+            
             <Button
               text=" تعديل"
               onClick={() => { modalRef.current?.close(); onSubmit() }}

@@ -135,7 +135,7 @@ const FilterModal: React.FC<FilterModalProps> = ({ onClose, onFilter, open, setC
                     }`}
                   onClick={() => setCriteria({ ...criteria, unitStatus: status?.id })}
                 >
-                  {status?.title}
+                    {status?.title=="بيع"?"للبيع":"للتطوير"}
                 </button>
               ))}
             </div>
