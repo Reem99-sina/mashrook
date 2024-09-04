@@ -44,7 +44,7 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({
               <li key={index}>
               <button
                 
-                onClick={() => handleSelect(option)}
+                onClick={() =>handleSelect(option)}
                 className={`w-full rounded-lg text-sm text-start ${optionFilter==option?"bg-[#3B73B9] bg-opacity-25 text-blue-450":"bg-gray-100"} p-2 mb-2`}
               >
                 {option}

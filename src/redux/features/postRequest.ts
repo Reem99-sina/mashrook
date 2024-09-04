@@ -13,6 +13,7 @@ export interface paymentType {
     land_details_id?: number,
     amount:number
     details_id?: number
+    [key:string]:any
   }
 export interface properityInfo{
   property_id: number,
@@ -95,7 +96,27 @@ export const postPaymentType = createAsyncThunk<
     return response;
   }
 );
+export const postPaymentFileType = createAsyncThunk<
+  returnType,
+  paymentType
+>(
+  "paymentfileType/post",
+  async (data: paymentType, { rejectWithValue }) => {
+    const formData = new FormData();
+    Object?.keys(data)?.map((ele:any)=>formData.append(ele, data[ele]))
+    // data?.images?.forEach((image) => );
+    const response = await axios
+      .post("https://server.mashrook.sa/payment/upload-receipt", formData, {
+        headers: {
+          Authorization: Cookie.get("token"),
+        },
+      })
+      .then((response) => response.data)
+      .catch((error) => error?.response?.data);
 
+    return response;
+  }
+);
 const initialstate = {
   loading: false,
   message: "",
@@ -141,7 +162,14 @@ const properityTypeSlice = createSlice({
       })
       ,builder.addCase(postPaymentType.rejected,(state, action) => {
         state.messagePayment=action.error.message ? action.error.message : "error"
-      });
+      }),builder.addCase(postPaymentFileType.fulfilled,(state, action) => {
+        state.messagePayment=action?.payload?.message?action?.payload?.message:"error"
+        state.dataPayment=action?.payload?.data?action?.payload?.data:null
+      })
+      ,builder.addCase(postPaymentFileType.rejected,(state, action) => {
+        state.messagePayment=action.error.message ? action.error.message : "error"
+      })
+      
   },
 });
 export const { removeState ,removeStatePayment} = properityTypeSlice.actions;

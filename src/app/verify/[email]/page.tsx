@@ -10,6 +10,7 @@ import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { verifyRequest,resendCodeRequest } from "@/redux/features/vierfySlice";
 import toast from "react-hot-toast";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import Cookie from "js-cookie"
 import { useRouter } from "next/navigation";
 const Verify: React.FC = () => {
@@ -113,12 +114,19 @@ const Verify: React.FC = () => {
             <InfoOutLine />
           </div>
           <div>
-            <Button
+            {loading?<button
+              className="relative flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-[#3B73B9] border border-transparent rounded-md group  focus:outline-none focus:ring-2 focus:ring-offset-2 "
+              disabled={loading}
+            ><AiOutlineLoading3Quarters className="rotate-90 text-gray-500"/>
+            </button>
+            
+            : <Button
               text="تسجيل جديد"
               className="relative flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-[#3B73B9] border border-transparent rounded-md group  focus:outline-none focus:ring-2 focus:ring-offset-2 "
               type="submit"
               onClick={onSubmit}
-            />
+            />}
+           
           </div>
         </form>
       </div>

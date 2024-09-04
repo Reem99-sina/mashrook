@@ -408,7 +408,7 @@ const PropertyDetails: React.FC<{id:any}> = ({id}:{id:any}) => {
           </div>
           <div className="flex bg-gray-100 w-full justify-between items-center py-2  px-2 rounded-lg ml-2 mt-4">
             <div>
-              <p>{selectData?.is_divisible}العقار قابل للتجزئة</p>
+              <p>العقار قابل للتجزئة</p>
             </div>
             <span>
               {selectData?.is_divisible==false ? (

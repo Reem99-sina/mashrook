@@ -69,6 +69,7 @@ export interface RealEstateTypeInter {
   propertyDetailsOwnership?:any;
   propertyPurpose?:any;
   finance?:boolean;
+  alternativeCount?:number;
   landDetails?: {
     area?: number | string;
     price?: number | string;
@@ -376,7 +377,7 @@ const realEstateTypeSlice = createSlice({
     }),
       builder.addCase(postrealEstateType.pending, (state, action) => {
         state.loading = true;
-        state.message = "loading...";
+        state.message = "";
         state.data = null;
       }),
       builder.addCase(postrealEstateType.rejected, (state, action) => {

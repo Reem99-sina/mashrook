@@ -2,28 +2,60 @@
 
 import React, { useState,useEffect,useRef } from "react";
 import { Range, getTrackBackground } from "react-range";
-
+import { AppDispatch, RootState } from "@/redux/store";
 import {CloseIconSmall } from "@/app/assets/svg";
 import { Modal, ModalRef } from "../components/shared/modal.component";
+import { getCity, getDistrict } from "@/redux/features/getCity"
+import { useDispatch, useSelector } from "react-redux";
+import { getproperityPurposeType } from "@/redux/features/getproperityPurpose";
+import { getDetailsType } from "@/redux/features/getDetailsType"
+interface criteriaInfo {
+  dealStatus: string,
+  city: string,
+  district: string,
+  unitType: string | number,
+  unitStatus: string,
+  realEstateStatus:string,
+  purposeStatus:string,
+  priceRange: number[],
+  shareRange: number[],
+}
 type FilterModalProps = {
   onClose: () => void;
   onFilter: (criteria: any) => void;
-  open:boolean
+  open:boolean,
+  setCriteria: (prev: criteriaInfo) => void;
+  criteria: criteriaInfo,
+  onCloseRequest:()=>void
 };
 
-const FilterModalPartner: React.FC<FilterModalProps> = ({ onClose, onFilter,open }) => {
+const FilterModalPartner: React.FC<FilterModalProps> = ({ onClose, onFilter,open ,criteria,setCriteria,onCloseRequest}) => {
   let refFilter=useRef<ModalRef>(null)
-  const [criteria, setCriteria] = useState<any>({
-    dealStatus: "",
-    city: "",
-    district: "",
-    unitType: "",
-    unitStatus: "",
-    purposeStatus: "",
+  const dispatch = useDispatch<AppDispatch>();
+  let { city, district } =
+ useSelector<RootState>((state) => state.city) as {
+   district: any
+   city: any
+ };
+let {
+ loading: loadingproperty_purpose_id,
+ message: messagePurpose,
+ data: dataPurpose,
+} = useSelector<RootState>((state) => state.properityPurpose) as {
+ loading: boolean;
+ message: string;
+ data: any;
+};
+let {
+ loading: loadingDetails,
+ message: messageDetails,
+ data: dataDetails,
+} = useSelector<RootState>((state) => state.detailsType) as {
+ loading: boolean;
+ message: string;
+ data: any;
+};
 
-    priceRange: [500000, 20000000],
-    shareRange: [10, 90],
-  });
   const [boolStatus, setbool] = useState<boolean>(false);
   // Example data for dropdowns
   const cities = ["الرياض", "الدمام", "جدة"];
@@ -66,6 +98,19 @@ if(open==true){
   refFilter.current?.close()
 }
 },[open])
+useEffect(() => {
+  dispatch(getproperityPurposeType());
+  dispatch(getDetailsType());
+
+}, [dispatch])
+useEffect(() => {
+  dispatch(getCity());
+}, [dispatch])
+useEffect(() => {
+  if (criteria?.city) {
+    dispatch(getDistrict({ name: criteria?.city }));
+  }
+}, [criteria?.city, dispatch])
   return (
    
     <Modal ref={refFilter} className="flex rounded-lg items-start justify-center font-[Cairo] w-full " size="xs">
@@ -101,15 +146,15 @@ if(open==true){
         <div className="mb-4  ">
           <h3 className="font-semibold mb-2">الغرض من عرض العقار</h3>
           <div className="flex flex-wrap">
-            {unitStatuses.map((status) => (
+          {dataPurpose?.map((status:any) => (
               <button
-                key={status}
+                key={status?.id}
                 className={`px-4 py-2 m-1 rounded-md border text-sm ${
-                  criteria.purposeStatus === status ? "bg-blue-450 text-white" : "bg-white text-gray-900"
+                  criteria.purposeStatus === status?.id ? "bg-blue-450 text-white" : "bg-white text-gray-900"
                 }`}
-                onClick={() => setCriteria({ ...criteria, purposeStatus: status })}
+                onClick={() => setCriteria({ ...criteria, purposeStatus: status?.id })}
               >
-                {status}
+                {status?.title}
               </button>
             ))}
           </div>
@@ -124,9 +169,9 @@ if(open==true){
             className="border rounded p-1 w-full"
           >
             <option value="" className="text-sm">اختيار المدينة</option>
-            {cities.map((city) => (
-              <option key={city} value={city} className="text-sm">
-                {city}
+            {city?.map((cit:any) => (
+              <option key={cit?.id} value={cit?.nameAr} className="text-sm">
+                {cit?.nameAr}
               </option>
             ))}
           </select>
@@ -141,9 +186,9 @@ if(open==true){
             className="border rounded p-1 w-full"
           >
             <option value=""className="text-sm">اختيار الحي</option>
-            {districts.map((district) => (
-              <option key={district} value={district} className="text-sm">
-                {district}
+            {district?.map((districtOne:any) => (
+              <option key={districtOne?.id} value={districtOne?.name} className="text-sm">
+                {districtOne?.name}
               </option>
             ))}
           </select>
@@ -153,15 +198,15 @@ if(open==true){
         <div className="mb-4">
           <h3 className="font-semibold mb-2">نوع العقار</h3>
           <div className="flex flex-wrap">
-            {unitTypes.map((type) => (
+          {dataDetails?.map((type:any) => (
               <button
-                key={type}
+                key={type?.id}
                 className={`px-4 py-2 m-1 text-sm rounded-md border ${
-                  criteria.unitType === type ? "bg-blue-450 text-white" : "bg-white text-gray-900"
+                  criteria?.unitType === type?.id ? "bg-blue-450 text-white" : "bg-white text-gray-900"
                 }`}
-                onClick={() => setCriteria({ ...criteria, unitType: type })}
+                onClick={() => setCriteria({ ...criteria, unitType: type?.id })}
               >
-                {type}
+                {type?.title}
               </button>
             ))}
           </div>
@@ -366,7 +411,21 @@ if(open==true){
             تطبيق
           </button>
           <button
-            onClick={onClose}
+            onClick={()=>{
+              setCriteria({
+                dealStatus: "",
+                city: "",
+                district: "",
+                unitType: "",
+                unitStatus: "",
+                realEstateStatus:"",
+                purposeStatus:"",
+                priceRange: [500000, 20000000],
+                shareRange:[10,90]
+              })
+              onCloseRequest()
+              onClose()
+            }}
             className="bg-gray-300 text-gray-900 px-4 py-2 rounded-md flex-grow"
           >
             إلغاء

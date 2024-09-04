@@ -1,42 +1,63 @@
 "use client";
 
-import React, { useState,useEffect,useRef } from "react";
+import React, { useState,useEffect,useRef,useMemo } from "react";
 import { Range, getTrackBackground } from "react-range";
-
+import { AppDispatch, RootState } from "@/redux/store";
+import { getCity, getDistrict } from "@/redux/features/getCity"
+import { useDispatch, useSelector } from "react-redux";
+import { getproperityPurposeType } from "@/redux/features/getproperityPurpose";
+import { getDetailsType } from "@/redux/features/getDetailsType"
 import {CloseIconSmall } from "@/app/assets/svg";
 import { Modal, ModalRef } from "../components/shared/modal.component";
+interface criteriaInfo {
+  dealStatus: string,
+  city: string,
+  district: string,
+  unitType: string | number,
+  unitStatus: string,
+  priceRange: number[]
+}
 type FilterModalProps = {
   onClose: () => void;
   onFilter: (criteria: any) => void;
-  open:boolean
+  open:boolean,
+  setCriteria: (prev: criteriaInfo) => void;
+  criteria: criteriaInfo,
 };
 
-const FilterModal: React.FC<FilterModalProps> = ({ onClose, onFilter,open }) => {
-  let refFilter=useRef<ModalRef>(null)
-  const [criteria, setCriteria] = useState<any>({
-    dealStatus: "",
-    city: "",
-    district: "",
-    unitType: "",
-    unitStatus: "",
-    priceRange: [500000, 20000000],
-   
-  });
+const FilterModal: React.FC<FilterModalProps> = ({ onClose, onFilter,open, criteria, setCriteria}) => {
   const [boolStatus, setbool] = useState<boolean>(false);
+  const dispatch = useDispatch<AppDispatch>();
+  const [sortOption, setSortOption] = useState<string>("");
+  let refFilter=useRef<ModalRef>(null)
+  
+
+  let { city, district } =
+    useSelector<RootState>((state) => state.city) as {
+      district: any
+      city: any
+    };
+  let {
+    loading: loadingproperty_purpose_id,
+    message: messagePurpose,
+    data: dataPurpose,
+  } = useSelector<RootState>((state) => state.properityPurpose) as {
+    loading: boolean;
+    message: string;
+    data: any;
+  };
+  let {
+    loading: loadingDetails,
+    message: messageDetails,
+    data: dataDetails,
+  } = useSelector<RootState>((state) => state.detailsType) as {
+    loading: boolean;
+    message: string;
+    data: any;
+  };
   // Example data for dropdowns
-  const cities = ["الرياض", "الدمام", "جدة"];
-  const districts = ["الياسمين", "البنفسج", "الورود"];
-  const unitTypes = [
-    "ارض سكنية",
-    "ارض تجارية",
-    "فيلا (وحدات تمليك)",
-    "فيلا (درج داخلي)",
-    "فيلا (درج داخلي + شقة)",
-    "شقة (داخل فيلا)",
-    "شقة (داخل عمارة سكنية)",
-    "دور ارضي",
-    "دور علوي",
-  ];
+
+  
   const unitStatuses = ["للتطوير", "للبيع"];
   const dealStatuses = ["متكامل", "منتهي", "تحت التقدم", "محدث"];
 
@@ -46,10 +67,6 @@ const FilterModal: React.FC<FilterModalProps> = ({ onClose, onFilter,open }) => 
 
   const handlePriceRangeChange = (values: number[]) => {
     setCriteria({ ...criteria, priceRange: values });
-  };
-
-  const handleShareRangeChange = (values: number[]) => {
-    setCriteria({ ...criteria, shareRange: values });
   };
 
   const handleApplyFilters = () => {
@@ -63,6 +80,20 @@ if(open==true){
   refFilter.current?.close()
 }
 },[open])
+useEffect(() => {
+  dispatch(getproperityPurposeType());
+  dispatch(getDetailsType());
+
+}, [dispatch])
+useEffect(() => {
+  dispatch(getCity());
+}, [dispatch])
+useEffect(() => {
+  if (criteria?.city) {
+    dispatch(getDistrict({ name: criteria?.city }));
+  }
+}, [criteria?.city, dispatch])
+
   return (
    
     <Modal ref={refFilter} className="flex rounded-lg items-start justify-center font-[Cairo] w-full " size="xs">
@@ -86,7 +117,7 @@ if(open==true){
                 className={`px-4 py-2 m-1 rounded-md border text-sm ${
                   criteria.dealStatus === status ? "bg-blue-450 text-white" : "bg-white text-gray-900"
                 }`}
-                onClick={() => setCriteria({ ...criteria, dealStatus: status })}
+                onClick={() => setCriteria({ ...criteria, dealStatus: status})}
               >
                 {status}
               </button>
@@ -101,16 +132,16 @@ if(open==true){
         <div className="mb-4">
           <h3 className="font-semibold mb-2">المدينة</h3>
           <select
-            value={criteria.city}
+            value={criteria?.city}
             onChange={(e) => setCriteria({ ...criteria, city: e.target.value })}
             className="border rounded p-1 w-full"
           >
             <option value="" className="text-sm">اختيار المدينة</option>
-            {cities.map((city) => (
-              <option key={city} value={city} className="text-sm">
-                {city}
-              </option>
-            ))}
+            {city?.map((city: any) => (
+                <option key={city?.id} value={city?.nameAr} className="text-sm">
+                  {city?.nameAr}
+                </option>
+              ))}
           </select>
         </div>
 
@@ -118,14 +149,14 @@ if(open==true){
         <div className="mb-4">
           <h3 className="font-semibold mb-2">الحي</h3>
           <select
-            value={criteria.district}
+            value={criteria?.district}
             onChange={(e) => setCriteria({ ...criteria, district: e.target.value })}
             className="border rounded p-1 w-full"
           >
             <option value=""className="text-sm">اختيار الحي</option>
-            {districts.map((district) => (
-              <option key={district} value={district} className="text-sm">
-                {district}
+            {district?.map((districtOne:any) => (
+              <option key={districtOne?.id} value={districtOne?.name} className="text-sm">
+                {districtOne?.name}
               </option>
             ))}
           </select>
@@ -135,15 +166,15 @@ if(open==true){
         <div className="mb-4">
           <h3 className="font-semibold mb-2">نوع العقار</h3>
           <div className="flex flex-wrap">
-            {unitTypes.map((type) => (
+            {dataDetails?.map((type:any) => (
               <button
-                key={type}
+                key={type?.id}
                 className={`px-4 py-2 m-1 text-sm rounded-md border ${
-                  criteria.unitType === type ? "bg-blue-450 text-white" : "bg-white text-gray-900"
+                  criteria.unitType === type?.id ? "bg-blue-450 text-white" : "bg-white text-gray-900"
                 }`}
-                onClick={() => setCriteria({ ...criteria, unitType: type })}
+                onClick={() => setCriteria({ ...criteria, unitType: type?.id })}
               >
-                {type}
+                {type?.title}
               </button>
             ))}
           </div>
@@ -160,7 +191,7 @@ if(open==true){
             </div>
             <Range
               step={100000}
-              min={0}
+              min={500000}
               max={20000000}
               values={criteria.priceRange}
               onChange={handlePriceRangeChange}
@@ -187,7 +218,7 @@ if(open==true){
                       background: getTrackBackground({
                         values: criteria.priceRange,
                         colors: ["#ccc", "#548BF4", "#ccc"],
-                        min: 0,
+                        min: 500000,
                         max: 20000000,
                         rtl: true,
                       }),
@@ -267,7 +298,16 @@ if(open==true){
             تطبيق
           </button>
           <button
-            onClick={onClose}
+            onClick={()=>{setCriteria({
+              dealStatus: "",
+              city: "",
+              district: "",
+              unitType: "",
+              unitStatus: "",
+              priceRange: [500000, 20000000]
+            })
+            onClose()
+          }}
             className="bg-gray-300 text-gray-900 px-4 py-2 rounded-md flex-grow"
           >
             إلغاء

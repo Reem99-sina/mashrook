@@ -488,7 +488,7 @@ const PropertyDetails: React.FC<{id:number}> = ({id}:{id:number}) => {
               <p>  العقار قابل للتجزئة</p>
             </div>
             <span>
-              {selectData?.finance == false ? (
+              {selectData?.is_divisible == false ? (
                 <IoMdCloseCircleOutline className="mr-2 ml-2 bg-red-450 text-white text-2xl font-bold rounded-full " />
               ) : (
                 <IoIosCheckmarkCircleOutline className="mr-2 ml-2 bg-green-450 text-white text-2xl font-bold rounded-full " />

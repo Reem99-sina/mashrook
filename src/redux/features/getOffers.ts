@@ -7,12 +7,24 @@ export interface returnType{
     message:string | undefined,
     data:any
 }
-
-export const getOffer=createAsyncThunk<returnType>("Offer/get", async (_, { rejectWithValue }) => {  
+interface paramsInput{
+    min_price?:number|null,
+  max_price?:number|null,
+  property_type_details_id?:number|null|string,
+  city?:string|null,
+  district?:string|null,
+  property_purpose_id?:number|null|string
+  ,status?:string|null,
+  sort?:string|null,
+  min_percentage?:number|null,
+      max_percentage?:number|null,
+  }
+export const getOffer=createAsyncThunk<returnType,(paramsInput|null)>("Offer/get", async (data:(paramsInput|null), { rejectWithValue }) => {  
         const response = await axios.get(`https://server.mashrook.sa/property/get/mine/offers`,{
             headers: {
               Authorization: Cookie.get("token"),
             },
+            params:data?data:{}
           })
         .then((response)=>response.data)
         .catch((error)=>error?.response?.data) 

@@ -15,11 +15,22 @@ export interface comeWithdrawType{
     ,
     land_details_id?:number
 }
-export const getPartner=createAsyncThunk<returnType>("partners/get", async (_, { rejectWithValue }) => {  
+interface paramsInput{
+    min_price?:number|null,
+  max_price?:number|null,
+  property_type_details_id?:number|null|string,
+  city?:string|null,
+  district?:string|null,
+  property_purpose_id?:number|null|string
+  ,status?:string|null,
+  sort?:string|null
+  }
+export const getPartner=createAsyncThunk<returnType,(paramsInput|null)>("partners/get", async (data:(paramsInput|null), { rejectWithValue }) => {  
         const response = await axios.get(`https://server.mashrook.sa/property/get/mine/partners`,{
             headers: {
               Authorization: Cookie.get("token"),
             },
+            params:data?data:{}
           })
         .then((response)=>response.data)
         .catch((error)=>error?.response?.data) 
@@ -45,12 +56,23 @@ export const withDrawProperty=createAsyncThunk<returnType,comeWithdrawType>("pro
     .catch((error)=>error?.response?.data) 
     return response;
 })
+export const UpdataExpiredDateProperty=createAsyncThunk<returnType,comeType>("property/expireddata", async (data:comeType, { rejectWithValue }) => {  
+    const response = await axios.put(`https://server.mashrook.sa/property/expire-date/${data?.id}`,{},{
+        headers: {
+          Authorization: Cookie.get("token"),
+        },
+      })
+    .then((response)=>response.data)
+    .catch((error)=>error?.response?.data) 
+    return response;
+})
 const initialstate={
     loading:false,
     message:"",
     data:null,
    messageDelete:"",
-   messageWithDraw:""
+   messageWithDraw:"",
+   messsageExpiredDate:""
 }
 
 const getPartnerSlice=createSlice({
@@ -68,6 +90,7 @@ const getPartnerSlice=createSlice({
         },
         removeDelete:(state)=>{
             state.messageDelete=""
+            state.messsageExpiredDate=""
         }
     },extraReducers:(builder)=>{
         builder.addCase(getPartner.fulfilled,(state,action)=>{
@@ -91,7 +114,7 @@ const getPartnerSlice=createSlice({
         }),
         builder.addCase(deleteProperty.pending,(state,action)=>{
             
-            state.messageDelete="loading..."
+            state.messageDelete=""
           
         }),
         builder.addCase(deleteProperty.rejected,(state,action)=>{
@@ -110,6 +133,13 @@ const getPartnerSlice=createSlice({
         builder.addCase(withDrawProperty.rejected,(state,action)=>{
             // state.loading=false
             state.messageWithDraw=action.error.message?action.error.message:"error"
+        }),builder.addCase(UpdataExpiredDateProperty.fulfilled,(state,action)=>{
+            state.messsageExpiredDate=action.payload.message?action.payload.message:""
+            console.log(action.payload,"payload")
+        }),builder.addCase(UpdataExpiredDateProperty.rejected,(state,action)=>{
+            
+        }),builder.addCase(UpdataExpiredDateProperty.pending,(state,action)=>{
+            
         })
         // withDrawProperty
     }

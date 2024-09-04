@@ -3,6 +3,7 @@ import axios from "axios";
 import Cookie from 'js-cookie';
 import { NextResponse } from 'next/server'
 import React from "react";
+
 export interface returnType{
     loading:boolean,
     message:string | undefined,
@@ -43,7 +44,7 @@ export const reset=createAsyncThunk<returnType,resetLogin>("reset", async (data:
 })
 export const getUserRequest=createAsyncThunk("putUser", async (_, { rejectWithValue }) => {  
     const response = await axios.put("https://server.mashrook.sa/auth/token", {},{ headers: {
-        Authorization: sessionStorage.getItem("token"),
+        Authorization: Cookie.get("token"),
       }}).then((response)=>response.data).catch((error)=>error?.response?.data)// Adjust your endpoint as necessary
     return response // Return the user data from API response  
 })

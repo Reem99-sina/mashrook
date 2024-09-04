@@ -58,15 +58,26 @@ const data = [
     purpose:"للبيع"
   },
 ];
-
+let statuses=[{title:"متكامل"},{title:"تحت التقدم"}]
 export const GitMyPartners = () => {
   const handleSelect = (option: string) => {
-   
+    setOption(option);
   };
   const dispatch = useDispatch<AppDispatch>();
   const [isFilterModalOpen, setIsFilterModalOpen] = useState<boolean>(false);
   const modalRef = useRef<ModalRef>(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [optionFilter, setOption] = useState<string>("");
+  const [criteria, setCriteria] = useState<any>({
+    dealStatus: "",
+    city: "",
+    district: "",
+    unitType: "",
+    unitStatus: "",
+    purposeStatus: "",
+    priceRange: [500000, 20000000],
+    shareRange: [10, 90],
+  });
   const [idDelete, setId] = useState<any>({
     land_details_id:0,details_id:0,
     requestNumber:0
@@ -118,6 +129,21 @@ export const GitMyPartners = () => {
         setNewData([])
       }
   },[dataPartner])
+  let fiterData = useMemo(() => {
+    return {
+      min_price: criteria?.priceRange[0] != 500000 ? criteria?.priceRange[0] : null,
+      max_price: criteria?.priceRange[1] != 20000000 ? criteria?.priceRange[1] : null,
+      min_percentage:criteria?.shareRange[0]!=10?criteria?.shareRange[0]:null,
+      max_percentage:criteria?.shareRange[1]!=90?criteria?.shareRange[1]:null,
+      city:criteria?.city,
+      district:criteria?.district,
+      property_type_details_id: criteria?.unitType!=0?criteria?.unitType:null
+      ,property_purpose_id:criteria?.purposeStatus!=0?criteria?.purposeStatus:null
+      ,status: (criteria?.dealStatus=="متكامل")?"complete":"available" ,
+      sort: optionFilter == "الأحدث الى الأقدم" ? "created_desc" : optionFilter == "الأقدم الى الأحدث" ? "created_asc" : optionFilter == "الميزانية ( الأدنى الى الأعلى)" ? "price_asc" : optionFilter == "الميزانية ( الأعلى الى الأدنى)"?"price_decs":""
+      // option=="الأحدث إلى الأقدم"?handleSelect("latest"):option=="الأقدم الى الأحدث"?handleSelect("oldest"):option=="الميزانية ( الأدنى الى الأعلى)"?handleSelect("priceLowToHigh"):handleSelect("priceHighToLow")
+    }
+  }, [criteria,optionFilter])
   let dataNew=useMemo(()=>{
     console.log(newData,"newData")
   },[
@@ -155,9 +181,15 @@ export const GitMyPartners = () => {
 
   useEffect(()=>{
     if(token){
-      dispatch(getPartner())
+      dispatch(getPartner({}))
     }
   },[token,dispatch])
+  useEffect(() => {
+    dispatch(getPartner({
+      sort: optionFilter == "الأحدث الى الأقدم" ? "created_desc" : optionFilter == "الأقدم الى الأحدث" ? "created_asc" : optionFilter == "الميزانية ( الأدنى الى الأعلى)" ? "price_asc" : optionFilter == "الميزانية ( الأعلى الى الأدنى)"?"price_decs":""
+   ,status: (criteria?.dealStatus=="متكامل")?"complete":"available"
+    }))
+  }, [ optionFilter, dispatch,criteria?.dealStatus])
   return (
     <div className="p-4 bg-white">
       {isFilterModalOpen && (
@@ -165,9 +197,13 @@ export const GitMyPartners = () => {
               onClose={() => setIsFilterModalOpen(false)}
               onFilter={(criteria) => {
                 // Filter logic to be added later
+                dispatch(getPartner(fiterData))
                 setIsFilterModalOpen(false);
               }}
+              onCloseRequest={()=>dispatch(getPartner({}))}
               open={isFilterModalOpen}
+              setCriteria={setCriteria}
+              criteria={criteria}
             />
           )}
       <div className="flex flex-row items-center justify-center gap-2">
@@ -189,18 +225,19 @@ export const GitMyPartners = () => {
               "الميزانية ( الأعلى الى الأدنى)",
             ]}
             onSelect={handleSelect}
+            optionFilter={optionFilter}
           />
         </span>
       </div>
 
       <div className="mt-5 mb-5 flex flex-row gap-2">
-        <span className="rounded-md border border-[#E5E7EB] text-sm font-normal text-[#6B7280] pl-3 pr-3 pt-1 pb-1">
-          تحت التقدم
-        </span>
-
-        <span className="rounded-md border border-[#E5E7EB] text-sm font-normal text-[#6B7280] pl-3 pr-3 pt-1 pb-1">
-          مكتملة
-        </span>
+      {statuses?.map((status:any)=><span key={status?.title} className={`rounded-md border border-[#E5E7EB] text-sm font-normal text-[#6B7280] pl-3 pr-3 pt-1 pb-1 cursor-pointer 
+            ${
+                  criteria.dealStatus === status?.title ? "bg-blue-450 text-white" : "bg-white text-gray-900"
+                }
+            `}onClick={()=>setCriteria({...criteria,dealStatus:status?.title})}>
+            {status?.title}
+          </span>)}  
       </div>
 
       <div>

@@ -35,7 +35,7 @@ import {
   earthInter,
   removeState,
 } from "@/redux/features/postRealEstate";
-import { getCity,getDistrict} from "@/redux/features/getCity"
+import { getCity, getDistrict } from "@/redux/features/getCity"
 import { cites } from "@/typeSchema/schema";
 import { validateForm } from "../hooks/validate";
 import toast from "react-hot-toast";
@@ -197,10 +197,10 @@ const AddYourRealEstate: React.FC = () => {
       titleSection: string;
       detailsSection: any;
     };
-    let {  city,district } =
+  let { city, district } =
     useSelector<RootState>((state) => state.city) as {
-      district:any
-      city:any
+      district: any
+      city: any
     };
   let {
     loading: loadingproperty_purpose_id,
@@ -458,8 +458,10 @@ const AddYourRealEstate: React.FC = () => {
     // setSentYourRequest(true);
   };
 
-  const onDelete = (index: string) => {
-    setImages(images?.filter((ele, ind) => ele?.name != index));
+  const onDelete = (index: any) => {
+   
+      setImages(images?.filter((ele, ind) => ele?.name != index?.name));
+
   };
   useEffect(() => {
     dispatch(getproperityType({ num: 1 }));
@@ -472,11 +474,11 @@ const AddYourRealEstate: React.FC = () => {
       dispatch(removeState());
     };
   }, [dispatch]);
-  useEffect(()=>{
-    if(dataSend?.city){
-      dispatch(getDistrict({name:dataSend?.city}));
+  useEffect(() => {
+    if (dataSend?.city) {
+      dispatch(getDistrict({ name: dataSend?.city }));
     }
-  },[dataSend?.city,dispatch])
+  }, [dataSend?.city, dispatch])
   useEffect(() => {
     dispatch(getproperityType({ num: dataSend?.property_purpose_id || 1 }));
   }, [dataSend?.property_purpose_id, dispatch]);
@@ -489,11 +491,11 @@ const AddYourRealEstate: React.FC = () => {
     );
   }, [dataSend?.property_type_id, dispatch]);
   useEffect(() => {
-   
-      const storedToken = Cookie.get("token");
-      if(storedToken){
-        setToken(storedToken);
-      }
+
+    const storedToken = Cookie.get("token");
+    if (storedToken) {
+      setToken(storedToken);
+    }
   }, []);
 
   useEffect(() => {
@@ -517,14 +519,14 @@ const AddYourRealEstate: React.FC = () => {
     setlandDetails((prev) =>
       prev.length < count.nums
         ? [
-            ...prev,
-            {
-              piece_number: "", // في حالة اختيار ارض (رقم القطعة)
-              plan_number: "",
-              area: 0,
-              price: 0,
-            },
-          ]
+          ...prev,
+          {
+            piece_number: "", // في حالة اختيار ارض (رقم القطعة)
+            plan_number: "",
+            area: 0,
+            price: 0,
+          },
+        ]
         : [...prev]
     );
   }, [count.nums]);
@@ -569,23 +571,23 @@ const AddYourRealEstate: React.FC = () => {
                   <div className="flex flex-row-reverse flex-wrap justify-start mt-6 gap-8">
                     {item.tattle == "نوع العقار"
                       ? data?.data?.map(
-                          (
-                            option: { id: number; title: string },
-                            index: number
-                          ) => (
-                            <RadioInput
-                              name={`realstateType`}
-                              onChange={() =>
-                                handleOptionChange(option, item.tattle)
-                              }
-                              value={option?.title}
-                              key={index}
-                              label={option?.title}
-                            />
-                          )
+                        (
+                          option: { id: number; title: string },
+                          index: number
+                        ) => (
+                          <RadioInput
+                            name={`realstateType`}
+                            onChange={() =>
+                              handleOptionChange(option, item.tattle)
+                            }
+                            value={option?.title}
+                            key={option?.id}
+                            label={option?.title}
+                          />
                         )
+                      )
                       : item.tattle == "صفة مقدم العرض"
-                      ? dataOwnerType?.map(
+                        ? dataOwnerType?.map(
                           (
                             option: { id: number; title: string },
                             index: number
@@ -596,18 +598,18 @@ const AddYourRealEstate: React.FC = () => {
                                 handleOptionChange(option, item.tattle)
                               }
                               value={option?.title}
-                              key={index}
+                              key={option?.id}
                               label={option?.title}
                             />
                           )
                         )
-                      : dataPurpose?.map(
+                        : dataPurpose?.map(
                           (
                             option: { id: number; title: string },
                             index: number
                           ) => (
                             <RadioInput
-                              key={index}
+                              key={option?.id}
                               name={item.tattle}
                               onChange={() =>
                                 handleOptionChange(option, item.tattle)
@@ -763,7 +765,7 @@ const AddYourRealEstate: React.FC = () => {
                       })
                     }
                   >
-                    {district?.map((city:any) => (
+                    {district?.map((city: any) => (
                       <option key={city?.id} value={city?.name}>
                         {city?.name}
                       </option>
@@ -785,7 +787,7 @@ const AddYourRealEstate: React.FC = () => {
                       setDataSend({ ...dataSend, city: event?.target?.value })
                     }
                   >
-                    {city?.map((cit:any) => (
+                    {city?.map((cit: any) => (
                       <option key={cit.id} value={cit?.nameAr}>
                         {cit?.nameAr}
                       </option>
@@ -863,7 +865,7 @@ const AddYourRealEstate: React.FC = () => {
                   selectedPropertyType?.title == "أرض تجارية" ||
                   selectedPropertyType?.title == "أرض سكنية تجارية") &&
                   Array.from({ length: count.nums }).map((_, index) => (
-                    <>
+                    <div key={index}>
                       <div className="flex items-start gap-2 justify-end flex-col mt-5">
                         <p className="text-base text-[#4B5563] font-medium">
                           رقم المخطط{" "}
@@ -875,9 +877,9 @@ const AddYourRealEstate: React.FC = () => {
                               prevs.map((ele, i) =>
                                 i == index
                                   ? {
-                                      ...ele,
-                                      piece_number: event?.target?.value,
-                                    }
+                                    ...ele,
+                                    piece_number: event?.target?.value,
+                                  }
                                   : ele
                               )
                             )
@@ -904,9 +906,9 @@ const AddYourRealEstate: React.FC = () => {
                                 prevs.map((ele, i) =>
                                   i == index
                                     ? {
-                                        ...ele,
-                                        plan_number: event?.target?.value,
-                                      }
+                                      ...ele,
+                                      plan_number: event?.target?.value,
+                                    }
                                     : ele
                                 )
                               )
@@ -928,9 +930,9 @@ const AddYourRealEstate: React.FC = () => {
                             prevs.map((ele, i) =>
                               i == index
                                 ? {
-                                    ...ele,
-                                    area: Number(event?.target?.value),
-                                  }
+                                  ...ele,
+                                  area: Number(event?.target?.value),
+                                }
                                 : ele
                             )
                           )
@@ -945,9 +947,9 @@ const AddYourRealEstate: React.FC = () => {
                             prevs.map((ele, i) =>
                               i == index
                                 ? {
-                                    ...ele,
-                                    price: Number(event?.target?.value),
-                                  }
+                                  ...ele,
+                                  price: Number(event?.target?.value),
+                                }
                                 : ele
                             )
                           )
@@ -956,41 +958,41 @@ const AddYourRealEstate: React.FC = () => {
                         measurement="ريال"
                         desc="(بدون القيمة المضافة والسعي)"
                       />
-                    </>
+                    </div>
                   ))}
 
                 {(selectedPropertyType?.title == "شقة" ||
                   selectedPropertyType?.title == "دور") && (
-                  <>
-                    <InputAreaPrice
-                      title="المساحة"
-                      onChange={(event) =>
-                        setDataSend({
-                          ...dataSend,
-                          area: Number(event?.target?.value),
-                        })
-                      }
-                      errors={errors?.area}
-                      measurement="متر"
-                    />
-                    <InputAreaPrice
-                      title="السعر"
-                      onChange={(event) =>
-                        setDataSend({
-                          ...dataSend,
-                          price: Number(event?.target?.value),
-                        })
-                      }
-                      errors={errors?.price}
-                      measurement="ريال"
-                      desc="(بدون القيمة المضافة والسعي)"
-                    />
-                  </>
-                )}
+                    <>
+                      <InputAreaPrice
+                        title="المساحة"
+                        onChange={(event) =>
+                          setDataSend({
+                            ...dataSend,
+                            area: Number(event?.target?.value),
+                          })
+                        }
+                        errors={errors?.area}
+                        measurement="متر"
+                      />
+                      <InputAreaPrice
+                        title="السعر"
+                        onChange={(event) =>
+                          setDataSend({
+                            ...dataSend,
+                            price: Number(event?.target?.value),
+                          })
+                        }
+                        errors={errors?.price}
+                        measurement="ريال"
+                        desc="(بدون القيمة المضافة والسعي)"
+                      />
+                    </>
+                  )}
               </div>
 
               {selectedPropertyType?.title === "شقة" ||
-              selectedPropertyType?.title === "دور" ? (
+                selectedPropertyType?.title === "دور" ? (
                 <>
                   <NumberRoom
                     errors={String(errors?.age)}
@@ -1119,9 +1121,9 @@ const AddYourRealEstate: React.FC = () => {
                                 prev.map((ele, i) =>
                                   i == index
                                     ? {
-                                        ...ele,
-                                        rooms_number: Number(e.target.value),
-                                      }
+                                      ...ele,
+                                      rooms_number: Number(e.target.value),
+                                    }
                                     : ele
                                 )
                               )
@@ -1142,9 +1144,9 @@ const AddYourRealEstate: React.FC = () => {
                                 prev.map((ele, i) =>
                                   i == index
                                     ? {
-                                        ...ele,
-                                        halls_number: Number(e.target.value),
-                                      }
+                                      ...ele,
+                                      halls_number: Number(e.target.value),
+                                    }
                                     : ele
                                 )
                               )
@@ -1166,11 +1168,11 @@ const AddYourRealEstate: React.FC = () => {
                                 prev.map((ele, i) =>
                                   i == index
                                     ? {
-                                        ...ele,
-                                        bathrooms_number: Number(
-                                          e.target.value
-                                        ),
-                                      }
+                                      ...ele,
+                                      bathrooms_number: Number(
+                                        e.target.value
+                                      ),
+                                    }
                                     : ele
                                 )
                               )
@@ -1192,9 +1194,9 @@ const AddYourRealEstate: React.FC = () => {
                                 prev.map((ele, i) =>
                                   i == index
                                     ? {
-                                        ...ele,
-                                        kitchens_number: Number(e.target.value),
-                                      }
+                                      ...ele,
+                                      kitchens_number: Number(e.target.value),
+                                    }
                                     : ele
                                 )
                               )
@@ -1237,9 +1239,9 @@ const AddYourRealEstate: React.FC = () => {
                                     prev.map((ele, i) =>
                                       i == index
                                         ? {
-                                            ...ele,
-                                            car_entrance: event.target.checked,
-                                          }
+                                          ...ele,
+                                          car_entrance: event.target.checked,
+                                        }
                                         : ele
                                     )
                                   )
@@ -1252,9 +1254,9 @@ const AddYourRealEstate: React.FC = () => {
                                     prev.map((ele, i) =>
                                       i == index
                                         ? {
-                                            ...ele,
-                                            kitchen: event.target.checked,
-                                          }
+                                          ...ele,
+                                          kitchen: event.target.checked,
+                                        }
                                         : ele
                                     )
                                   )
@@ -1267,9 +1269,9 @@ const AddYourRealEstate: React.FC = () => {
                                     prev.map((ele, i) =>
                                       i == index
                                         ? {
-                                            ...ele,
-                                            furnished: event.target.checked,
-                                          }
+                                          ...ele,
+                                          furnished: event.target.checked,
+                                        }
                                         : ele
                                     )
                                   )
@@ -1442,7 +1444,7 @@ const AddYourRealEstate: React.FC = () => {
                   </>
                 )}
               {selectedPropertyType?.title === "فيلا" &&
-              departmentArch?.property_type_details_id == 3 ? (
+                departmentArch?.property_type_details_id == 3 ? (
                 <div className="mt-2">
                   <div
                     className="flex justify-between text-sm mt-2"
@@ -1553,23 +1555,23 @@ const AddYourRealEstate: React.FC = () => {
               {(selectedPropertyType?.title == "أرض سكنية" ||
                 selectedPropertyType?.title == "أرض تجارية" ||
                 selectedPropertyType?.title == "أرض سكنية تجارية") && (
-                <div className="mb-4" style={{ direction: "rtl" }}>
-                  <div className="flex gap-2  flex-row mt-5">
-                    <div
-                      onClick={() =>
-                        setCount((prev) => ({ nums: prev.nums + 1 }))
-                      }
-                      className="cursor-pointer bg-[#3B73B9]"
-                    >
-                      <Image src={Add} width={21} height={21} alt={"add"} />
-                    </div>
+                  <div className="mb-4" style={{ direction: "rtl" }}>
+                    <div className="flex gap-2  flex-row mt-5">
+                      <div
+                        onClick={() =>
+                          setCount((prev) => ({ nums: prev.nums + 1 }))
+                        }
+                        className="cursor-pointer bg-[#3B73B9]"
+                      >
+                        <Image src={Add} width={21} height={21} alt={"add"} />
+                      </div>
 
-                    <p className="text-sm text-[#3B73B9] font-bold">
-                      إضافة عقار اخر
-                    </p>
+                      <p className="text-sm text-[#3B73B9] font-bold">
+                        إضافة عقار اخر
+                      </p>
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
             </div>
 
             <div className="bg-white rounded-lg border border-[#E5E7EB] w-full mb-4 items-start justify-start p-4">
@@ -1723,12 +1725,12 @@ const AddYourRealEstate: React.FC = () => {
                 />
               </div>
               <div className="p-7">
-              {loadingrealEstateRequest?<button
-              className="relative flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-[#3B73B9] border border-transparent rounded-md group  focus:outline-none focus:ring-2 focus:ring-offset-2 "
-              disabled={loadingrealEstateRequest}
-            ><AiOutlineLoading3Quarters className="rotate-90 text-gray-500"/>
-            </button>: <Button text="إضافة العقار" onClick={onSubmit} />}
-               
+                {loadingrealEstateRequest ? <button
+                  className="relative flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-[#3B73B9] border border-transparent rounded-md group  focus:outline-none focus:ring-2 focus:ring-offset-2 "
+                  disabled={loadingrealEstateRequest}
+                ><AiOutlineLoading3Quarters className="rotate-90 text-gray-500" />
+                </button> : <Button text="إضافة العقار" onClick={onSubmit} />}
+
               </div>
             </div>
           </div>
@@ -1739,7 +1741,7 @@ const AddYourRealEstate: React.FC = () => {
                 <MapLocation
                   lat={dataSend?.lat}
                   long={dataSend?.long}
-                  onChange={({lat,long,address}:{lat:number,long:number,address:string})=>setDataSend({...dataSend,lat:lat,long:long,address:address})}
+                  onChange={({ lat, long, address }: { lat: number, long: number, address: string }) => setDataSend({ ...dataSend, lat: lat, long: long, address: address })}
                 />
                 {/* <Map /> */}
                 {/* <div></div> */}
@@ -1782,8 +1784,8 @@ const AddYourRealEstate: React.FC = () => {
           </div>
           <div className="w-4/5 mb-28  ">
             <Button text="الذهاب الى طلباتي" onClick={() => {
-                router.push("/my-offer");
-              }}/>
+              router.push("/my-offer");
+            }} />
             <Button
               text="العودة الى الرئيسية"
               className="!text-[#3B73B9] !bg-white !border !border-[#3B73B9] rounded !mt-5"

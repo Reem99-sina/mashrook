@@ -13,7 +13,7 @@ import { GoDownload } from "react-icons/go";
 import { AppDispatch,RootState } from "@/redux/store";
 import { useDispatch,useSelector } from "react-redux";
 import {dataReturn,addUnqiue} from "@/redux/features/getRequest"
-import {postPaymentType,removeStatePayment} from "@/redux/features/postRequest"
+import {postPaymentType,removeStatePayment,postPaymentFileType} from "@/redux/features/postRequest"
 import toast from "react-hot-toast";
 import {paymentSchema} from "@/typeSchema/schema"
 import {useState,useEffect} from "react"
@@ -41,12 +41,14 @@ export default function Payment() {
  numCard:0,
  endDate:"",
 cvv:""})
+let [recipt,setRecipt]=useState<File>()
 const [errors, setErrors] = useState<{
-  method:string,
- name:string,
- numCard:number,
- endDate:string,
-cvv:string
+  method?:string,
+ name?:string,
+ numCard?:number,
+ endDate?:string,
+cvv?:string,
+receipt?:string
 }>();
 let dispatch=useDispatch<AppDispatch>()
 let refImage = useRef<HTMLInputElement>(null);
@@ -54,30 +56,56 @@ let refA = useRef<any>(null);
 let [url,setUrl]=useState<any>()
   async function onSubmit(e:React.MouseEvent<HTMLButtonElement>){
     e.preventDefault()
-    const status=await validateForm(data,paymentSchema,setErrors)
-    if(status==true){
-      if(selectData?.type){
-        dispatch(postPaymentType({
-          property_id: selectData?.id,
-          land_details_id: selectData?.detail_id,
-      // land_details_id: selectData?.detail_id,
-      amount:Number(sessionStorage.getItem("amount"))
-        }))
+    if(data?.method=="bank"){
+      if(recipt){
+        if(selectData?.type){
+          dispatch(postPaymentFileType({
+            property_id: selectData?.id,
+            land_details_id: selectData?.detail_id,
+        // land_details_id: selectData?.detail_id,
+        receipt:recipt,
+        amount:Number(sessionStorage.getItem("amount"))
+          }))
+        }else{
+          dispatch(postPaymentFileType({
+            property_id: selectData?.id,
+            details_id: selectData?.detail_id,
+        // land_details_id: selectData?.detail_id,
+        receipt:recipt,
+        amount:Number(sessionStorage.getItem("amount"))
+          }))
+        }
       }else{
-        dispatch(postPaymentType({
-          property_id: selectData?.id,
-          details_id: selectData?.detail_id,
-      // land_details_id: selectData?.detail_id,
-      amount:Number(sessionStorage.getItem("amount"))
-        }))
+        setErrors({...errors,receipt:"يجب ادخال ايصال"})
       }
-     
+    }else{
+      const status=await validateForm(data,paymentSchema,setErrors)
+      if(status==true){
+        if(selectData?.type){
+          dispatch(postPaymentType({
+            property_id: selectData?.id,
+            land_details_id: selectData?.detail_id,
+        // land_details_id: selectData?.detail_id,
+        amount:Number(sessionStorage.getItem("amount"))
+          }))
+        }else{
+          dispatch(postPaymentType({
+            property_id: selectData?.id,
+            details_id: selectData?.detail_id,
+        // land_details_id: selectData?.detail_id,
+        amount:Number(sessionStorage.getItem("amount"))
+          }))
+        }
+       
+      }
     }
+    
   }
   function readAndPreview(file:any) {
     // Make sure `file.name` matches our extensions criteria
     
     if((file instanceof File)==true){
+      setRecipt(file)
       if (/\.(pdf?g|pdf)$/i.test(file.name)) {
         const reader = new FileReader();
       
@@ -164,41 +192,43 @@ let [url,setUrl]=useState<any>()
                   <div className="text-right p-4 mb-4 rounded-xl bg-gray-200">
                     <p className="text-xl font-bold">بيانات الدفع</p>
                   </div>
-                  {data?.method=="bank"?url?<>
-                    <div className="my-2 border-2 shadow-md p-4 rounded-xl flex flex-row-reverse items-center justify-between">
-              <div className="flex flex-row-reverse items-center gap-x-3">
-              <IoDocumentText/>
-              <div className="text-gray-500 text-xs flex-col items-center  justify-start">
-              <p>
-                 {url?.name}
-              </p>
-              <p>
-                PDF file
-              </p>
-              </div>
-              </div>
-              <div className="cursor-pointer items-start">
-                <IoMdClose className="text-blue-450 text-md" onClick={()=>setUrl({})}/>
-              </div>
-            </div>
-                    <div className="my-2 border-2 shadow-md p-4 rounded-xl flex flex-row-reverse items-center justify-between">
-              <div className="flex flex-row-reverse items-center gap-x-3">
-              <IoDocumentText/>
-              <div className="text-gray-500 text-xs flex-col items-center  justify-start">
-              <p>
-                فاتورة الدفع
-              </p>
-              <p>
-                انقر للتحميل
-              </p>
-              </div>
-              </div>
-              <div className="cursor-pointer items-start">
-                <GoDownload className="text-blue-450 text-md" onClick={()=>refA?.current?.click()}/>
-                  <a href="/منصة مشروك الإجراءات والسياسات.pdf" download ref={refA} ></a>
-              </div>
-            </div>
-                  </>:<>
+                  {data?.method=="bank"?
+            //       url?<>
+            //         <div className="my-2 border-2 shadow-md p-4 rounded-xl flex flex-row-reverse items-center justify-between">
+            //   <div className="flex flex-row-reverse items-center gap-x-3">
+            //   <IoDocumentText/>
+            //   <div className="text-gray-500 text-xs flex-col items-center  justify-start">
+            //   <p>
+            //      {url?.name}
+            //   </p>
+            //   <p>
+            //     PDF file
+            //   </p>
+            //   </div>
+            //   </div>
+            //   <div className="cursor-pointer items-start">
+            //     <IoMdClose className="text-blue-450 text-md" onClick={()=>setUrl({})}/>
+            //   </div>
+            // </div>
+            //         <div className="my-2 border-2 shadow-md p-4 rounded-xl flex flex-row-reverse items-center justify-between">
+            //   <div className="flex flex-row-reverse items-center gap-x-3">
+            //   <IoDocumentText/>
+            //   <div className="text-gray-500 text-xs flex-col items-center  justify-start">
+            //   <p>
+            //     فاتورة الدفع
+            //   </p>
+            //   <p>
+            //     انقر للتحميل
+            //   </p>
+            //   </div>
+            //   </div>
+            //   <div className="cursor-pointer items-start">
+            //     <GoDownload className="text-blue-450 text-md" onClick={()=>refA?.current?.click()}/>
+            //       <a href="/منصة مشروك الإجراءات والسياسات.pdf" download ref={refA} ></a>
+            //   </div>
+            // </div>
+            //       </>
+            <>
                     <div className="border-2 shadow-md p-4 rounded-xl">
                     <h3 className="my-2 font-bold">صورة السند</h3>
                     <div className="flex gap-2  flex-row-reverse mt-5">
@@ -211,6 +241,9 @@ let [url,setUrl]=useState<any>()
               <p className="text-sm text-[#3B73B9] font-bold">
                 أضف صورة / ملف
               </p>
+              {errors?.receipt?<p className="text-xs text-red-600 dark:text-red-500 text-right">
+                  {String(errors?.receipt)}
+                </p>:<></>}
               <input
                 type="file"
                 className="hidden"
@@ -235,7 +268,7 @@ let [url,setUrl]=useState<any>()
               <IoDocumentText/>
               <div className="text-gray-500 text-xs flex-col items-center  justify-start">
               <p>
-                فاتورة الدفع
+                {url?.name}
               </p>
               <p>
                 انقر للتحميل
@@ -244,7 +277,7 @@ let [url,setUrl]=useState<any>()
               </div>
               <div className="cursor-pointer items-start">
                 <GoDownload className="text-blue-450 text-md" onClick={()=>refA?.current?.click()}/>
-                  <a href="/منصة مشروك الإجراءات والسياسات.pdf" download ref={refA} ></a>
+                  <a href={url?.link} download ref={refA} ></a>
               </div>
             </div>
                     </div>

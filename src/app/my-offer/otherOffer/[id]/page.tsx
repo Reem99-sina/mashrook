@@ -3,14 +3,33 @@ import MainHeader from "@/app/components/header/MainHeader";
 import { BackButtonOutline } from "@/app/assets/svg";
 import { useRouter,useParams } from "next/navigation";
 import {OtherOfferCard} from "../myOtherOfferCrd"
-
+import {useEffect} from "react"
+import { AppDispatch, RootState } from "@/redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import {getOtherOrders} from "@/redux/features/getOrders"
 function OtherOffer() {
   const router = useRouter();
+  const dispatch = useDispatch<AppDispatch>();
+  let {
+    loadingOther,
+    messageOther,
+    dataOther
+  } = useSelector<RootState>((state) => state.requests) as {
+    loadingOther:boolean,
+    messageOther:string,
+    dataOther:any,
+  };
   const params = useParams(); 
+  let {id}=params
   const handleBack = () => {
     router.push("/my-offer");
   };
-
+  useEffect(()=>{
+    if(id){
+      dispatch(getOtherOrders({id:Number(id)}))
+    }
+  },[id,dispatch])
+  console.log(dataOther,"dataOther")
   return (
     <div className="flex flex-col items-center min-h-screen h-full w-full bg-white">
        <MainHeader />
@@ -31,7 +50,7 @@ function OtherOffer() {
          </div>
          <hr className="h-px my-8 bg-gray-300 border-0 dark:bg-gray-700" />
          <div className="m-2">
-         {data.map((offer, index) => (<>
+         {dataOther?.map((offer:any, index:number) => (<>
                 <OtherOfferCard
                   key={index}
                   title={offer.title}

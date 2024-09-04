@@ -140,7 +140,7 @@ export const OfferCard: React.FC<ChatCardProps> = ({
         </div>
       </div>
       <div className="gap-1 mt-2 flex flex-col">
-        {details.map((detail:any, index:number) => (
+        {details?.map((detail:any, index:number) => (
           <>
             <div
               key={`detail-${index}`}
@@ -258,6 +258,7 @@ export const OfferCard: React.FC<ChatCardProps> = ({
                 disabled={detail?.stage === "finished"}
                 //   onClick={handleDialogToggle}
               >
+                
                 عرض المحادثات
                 <BsChatSquareText
                   className={`mr-4 text-xl ${

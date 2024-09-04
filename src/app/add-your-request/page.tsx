@@ -126,6 +126,7 @@ const AddYourRequest: React.FC = () => {
 
   const handlePropertyTypeChange = (value: typeSelect) => {
     setSelectedPropertyType(value);
+    setSelectedCites([])
   };
 
   const handleCiteChange = (cite: { id: number; name: string }) => {
@@ -343,11 +344,12 @@ const AddYourRequest: React.FC = () => {
                         <RadioInput
                           key={ele?.id}
                           name="property_type_details_id"
-                          onChange={(event) =>
+                          onChange={(event) =>{
                             setCriteria({
                               ...criteria,
                               unitType: Number(event?.target?.value),
                             })
+                            setSelectedCites([])}
                           }
                           value={ele.id}
                           label={ele?.title}

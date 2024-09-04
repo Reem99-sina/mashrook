@@ -16,6 +16,7 @@ import  getRequest  from './features/getRequest';
 import getRequestSlice from "./features/getOrders"
 import getPartnerSlice from "./features/getPartners"
 import getOfferSlice from "./features/getOffers"
+import saveSlice from "./features/mySave"
 import getMessageSlice from "./features/getMessages"
 import getPartnerMessageSlice from "./features/getMessagePartner"
 import uploadReciptSlice from "./features/uploadRecipt"
@@ -37,7 +38,8 @@ const store = configureStore({
     city:getCitySlice,
     messageOrders:getMessageSlice,
     messagePartners:getPartnerMessageSlice,
-    uploadRecipt:uploadReciptSlice
+    uploadRecipt:uploadReciptSlice,
+    save:saveSlice
   }
 
 });
