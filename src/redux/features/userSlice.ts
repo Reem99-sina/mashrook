@@ -22,7 +22,11 @@ const userSlice=createSlice({
     name:"user",
     initialState:initialstate,
     reducers:{
-
+        removeUser:(state)=>{
+            state.loading=false
+            state.message=""
+            state.data=null
+        }
     },extraReducers:(builder)=>{
         builder.addCase(register.fulfilled,(state,action)=>{
             state.loading=false
@@ -31,7 +35,7 @@ const userSlice=createSlice({
         }),
         builder.addCase(register.pending,(state,action)=>{
             state.loading=true
-            state.message="loading..."
+            state.message=""
             state.data=null
         }),
         builder.addCase(register.rejected,(state,action)=>{
@@ -41,4 +45,5 @@ const userSlice=createSlice({
         })
     }
 })
+export const { removeUser } = userSlice.actions;
 export default userSlice.reducer

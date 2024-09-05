@@ -15,6 +15,7 @@ import {
   IoIosCheckmarkCircleOutline,
   IoMdCloseCircleOutline,
 } from "react-icons/io";
+import toast from "react-hot-toast";
 import { HiOutlineSquare3Stack3D } from "react-icons/hi2";
 import { BiArea, BiShareAlt } from "react-icons/bi";
 import { LuTag } from "react-icons/lu";
@@ -22,11 +23,12 @@ import { RxArrowLeft } from "react-icons/rx";
 import { MdOutlineFlag } from "react-icons/md";
 import Image from "next/image";
 import JoinStatusButtons from "../components/propertyCard/JoinButton";
-
+import {postSave,deleteSave,deleteSaves} from "@/redux/features/mySave"
 import { AppDispatch,RootState } from "@/redux/store";
 import { useDispatch,useSelector } from "react-redux";
 import {dataReturn} from "@/redux/features/getRequest"
 import {useRouter} from "next/navigation"
+import Cookie from 'js-cookie';
 import {Vector,Money,Diagram,Dance,Shower,Kitchen,CheckOut} from "@/app/assets/svg"
 const PropertyDetails: React.FC<{id:number}> = ({id}:{id:number}) => {
 
@@ -44,6 +46,7 @@ const PropertyDetails: React.FC<{id:number}> = ({id}:{id:number}) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
   const [reportText, setReportText] = useState("");
+  const [user, setUser] = useState<any | null>(null);
   const [showReportNotification, setShowReportNotification] = useState(false);
   const [reportNotificationMessage, setReportNotificationMessage] =
     useState("");
@@ -53,7 +56,9 @@ const PropertyDetails: React.FC<{id:number}> = ({id}:{id:number}) => {
       (state) => state.getRequest
     ) as { loading: boolean; message: string; data: dataReturn[], selectData:dataReturn,messageReport:string,status:number};
 
-
+    let { loading:loadingSave, message:messageSave, data:dataSave } = useSelector<RootState>(
+      (state) => state.save
+    ) as { loading: boolean; message: string; data: any };
   const maxChars = 250;
 
   const currentDealStatus = "متاح";
@@ -106,19 +111,55 @@ const PropertyDetails: React.FC<{id:number}> = ({id}:{id:number}) => {
     }, 3000);
   };
 
-  const handleSaveClick = () => {
-    if (!saved) {
-      setNotificationMessage("تم الحفظ");
-    } else {
-      setNotificationMessage("تم الغاء الحفظ");
+  const handleSaveClick= (id:number) => {
+    if(id){
+      if (!saved) {
+      dispatch(postSave({property_id:id}))
+    }else{
+      dispatch(deleteSaves({id:id}))
     }
+  }
+    // if (!saved) {
+    //   setNotificationMessage("تم الحفظ");
+    // } else {
+    //   setNotificationMessage("تم الغاء الحفظ");
+    // }
+    // setSaved(!saved);
+    // setShowNotification(true);
+    // setTimeout(() => {
+    //   setShowNotification(false);
+    // }, 3000);
+  };
+  useEffect(() => {
+   
+    const storedToken = Cookie.get("user");
+    if(storedToken){
+      setUser(storedToken);
+    }
+  
+}, []);
+useEffect(()=>{
+  if(messageSave&&Boolean(dataSave)==true){
+      setNotificationMessage("تم الحفظ");
     setSaved(!saved);
     setShowNotification(true);
     setTimeout(() => {
       setShowNotification(false);
-    }, 3000);
-  };
+    }, 5000);
 
+  }else if (messageSave=="Properties removed successfully"&&Boolean(dataSave)==false){
+    
+    setNotificationMessage("تم الغاء الحفظ");
+    setSaved(!saved);
+    setShowNotification(true);
+    setTimeout(() => {
+      setShowNotification(false);
+    }, 5000);
+  }
+  return ()=>{
+    dispatch(deleteSave())
+  }
+},[messageSave,dataSave,dispatch,saved])
 
   useEffect(()=>{
     if(messageReport&&status){
@@ -530,12 +571,13 @@ const PropertyDetails: React.FC<{id:number}> = ({id}:{id:number}) => {
       >
         <div className="flex flex-row py-4 items-center justify-center">
           <button
-            onClick={handleSaveClick}
-            className="text-blue-500 mx-2 align-middle"
+            onClick={()=>handleSaveClick(selectData?.id)}
+            className={`${selectData?.user?.email==user?.email?"text-gray-500":"text-blue-500"} mx-2 align-middle`}
+                  disabled={selectData?.user?.email==user?.email}
           >
             {saved ? "إلغاء الحفظ" : "حفظ"}
           </button>
-          <FaBookmark className="text-blue-500 mx-2 text-xl align-middle" />
+          <FaBookmark className={`${selectData?.user?.email==user?.email?"text-gray-500":"text-blue-500"} mx-2 text-xl align-middle`} />
         </div>
 
         <div className="bg-gray-300 inline-block h-10 w-0.5 align-bottom"></div>
@@ -643,6 +685,7 @@ const PropertyDetails: React.FC<{id:number}> = ({id}:{id:number}) => {
       </div>
 
       <Footer />
+      
     </div>
   );
 };

@@ -41,10 +41,10 @@ const MyAccountPage=()=>{
               </div>
             </div>
             <MainOtion title={dataUser?.user?.username} subTitle={"عرض الملف الشخصية"} dataUser={dataUser}onClick={()=>router.push("/profile")}/>
-            <MainOtion title={"كلمة السر"} subTitle={""} dataUser={dataUser} Icon={BsKey} onClick={()=>router.push("/")}/>
+            <MainOtion title={"كلمة السر"} subTitle={""} dataUser={dataUser} Icon={BsKey} onClick={()=>router.push("/password")}/>
             <MainOtion title={"الاشعارات"} subTitle={""} dataUser={dataUser} Icon={IoIosNotificationsOutline}onClick={()=>router.push("/")}/>
-            <MainOtion title={"رخصة فال"} subTitle={""} dataUser={dataUser} Icon={FaAddressCard}onClick={()=>router.push("/")}/>
-            <MainOtion title={"محفوظاتي"} subTitle={""} dataUser={dataUser} Icon={BsSave}onClick={()=>router.push("/")}/>
+            <MainOtion title={"رخصة فال"} subTitle={""} dataUser={dataUser} Icon={FaAddressCard}onClick={()=>router.push("/lisence_number")}/>
+            <MainOtion title={"محفوظاتي"} subTitle={""} dataUser={dataUser} Icon={BsSave}onClick={()=>router.push("/mySave")}/>
             <MainOtion title={"اعلاناتي"} subTitle={""} dataUser={dataUser} Icon={FaAd} onClick={()=>router.push("/")}/>
             <div className="mx-2">
                 <div className="flex flex-row gap-x-2 items-center py-4 cursor-pointer" onClick={()=>{

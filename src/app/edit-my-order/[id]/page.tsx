@@ -274,7 +274,7 @@ const EditMyOrderBadge = () => {
             <select className="border w-full text-right  border-[#D1D5DB] rounded-lg"
               value={criteria?.city}
               onChange={(event) =>
-                setCriteria({ ...criteria, city: event?.target?.value })
+                setCriteria({ ...criteria, city: event?.target?.value,district: [] })
               }
             >
               {city?.map((city:any) => (
@@ -451,7 +451,7 @@ const EditMyOrderBadge = () => {
 
           putDetailsType(ele?.min_apartment_floor && ele?.apartment_floor ? {
 
-            // finance: criteria?.finance=="false"?false:true,
+            finance: criteria?.finance=="false"?false:true,
 
             status: criteria?.status,
             details_id: ele?.id,
@@ -465,6 +465,7 @@ const EditMyOrderBadge = () => {
             details_id: ele?.id,
             price: criteria?.shareRange[1],
             min_price: criteria?.shareRange[0],
+            finance: criteria?.finance == "false" ? false : true
           })
         ))
       } else if (selectData?.details?.length > 1) {

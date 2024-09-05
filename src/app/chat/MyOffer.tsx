@@ -62,8 +62,8 @@ const message = [
 export const MyOffer = () => {
   const router = useRouter();
   const [token, setToken] = useState<string | null>(null);
-  const OnClick = () => {
-    router.push("/ChatPage");
+  const OnClick = (id:number) => {
+    router.push(`/ChatPage/${id}`);
   };
   let{loading,message:messageOrders,data}=useSelector<RootState>((state)=>state.messageOrders) as {
     loading:boolean,
@@ -117,7 +117,7 @@ export const MyOffer = () => {
               title={message?.property?.propertyTypeDetails?.title?`${message?.property?.propertyTypeDetails?.title} ${message?.property?.propertyType?.title}`:`${message?.property?.propertyType?.title} قطعة رقم ${message?.landDetails?.plan_number}`}
               time={format(message.lastMessage?.createdAt, 'hh:mm a')}
               image={<Block />}
-              onClick={OnClick}
+              onClick={()=>OnClick(message?.id)}
             />
           ))
         ) : (

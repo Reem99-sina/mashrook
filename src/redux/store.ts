@@ -19,6 +19,7 @@ import getOfferSlice from "./features/getOffers"
 import saveSlice from "./features/mySave"
 import getMessageSlice from "./features/getMessages"
 import getPartnerMessageSlice from "./features/getMessagePartner"
+import getMessageByid from "./features/getMessage"
 import uploadReciptSlice from "./features/uploadRecipt"
 const store = configureStore({
   reducer: {
@@ -39,7 +40,8 @@ const store = configureStore({
     messageOrders:getMessageSlice,
     messagePartners:getPartnerMessageSlice,
     uploadRecipt:uploadReciptSlice,
-    save:saveSlice
+    save:saveSlice,
+    messageByID:getMessageByid
   }
 
 });

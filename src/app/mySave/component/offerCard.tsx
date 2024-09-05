@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React,{useState} from "react";
 import {
   Accreditation,
   Dots,
@@ -9,83 +9,55 @@ import {
   UpdateIcon,
   Rebuild,
   ChatIconSmall,
-} from "../assets/svg";
+} from "@/app/assets/svg";
+import {postSave,deleteSave,deleteSaves} from "@/redux/features/mySave"
+import {
+  FaRegCalendarAlt,
+  FaBookmark,
+  FaEllipsisH,
+  FaAngleDoubleLeft,
+} from "react-icons/fa";
 import { BsChatSquareText } from "react-icons/bs";
 import Link from "next/link"
-import { Button } from "../components/shared/button.component";
-import Stepper from "../components/shared/Stepper";
+import { Button } from "@/app/components/shared/button.component";
+import Stepper from "@/app/components/shared/Stepper";
 import { CgSmartphoneShake } from "react-icons/cg";
-import CircularProgressBar from "../components/propertyCard/RadialProgressBar";
+import CircularProgressBar from "@/app/components/propertyCard/RadialProgressBar";
 import { FinishedShares } from "@/app/assets/svg";
 import { GoLocation } from "react-icons/go";
 import { LuTag } from "react-icons/lu";
 import { BiArea } from "react-icons/bi";
 import { CiLocationOn } from "react-icons/ci";
 import { useRouter } from "next/navigation";
+import { AppDispatch, RootState } from "@/redux/store";
+import { useDispatch, useSelector } from "react-redux";
 interface ChatCardProps {
-  title: string;
-  date: string;
-  count: number;
-  onEdit?: () => void;
-  onUpdate?: () => void;
-  onDelete?: () => void;
-  inProgress?: boolean;
-  active?: boolean;
-  expired?: boolean;
-  requestNumber: number;
-  city: string;
-  id:number;
-  district: string;
-  budget: string;
-  type: string;
-  purpose: string;
-  lisNumber: string;
-  house?: boolean;
-  details: {
-    piece_number: string;
-    price: string;
-    area: string;
-    stage: string;
-    available_price: string;
-    available_percentage: string;
-    type?: string;
-    onUpdate?: () => void;
-    onDelete?: () => void;
-    onEdit?: () => void;
-    currentStep: number;
-  }[];
+  offer:any
 }
 
 export const OfferCard: React.FC<ChatCardProps> = ({
-  onEdit,
-  onUpdate,
-  onDelete,
-  title,
-  inProgress,
-  active,
-  expired,
-  date,
-  requestNumber,
-  count,
-  city,
-  district,
-  id,
-  budget,
-  type,
-  purpose,
-  lisNumber,
-  details,
-  house,
+offer
 }) => {
   const steps = ["الانتهاء", "السعي", "دفع الرسوم", "انضمام الشركاء"];
   const currentStep = 1;
+  const [showNotification, setShowNotification] = useState(false);
+  let dispatch = useDispatch<AppDispatch>();
+  const [notificationMessage, setNotificationMessage] = useState("");
+  const [saved, setSaved] = useState(false);
   let router = useRouter();
+  const handleSaveClick = (id:number) => {
+    if(id){
+    
+        dispatch(deleteSaves({id:id}))
+      
+    }
+  };
   return (
     <div className="mt-4 w-full border-2 border-[#E5E7EB] rounded-lg mb-4 flex flex-col p-4">
       <div className="items-center justify-between  flex-row flex relative">
-        <p className="text-xl font-bold text-[#374151]">{title} </p>
+        <p className="text-xl font-bold text-[#374151]">{offer?.title} </p>
 
-        <Link className="items-center justify-center flex border border-[#E5E7EB] p-2 rounded-md gap-1 " href={`/showproperty/${requestNumber}`}>
+        <Link className="items-center justify-center flex border border-[#E5E7EB] p-2 rounded-md gap-1 " href={`/showproperty/${offer?.requestNumber}`}>
           <p className="font-medium text-sm text-[#3B73B9]">عرض التفاصيل </p>
           <Dots />
         </Link>
@@ -94,53 +66,39 @@ export const OfferCard: React.FC<ChatCardProps> = ({
         <div className="flex flex-row gap-x-2 text-xs">
           <span
             className={`text-white text-right px-4 py-1 rounded-2xl ${
-              purpose === "للبيع" ? "bg-green-450" : "bg-orange-450"
+              offer?.purpose === "للبيع" ? "bg-green-450" : "bg-orange-450"
             }`}
           >
-            {purpose === "للبيع" ? purpose : "تطوير"}
+            {offer?.purpose === "للبيع" ? offer?.purpose : "تطوير"}
           </span>
          
           <span
             className={`text-black text-right px-4 py-1 rounded-2xl ${"bg-gray-200"}`}
           >
-            {date}
+            {offer?.date}
           </span>
         </div>
-
-        {/* {inProgress ? (
-          <span className="rounded-xl bg-[#FEECDC] pl-2 pr-2 pt-[2px] pb-[2px] text-xs font-normal text-[#FF8A4C]">
-            تحت التقدم{" "}
-          </span>
-        ) : active ? (
-          <span className="rounded-xl bg-[#F3F4F6] pl-2 pr-2 pt-[2px] pb-[2px] text-xs font-normal text-[#6B7280]">
-            {count} ايام للانتهاء
-          </span>
-        ) : (
-          <span className="rounded-xl bg-[#FDE8E8] pl-2 pr-2 pt-[2px] pb-[2px] text-xs font-normal text-[#F98080]">
-            منتهي
-          </span>
-        )} */}
       </div>
 
       <div className=" mt-2">
         <p className="text-xs text-[#6B7280] font-normal">
-          رقم الطلب: {requestNumber}
+          رقم الطلب: {offer?.requestNumber}
         </p>
       </div>
       <div className="pt-1 mr-4 text-sm text-gray-700 mt-2">
         <div className="flex items-center justify-start">
           <CgSmartphoneShake className="w-[16px]" />
-          <p className="px-2">ترخيص رقم: {lisNumber}</p>
+          <p className="px-2">ترخيص رقم: {offer?.lisNumber}</p>
         </div>
         <div className="flex items-center  justify-start">
           <GoLocation />
           <p className="px-2">
-            مدينة {city}، {district}
+            مدينة {offer?.city}، {offer?.district}
           </p>
         </div>
       </div>
       <div className="gap-1 mt-2 flex flex-col">
-        {details?.map((detail:any, index:number) => (
+        {offer?.details?.map((detail:any, index:number) => (
           <>
             <div
               key={`detail-${index}`}
@@ -152,8 +110,8 @@ export const OfferCard: React.FC<ChatCardProps> = ({
                     <p className="text-2xl px-4 text-black font-bold">
                       {detail?.type
                         ? detail?.type
-                        : detail?.plan_number &&
-                          `قطعة رقم  ${detail?.plan_number}`}
+                        : detail?.piece_number &&
+                          `قطعة رقم  ${detail?.piece_number}`}
                     </p>
                   </div>
                   <div className="flex flex-col gap-y-2 my-2 flex-wrap items-start">
@@ -204,50 +162,9 @@ export const OfferCard: React.FC<ChatCardProps> = ({
                   )}
                 </div>
               </div>
-              {/* {inProgress ? ( */}
-              {/* <> */}
-              {/* <div className="p-4 w-full">
-                <Stepper steps={steps} currentStep={detail?.currentStep} />
-              </div>
-              <div className="flex items-center justify-center ">
-                <p className="text-xs text-[#6B7280] font-semibold">
-                  مراحل الشراكة
-                </p>
-              </div> */}
-              {/* </> */}
-              {/* ) : null} */}
+              
               <hr className="border-gray-200 dark:border-white my-2" />
-              <div className="flex flex-row items-center justify-center   gap-3 border-[#E5E7EB] my-5">
-                {house ? (
-                  <Button
-                    startIcon={<EditIcon />}
-                    text="تعديل"
-                    className="!bg-white disabled:!bg-gray-200 flex flex-row-reverse !text-[#3B73B9] disabled:!text-gray-500 !text-sm !font-medium !gap-1  !border-[#3B73B9] disabled:!border-gray-500 border-solid rounded-md border-2"
-                    onClick={() => {router.push("/edit-my-offer");
-                      sessionStorage.setItem("offer",JSON.stringify({...detail,title:title}))
-                    }}
-                    disabled={detail?.currentStep > 1}
-                  />
-                ) : (
-                  <Button
-                    startIcon={<EditIcon />}
-                    text="تعديل"
-                    className="!bg-white disabled:!bg-gray-200 flex flex-row-reverse !text-[#3B73B9] disabled:!text-gray-500 !text-sm !font-medium !gap-1  !border-[#3B73B9] disabled:!border-gray-500 border-solid rounded-md border-2"
-                    onClick={detail?.onEdit}
-                    disabled={detail?.currentStep > 1}
-                  />
-                )}
-
-                <Button
-                  startIcon={
-                    <DeleteIcon className="disabled:!text-gray-500 !text-[#F05252]" />
-                  }
-                  text="حذف"
-                  className="!bg-white disabled:!bg-gray-200 flex flex-row-reverse !text-[#F05252] disabled:!text-gray-500 !text-sm !font-medium !gap-1  !border-red-500 disabled:!border-gray-500 border-solid rounded-md border-2"
-                  onClick={onDelete}
-                  disabled={detail?.currentStep > 1}
-                />
-              </div>
+        
               <button
                 type="button"
                 className={`${
@@ -273,32 +190,42 @@ export const OfferCard: React.FC<ChatCardProps> = ({
         ))}
       </div>
 
-      <div className="flex flex-row items-center justify-center border-t-2 mt-5 border-[#E5E7EB]">
-        <Button
-          startIcon={<EditIcon />}
-          text="تعديل"
-          className="!bg-white !flex !flex-row-reverse !text-[#3B73B9] !text-sm !font-medium !gap-1 "
-          onClick={() => router.push(`/edit-offer/${id}`)}
-        />
-        <span className="text-[#D1D5DB]">|</span>
-        
-          <Button
-            startIcon={<UpdateIcon />}
-            text="تحديث"
-            className="!bg-white !flex !flex-row-reverse !text-[#3B73B9] !text-sm !font-medium !gap-1 "
-            onClick={onUpdate}
-          />
-        
+      <div className="flex justify-around items-center mt-4">
+              <div className="flex flex-row  py-1 items-center justify-center">
+                <Link href={`/showproperty/${offer?.id}`} onClick={() => {}}>
+                  <button className="text-blue-500 mx-4 align-middle">
+                    عرض التفاصيل
+                  </button>
+                </Link>
+                <FaEllipsisH className="text-blue-500 mx-2 align-middle" />
+              </div>
+              <div className="bg-gray-300 inline-block h-12 w-0.5 self-stretch"></div>
 
-        <span className="text-[#D1D5DB]">|</span>
+              <div className="flex flex-row py-1 items-center justify-center">
+                <div
+                  onClick={()=>handleSaveClick(offer?.id)}
+                 
+                  className={`text-blue-500 mx-2 align-middle cursor-pointer`}
+                  // disabled={ele?.user?.email==user?.email}
+                >
+                  { "إلغاء الحفظ" }
+                </div>
+                <FaBookmark
+                 className={`
+                 ${
+                  // ele?.user?.email==user?.email?
+                //   true?
+                //  "text-gray-500"
+                //  :
+                 "text-blue-500"} mx-2 text-xl align-middle`} />
+              </div>
 
-        <Button
-          startIcon={<DeleteIcon />}
-          text="حذف"
-          className="!bg-white flex flex-row-reverse !text-[#F05252] !text-sm !font-medium gap-1 "
-          onClick={onDelete}
-        />
-      </div>
+              {showNotification && (
+                <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-500 text-white px-4 py-2 rounded-full">
+                  {notificationMessage}
+                </div>
+              )}
+            </div>
     </div>
   );
 };

@@ -51,9 +51,11 @@ const Login: React.FC = () => {
      if (Boolean(data) == true) {
       toast.success(message);
       // sessionStorage.setItem("token", data?.token);
-      sessionStorage.setItem('tokenTime', String(currentTime));  
+      Cookie.set('tokenTime', String(currentTime));  
       Cookie.set("user", JSON.stringify(data?.user));
       router.push(`/`);
+    }else if(message&&Boolean(data) == false){
+      toast.error(message);
     }
   }, [data, message, router]);
   useEffect(()=>{
