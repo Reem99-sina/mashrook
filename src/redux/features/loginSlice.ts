@@ -84,7 +84,7 @@ const loginSlice=createSlice({
         }),
         builder.addCase(login.pending,(state,action)=>{
             state.loading=true
-            state.message="loading..."
+            state.message=""
             state.data=null
         }),
         builder.addCase(login.rejected,(state,action)=>{
@@ -96,7 +96,7 @@ const loginSlice=createSlice({
             state.dataUser=action?.payload?.data
         }), builder.addCase(getUserRequest.rejected,(state,action)=>{
             state.dataUser=null
-            
+            Cookie.remove("token")
         }),builder.addCase(getUserRequest.pending,(state,action)=>{
             state.dataUser=null
         }),builder.addCase(forget.fulfilled,(state,action)=>{

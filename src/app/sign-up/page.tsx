@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
-import { register } from "@/redux/features/userSlice";
+import { register,removeUser } from "@/redux/features/userSlice";
 import toast from "react-hot-toast";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { registerSchema } from "@/typeSchema/schema";
@@ -62,8 +62,13 @@ const SignUp: React.FC = () => {
     if (message&&Boolean(data) == true) {
       toast.success(message);
       router.push(`/verify/${data?.user?.email}`);
+    }else if(message&&Boolean(data) == false){
+      toast.error(message);
     }
-  }, [data, message, router]);
+    return ()=>{
+      dispatch(removeUser())
+    }
+  }, [data, message, router,dispatch]);
   useEffect(() => {
     if (typeof window !== "undefined") {
       const storedToken =  Cookie.remove("token");

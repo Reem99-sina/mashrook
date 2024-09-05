@@ -54,8 +54,10 @@ const saveSlice=createSlice({
     name:"save",
     initialState:initialstate,
     reducers:{
-        deleteSave:(state,action)=>{
-            state.data=action.payload.data
+        deleteSave:(state)=>{
+            state.loading=false
+            state.message=""
+            state.data=null
         }
     },extraReducers:(builder)=>{
         builder.addCase(postSave.fulfilled,(state,action)=>{

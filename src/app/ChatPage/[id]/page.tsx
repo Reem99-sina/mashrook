@@ -1,7 +1,9 @@
 "use client";
-import React, { useState } from "react";
-import MainHeader from "../components/header/MainHeader";
-import { TextInput } from "../components/shared/text-input.component";
+import React, { useState,useEffect } from "react";
+import MainHeader from "@/app/components/header/MainHeader";
+import Pusher from "pusher-js";
+import Cookie from 'js-cookie';
+import { TextInput } from "@/app/components/shared/text-input.component";
 import {
   BackButtonOutline,
   Block,
@@ -9,9 +11,24 @@ import {
   Search,
 } from "@/app/assets/svg";
 import { IoAttach } from "react-icons/io5";
-import { useRouter } from "next/navigation";
+import { useRouter,useParams } from "next/navigation";
+import {getMessageByid} from "@/redux/features/getMessage"
+import { AppDispatch, RootState } from "@/redux/store";
+import { useDispatch, useSelector } from "react-redux";
 
 const ChatPage = () => {
+  const params = useParams();
+  let [user,setUser]=useState<any>()
+  let { loading,
+    message,
+    data } = useSelector<RootState>(
+    (state) => state.messageByID
+  ) as {
+    loading: boolean;
+    message: string;
+    data: any;
+  };
+  let {id}=params
   const [messages, setMessages] = useState([
     {
       sender: "إدارة مشروك",
@@ -34,8 +51,9 @@ const ChatPage = () => {
   ]);
 
   const [newMessage, setNewMessage] = useState("");
-
+  const dispatch = useDispatch<AppDispatch>();
   const handleSendMessage = () => {
+    
     if (newMessage.trim() !== "") {
       const currentTime = new Date().toLocaleTimeString([], {
         hour: "2-digit",
@@ -59,7 +77,34 @@ const ChatPage = () => {
   const handleBack = () => {
     router.back();
   };
-
+  useEffect(() => {
+   
+    const storedToken = Cookie.get("user");
+    if(storedToken){
+      setUser(JSON.parse(storedToken));
+    }
+  
+}, []);
+  useEffect(() => {
+    const pusher = new Pusher("eac8985b87012d5f5753", {
+      cluster:"mt1"
+    });
+    const channel = pusher.subscribe("chat");
+    // channel.bind("chat-event", function (data) {
+    //   setChats((prevState) => [
+    //     ...prevState,
+    //     { sender: data.sender, message: data.message },
+    //   ]);
+    // });
+    return () => {
+      pusher.unsubscribe("chat");
+    };
+  }, []);
+  useEffect(()=>{
+    if(id){
+      dispatch(getMessageByid({id:Number(id)}))
+    }
+  },[id,dispatch])
   return (
     <>
       <div className="flex flex-col h-screen bg-white">
@@ -90,21 +135,21 @@ const ChatPage = () => {
           </div>
 
           <div className="flex-1  p-4 gap-4 flex flex-col">
-            {messages.length > 0
-              ? messages.map((msg, index) => (
+            {data?.length > 0
+              ? data.map((msg:any, index:number) => (
                   <div
                     key={index}
                     className={`flex ${
-                      msg.isReceiver ? "justify-start" : "justify-end"
+                      user?.id==msg?.user_id? "justify-start" : "justify-end"
                     } mb-2`}
                   >
                     <div className="flex flex-col gap-1">
                       <div
                         className={`flex flex-row items-center justify-center gap-3 ${
-                          msg.isReceiver ? "flex-row" : "flex-row-reverse"
+                          user?.id==msg?.user_id ? "flex-row" : "flex-row-reverse"
                         }`}
                       >
-                        {msg.isReceiver ? (
+                        {user?.id==msg?.user_id ? (
                           <span className="bg-[#E5E7EB] text-[#111928] font-normal items-center justify-center rounded-full w-9 h-9 flex">
                             ي
                           </span>
@@ -112,20 +157,20 @@ const ChatPage = () => {
                           <MashrookLogoChat />
                         )}
                         <p className="text-[#4B5563] text-sm font-semibold">
-                          {msg.sender}
+                          {user?.id==msg?.user_id?msg?.sender:"ادارة مشروك"}
                         </p>
                         <span className="text-xs font-normal text-[#9CA3AF]">
-                          {msg.time}
+                          {msg?.createdAt}
                         </span>
                       </div>
                       <div
                         className={`max-w-xs p-3 rounded-lg ${
-                          msg.isReceiver
+                          user?.id==msg?.user_id
                             ? "bg-[#3B73B9] text-white"
                             : "bg-gray-100"
                         }`}
                       >
-                        <p className="mt-1">{msg.content}</p>
+                        <p className="mt-1">{msg?.message}</p>
                       </div>
                     </div>
                   </div>

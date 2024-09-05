@@ -222,7 +222,7 @@ console.log(dataDetails,"console.log()")
                 }`}
                 onClick={() => setCriteria({ ...criteria, purposeStatus: status?.id })}
               >
-                {status?.title}
+               {status?.title=="بيع"?"للبيع":"للتطوير"}
               </button>
             ))}
           </div>

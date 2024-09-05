@@ -3,12 +3,12 @@
 import React, { useState,useEffect,useRef } from "react";
 import { Range, getTrackBackground } from "react-range";
 import { AppDispatch, RootState } from "@/redux/store";
-import {CloseIconSmall } from "@/app/assets/svg";
-import { Modal, ModalRef } from "../components/shared/modal.component";
 import { getCity, getDistrict } from "@/redux/features/getCity"
 import { useDispatch, useSelector } from "react-redux";
 import { getproperityPurposeType } from "@/redux/features/getproperityPurpose";
 import { getDetailsType } from "@/redux/features/getDetailsType"
+import {CloseIconSmall } from "@/app/assets/svg";
+import { Modal, ModalRef } from "@/app/components/shared/modal.component";
 interface criteriaInfo {
   dealStatus: string,
   city: string,
@@ -26,13 +26,31 @@ type FilterModalProps = {
   open:boolean,
   setCriteria: (prev: criteriaInfo) => void;
   criteria: criteriaInfo,
-  onCloseRequest:()=>void
+  onCloseRequest?:()=>void
 };
 
-const FilterModalPartner: React.FC<FilterModalProps> = ({ onClose, onFilter,open ,criteria,setCriteria,onCloseRequest}) => {
+const FilterModalOffer: React.FC<FilterModalProps> = ({ onClose, onFilter,open,criteria,setCriteria,onCloseRequest }) => {
   let refFilter=useRef<ModalRef>(null)
   const dispatch = useDispatch<AppDispatch>();
-  let { city, district } =
+  const [boolStatus, setbool] = useState<boolean>(false);
+  // Example data for dropdowns
+  const cities = ["الرياض", "الدمام", "جدة"];
+  const districts = ["الياسمين", "البنفسج", "الورود"];
+  const unitTypes = [
+    "ارض سكنية",
+    "ارض تجارية",
+    "فيلا (وحدات تمليك)",
+    "فيلا (درج داخلي)",
+    "فيلا (درج داخلي + شقة)",
+    "شقة (داخل فيلا)",
+    "شقة (داخل عمارة سكنية)",
+    "دور ارضي",
+    "دور علوي",
+  ];
+  const unitStatuses = ["للتطوير", "للبيع"];
+  const dealStatuses = ["متكامل", "تحت التقدم","اكتمال الشراكة"];
+ const statusOfReal=["متاح","محجوز","تمت الشراكة"]
+ let { city, district } =
  useSelector<RootState>((state) => state.city) as {
    district: any
    city: any
@@ -55,26 +73,6 @@ let {
  message: string;
  data: any;
 };
-
-  const [boolStatus, setbool] = useState<boolean>(false);
-  // Example data for dropdowns
-  const cities = ["الرياض", "الدمام", "جدة"];
-  const districts = ["الياسمين", "البنفسج", "الورود"];
-  const unitTypes = [
-    "ارض سكنية",
-    "ارض تجارية",
-    "فيلا (وحدات تمليك)",
-    "فيلا (درج داخلي)",
-    "فيلا (درج داخلي + شقة)",
-    "شقة (داخل فيلا)",
-    "شقة (داخل عمارة سكنية)",
-    "دور ارضي",
-    "دور علوي",
-  ];
-  const unitStatuses = ["للتطوير", "للبيع"];
-  const dealStatuses = ["متكامل", "تحت التقدم"];
- 
-
   const formatNumber = (number: number) => {
     return number.toLocaleString();
   };
@@ -91,26 +89,28 @@ let {
     onFilter(criteria);
     onClose();
   };
-useEffect(()=>{
-if(open==true){
-  refFilter.current?.open()
-}else{
-  refFilter.current?.close()
-}
-},[open])
-useEffect(() => {
-  dispatch(getproperityPurposeType());
-  dispatch(getDetailsType());
+  useEffect(()=>{
+    if(open==true){
+      refFilter.current?.open()
+    }else{
+      refFilter.current?.close()
+    }
+    },[open])
+  useEffect(() => {
+    dispatch(getproperityPurposeType());
+    dispatch(getDetailsType());
+  
+  }, [dispatch])
+  useEffect(() => {
+    dispatch(getCity());
+  }, [dispatch])
+  useEffect(() => {
+    if (criteria?.city) {
+      dispatch(getDistrict({ name: criteria?.city }));
+    }
+  }, [criteria?.city, dispatch])
 
-}, [dispatch])
-useEffect(() => {
-  dispatch(getCity());
-}, [dispatch])
-useEffect(() => {
-  if (criteria?.city) {
-    dispatch(getDistrict({ name: criteria?.city }));
-  }
-}, [criteria?.city, dispatch])
+console.log(dataDetails,"console.log()")
   return (
    
     <Modal ref={refFilter} className="flex rounded-lg items-start justify-center font-[Cairo] w-full " size="xs">
@@ -125,24 +125,24 @@ useEffect(() => {
         </div>
         {/* Deal Status */}
         <div className="h-[75vh] overflow-y-auto  overflow-x-hidden">
+
+        {/* Unit Status */}
         <div className="mb-4  ">
-          <h3 className="font-semibold mb-2">حالة الطلب</h3>
+          <h3 className="font-semibold mb-2"> حالة العقار</h3>
           <div className="flex flex-wrap">
             {dealStatuses.map((status) => (
               <button
                 key={status}
                 className={`px-4 py-2 m-1 rounded-md border text-sm ${
-                  criteria.dealStatus === status ? "bg-blue-450 text-white" : "bg-white text-gray-900"
+                  criteria?.realEstateStatus === status ? "bg-blue-450 text-white" : "bg-white text-gray-900"
                 }`}
-                onClick={() => setCriteria({ ...criteria, dealStatus: status })}
+                onClick={() => setCriteria({ ...criteria, realEstateStatus: status })}
               >
                 {status}
               </button>
             ))}
           </div>
         </div>
-
-        {/* Unit Status */}
         <div className="mb-4  ">
           <h3 className="font-semibold mb-2">الغرض من عرض العقار</h3>
           <div className="flex flex-wrap">
@@ -154,12 +154,11 @@ useEffect(() => {
                 }`}
                 onClick={() => setCriteria({ ...criteria, purposeStatus: status?.id })}
               >
-               {status?.title=="بيع"?"للبيع":"للتطوير"}
+                {status?.title=="بيع"?"للبيع":"للتطوير"}
               </button>
             ))}
           </div>
         </div>
-
         {/* City */}
         <div className="mb-4">
           <h3 className="font-semibold mb-2">المدينة</h3>
@@ -211,7 +210,7 @@ useEffect(() => {
             ))}
           </div>
         </div>
-
+        
         {/* Price Range */}
         <div className="mb-4">
           <h3 className="font-semibold mb-2">الميزانية</h3>
@@ -289,7 +288,7 @@ useEffect(() => {
                       backgroundColor: "#548BF4",
                     }}
                   >
-                    {formatNumber(criteria.priceRange[index])}
+                    {formatNumber(criteria.priceRange[index])}ريال
                   </div>
                 </div>
               )}
@@ -379,30 +378,7 @@ useEffect(() => {
           </div>
         </div>
         {/* Share Range */}
-        <div className="mb-4">
-        <h3 className="font-semibold mb-2">الرغبة في التمويل العقاري</h3>
-        <div>
-        <button
-                key={"yes"}
-                className={`px-4 py-2 m-1 rounded-md border text-sm ${
-                    boolStatus == true ? "bg-blue-450 text-white" : "bg-white text-gray-900"
-                }`}
-                onClick={() => setbool(true)}
-              >
-               نعم
-              </button>
-              <button
-                key={"no"}
-                className={`px-4 py-2 m-1 rounded-md border text-sm ${
-                    boolStatus == false ? "bg-blue-450 text-white" : "bg-white text-gray-900"
-                }`}
-                onClick={() => setbool(false)}
-              >
-               لا
-              </button>
-        </div>
-        </div>
-        </div>
+               </div>
         <div className="flex container justify-center space-x-2">
           <button
             onClick={handleApplyFilters}
@@ -423,7 +399,9 @@ useEffect(() => {
                 priceRange: [500000, 20000000],
                 shareRange:[10,90]
               })
-              onCloseRequest()
+              if(onCloseRequest){
+                onCloseRequest()
+              }
               onClose()
             }}
             className="bg-gray-300 text-gray-900 px-4 py-2 rounded-md flex-grow"
@@ -436,6 +414,6 @@ useEffect(() => {
   );
 };
 
-export default FilterModalPartner;
+export default FilterModalOffer;
 
 //last modified by Omar Marei 3/8/2024

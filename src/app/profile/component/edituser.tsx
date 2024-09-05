@@ -1,5 +1,6 @@
 "use client"
-const EditUser=({title,name}:{title:string,name:string})=>{
+import Link from "next/link"
+const EditUser=({title,name,href}:{title:string,name:string,href:string})=>{
     return (
         <div className="flex flex-row justify-between items-center mx-4 my-5  ">
             <div className="flex flex-col items-start">
@@ -9,7 +10,7 @@ const EditUser=({title,name}:{title:string,name:string})=>{
                 <p className="text-gray-600">{name}</p>
             </div>
             <div >
-                <a href="/" className="text-blue-450 underline-offset-2">تعديل</a>
+                <Link href={href} className="text-blue-450 underline-offset-2">تعديل</Link>
             </div>
         </div>
     )
