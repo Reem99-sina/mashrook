@@ -1,8 +1,7 @@
-
 "use client";
 
 import React, { useRef, useState, useEffect } from "react";
-import { Add, CloseIconSmall,BackButtonOutline } from "@/app/assets/svg";
+import { Add, BackButtonOutline } from "@/app/assets/svg";
 import { RadioInput } from "../components/shared/radio.component";
 import { Button } from "../components/shared/button.component";
 import { Modal, ModalRef } from "../components/shared/modal.component";
@@ -17,19 +16,19 @@ import MainHeader from "../components/header/MainHeader";
 import { useRouter } from "next/navigation";
 import { TextInput } from "../components/shared/text-input.component";
 import {
-  dataTypeOfRealEstate
-  ,detailsType
-  ,detailsMoreType
-  ,cityDetial ,
+  dataTypeOfRealEstate,
+  detailsType,
+  detailsMoreType,
+  cityDetial,
   districtDetail,
   returnRealState,
   imageInfo,
-  DataSendInfo
-}from "@/type/addrealestate"
+  DataSendInfo,
+} from "@/type/addrealestate";
 import CountElement from "./components/CountElemet";
 import CheckFeature from "./components/CheckFeature";
 import InputAreaPrice from "./components/InputAreaPrice";
-import ModelRules from "@/app/components/shared/ModelRules"
+import ModelRules from "@/app/components/shared/ModelRules";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -123,21 +122,19 @@ const AddYourRealEstate: React.FC = () => {
     useState<typeSelectedProperty>();
   const handleOptionChange = (option: Option, title: string) => {
     if (title == "صفة مقدم العرض") {
-      setDataSend((prev)=>({ ...prev, property_owner_type_id: option?.id }));
+      setDataSend((prev) => ({ ...prev, property_owner_type_id: option?.id }));
     } else if (title == "الغرض من عرض العقار") {
-      setDataSend((prev)=>({ ...prev,property_purpose_id: option?.id }));
+      setDataSend((prev) => ({ ...prev, property_purpose_id: option?.id }));
     } else {
-      setDataSend((prev)=>({ ...prev, property_type_id: option?.id }));
-       setSelectedPropertyType(option);
-
+      setDataSend((prev) => ({ ...prev, property_type_id: option?.id }));
+      setSelectedPropertyType(option);
     }
-    setDataSend((prev)=>({ ...prev,city:"تبوك"}))
+    setDataSend((prev) => ({ ...prev, city: "تبوك" }));
   };
   const [token, setToken] = useState<string | null>(null);
   const [haveNumber, setHaveNumber] = useState(false);
   const [deal, setdeal] = useState(false);
 
-  
   const [mediator, setMediator] = useState({
     advertisement_number: "",
     license_number: "",
@@ -213,8 +210,8 @@ const AddYourRealEstate: React.FC = () => {
       detailsSection: detailsMoreType[];
     };
   const { city, district } = useSelector<RootState>((state) => state.city) as {
-    district: districtDetail[]|null;
-    city: cityDetial[]|null;
+    district: districtDetail[] | null;
+    city: cityDetial[] | null;
   };
   const { data: dataPurpose } = useSelector<RootState>(
     (state) => state.properityPurpose
@@ -255,8 +252,8 @@ const AddYourRealEstate: React.FC = () => {
       [e.target.name]: Number(e.target.value),
     });
   };
-  const handleBack = (e:React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault()
+  const handleBack = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     router.push("/");
   };
   const onSubmit = async () => {
@@ -535,7 +532,7 @@ const AddYourRealEstate: React.FC = () => {
               price: 0,
             },
           ]
-        : prev.filter((ele,index)=>index+1<=count.nums)
+        : prev.filter((ele, index) => index + 1 <= count.nums)
     );
   }, [count.nums]);
   return (
@@ -543,18 +540,21 @@ const AddYourRealEstate: React.FC = () => {
       {!sentYourRequest ? (
         <form className="flex flex-col items-center min-h-screen h-full w-full bg-[url('/background-cover.png')] bg-cover">
           <MainHeader />
-          <div className="flex items-center justify-center w-full"style={{direction:"rtl"}}>
-              <div className="justify-start">
-                <button onClick={handleBack}>
-                  <BackButtonOutline />
-                </button>
-              </div>
-              <div className="flex flex-1  items-center justify-center">
-                <p className="flex items-center justify-center text-[#36343B] font-bold text-xl">
-                  اضف عقارك
-                </p>
-              </div>
+          <div
+            className="flex items-center justify-center w-full"
+            style={{ direction: "rtl" }}
+          >
+            <div className="justify-start">
+              <button onClick={handleBack}>
+                <BackButtonOutline />
+              </button>
             </div>
+            <div className="flex flex-1  items-center justify-center">
+              <p className="flex items-center justify-center text-[#36343B] font-bold text-xl">
+                اضف عقارك
+              </p>
+            </div>
+          </div>
           <div className="p-4 w-full flex gap-4 flex-col">
             <div>
               {dataa.map((item) => (
@@ -1314,16 +1314,18 @@ const AddYourRealEstate: React.FC = () => {
                 selectedPropertyType?.title == "أرض سكنية تجارية") && (
                 <div className="mb-4" style={{ direction: "rtl" }}>
                   <div className="flex gap-2  flex-row mt-5">
-                    {count?.nums>1&&<>
-                      <div
-                      onClick={() =>
-                        setCount((prev) => ({ nums: prev.nums - 1 }))
-                      }
-                      className="cursor-pointer bg-[#3B73B9] p-1"
-                    >
-                    <RiSubtractFill className="text-white"/>
-                    </div>
-                    </>}
+                    {count?.nums > 1 && (
+                      <>
+                        <div
+                          onClick={() =>
+                            setCount((prev) => ({ nums: prev.nums - 1 }))
+                          }
+                          className="cursor-pointer bg-[#3B73B9] p-1"
+                        >
+                          <RiSubtractFill className="text-white" />
+                        </div>
+                      </>
+                    )}
                     <div
                       onClick={() =>
                         setCount((prev) => ({ nums: prev.nums + 1 }))
@@ -1341,49 +1343,49 @@ const AddYourRealEstate: React.FC = () => {
               )}
             </div>
             {(selectedPropertyType?.title == "أرض سكنية" ||
-                selectedPropertyType?.title == "أرض تجارية" ||
-                selectedPropertyType?.title == "أرض سكنية تجارية")&&
-                <div className="bg-white rounded-lg border border-[#E5E7EB] w-full mb-4 items-start justify-start p-4">
-              <div className="flex items-center justify-end">
-                <p className="text-base font-bold text-[#4B5563]">
-                  هل العقار قابل للتجزئة؟
-                </p>
+              selectedPropertyType?.title == "أرض تجارية" ||
+              selectedPropertyType?.title == "أرض سكنية تجارية") && (
+              <div className="bg-white rounded-lg border border-[#E5E7EB] w-full mb-4 items-start justify-start p-4">
+                <div className="flex items-center justify-end">
+                  <p className="text-base font-bold text-[#4B5563]">
+                    هل العقار قابل للتجزئة؟
+                  </p>
+                </div>
+                <div className="flex flex-row justify-end mt-6 gap-8">
+                  <RadioInput
+                    name="isDivisibleType"
+                    onChange={(event) =>
+                      setDataSend({
+                        ...dataSend,
+                        is_divisible:
+                          event?.target?.value == "نعم" ? true : false,
+                      })
+                    }
+                    checked={dataSend?.is_divisible == true}
+                    value="نعم"
+                    label="نعم"
+                  />
+                  <RadioInput
+                    name="isDivisibleType"
+                    onChange={(event) =>
+                      setDataSend({
+                        ...dataSend,
+                        is_divisible:
+                          event?.target?.value == "نعم" ? true : false,
+                      })
+                    }
+                    checked={dataSend?.is_divisible == false}
+                    value="لا"
+                    label="لا"
+                  />
+                </div>
+                {errors?.is_divisible && (
+                  <p className="text-xs text-red-600 dark:text-red-500 text-right">
+                    {errors?.is_divisible}
+                  </p>
+                )}
               </div>
-              <div className="flex flex-row justify-end mt-6 gap-8">
-                <RadioInput
-                  name="isDivisibleType"
-                  onChange={(event) =>
-                    setDataSend({
-                      ...dataSend,
-                      is_divisible:
-                        event?.target?.value == "نعم" ? true : false,
-                    })
-                  }
-                  checked={dataSend?.is_divisible == true}
-                  value="نعم"
-                  label="نعم"
-                />
-                <RadioInput
-                  name="isDivisibleType"
-                  onChange={(event) =>
-                    setDataSend({
-                      ...dataSend,
-                      is_divisible:
-                        event?.target?.value == "نعم" ? true : false,
-                    })
-                  }
-                  checked={dataSend?.is_divisible == false}
-                  value="لا"
-                  label="لا"
-                />
-              </div>
-              {errors?.is_divisible && (
-                <p className="text-xs text-red-600 dark:text-red-500 text-right">
-                  {errors?.is_divisible}
-                </p>
-              )}
-            </div>
-                }
+            )}
             <div className="bg-white rounded-lg border border-[#E5E7EB] w-full mb-4 items-start justify-start p-4">
               <div className="flex items-center justify-end">
                 <p className="text-base font-bold text-[#4B5563]">المرفقات</p>
@@ -1477,22 +1479,35 @@ const AddYourRealEstate: React.FC = () => {
 
             <div className="bg-white rounded-lg border border-[#E5E7EB] w-full mb-4 items-start justify-start p-4">
               <div className="flex items-center justify-end gap-2">
-              <p className="text-xs text-[#6B7280] font-bold">
-                  أوافق على <button className="text-[#98CC5D]" onClick={(e:React.MouseEvent<HTMLButtonElement>)=>{
-                    e.preventDefault()
-                    modalRefRules?.current?.open()
-                    }}>الشروط</button> و
-                  <button className="text-[#98CC5D]"
-                  onClick={(e:React.MouseEvent<HTMLButtonElement>)=>{
-                    e.preventDefault()
-                    modalRefRules?.current?.open()
+                <p className="text-xs text-[#6B7280] font-bold">
+                  أوافق على{" "}
+                  <button
+                    className="text-[#98CC5D]"
+                    onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                      e.preventDefault();
+                      modalRefRules?.current?.open();
                     }}
-                  >الأحكام</button> الخاصة بمشروك
+                  >
+                    الشروط
+                  </button>{" "}
+                  و
+                  <button
+                    className="text-[#98CC5D]"
+                    onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                      e.preventDefault();
+                      modalRefRules?.current?.open();
+                    }}
+                  >
+                    الأحكام
+                  </button>{" "}
+                  الخاصة بمشروك
                 </p>
                 <input
                   type="checkbox"
                   className="h-4 w-4 rounded-2xl accent-[#3B73B9]"
-                  onChange={(e:React.ChangeEvent<HTMLInputElement>) => setdeal(e.target.checked)}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setdeal(e.target.checked)
+                  }
                   checked={deal}
                 />
               </div>
@@ -1512,7 +1527,13 @@ const AddYourRealEstate: React.FC = () => {
           </div>
 
           <div>
-          <ModelRules refModel={modalRefRules}  onChange={(e:React.ChangeEvent<HTMLInputElement>) => setdeal(e.target.checked)} deal={deal}/>
+            <ModelRules
+              refModel={modalRefRules}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setdeal(e.target.checked)
+              }
+              deal={deal}
+            />
             <Modal ref={modalRef} size="xl">
               <>
                 <AddLocation

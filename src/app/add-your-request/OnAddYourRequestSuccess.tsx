@@ -1,4 +1,3 @@
-// components/OnAddYourRequestSuccess.tsx
 import { FC } from "react";
 import { Button } from "../components/shared/button.component";
 import { useRouter } from "next/navigation";
@@ -42,7 +41,6 @@ const OnAddYourRequestSuccess: FC<OnAddYourRequestSuccessProps> = ({
           text="العودة الى الرئيسية"
           className="!text-[#3B73B9] !bg-white !border !border-[#3B73B9] rounded !mt-5"
           onClick={() => {
-            router.refresh();
             router.push("/");
           }}
         />

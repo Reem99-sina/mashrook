@@ -1,18 +1,16 @@
 "use client";
 import clsx from "clsx";
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { TextInput } from "../components/shared/text-input.component";
 import { Block, MessageIcon, Search } from "@/app/assets/svg";
 import { ChatCard } from "./ChatCard";
 import { useRouter } from "next/navigation";
-import { AppDispatch, RootState } from "@/redux/store";
-import { useDispatch, useSelector } from "react-redux";
-import { format } from 'date-fns';  
-import Cookie from 'js-cookie';
+import { RootState } from "@/redux/store";
+import { useSelector } from "react-redux";
+import { format } from "date-fns";
+import Cookie from "js-cookie";
 
-import {
-  Note
-} from "../assets/svg";
+import { Note } from "../assets/svg";
 import { FaRegUserCircle } from "react-icons/fa";
 const message = [
   {
@@ -62,22 +60,23 @@ const message = [
 export const MyOffer = () => {
   const router = useRouter();
   const [token, setToken] = useState<string | null>(null);
-  const OnClick = (id:number) => {
+  const OnClick = (id: number) => {
     router.push(`/ChatPage/${id}`);
   };
-  let{loading,message:messageOrders,data}=useSelector<RootState>((state)=>state.messageOrders) as {
-    loading:boolean,
-    message:string,
-    data:any
-  }
+  const {
+    loading,
+    message: messageOrders,
+    data,
+  } = useSelector<RootState>((state) => state.messageOrders) as {
+    loading: boolean;
+    message: string;
+    data: any;
+  };
   useEffect(() => {
-    
-      const storedToken = Cookie.get("token");
-      if(storedToken){
-        setToken(storedToken);
-
-      }
-    
+    const storedToken = Cookie.get("token");
+    if (storedToken) {
+      setToken(storedToken);
+    }
   }, []);
   return (
     <div className="p-4 bg-white">
@@ -107,17 +106,20 @@ export const MyOffer = () => {
               <button></button>
             </div>
           </>
-
         ) : data?.length > 0 ? (
-          data?.map((message:any, index:number) => (
+          data?.map((message: any, index: number) => (
             <ChatCard
               key={message?.id}
               count={1}
               subtitle={message.lastMessage.message}
-              title={message?.property?.propertyTypeDetails?.title?`${message?.property?.propertyTypeDetails?.title} ${message?.property?.propertyType?.title}`:`${message?.property?.propertyType?.title} قطعة رقم ${message?.landDetails?.plan_number}`}
-              time={format(message.lastMessage?.createdAt, 'hh:mm a')}
+              title={
+                message?.property?.propertyTypeDetails?.title
+                  ? `${message?.property?.propertyTypeDetails?.title} ${message?.property?.propertyType?.title}`
+                  : `${message?.property?.propertyType?.title} قطعة رقم ${message?.landDetails?.plan_number}`
+              }
+              time={format(message.lastMessage?.createdAt, "hh:mm a")}
               image={<Block />}
-              onClick={()=>OnClick(message?.id)}
+              onClick={() => OnClick(message?.id)}
             />
           ))
         ) : (
@@ -130,9 +132,8 @@ export const MyOffer = () => {
               لا توجد اي محادثات هنا بعد
             </p>
           </div>
-        )
-      } 
+        )}
       </div>
     </div>
-  )
-}
+  );
+};

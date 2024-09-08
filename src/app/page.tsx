@@ -9,9 +9,9 @@ import ClientJourney2 from "../app/components/landingPage/ClientJourney2";
 import { sampleData5 } from "../app/assets/data/data";
 import Link from "next/link";
 import { AppDispatch, RootState } from "@/redux/store";
-import Cookie from 'js-cookie';
+import Cookie from "js-cookie";
 import { useDispatch, useSelector } from "react-redux";
-import {removeToken} from "@/redux/features/loginSlice"
+import { removeToken } from "@/redux/features/loginSlice";
 import PropertyCard from "./components/propertyCard/PropertyCard";
 import { MdKeyboardArrowLeft } from "react-icons/md";
 import { useRouter } from "next/navigation";
@@ -47,12 +47,11 @@ export default function Home() {
   ) as { loading: boolean; message: string; data: any };
   const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
-    
-      const storedToken = Cookie.get("token");
-      if(storedToken){
-        setToken(storedToken);
-      }
-// 24 * 60 * 60 * 1000
+    const storedToken = Cookie.get("token");
+    if (storedToken) {
+      setToken(storedToken);
+    }
+    // 24 * 60 * 60 * 1000
   }, []);
   useEffect(() => {
     const checkAndRemoveCookie = () => {
@@ -61,20 +60,18 @@ export default function Home() {
       // Check if it's 12 AM
       if (hours === 0) {
         // Remove the token from cookies
-        dispatch(removeToken())
-        Cookie.remove('user');
-        setToken("")
+        dispatch(removeToken());
+        Cookie.remove("user");
+        setToken("");
       }
     };
     // Run every minute to check if it's 12 AM
-    const interval = setInterval(checkAndRemoveCookie, 60* 1000);
+    const interval = setInterval(checkAndRemoveCookie, 60 * 1000);
     // Cleanup the interval when the component unmounts
     return () => clearInterval(interval);
   }, []);
   useEffect(() => {
-
-   dispatch(getRequest({}))
-
+    dispatch(getRequest({}));
   }, [dispatch]);
   return (
     <div className="flex justify-center w-dvh h-max ">
@@ -101,8 +98,7 @@ export default function Home() {
                         toast.error("انت تحتاج الي تسجيل دخول");
                         router.push("/login");
                       } else {
-                        router.refresh();
-                        router.replace("/add-your-real-estate");
+                        router.push("/add-your-real-estate");
                       }
                     }}
                   >
@@ -115,7 +111,6 @@ export default function Home() {
                         toast.error("انت تحتاج الي تسجيل دخول");
                         router.push("/login");
                       } else {
-                        router.refresh();
                         router.replace("/add-your-request");
                       }
                     }}
