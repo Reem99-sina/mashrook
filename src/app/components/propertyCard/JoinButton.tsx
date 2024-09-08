@@ -6,7 +6,7 @@ import { RxArrowLeft } from "react-icons/rx";
 import { useRouter } from "next/navigation";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
-import Cookie from 'js-cookie';
+import Cookie from "js-cookie";
 import { validateForm } from "@/app/hooks/validate";
 import { dataReturn, addUnqiue, typePay } from "@/redux/features/getRequest";
 import { amountSchema } from "@/typeSchema/schema";
@@ -88,23 +88,21 @@ const JoinStatusButtons: React.FC<JoinStatusButtonsProps> = ({
     }
   }, [partnershipPercentage]);
   useEffect(() => {
-    
-      const storedToken = Cookie.get("token");
-      if(storedToken){
-        setToken(storedToken);
-      }
-    
+    const storedToken = Cookie.get("token");
+    if (storedToken) {
+      setToken(storedToken);
+    }
   }, []);
-  useEffect(()=>{
-    if(typeof window !="undefined"){
-      const userItem = Cookie?.get("user");  
-      let user = userItem ? JSON.parse(userItem) : null;  // Ensure user is either the parsed object or null  
-      if (user) {  
-        setUser(user);  
-      }  
-    }  
-  }, []);  
-     
+  useEffect(() => {
+    if (typeof window != "undefined") {
+      const userItem = Cookie?.get("user");
+      let user = userItem ? JSON.parse(userItem) : null; // Ensure user is either the parsed object or null
+      if (user) {
+        setUser(user);
+      }
+    }
+  }, []);
+
   const partnershipAmount = useMemo(() => {
     return (data?.available_price * partnershipPercentage) / 100;
   }, [data?.available_price, partnershipPercentage]);
@@ -126,7 +124,6 @@ const JoinStatusButtons: React.FC<JoinStatusButtonsProps> = ({
       setPartnershipPercentage(newPercentage);
     }
   };
-console.log(user,";user",dataMain?.user?.email)
   return (
     <div id="joinStatus" className="py-4">
       {/* {currentDealStatus === "محجوز" ? (
@@ -149,16 +146,24 @@ console.log(user,";user",dataMain?.user?.email)
         <button
           type="button"
           className={`${
-            data?.stage === "finished" || Boolean(token) == false ||user?.email==dataMain?.user?.email
+            data?.stage === "finished" ||
+            Boolean(token) == false ||
+            user?.email == dataMain?.user?.email
               ? "bg-gray-300 text-gray-800"
               : "bg-blue-450 text-white hover:bg-blue-800 border-2 border-blue-500"
           } w-3/4 font-medium rounded-lg text-sm px-5 py-2.5 flex justify-center rtl:flex-row-reverse dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
-          disabled={data?.stage === "finished" || Boolean(token) == false ||user?.email==dataMain?.user?.email}
+          disabled={
+            data?.stage === "finished" ||
+            Boolean(token) == false ||
+            user?.email == dataMain?.user?.email
+          }
           onClick={handleDialogToggle}
         >
           <RxArrowLeft
             className={`mr-4 text-xl ${
-              data?.stage === "finished" || Boolean(token) == false||user?.email==dataMain?.user?.email
+              data?.stage === "finished" ||
+              Boolean(token) == false ||
+              user?.email == dataMain?.user?.email
                 ? "text-gray-600"
                 : "text-white"
             }`}

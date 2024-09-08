@@ -1,13 +1,13 @@
-"use client"
+"use client";
 import MainHeader from "@/app/components/header/MainHeader";
 import { BackButtonOutline, Add } from "@/app/assets/svg";
-import { useRouter, useParams } from "next/navigation"
+import { useRouter, useParams } from "next/navigation";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { Button } from "@/app/components/shared/button.component";
 import { RadioInput } from "@/app/components/shared/radio.component";
 import { TextInput } from "@/app/components/shared/text-input.component";
-import { cites, cities } from "@/typeSchema/schema"
+import { cites, cities } from "@/typeSchema/schema";
 import ImageAppear from "@/app/components/shared/ImageAppear";
 import CountElement from "@/app/add-your-real-estate/components/CountElemet";
 import CheckFeature from "@/app/add-your-real-estate/components/CheckFeature";
@@ -22,32 +22,28 @@ import {
   removeStateEdit,
   RealEstateTypeInter,
   imageDeleteRequest,
-  imageUpdateRequest
+  imageUpdateRequest,
 } from "@/redux/features/postRealEstate";
 import Image from "next/image";
-import { getCity, getDistrict } from "@/redux/features/getCity"
+import { getCity, getDistrict } from "@/redux/features/getCity";
 import { FaEdit } from "react-icons/fa";
-import { compare } from "@/app/hooks/compare"
+import { compare } from "@/app/hooks/compare";
 import { CiLocationOn } from "react-icons/ci";
 import { AddButton, CloseIconSmall, InfoOutLine } from "@/app/assets/svg";
-import {
-  earthInter
-} from "@/redux/features/postRealEstate";
+import { earthInter } from "@/redux/features/postRealEstate";
 import {
   getproperityType,
   getproperityTypeMore,
 } from "@/redux/features/getProperity";
 import { getproperityPurposeType } from "@/redux/features/getproperityPurpose";
 import { getproperityOwnerType } from "@/redux/features/getProperityOwnerType";
-import { useMemo, useEffect, useState, useRef } from "react"
+import { useMemo, useEffect, useState, useRef } from "react";
 import { Modal, ModalRef } from "@/app/components/shared/modal.component";
 import MapLocation from "@/app/add-your-real-estate/components/MapLocation";
 import { getRequestByid, dataReturn } from "@/redux/features/getRequest";
-import {
-  properityInfo
-} from "@/redux/features/postRequest";
+import { properityInfo } from "@/redux/features/postRequest";
 const EditOffer = () => {
-  let router = useRouter()
+  let router = useRouter();
   const params = useParams();
   let refImage = useRef<HTMLInputElement>(null);
   const [images, setImages] = useState<File[] | undefined>([]);
@@ -55,7 +51,7 @@ const EditOffer = () => {
 
   const modalRef = useRef<ModalRef>(null);
   const checkRef = useRef<ModalRef>(null);
-  const { id } = params
+  const { id } = params;
   const dispatch = useDispatch<AppDispatch>();
   let { data: dataById, selectData } = useSelector<RootState>(
     (state) => state.getRequest
@@ -71,23 +67,22 @@ const EditOffer = () => {
     dataPutDetail,
     messagePutLocat,
     dataPutLocat,
-    messagePutDetail
+    messagePutDetail,
   } = useSelector<RootState>((state) => state.realEstateRequest) as {
-    dataPut: any,
-    messagePut: string,
-    messagePutLocat: string,
-    dataPutLocat: any,
-    dataPutDetail: any,
-    messagePutDetail: string
+    dataPut: any;
+    messagePut: string;
+    messagePutLocat: string;
+    dataPutLocat: any;
+    dataPutDetail: any;
+    messagePutDetail: string;
   };
-  let { city, district } =
-    useSelector<RootState>((state) => state.city) as {
-      district: any
-      city: any
-    };
+  let { city, district } = useSelector<RootState>((state) => state.city) as {
+    district: any;
+    city: any;
+  };
   const [deal, setDeal] = useState(false);
   const [dataCom, setData] = useState<RealEstateTypeInter>();
-  const [parent, setParent] = useState({})
+  const [parent, setParent] = useState({});
   const [count, setCount] = useState({
     nums: 1,
   });
@@ -101,18 +96,16 @@ const EditOffer = () => {
       titleSection: string;
       detailsSection: any;
     };
-  let {
-
-    data: dataPurpose,
-  } = useSelector<RootState>((state) => state.properityPurpose) as {
+  let { data: dataPurpose } = useSelector<RootState>(
+    (state) => state.properityPurpose
+  ) as {
     loading: boolean;
     message: string;
     data: any;
   };
-  let {
-
-    data: dataOwnerType,
-  } = useSelector<RootState>((state) => state.properityOwnerType) as {
+  let { data: dataOwnerType } = useSelector<RootState>(
+    (state) => state.properityOwnerType
+  ) as {
     loading: boolean;
     message: string;
     data: any;
@@ -123,32 +116,32 @@ const EditOffer = () => {
         id: 1,
         title: "صفة مقدم العرض",
         english: "property_owner_type_id",
-        option: dataOwnerType?.map((ele: { id: number, title: string }) => ele),
+        option: dataOwnerType?.map((ele: { id: number; title: string }) => ele),
       },
       {
         id: 2,
         title: "الغرض من عرض العقار",
         english: "property_purpose_id",
-        option: dataPurpose?.map((ele: { id: number, title: string }) => ele),
+        option: dataPurpose?.map((ele: { id: number; title: string }) => ele),
       },
       {
         id: 3,
         title: "نوع العقار",
         english: "property_type_id",
-        option: data?.data?.map((ele: { id: number, title: string }) => ele),
+        option: data?.data?.map((ele: { id: number; title: string }) => ele),
       },
-    ]
+    ];
   }, [dataOwnerType, dataPurpose, data]);
   const onDelete = (index: any) => {
     setImages(images?.filter((ele, ind) => ele?.name != index?.name));
     if (index?.id) {
-      dispatch(imageDeleteRequest({ id: index?.id }))
+      dispatch(imageDeleteRequest({ id: index?.id }));
     }
   };
   const handleBack = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault()
-    router.push("/my-offer")
-  }
+    e.preventDefault();
+    router.push("/my-offer");
+  };
   const handleOptionChange = (option: any, title: string) => {
     if (title == "صفة مقدم العرض") {
       setData({ ...dataCom, property_owner_type_id: option?.id });
@@ -194,16 +187,18 @@ const EditOffer = () => {
       district: [dataCom?.propertyLocation?.district],
       address: dataCom?.propertyLocation?.address,
       lat: dataCom?.propertyLocation?.lat,
-      long: dataCom?.propertyLocation?.long
-    } as properityInfo
+      long: dataCom?.propertyLocation?.long,
+    } as properityInfo;
     dispatch(
       putLocation({
-        ...datasend
+        ...datasend,
       })
     );
     if (images && images?.length > 0 && Array.isArray(images)) {
-      let newImages = images.filter(item => item instanceof File)
-      newImages.map((image: File) => dispatch(imageUpdateRequest({ id: dataCom?.id, images: image })))
+      let newImages = images.filter((item) => item instanceof File);
+      newImages.map((image: File) =>
+        dispatch(imageUpdateRequest({ id: dataCom?.id, images: image }))
+      );
     }
     if (dataCom?.details && dataCom?.details?.length > 0) {
       dataCom?.details?.map((detail: any) => {
@@ -224,13 +219,12 @@ const EditOffer = () => {
             car_entrance: detail?.amenities?.car_entrance,
             garage: detail?.amenities?.garage,
             kitchen: detail?.amenities?.kitchen,
-            details_id: detail?.id
+            details_id: detail?.id,
           })
-        )
-      })
-
+        );
+      });
     } else {
-      dataCom?.landDetails?.map((detail: any) => (
+      dataCom?.landDetails?.map((detail: any) =>
         dispatch(
           putLandDetailsType({
             area: detail?.area,
@@ -238,19 +232,19 @@ const EditOffer = () => {
             piece_number: detail?.piece_number,
             plan_number: detail?.plan_number,
             // status: dataCom?.status, /// مشاع او حر
-            land_details_id: detail?.id
+            land_details_id: detail?.id,
           })
         )
-      ))
+      );
     }
-  }
+  };
 
   useEffect(() => {
-    setData({ ...selectData })
+    setData({ ...selectData });
     if (selectData?.propertyMedia?.length > 0) {
-      setImages(selectData?.propertyMedia)
+      setImages(selectData?.propertyMedia);
     }
-  }, [selectData])
+  }, [selectData]);
 
   useEffect(() => {
     if (!(titleSection && detailsSection)) {
@@ -261,7 +255,6 @@ const EditOffer = () => {
         })
       );
     }
-
   }, [titleSection, detailsSection, dispatch, dataCom?.property_type_id]);
   useEffect(() => {
     if (dataCom?.property_purpose_id == 2) {
@@ -269,9 +262,8 @@ const EditOffer = () => {
         dispatch(getproperityType({ num: dataCom?.property_purpose_id || 1 }));
       }
     }
-  }, [title, details, dataCom?.property_purpose_id, dispatch])
+  }, [title, details, dataCom?.property_purpose_id, dispatch]);
   useEffect(() => {
-    console.log(messagePut, dataPut)
     if (messagePut && Boolean(dataPut) == true) {
       toast.success(messagePut);
       router.push("/my-offer");
@@ -287,21 +279,28 @@ const EditOffer = () => {
       router.push("/my-offer");
       // setSentYourRequest(true);
     }
-  }, [dataPut, messagePut, dataPutLocat, messagePutLocat, dataPutDetail,
-    messagePutDetail, router]);
+  }, [
+    dataPut,
+    messagePut,
+    dataPutLocat,
+    messagePutLocat,
+    dataPutDetail,
+    messagePutDetail,
+    router,
+  ]);
   useEffect(() => {
     dispatch(getCity());
-  }, [dispatch])
+  }, [dispatch]);
   useEffect(() => {
     if (dataCom?.propertyLocation?.city) {
       dispatch(getDistrict({ name: dataCom?.propertyLocation?.city }));
     }
-  }, [dataCom?.propertyLocation?.city, dispatch])
+  }, [dataCom?.propertyLocation?.city, dispatch]);
   useEffect(() => {
     return () => {
-      dispatch(removeStateEdit())
-    }
-  }, [dispatch])
+      dispatch(removeStateEdit());
+    };
+  }, [dispatch]);
   return (
     <form className="bg-white flex w-full h-full min-h-screen  flex-col p-5">
       <MainHeader />
@@ -323,109 +322,118 @@ const EditOffer = () => {
       <div className="bg-white  w-full mb-4 items-start justify-start  mt-4">
         <div className="p-2 w-full flex gap-4 flex-col">
           <div>
-            {dataReal?.map((item: { title: string, english: string, id: number, option: any }) => (
-              <div
-                key={item.id}
-                className="bg-white rounded-lg border border-[#E5E7EB] w-full mb-4 items-start justify-start p-4"
-              >
-                <div className="flex items-end justify-end flex-col gap-2">
-                  <p className="text-base font-bold text-[#4B5563]">
-                    {item.title}
-                  </p>
-
-                </div>
-                <div className="flex flex-row-reverse flex-wrap justify-start mt-6 gap-2">
-                  {item?.option?.map((ele: any, index: number) => (
-                    <RadioInput
-                      name={item.english}
-                      onChange={() => handleOptionChange(ele, item.title)}
-                      value={ele?.title}
-                      checked={dataCom ? ele?.id == dataCom[item?.english as keyof typeof dataCom] : false}
-                      key={ele?.id}
-                      label={ele?.title}
-                      disabled={true}
-                    />
-                  ))}
-                  {title &&
-                    details &&
-                    item.title == "الغرض من عرض العقار" && (
-                      <div className=" w-full  items-start justify-start ">
-                        <div className="flex items-center justify-end">
-                          <p className="text-base font-bold text-[#4B5563] self-end">
-                            {title}
-                          </p>
-                        </div>
-                        <div className="flex flex-row flex-wrap justify-end mt-2 gap-8 items-end">
-                          <div className=" flex-row-reverse flex">
-                            {details?.map(
-                              (ele: { id: number; title: string }) => (
-                                <RadioInput
-                                  key={ele?.id}
-                                  name="partner_type_id"
-                                  disabled={true}
-                                  onChange={(event) =>
-                                    setData({
-                                      ...dataCom,
-                                      partner_type_id: Number(
-                                        event?.target?.value
-                                      ),
-                                    })
-                                  }
-                                  value={ele?.id}
-                                  checked={dataCom?.partner_type_id == ele?.id}
-                                  label={ele?.title}
-                                />
-                              )
-                            )}
+            {dataReal?.map(
+              (item: {
+                title: string;
+                english: string;
+                id: number;
+                option: any;
+              }) => (
+                <div
+                  key={item.id}
+                  className="bg-white rounded-lg border border-[#E5E7EB] w-full mb-4 items-start justify-start p-4"
+                >
+                  <div className="flex items-end justify-end flex-col gap-2">
+                    <p className="text-base font-bold text-[#4B5563]">
+                      {item.title}
+                    </p>
+                  </div>
+                  <div className="flex flex-row-reverse flex-wrap justify-start mt-6 gap-2">
+                    {item?.option?.map((ele: any, index: number) => (
+                      <RadioInput
+                        name={item.english}
+                        onChange={() => handleOptionChange(ele, item.title)}
+                        value={ele?.title}
+                        checked={
+                          dataCom
+                            ? ele?.id ==
+                              dataCom[item?.english as keyof typeof dataCom]
+                            : false
+                        }
+                        key={ele?.id}
+                        label={ele?.title}
+                        disabled={true}
+                      />
+                    ))}
+                    {title &&
+                      details &&
+                      item.title == "الغرض من عرض العقار" && (
+                        <div className=" w-full  items-start justify-start ">
+                          <div className="flex items-center justify-end">
+                            <p className="text-base font-bold text-[#4B5563] self-end">
+                              {title}
+                            </p>
+                          </div>
+                          <div className="flex flex-row flex-wrap justify-end mt-2 gap-8 items-end">
+                            <div className=" flex-row-reverse flex">
+                              {details?.map(
+                                (ele: { id: number; title: string }) => (
+                                  <RadioInput
+                                    key={ele?.id}
+                                    name="partner_type_id"
+                                    disabled={true}
+                                    onChange={(event) =>
+                                      setData({
+                                        ...dataCom,
+                                        partner_type_id: Number(
+                                          event?.target?.value
+                                        ),
+                                      })
+                                    }
+                                    value={ele?.id}
+                                    checked={
+                                      dataCom?.partner_type_id == ele?.id
+                                    }
+                                    label={ele?.title}
+                                  />
+                                )
+                              )}
+                            </div>
                           </div>
                         </div>
-
-                      </div>
+                      )}
+                  </div>
+                  {(dataCom?.property_owner_type_id == 2 ||
+                    dataCom?.property_owner_type_id == 3) &&
+                    item.title == "صفة مقدم العرض" && (
+                      <>
+                        <div className="flex items-end gap-2 justify-end flex-col ">
+                          <p className="text-base text-[#4B5563] font-medium">
+                            رقم رخصة فال{" "}
+                          </p>
+                          <TextInput
+                            inputProps={{ placeholder: "-- الرجاء الادخال --" }}
+                            onChange={(event) =>
+                              setData({
+                                ...dataCom,
+                                license_number: event?.target?.value,
+                              })
+                            }
+                            disabled={true}
+                            value={dataCom?.license_number}
+                          />
+                        </div>
+                        <div className="flex items-end gap-2 justify-end flex-col mt-2">
+                          <p className="text-base text-[#4B5563] font-medium">
+                            رقم الاعلان{" "}
+                          </p>
+                          <TextInput
+                            inputProps={{ placeholder: "-- الرجاء الادخال --" }}
+                            onChange={(event) =>
+                              setData({
+                                ...dataCom,
+                                advertisement_number: event?.target?.value,
+                              })
+                            }
+                            disabled={true}
+                            value={dataCom?.advertisement_number}
+                          />
+                        </div>
+                      </>
                     )}
-
                 </div>
-                {(dataCom?.property_owner_type_id == 2 ||
-                  dataCom?.property_owner_type_id == 3) &&
-                  item.title == "صفة مقدم العرض" && (
-                    <>
-                      <div className="flex items-end gap-2 justify-end flex-col ">
-                        <p className="text-base text-[#4B5563] font-medium">
-                          رقم رخصة فال{" "}
-                        </p>
-                        <TextInput
-                          inputProps={{ placeholder: "-- الرجاء الادخال --" }}
-                          onChange={(event) =>
-                            setData({
-                              ...dataCom,
-                              license_number: event?.target?.value,
-                            })
-                          }
-                          disabled={true}
-                          value={dataCom?.license_number}
-                        />
-
-                      </div>
-                      <div className="flex items-end gap-2 justify-end flex-col mt-2">
-                        <p className="text-base text-[#4B5563] font-medium">
-                          رقم الاعلان{" "}
-                        </p>
-                        <TextInput
-                          inputProps={{ placeholder: "-- الرجاء الادخال --" }}
-                          onChange={(event) =>
-                            setData({
-                              ...dataCom,
-                              advertisement_number: event?.target?.value,
-                            })
-                          }
-                          disabled={true}
-                          value={dataCom?.advertisement_number}
-                        />
-
-                      </div>
-                    </>
-                  )}
-              </div>
-            ))}
+              )
+            )}
             {titleSection && detailsSection && (
               <div className="bg-white rounded-lg border border-[#E5E7EB] w-full mb-4 items-start justify-start p-4 mt-4">
                 <div className="flex items-center justify-end">
@@ -456,7 +464,6 @@ const EditOffer = () => {
                     )}
                   </div>
                 </div>
-
               </div>
             )}
             <div className="bg-white rounded-lg border border-[#E5E7EB] w-full mb-4 items-start justify-start p-4">
@@ -478,8 +485,8 @@ const EditOffer = () => {
                         propertyLocation: {
                           ...dataCom?.propertyLocation,
 
-                          district: event?.target?.value
-                        }
+                          district: event?.target?.value,
+                        },
                       })
                     }
                   >
@@ -489,7 +496,6 @@ const EditOffer = () => {
                       </option>
                     ))}
                   </select>
-
                 </div>
                 <div className="flex flex-col items-end gap-2 justify-end  w-full">
                   <p className="text-base font-medium text-[#4B5563]">
@@ -504,8 +510,8 @@ const EditOffer = () => {
                         propertyLocation: {
                           ...dataCom?.propertyLocation,
 
-                          city: event?.target?.value
-                        }
+                          city: event?.target?.value,
+                        },
                       })
                     }
                   >
@@ -515,15 +521,19 @@ const EditOffer = () => {
                       </option>
                     ))}
                   </select>
-
                 </div>
               </div>
               <div className="flex items-end gap-2 justify-end flex-col mt-5 rounded-lg border border-[#E5E7EB] p-2">
                 <div className="flex flex-row-reverse justify-between w-full items-center">
-                  <p className="text-sm text-[#3B73B9] font-bold">الموقع العقار </p>
+                  <p className="text-sm text-[#3B73B9] font-bold">
+                    الموقع العقار{" "}
+                  </p>
                   <div className="flex justify-center items-center gap-2">
                     <CloseIconSmall onClick={() => modalRef.current?.close()} />
-                    <FaEdit onClick={() => modalRef.current?.open()} className="cursor-pointer" />
+                    <FaEdit
+                      onClick={() => modalRef.current?.open()}
+                      className="cursor-pointer"
+                    />
                     {/* <div
                   onClick={() => modalRef.current?.open()}
                   className="cursor-pointer bg-[#3B73B9]"
@@ -531,14 +541,12 @@ const EditOffer = () => {
                   <Image src={Add} width={21} height={21} alt={"add"} />
                 </div> */}
                   </div>
-
                 </div>
                 <div className="flex gap-2 items-center flex-row-reverse">
                   <CiLocationOn className="text-[20px]" />
                   <p>{dataCom?.propertyLocation?.address}</p>
                 </div>
               </div>
-
             </div>
           </div>
         </div>
@@ -549,8 +557,8 @@ const EditOffer = () => {
             </p>
           </div>
           <div className="mb-4" style={{ direction: "rtl" }}>
-            {dataCom?.property_type_details_id == 8 && (
-              dataCom?.details?.map((detail) =>
+            {dataCom?.property_type_details_id == 8 &&
+              dataCom?.details?.map((detail) => (
                 <>
                   <div className="flex flex-col gap-5 my-3">
                     <p>رقم الشقة </p>
@@ -559,11 +567,14 @@ const EditOffer = () => {
                       onChange={(num) =>
                         setData({
                           ...dataCom,
-                          details: dataCom?.details?.map((ele: any) => ele?.id == detail?.id ? ({
-                            ...ele,
-                            apartment_number: String(num),
-                          }) : ele)
-
+                          details: dataCom?.details?.map((ele: any) =>
+                            ele?.id == detail?.id
+                              ? {
+                                  ...ele,
+                                  apartment_number: String(num),
+                                }
+                              : ele
+                          ),
                         })
                       }
                       title="رقم الشقة"
@@ -575,19 +586,21 @@ const EditOffer = () => {
                       onChange={(num) =>
                         setData({
                           ...dataCom,
-                          details: dataCom?.details?.map((ele: any) => ele?.id == detail?.id ? ({
-                            ...ele,
-                            apartment_number: String(num),
-                          }) : ele)
-
+                          details: dataCom?.details?.map((ele: any) =>
+                            ele?.id == detail?.id
+                              ? {
+                                  ...ele,
+                                  apartment_number: String(num),
+                                }
+                              : ele
+                          ),
                         })
                       }
                       title="رقم الدور"
                     />
-
                   </div>
-                </>)
-            )}
+                </>
+              ))}
 
             {(dataCom?.property_type_id == 1 ||
               dataCom?.property_type_id == 2 ||
@@ -604,15 +617,18 @@ const EditOffer = () => {
                       onChange={(event) =>
                         setData({
                           ...dataCom,
-                          landDetails: dataCom?.landDetails?.map((landDetail: any) => landDetail?.id == ele?.id ? ({
-                            ...landDetail,
-                            piece_number: event?.target?.value,
-                          }) : landDetail)
-
+                          landDetails: dataCom?.landDetails?.map(
+                            (landDetail: any) =>
+                              landDetail?.id == ele?.id
+                                ? {
+                                    ...landDetail,
+                                    piece_number: event?.target?.value,
+                                  }
+                                : landDetail
+                          ),
                         })
                       }
                     />
-
                   </div>
                   <div className="mb-4">
                     <label className="block mb-2 font-medium mt-2">
@@ -627,17 +643,19 @@ const EditOffer = () => {
                         onChange={(event) =>
                           setData({
                             ...dataCom,
-                            landDetails: dataCom?.landDetails?.map((landDetail) => landDetail?.id == ele?.id ? ({
-                              ...landDetail,
-                              plan_number: event?.target?.value,
-                            }) : landDetail)
-
+                            landDetails: dataCom?.landDetails?.map(
+                              (landDetail) =>
+                                landDetail?.id == ele?.id
+                                  ? {
+                                      ...landDetail,
+                                      plan_number: event?.target?.value,
+                                    }
+                                  : landDetail
+                            ),
                           })
                         }
                       />
                     </div>
-
-
                   </div>
                   <InputAreaPrice
                     title="المساحة"
@@ -645,14 +663,16 @@ const EditOffer = () => {
                     onChange={(event) =>
                       setData({
                         ...dataCom,
-                        landDetails: dataCom?.landDetails?.map((landDetail) => landDetail?.id == ele?.id ? ({
-                          ...landDetail,
-                          area: Number(event?.target?.value),
-                        }) : landDetail)
-
+                        landDetails: dataCom?.landDetails?.map((landDetail) =>
+                          landDetail?.id == ele?.id
+                            ? {
+                                ...landDetail,
+                                area: Number(event?.target?.value),
+                              }
+                            : landDetail
+                        ),
                       })
                     }
-
                     measurement="متر"
                   />
                   <InputAreaPrice
@@ -661,21 +681,24 @@ const EditOffer = () => {
                     onChange={(event) =>
                       setData({
                         ...dataCom,
-                        landDetails: dataCom?.landDetails?.map((landDetail) => landDetail?.id == ele?.id ? ({
-                          ...landDetail,
-                          price: Number(event?.target?.value),
-                        }) : landDetail)
-
+                        landDetails: dataCom?.landDetails?.map((landDetail) =>
+                          landDetail?.id == ele?.id
+                            ? {
+                                ...landDetail,
+                                price: Number(event?.target?.value),
+                              }
+                            : landDetail
+                        ),
                       })
                     }
-
                     measurement="ريال"
                     desc="(بدون القيمة المضافة والسعي)"
                   />
                 </>
               ))}
 
-            {(dataCom?.property_type_id == 4 || dataCom?.property_type_id == 5) && (
+            {(dataCom?.property_type_id == 4 ||
+              dataCom?.property_type_id == 5) && (
               <>
                 <InputAreaPrice
                   title="المساحة"
@@ -688,146 +711,151 @@ const EditOffer = () => {
                   value={Number(dataCom?.area)}
                   measurement="متر"
                 />
-
               </>
             )}
           </div>
 
-          {(dataCom?.property_type_id == 4 || dataCom?.property_type_id == 5) ? (
-            dataCom?.details?.map((detail) =>
-              <>
-                <InputAreaPrice
-                  title="السعر"
-                  onChange={(event) =>
-                    setData({
-                      ...dataCom,
-                      details: dataCom?.details?.map((ele) => ele?.id == detail?.id ? ({
-                        ...ele,
-                        price: Number(event?.target?.value),
-                      }) : ele)
+          {dataCom?.property_type_id == 4 || dataCom?.property_type_id == 5
+            ? dataCom?.details?.map((detail) => (
+                <>
+                  <InputAreaPrice
+                    title="السعر"
+                    onChange={(event) =>
+                      setData({
+                        ...dataCom,
+                        details: dataCom?.details?.map((ele) =>
+                          ele?.id == detail?.id
+                            ? {
+                                ...ele,
+                                price: Number(event?.target?.value),
+                              }
+                            : ele
+                        ),
+                      })
+                    }
+                    value={Number(detail?.price)}
+                    measurement="ريال"
+                    desc="(بدون القيمة المضافة والسعي)"
+                  />
+                  <NumberRoom
+                    value={Number(dataCom?.age)}
+                    onChange={(e) => {
+                      setData({
+                        ...dataCom,
+                        age: Number(e?.target?.value),
+                      });
+                    }}
+                    name="age"
+                    title={"العمر"}
+                    firstNumber={"جديد"}
+                    secondNumber={"+10 سنين"}
+                    max={10}
+                  />
+                  <NumberRoom
+                    value={detail?.rooms_number}
+                    onChange={(e) => {
+                      setData({
+                        ...dataCom,
+                        details: dataCom?.details?.map((ele) =>
+                          ele?.id == detail?.id
+                            ? {
+                                ...ele,
+                                rooms_number: Number(e?.target?.value),
+                              }
+                            : ele
+                        ),
+                      });
+                    }}
+                    name="rooms_number"
+                    title={"عدد الغرف"}
+                    firstNumber={"غرفة"}
+                    secondNumber={"+10 غرف"}
+                    max={10}
+                  />
+                  <NumberRoom
+                    value={detail?.halls_number}
+                    onChange={(e) => {
+                      setData({
+                        ...dataCom,
+                        details: dataCom?.details?.map((ele) =>
+                          ele?.id == detail?.id
+                            ? {
+                                ...ele,
+                                halls_number: Number(e?.target?.value),
+                              }
+                            : ele
+                        ),
+                      });
+                    }}
+                    name="halls_number"
+                    title={"عدد الصالات"}
+                    firstNumber={"صالة"}
+                    secondNumber={"3+ صالات "}
+                    max={3}
+                  />
+                  <NumberRoom
+                    value={detail?.bathrooms_number}
+                    onChange={(e) => {
+                      setData({
+                        ...dataCom,
+                        details: dataCom?.details?.map((ele) =>
+                          ele?.id == detail?.id
+                            ? {
+                                ...ele,
+                                bathrooms_number: Number(e?.target?.value),
+                              }
+                            : ele
+                        ),
+                      });
+                    }}
+                    name="bathrooms_number"
+                    title={"عدد دورات المياه"}
+                    firstNumber={"دورة مياه"}
+                    secondNumber={"3+ دورة مياه "}
+                    max={3}
+                  />
+                  <NumberRoom
+                    value={detail?.kitchens_number}
+                    onChange={(e) => {
+                      setData({
+                        ...dataCom,
+                        details: dataCom?.details?.map((ele) =>
+                          ele?.id == detail?.id
+                            ? {
+                                ...ele,
+                                kitchens_number: Number(e?.target?.value),
+                              }
+                            : ele
+                        ),
+                      });
+                    }}
+                    name="kitchens_number"
+                    title={" عدد المطابخ"}
+                    firstNumber={"مطبخ"}
+                    secondNumber={"3+ مطابخ"}
+                    max={3}
+                  />
+                </>
+              ))
+            : dataCom?.property_type_id == 3 && (
+                <>
+                  <NumberRoom
+                    value={Number(dataCom?.age)}
+                    onChange={(e) => {
+                      setData({
+                        ...dataCom,
 
-                    })
-                  }
-                  value={Number(detail?.price)}
-                  measurement="ريال"
-                  desc="(بدون القيمة المضافة والسعي)"
-                />
-                <NumberRoom
-
-                  value={Number(dataCom?.age)}
-                  onChange={(e) => {
-                    setData({
-                      ...dataCom,
-                      age: Number(e?.target?.value),
-                    })
-                  }}
-                  name="age"
-                  title={"العمر"}
-                  firstNumber={"جديد"}
-                  secondNumber={"+10 سنين"}
-                  max={10}
-                />
-                <NumberRoom
-
-                  value={detail?.rooms_number}
-                  onChange={(e) => {
-                    setData({
-                      ...dataCom,
-                      details: dataCom?.details?.map((ele) => ele?.id == detail?.id ? ({
-                        ...ele,
-                        rooms_number: Number(e?.target?.value),
-                      }) : ele)
-
-                    })
-                  }}
-                  name="rooms_number"
-                  title={"عدد الغرف"}
-                  firstNumber={"غرفة"}
-                  secondNumber={"+10 غرف"}
-                  max={10}
-                />
-                <NumberRoom
-
-                  value={detail?.halls_number}
-                  onChange={(e) => {
-                    setData({
-                      ...dataCom,
-                      details: dataCom?.details?.map((ele) => ele?.id == detail?.id ? ({
-                        ...ele,
-                        halls_number: Number(e?.target?.value),
-                      }) : ele)
-
-                    })
-                  }}
-                  name="halls_number"
-                  title={"عدد الصالات"}
-                  firstNumber={"صالة"}
-                  secondNumber={"3+ صالات "}
-                  max={3}
-                />
-                <NumberRoom
-
-                  value={detail?.bathrooms_number}
-                  onChange={(e) => {
-                    setData({
-                      ...dataCom,
-                      details: dataCom?.details?.map((ele) => ele?.id == detail?.id ? ({
-                        ...ele,
-                        bathrooms_number: Number(e?.target?.value),
-                      }) : ele)
-
-                    })
-                  }}
-                  name="bathrooms_number"
-                  title={"عدد دورات المياه"}
-                  firstNumber={"دورة مياه"}
-                  secondNumber={"3+ دورة مياه "}
-                  max={3}
-                />
-                <NumberRoom
-
-                  value={detail?.kitchens_number}
-                  onChange={(e) => {
-                    setData({
-                      ...dataCom,
-                      details: dataCom?.details?.map((ele) => ele?.id == detail?.id ? ({
-                        ...ele,
-                        kitchens_number: Number(e?.target?.value),
-                      }) : ele)
-
-                    })
-                  }}
-                  name="kitchens_number"
-                  title={" عدد المطابخ"}
-                  firstNumber={"مطبخ"}
-                  secondNumber={"3+ مطابخ"}
-                  max={3}
-                />
-              </>)
-          ) : (
-            dataCom?.property_type_id == 3 && (
-              <>
-                <NumberRoom
-
-                  value={Number(dataCom?.age)}
-                  onChange={(e) => {
-                    setData({
-                      ...dataCom,
-
-                      age: Number(e?.target?.value),
-
-
-                    })
-                  }}
-                  name="age"
-                  title={"العمر"}
-                  firstNumber={"جديد"}
-                  secondNumber={"+10 سنين"}
-                  max={10}
-                />
-              </>
-            )
-          )}
+                        age: Number(e?.target?.value),
+                      });
+                    }}
+                    name="age"
+                    title={"العمر"}
+                    firstNumber={"جديد"}
+                    secondNumber={"+10 سنين"}
+                    max={10}
+                  />
+                </>
+              )}
           {dataCom?.property_type_id == 3 &&
             dataCom?.property_type_details_id == 4 && (
               <>
@@ -838,10 +866,15 @@ const EditOffer = () => {
                     floors={floorsVilla}
                     onChange={(e) =>
                       setData({
-                        ...dataCom, details: dataCom?.details?.map((ele) => ele?.id == floor?.id ? ({
-                          ...ele,
-                          type: e.target.value
-                        }) : ele)
+                        ...dataCom,
+                        details: dataCom?.details?.map((ele) =>
+                          ele?.id == floor?.id
+                            ? {
+                                ...ele,
+                                type: e.target.value,
+                              }
+                            : ele
+                        ),
                       })
                     }
                     value={floor?.type}
@@ -851,10 +884,15 @@ const EditOffer = () => {
                         title="المساحة"
                         onChange={(e) =>
                           setData({
-                            ...dataCom, details: dataCom?.details?.map((ele) => ele?.id == floor?.id ? ({
-                              ...ele,
-                              area: Number(e.target.value)
-                            }) : ele)
+                            ...dataCom,
+                            details: dataCom?.details?.map((ele) =>
+                              ele?.id == floor?.id
+                                ? {
+                                    ...ele,
+                                    area: Number(e.target.value),
+                                  }
+                                : ele
+                            ),
                           })
                         }
                         value={floor?.area}
@@ -864,10 +902,15 @@ const EditOffer = () => {
                         title="السعر"
                         onChange={(e) =>
                           setData({
-                            ...dataCom, details: dataCom?.details?.map((ele) => ele?.id == floor?.id ? ({
-                              ...ele,
-                              price: Number(e.target.value)
-                            }) : ele)
+                            ...dataCom,
+                            details: dataCom?.details?.map((ele) =>
+                              ele?.id == floor?.id
+                                ? {
+                                    ...ele,
+                                    price: Number(e.target.value),
+                                  }
+                                : ele
+                            ),
                           })
                         }
                         value={floor?.price}
@@ -875,14 +918,18 @@ const EditOffer = () => {
                         desc="(بدون القيمة المضافة والسعي)"
                       />
                       <NumberRoom
-
                         value={floor?.rooms_number}
                         onChange={(e) =>
                           setData({
-                            ...dataCom, details: dataCom?.details?.map((ele) => ele?.id == floor?.id ? ({
-                              ...ele,
-                              rooms_number: Number(e.target.value)
-                            }) : ele)
+                            ...dataCom,
+                            details: dataCom?.details?.map((ele) =>
+                              ele?.id == floor?.id
+                                ? {
+                                    ...ele,
+                                    rooms_number: Number(e.target.value),
+                                  }
+                                : ele
+                            ),
                           })
                         }
                         name="rooms_number"
@@ -892,14 +939,18 @@ const EditOffer = () => {
                         max={10}
                       />
                       <NumberRoom
-
                         value={floor?.halls_number}
                         onChange={(e) =>
                           setData({
-                            ...dataCom, details: dataCom?.details?.map((ele) => ele?.id == floor?.id ? ({
-                              ...ele,
-                              halls_number: Number(e.target.value)
-                            }) : ele)
+                            ...dataCom,
+                            details: dataCom?.details?.map((ele) =>
+                              ele?.id == floor?.id
+                                ? {
+                                    ...ele,
+                                    halls_number: Number(e.target.value),
+                                  }
+                                : ele
+                            ),
                           })
                         }
                         name="halls_number"
@@ -909,14 +960,18 @@ const EditOffer = () => {
                         max={3}
                       />
                       <NumberRoom
-
                         value={floor?.bathrooms_number}
                         onChange={(e) =>
                           setData({
-                            ...dataCom, details: dataCom?.details?.map((ele) => ele?.id == floor?.id ? ({
-                              ...ele,
-                              bathrooms_number: Number(e.target.value)
-                            }) : ele)
+                            ...dataCom,
+                            details: dataCom?.details?.map((ele) =>
+                              ele?.id == floor?.id
+                                ? {
+                                    ...ele,
+                                    bathrooms_number: Number(e.target.value),
+                                  }
+                                : ele
+                            ),
                           })
                         }
                         name="bathrooms_number"
@@ -926,14 +981,18 @@ const EditOffer = () => {
                         max={3}
                       />
                       <NumberRoom
-
                         value={floor?.kitchens_number}
                         onChange={(e) =>
                           setData({
-                            ...dataCom, details: dataCom?.details?.map((ele) => ele?.id == floor?.id ? ({
-                              ...ele,
-                              kitchens_number: Number(e.target.value)
-                            }) : ele)
+                            ...dataCom,
+                            details: dataCom?.details?.map((ele) =>
+                              ele?.id == floor?.id
+                                ? {
+                                    ...ele,
+                                    kitchens_number: Number(e.target.value),
+                                  }
+                                : ele
+                            ),
                           })
                         }
                         name="kitchens_number"
@@ -959,14 +1018,18 @@ const EditOffer = () => {
                             title="مكيفة"
                             onChange={(event) =>
                               setData({
-                                ...dataCom, details: dataCom?.details?.map((ele) => ele?.id == floor?.id ? ({
-                                  ...ele,
-                                  amenities: {
-                                    ...ele?.amenities,
-                                    ac: event?.target?.checked
-                                  }
-
-                                }) : ele)
+                                ...dataCom,
+                                details: dataCom?.details?.map((ele) =>
+                                  ele?.id == floor?.id
+                                    ? {
+                                        ...ele,
+                                        amenities: {
+                                          ...ele?.amenities,
+                                          ac: event?.target?.checked,
+                                        },
+                                      }
+                                    : ele
+                                ),
                               })
                             }
                             checked={floor?.pool}
@@ -975,14 +1038,18 @@ const EditOffer = () => {
                             title="مدخل سيارة"
                             onChange={(event) =>
                               setData({
-                                ...dataCom, details: dataCom?.details?.map((ele) => ele?.id == floor?.id ? ({
-                                  ...ele,
-                                  amenities: {
-                                    ...ele?.amenities,
-                                    car_entrance: event?.target?.checked
-                                  }
-
-                                }) : ele)
+                                ...dataCom,
+                                details: dataCom?.details?.map((ele) =>
+                                  ele?.id == floor?.id
+                                    ? {
+                                        ...ele,
+                                        amenities: {
+                                          ...ele?.amenities,
+                                          car_entrance: event?.target?.checked,
+                                        },
+                                      }
+                                    : ele
+                                ),
                               })
                             }
                             checked={floor?.car_entrance}
@@ -991,14 +1058,18 @@ const EditOffer = () => {
                             title="مطبخ راكب"
                             onChange={(event) =>
                               setData({
-                                ...dataCom, details: dataCom?.details?.map((ele) => ele?.id == floor?.id ? ({
-                                  ...ele,
-                                  amenities: {
-                                    ...ele?.amenities,
-                                    kitchen: event?.target?.checked
-                                  }
-
-                                }) : ele)
+                                ...dataCom,
+                                details: dataCom?.details?.map((ele) =>
+                                  ele?.id == floor?.id
+                                    ? {
+                                        ...ele,
+                                        amenities: {
+                                          ...ele?.amenities,
+                                          kitchen: event?.target?.checked,
+                                        },
+                                      }
+                                    : ele
+                                ),
                               })
                             }
                             checked={floor?.kitchen}
@@ -1007,14 +1078,18 @@ const EditOffer = () => {
                             title="مؤثثة"
                             onChange={(event) =>
                               setData({
-                                ...dataCom, details: dataCom?.details?.map((ele) => ele?.id == floor?.id ? ({
-                                  ...ele,
-                                  amenities: {
-                                    ...ele?.amenities,
-                                    furnished: event?.target?.checked
-                                  }
-
-                                }) : ele)
+                                ...dataCom,
+                                details: dataCom?.details?.map((ele) =>
+                                  ele?.id == floor?.id
+                                    ? {
+                                        ...ele,
+                                        amenities: {
+                                          ...ele?.amenities,
+                                          furnished: event?.target?.checked,
+                                        },
+                                      }
+                                    : ele
+                                ),
                               })
                             }
                             checked={floor?.furnished}
@@ -1027,301 +1102,346 @@ const EditOffer = () => {
               </>
             )}
           {dataCom?.property_type_id == 3 &&
-            dataCom?.property_type_details_id == 3 && (
-              dataCom?.details?.map((detail) =>
-                <>
+            dataCom?.property_type_details_id == 3 &&
+            dataCom?.details?.map((detail) => (
+              <>
+                <div className="mt-2">
+                  <div
+                    className="flex justify-between text-sm mt-2"
+                    style={{ direction: "rtl" }}
+                  >
+                    <p className="font-bold text-base text-black ">
+                      {detail?.type}
+                    </p>
+                  </div>
+                  <div
+                    className=" flex flex-col flex-wrap gap-2"
+                    style={{ direction: "rtl" }}
+                  >
+                    <InputAreaPrice
+                      title="المساحة"
+                      onChange={(event) =>
+                        setData({
+                          ...dataCom,
+                          details: dataCom?.details?.map((ele) =>
+                            ele?.id == detail?.id
+                              ? {
+                                  ...ele,
+                                  area: Number(event?.target?.value),
+                                }
+                              : ele
+                          ),
+                        })
+                      }
+                      value={detail?.area}
+                      measurement="متر"
+                    />
+                    <InputAreaPrice
+                      title="السعر"
+                      onChange={(event) =>
+                        setData({
+                          ...dataCom,
+                          details: dataCom?.details?.map((ele) =>
+                            ele?.id == detail?.id
+                              ? {
+                                  ...ele,
+                                  price: Number(event?.target?.value),
+                                }
+                              : ele
+                          ),
+                        })
+                      }
+                      value={detail?.price}
+                      measurement="ريال"
+                      desc="(بدون القيمة المضافة والسعي)"
+                    />
+                    <NumberRoom
+                      value={detail?.rooms_number}
+                      onChange={(e) =>
+                        setData({
+                          ...dataCom,
+                          details: dataCom?.details?.map((ele) =>
+                            ele?.id == detail?.id
+                              ? {
+                                  ...ele,
+                                  rooms_number: Number(e?.target?.value),
+                                }
+                              : ele
+                          ),
+                        })
+                      }
+                      name="rooms_number"
+                      title={"عدد الغرف"}
+                      firstNumber={"غرفة"}
+                      secondNumber={"+10 غرف"}
+                      max={10}
+                    />
+                    <NumberRoom
+                      value={detail?.halls_number}
+                      onChange={(e) =>
+                        setData({
+                          ...dataCom,
+                          details: dataCom?.details?.map((ele) =>
+                            ele?.id == detail?.id
+                              ? {
+                                  ...ele,
+                                  halls_number: Number(e?.target?.value),
+                                }
+                              : ele
+                          ),
+                        })
+                      }
+                      name="halls_number"
+                      title={"عدد الصالات"}
+                      firstNumber={"صالة"}
+                      secondNumber={"3+ صالات "}
+                      max={3}
+                    />
+                    <NumberRoom
+                      value={detail?.bathrooms_number}
+                      onChange={(e) =>
+                        setData({
+                          ...dataCom,
+                          details: dataCom?.details?.map((ele) =>
+                            ele?.id == detail?.id
+                              ? {
+                                  ...ele,
+                                  bathrooms_number: Number(e?.target?.value),
+                                }
+                              : ele
+                          ),
+                        })
+                      }
+                      name="bathrooms_number"
+                      title={"عدد دورات المياه"}
+                      firstNumber={"دورة مياه"}
+                      secondNumber={"3+ دورة مياه "}
+                      max={3}
+                    />
+                    <NumberRoom
+                      value={detail?.kitchens_number}
+                      onChange={(e) =>
+                        setData({
+                          ...dataCom,
+                          details: dataCom?.details?.map((ele) =>
+                            ele?.id == detail?.id
+                              ? {
+                                  ...ele,
+                                  kitchens_number: Number(e?.target?.value),
+                                }
+                              : ele
+                          ),
+                        })
+                      }
+                      name="kitchens_number"
+                      title={" عدد المطابخ"}
+                      firstNumber={"مطبخ"}
+                      secondNumber={"3+ مطابخ"}
+                      max={3}
+                    />
+                    <hr className="border-gray-200 dark:border-white my-2" />
+                  </div>
                   <div className="mt-2">
                     <div
                       className="flex justify-between text-sm mt-2"
                       style={{ direction: "rtl" }}
                     >
-                      <p className="font-bold text-base text-black ">{detail?.type}</p>
+                      <p className="font-medium text-base text-[#4B5563]">
+                        مزايا إضافية:
+                      </p>
                     </div>
                     <div
-                      className=" flex flex-col flex-wrap gap-2"
+                      className=" flex flex-row flex-wrap gap-8"
                       style={{ direction: "rtl" }}
                     >
-                      <InputAreaPrice
-                        title="المساحة"
+                      <CheckFeature
+                        title="مسبح"
                         onChange={(event) =>
                           setData({
                             ...dataCom,
-                            details: dataCom?.details?.map((ele) => ele?.id == detail?.id ? ({
-                              ...ele,
-                              area: Number(event?.target?.value)
-                            }) : ele)
-
+                            details: dataCom?.details?.map((ele) =>
+                              ele?.id == detail?.id
+                                ? {
+                                    ...ele,
+                                    amenities: {
+                                      ...ele?.amenities,
+                                      pool: event?.target?.checked,
+                                    },
+                                  }
+                                : ele
+                            ),
                           })
                         }
-                        value={detail?.area}
-                        measurement="متر"
+                        checked={detail?.amenities?.pool}
                       />
-                      <InputAreaPrice
-                        title="السعر"
+                      <CheckFeature
+                        title="كراج للسيارات"
                         onChange={(event) =>
                           setData({
                             ...dataCom,
-                            details: dataCom?.details?.map((ele) => ele?.id == detail?.id ? ({
-                              ...ele,
-                              price: Number(event?.target?.value)
-                            }) : ele)
-
+                            details: dataCom?.details?.map((ele) =>
+                              ele?.id == detail?.id
+                                ? {
+                                    ...ele,
+                                    amenities: {
+                                      ...ele?.amenities,
+                                      garage: event?.target?.checked,
+                                    },
+                                  }
+                                : ele
+                            ),
                           })
                         }
-                        value={detail?.price}
-                        measurement="ريال"
-                        desc="(بدون القيمة المضافة والسعي)"
+                        checked={detail?.amenities?.garage}
                       />
-                      <NumberRoom
-
-                        value={detail?.rooms_number}
-                        onChange={(e) =>
+                      <CheckFeature
+                        title="غرفة خدم"
+                        onChange={(event) =>
                           setData({
                             ...dataCom,
-                            details: dataCom?.details?.map((ele) => ele?.id == detail?.id ? ({
-                              ...ele,
-                              rooms_number: Number(e?.target?.value)
-                            }) : ele)
-
-                          })}
-                        name="rooms_number"
-                        title={"عدد الغرف"}
-                        firstNumber={"غرفة"}
-                        secondNumber={"+10 غرف"}
-                        max={10}
+                            details: dataCom?.details?.map((ele) =>
+                              ele?.id == detail?.id
+                                ? {
+                                    ...ele,
+                                    amenities: {
+                                      ...ele?.amenities,
+                                      servants_room: event?.target?.checked,
+                                    },
+                                  }
+                                : ele
+                            ),
+                          })
+                        }
+                        checked={detail?.amenities?.servants_room}
                       />
-                      <NumberRoom
-
-                        value={detail?.halls_number}
-                        onChange={(e) =>
+                      <CheckFeature
+                        title="مؤثثة"
+                        onChange={(event) =>
                           setData({
                             ...dataCom,
-                            details: dataCom?.details?.map((ele) => ele?.id == detail?.id ? ({
-                              ...ele,
-                              halls_number: Number(e?.target?.value)
-                            }) : ele)
-
-                          })}
-                        name="halls_number"
-                        title={"عدد الصالات"}
-                        firstNumber={"صالة"}
-                        secondNumber={"3+ صالات "}
-                        max={3}
+                            details: dataCom?.details?.map((ele) =>
+                              ele?.id == detail?.id
+                                ? {
+                                    ...ele,
+                                    amenities: {
+                                      ...ele?.amenities,
+                                      furnished: event?.target?.checked,
+                                    },
+                                  }
+                                : ele
+                            ),
+                          })
+                        }
+                        checked={detail?.amenities?.furnished}
                       />
-                      <NumberRoom
-
-                        value={detail?.bathrooms_number}
-                        onChange={(e) =>
-                          setData({
-                            ...dataCom,
-                            details: dataCom?.details?.map((ele) => ele?.id == detail?.id ? ({
-                              ...ele,
-                              bathrooms_number: Number(e?.target?.value)
-                            }) : ele)
-
-                          })}
-                        name="bathrooms_number"
-                        title={"عدد دورات المياه"}
-                        firstNumber={"دورة مياه"}
-                        secondNumber={"3+ دورة مياه "}
-                        max={3}
-                      />
-                      <NumberRoom
-
-                        value={detail?.kitchens_number}
-                        onChange={(e) =>
-                          setData({
-                            ...dataCom,
-                            details: dataCom?.details?.map((ele) => ele?.id == detail?.id ? ({
-                              ...ele,
-                              kitchens_number: Number(e?.target?.value)
-                            }) : ele)
-
-                          })}
-                        name="kitchens_number"
-                        title={" عدد المطابخ"}
-                        firstNumber={"مطبخ"}
-                        secondNumber={"3+ مطابخ"}
-                        max={3}
-                      />
-                      <hr className="border-gray-200 dark:border-white my-2" />
-                    </div>
-                    <div className="mt-2">
-                      <div
-                        className="flex justify-between text-sm mt-2"
-                        style={{ direction: "rtl" }}
-                      >
-                        <p className="font-medium text-base text-[#4B5563]">
-                          مزايا إضافية:
-                        </p>
-                      </div>
-                      <div
-                        className=" flex flex-row flex-wrap gap-8"
-                        style={{ direction: "rtl" }}
-                      >
-                        <CheckFeature
-                          title="مسبح"
-                          onChange={(event) =>
-                            setData({
-                              ...dataCom,
-                              details: dataCom?.details?.map((ele) => ele?.id == detail?.id ? ({
-                                ...ele,
-                                amenities: {
-                                  ...ele?.amenities
-                                  , pool: event?.target?.checked
-                                }
-                              }) : ele)
-
-                            })
-                          }
-                          checked={detail?.amenities?.pool}
-                        />
-                        <CheckFeature
-                          title="كراج للسيارات"
-                          onChange={(event) =>
-                            setData({
-                              ...dataCom,
-                              details: dataCom?.details?.map((ele) => ele?.id == detail?.id ? ({
-                                ...ele,
-                                amenities: {
-                                  ...ele?.amenities
-                                  , garage: event?.target?.checked
-                                }
-                              }) : ele)
-
-                            })
-                          }
-                          checked={detail?.amenities?.garage}
-                        />
-                        <CheckFeature
-                          title="غرفة خدم"
-                          onChange={(event) =>
-                            setData({
-                              ...dataCom,
-                              details: dataCom?.details?.map((ele) => ele?.id == detail?.id ? ({
-                                ...ele,
-                                amenities: {
-                                  ...ele?.amenities
-                                  , servants_room: event?.target?.checked
-                                }
-                              }) : ele)
-
-                            })
-                          }
-                          checked={detail?.amenities?.servants_room}
-                        />
-                        <CheckFeature
-                          title="مؤثثة"
-                          onChange={(event) =>
-                            setData({
-                              ...dataCom,
-                              details: dataCom?.details?.map((ele) => ele?.id == detail?.id ? ({
-                                ...ele,
-                                amenities: {
-                                  ...ele?.amenities
-                                  , furnished: event?.target?.checked
-                                }
-                              }) : ele)
-
-                            })
-                          }
-                          checked={detail?.amenities?.furnished}
-                        />
-                      </div>
                     </div>
                   </div>
-                </>)
-            )}
+                </div>
+              </>
+            ))}
           {dataCom?.property_type_id == 3 &&
-            dataCom?.property_type_details_id == 3 ? (
+          dataCom?.property_type_details_id == 3 ? (
             <></>
           ) : (
-            (dataCom?.property_type_id == 4 || dataCom?.property_type_id == 5) && (
-              dataCom?.details?.map((detail) =>
-                <div className="mt-2" key={detail?.id}>
-                  <div
-                    className="flex justify-between text-sm mt-2"
-                    style={{ direction: "rtl" }}
-                  >
-                    <p className="font-medium text-base text-[#4B5563]">
-                      مزايا إضافية:
-                    </p>
-                  </div>
-                  <div
-                    className=" flex flex-row flex-wrap gap-8"
-                    style={{ direction: "rtl" }}
-                  >
-                    <CheckFeature
-                      title="مكيفة"
-                      onChange={(event) =>
-                        setData({
-                          ...dataCom,
-                          details: dataCom?.details?.map((ele) => ele?.id == detail?.id ? ({
-                            ...ele,
-                            amenities: {
-                              ...ele?.amenities
-                              , ac: event?.target?.checked
-                            }
-                          }) : ele)
-
-                        })
-                      }
-                      checked={detail?.amenities?.ac}
-                    />
-                    <CheckFeature
-                      title="مدخل سيارة"
-                      onChange={(event) =>
-                        setData({
-                          ...dataCom,
-                          details: dataCom?.details?.map((ele) => ele?.id == detail?.id ? ({
-                            ...ele,
-                            amenities: {
-                              ...ele?.amenities
-                              , car_entrance: event?.target?.checked
-                            }
-                          }) : ele)
-
-                        })
-                      }
-                      checked={detail?.amenities?.car_entrance}
-                    />
-                    <CheckFeature
-                      title="مطبخ راكب"
-                      onChange={(event) =>
-                        setData({
-                          ...dataCom,
-                          details: dataCom?.details?.map((ele) => ele?.id == detail?.id ? ({
-                            ...ele,
-                            amenities: {
-                              ...ele?.amenities
-                              , kitchen: event?.target?.checked
-                            }
-                          }) : ele)
-
-                        })
-                      }
-                      checked={detail?.amenities?.kitchen}
-                    />
-                    <CheckFeature
-                      title="مؤثثة"
-                      onChange={(event) =>
-                        setData({
-                          ...dataCom,
-                          details: dataCom?.details?.map((ele) => ele?.id == detail?.id ? ({
-                            ...ele,
-                            amenities: {
-                              ...ele?.amenities
-                              , furnished: event?.target?.checked
-                            }
-                          }) : ele)
-
-                        })
-                      }
-                      checked={detail?.amenities?.furnished}
-                    />
-                  </div>
-                </div>)
-            )
+            (dataCom?.property_type_id == 4 ||
+              dataCom?.property_type_id == 5) &&
+            dataCom?.details?.map((detail) => (
+              <div className="mt-2" key={detail?.id}>
+                <div
+                  className="flex justify-between text-sm mt-2"
+                  style={{ direction: "rtl" }}
+                >
+                  <p className="font-medium text-base text-[#4B5563]">
+                    مزايا إضافية:
+                  </p>
+                </div>
+                <div
+                  className=" flex flex-row flex-wrap gap-8"
+                  style={{ direction: "rtl" }}
+                >
+                  <CheckFeature
+                    title="مكيفة"
+                    onChange={(event) =>
+                      setData({
+                        ...dataCom,
+                        details: dataCom?.details?.map((ele) =>
+                          ele?.id == detail?.id
+                            ? {
+                                ...ele,
+                                amenities: {
+                                  ...ele?.amenities,
+                                  ac: event?.target?.checked,
+                                },
+                              }
+                            : ele
+                        ),
+                      })
+                    }
+                    checked={detail?.amenities?.ac}
+                  />
+                  <CheckFeature
+                    title="مدخل سيارة"
+                    onChange={(event) =>
+                      setData({
+                        ...dataCom,
+                        details: dataCom?.details?.map((ele) =>
+                          ele?.id == detail?.id
+                            ? {
+                                ...ele,
+                                amenities: {
+                                  ...ele?.amenities,
+                                  car_entrance: event?.target?.checked,
+                                },
+                              }
+                            : ele
+                        ),
+                      })
+                    }
+                    checked={detail?.amenities?.car_entrance}
+                  />
+                  <CheckFeature
+                    title="مطبخ راكب"
+                    onChange={(event) =>
+                      setData({
+                        ...dataCom,
+                        details: dataCom?.details?.map((ele) =>
+                          ele?.id == detail?.id
+                            ? {
+                                ...ele,
+                                amenities: {
+                                  ...ele?.amenities,
+                                  kitchen: event?.target?.checked,
+                                },
+                              }
+                            : ele
+                        ),
+                      })
+                    }
+                    checked={detail?.amenities?.kitchen}
+                  />
+                  <CheckFeature
+                    title="مؤثثة"
+                    onChange={(event) =>
+                      setData({
+                        ...dataCom,
+                        details: dataCom?.details?.map((ele) =>
+                          ele?.id == detail?.id
+                            ? {
+                                ...ele,
+                                amenities: {
+                                  ...ele?.amenities,
+                                  furnished: event?.target?.checked,
+                                },
+                              }
+                            : ele
+                        ),
+                      })
+                    }
+                    checked={detail?.amenities?.furnished}
+                  />
+                </div>
+              </div>
+            ))
           )}
           {/* {(dataCom?.property_type_id == 1 || dataCom?.property_type_id == 2 || dataCom?.property_type_id == 6) && (
             <div className="mb-4" style={{ direction: "rtl" }}>
@@ -1357,9 +1477,7 @@ const EditOffer = () => {
           <ImageAppear images={images} onDelete={onDelete} links={Links} />
           <div className="flex flex-row justify-end mt-1 gap-8">
             <div className="flex gap-2  flex-row mt-5">
-              <p className="text-sm text-[#3B73B9] font-bold">
-                أضف صورة / صور
-              </p>
+              <p className="text-sm text-[#3B73B9] font-bold">أضف صورة / صور</p>
 
               <div
                 onClick={() => refImage.current?.click()}
@@ -1377,25 +1495,18 @@ const EditOffer = () => {
                   const files = event.target.files;
                   if (files) {
                     const imageFiles = Array.from(files) as File[];
-                    setImages((prev: any) => ([...prev, ...imageFiles]));
+                    setImages((prev: any) => [...prev, ...imageFiles]);
                   }
                 }}
               />
             </div>
           </div>
-
         </div>
         <div className="bg-white rounded-lg border border-[#E5E7EB] w-full mb-4 items-start justify-start p-4">
           <div className="flex items-center justify-end gap-2">
             <p className="text-xs text-[#6B7280] font-bold">
-              أوافق على{" "}
-              <span
-                className="text-[#98CC5D]"
-
-              >
-                الشروط
-              </span>{" "}
-              و<span className="text-[#98CC5D]">الأحكام</span> الخاصة بمشروك
+              أوافق على <span className="text-[#98CC5D]">الشروط</span> و
+              <span className="text-[#98CC5D]">الأحكام</span> الخاصة بمشروك
             </p>
             <input
               type="checkbox"
@@ -1404,7 +1515,10 @@ const EditOffer = () => {
             />
           </div>
           <div className="p-7">
-            <Button text="حفظ التعديلات" onClick={() => checkRef?.current?.open()} />
+            <Button
+              text="حفظ التعديلات"
+              onClick={() => checkRef?.current?.open()}
+            />
           </div>
         </div>
       </div>
@@ -1447,7 +1561,10 @@ const EditOffer = () => {
           <div className="flex flex-row items-center justify-center gap-3  w-full">
             <Button
               text=" تعديل"
-              onClick={() => { checkRef.current?.close(); onSubmit() }}
+              onClick={() => {
+                checkRef.current?.close();
+                onSubmit();
+              }}
               className="!text-xs !font-medium"
             />
             <Button
@@ -1463,13 +1580,25 @@ const EditOffer = () => {
           <MapLocation
             lat={dataCom?.propertyLocation?.lat}
             long={dataCom?.propertyLocation?.long}
-            onChange={({ address, lat, long }: { address: string, lat: number, long: number }) => setData({
-              ...dataCom,
-              propertyLocation: {
-                ...dataCom?.propertyLocation,
-                lat: lat, long: long, address: address
-              }
-            })}
+            onChange={({
+              address,
+              lat,
+              long,
+            }: {
+              address: string;
+              lat: number;
+              long: number;
+            }) =>
+              setData({
+                ...dataCom,
+                propertyLocation: {
+                  ...dataCom?.propertyLocation,
+                  lat: lat,
+                  long: long,
+                  address: address,
+                },
+              })
+            }
           />
           {/* <Map /> */}
           {/* <div></div> */}
@@ -1483,17 +1612,14 @@ const EditOffer = () => {
               onClick={() => modalRef.current?.close()}
               className="!bg-[#E5E7EB] !text-[#1F2A37]"
             />
-            <Button
-              text="حفظ"
-              onClick={() => modalRef.current?.close()}
-            />
+            <Button text="حفظ" onClick={() => modalRef.current?.close()} />
           </div>
         </div>
       </Modal>
     </form>
-  )
-}
-export default EditOffer
+  );
+};
+export default EditOffer;
 const floorsVilla = [
   { name: "دور الارضي" },
   { name: "دور علوي" },

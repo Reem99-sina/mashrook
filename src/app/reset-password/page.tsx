@@ -1,52 +1,52 @@
 "use client";
 
-import React, { useState,useMemo,useEffect } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { CloseButton, MashrookLogo } from "@/app/assets/svg";
 import { Button } from "../components/shared/button.component";
 import { ResetPassword } from "./Resetpassword";
 import { useRouter } from "next/navigation";
 import { validateForm } from "../hooks/validate";
 import toast from "react-hot-toast";
-import { useSearchParams } from 'next/navigation';  
-import {
-  ForgetSchema,
-  ResetSchema
-} from "@/typeSchema/schema";
-import {forget,removeForget,reset} from "@/redux/features/loginSlice"
+import { useSearchParams } from "next/navigation";
+import { ForgetSchema, ResetSchema } from "@/typeSchema/schema";
+import { forget, removeForget, reset } from "@/redux/features/loginSlice";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
-interface forgetPasswordInfo{
-    new_password: string,
-    repeate_new_password: string
+interface forgetPasswordInfo {
+  new_password: string;
+  repeate_new_password: string;
 }
 
 const ForgetPassword: React.FC = () => {
-  const searchParams = useSearchParams();  
-    const token = searchParams.get('token');
+  const searchParams = useSearchParams();
+  const token = searchParams.get("token");
   const [activeStep, setActiveStep] = useState<number>(1);
-  let [email,setEmail]=useState<string>("")
-  let [data,setData]=useState<forgetPasswordInfo>({
-    
+  let [email, setEmail] = useState<string>("");
+  let [data, setData] = useState<forgetPasswordInfo>({
     new_password: "",
-    repeate_new_password: ""
-  })
-  console.log(token,"token")
+    repeate_new_password: "",
+  });
   const dispatch = useDispatch<AppDispatch>();
-  let {     messageRest,
-    dataRest}=useSelector<RootState>((state)=>state.login)as { messageForget:string,dataForget:any,messageRest:string,
-      dataRest:any}
+  let { messageRest, dataRest } = useSelector<RootState>(
+    (state) => state.login
+  ) as {
+    messageForget: string;
+    dataForget: any;
+    messageRest: string;
+    dataRest: any;
+  };
   const [errors, setErrors] = useState<any>();
-  
-  const onReset=async()=>{
-    let status=await validateForm(data,ResetSchema,setErrors)
-    if(status==true&&token){
-      setErrors({})
-      dispatch(reset({...data,token:token}))
+
+  const onReset = async () => {
+    let status = await validateForm(data, ResetSchema, setErrors);
+    if (status == true && token) {
+      setErrors({});
+      dispatch(reset({ ...data, token: token }));
       // setActiveStep(activeStep + 1);
     }
-  }
+  };
   const router = useRouter();
-  const steps = useMemo(()=>{
+  const steps = useMemo(() => {
     return [
       // {
       //   title: "نسيت كلمة المرور",
@@ -54,28 +54,28 @@ const ForgetPassword: React.FC = () => {
       // },
       {
         title: "إعادة تعيين كلمة المرور",
-        component: <ResetPassword data={data} setData={setData} error={errors}/>,
+        component: (
+          <ResetPassword data={data} setData={setData} error={errors} />
+        ),
       },
-    ]
-  },[errors,data])
-  useEffect(()=>{
-    if (messageRest=="Password is updated successfully.") {
+    ];
+  }, [errors, data]);
+  useEffect(() => {
+    if (messageRest == "Password is updated successfully.") {
       toast.success(messageRest);
-      router.push("/")
+      router.push("/");
       // setActiveStep(activeStep + 1)
       // setSentYourRequest(true);
-    }else if(messageRest) {
+    } else if (messageRest) {
       toast.error(messageRest);
     }
-   
-    return ()=>{
-      dispatch(removeForget())
-    }
-  },[ messageRest,dispatch,router])
+
+    return () => {
+      dispatch(removeForget());
+    };
+  }, [messageRest, dispatch, router]);
   return (
-    
     <div className="flex items-center lg:justify-center min-h-screen h-full  w-full flex-col">
-      
       <div className="w-full max-w-md  space-y-8 bg-white   md:max-w-lg lg:max-w-xl ">
         <div className=" items-end justify-start ml-4 mt-4 hidden sm:flex ">
           <CloseButton
@@ -103,15 +103,11 @@ const ForgetPassword: React.FC = () => {
           </div>
 
           <div>
-            
-              <Button text="إعادة تعيين" onClick={onReset}/>
-            
+            <Button text="إعادة تعيين" onClick={onReset} />
           </div>
         </form>
-       
       </div>
     </div>
-    
   );
 };
 
