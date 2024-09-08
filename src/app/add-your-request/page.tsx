@@ -1,20 +1,20 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import React, { useRef, useState, useEffect,useMemo } from "react";
+import React, { useRef, useState, useEffect, useMemo } from "react";
 
-import { Add, CloseIconSmall, Succeeded } from "@/app/assets/svg";
-import RangeComponent from "@/app/components/shared/range.component"
+import { Add, CloseIconSmall } from "@/app/assets/svg";
+import RangeComponent from "@/app/components/shared/range.component";
 import { RadioInput } from "../components/shared/radio.component";
 import { Button } from "../components/shared/button.component";
 import { Modal, ModalRef } from "../components/shared/modal.component";
 import Footer from "../components/header/Footer2";
 import MainHeader from "../components/header/MainHeader";
-import { getCity,getDistrict} from "@/redux/features/getCity"
+import { getCity, getDistrict } from "@/redux/features/getCity";
 import Image from "next/image";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
-import { Range, getTrackBackground } from "react-range";
 import {
   getproperityType,
   getproperityTypeMore,
@@ -29,7 +29,6 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
 import {
-  rowSchema,
   departmentSchema,
   departmentOwnSchema,
   earthSchema,
@@ -37,7 +36,8 @@ import {
 } from "@/typeSchema/schema";
 import { validateForm } from "../hooks/validate";
 import AccordionComponent from "../components/shared/Accordion.component";
-import Cookie from 'js-cookie';
+import Cookie from "js-cookie";
+import OnAddYourRequestSuccess from "./OnAddYourRequestSuccess";
 
 const dataReal = [
   {
@@ -45,7 +45,7 @@ const dataReal = [
     children: ["أرض سكنية", "أرض تجارية", "فيلا", "دور", "شقة"],
   },
 ];
- const floorsVilla = [
+const floorsVilla = [
   { name: "دور الارضي" },
   { name: "دور علوي" },
   { name: "شقة" },
@@ -66,7 +66,6 @@ const AddYourRequest: React.FC = () => {
   const modalRef = useRef<ModalRef>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [deal, setdeal] = useState(false);
-  const [ownerShip, setownerShip] = useState(false);
   const [detailsVilla, setDetails] = useState([
     {
       type: "",
@@ -98,17 +97,18 @@ const AddYourRequest: React.FC = () => {
   const [sentYourRequest, setSentYourRequest] = useState<boolean>(false);
   const [errors, setErrors] = useState<properityErrorTypeInter>();
 
-  let { loading, message, data, title, details, titleSection, detailsSection } =
-    useSelector<RootState>((state) => state.properityType) as {
-      loading: boolean;
-      message: string;
-      data: any;
-      title: string;
-      details: any;
-      titleSection: string;
-      detailsSection: any;
-    };
-  let {
+  const { data, titleSection, detailsSection } = useSelector<RootState>(
+    (state) => state.properityType
+  ) as {
+    loading: boolean;
+    message: string;
+    data: any;
+    title: string;
+    details: any;
+    titleSection: string;
+    detailsSection: any;
+  };
+  const {
     loading: loadingRequest,
     message: messageRequest,
     data: dataRequest,
@@ -117,16 +117,15 @@ const AddYourRequest: React.FC = () => {
     message: string;
     data: any;
   };
-  let {  city,district } =
-  useSelector<RootState>((state) => state.city) as {
-    district:any
-    city:any
+  const { city, district } = useSelector<RootState>((state) => state.city) as {
+    district: any;
+    city: any;
   };
   const dispatch = useDispatch<AppDispatch>();
 
   const handlePropertyTypeChange = (value: typeSelect) => {
     setSelectedPropertyType(value);
-    setSelectedCites([])
+    setSelectedCites([]);
   };
 
   const handleCiteChange = (cite: { id: number; name: string }) => {
@@ -143,20 +142,13 @@ const AddYourRequest: React.FC = () => {
     setSelectedCites(selectedCites.filter((cite) => cite.id !== id));
   };
 
-  const filteredCites = useMemo(()=>{
-    return district?.filter((cite:any) =>
-    cite?.name?.toLowerCase()?.includes(searchTerm?.toLowerCase())
-  )},[district,searchTerm]);
+  const filteredCites = useMemo(() => {
+    return district?.filter((cite: any) =>
+      cite?.name?.toLowerCase()?.includes(searchTerm?.toLowerCase())
+    );
+  }, [district, searchTerm]);
 
-  const handleShareRangeChange = (values: number[]) => {
-    setCriteria({ ...criteria, shareRange: values });
-  };
-  const handleDesiredRowChange = (values: number[]) => {
-    setCriteria({ ...criteria, desiredRow: values });
-  };
   const onSubmit = async () => {
-    // setSentYourRequest(true);
-    // departmentSchema
     const datasend = {
       property_type_id: selectedPropertyType?.id,
       property_type_details_id: criteria?.unitType,
@@ -217,7 +209,6 @@ const AddYourRequest: React.FC = () => {
               postProperityType({
                 ...datasend,
                 finance: criteria?.dealStatus == "نعم" ? true : false,
-                // apartment_floor:criteria?.floorType,
                 details: detailsVilla,
               })
             );
@@ -248,7 +239,7 @@ const AddYourRequest: React.FC = () => {
 
   useEffect(() => {
     dispatch(getproperityType({ num: 1 }));
-    dispatch(getCity())
+    dispatch(getCity());
     return () => {
       dispatch(removeState());
     };
@@ -268,21 +259,18 @@ const AddYourRequest: React.FC = () => {
     }
   }, [dataRequest, messageRequest]);
   useEffect(() => {
-   
-      const storedToken = Cookie.get("token");
-      if(storedToken){
-        setToken(storedToken);
-      }
-    
+    const storedToken = Cookie.get("token");
+    if (storedToken) {
+      setToken(storedToken);
+    }
   }, []);
 
-  useEffect(()=>{
-    if(criteria?.city){
-      dispatch(getDistrict({name:criteria?.city}));
+  useEffect(() => {
+    if (criteria?.city) {
+      dispatch(getDistrict({ name: criteria?.city }));
     }
-  },[criteria?.city,dispatch])
+  }, [criteria?.city, dispatch]);
 
-  // let router=useRouter()
   useEffect(() => {
     return () => {
       setSentYourRequest(false);
@@ -344,13 +332,13 @@ const AddYourRequest: React.FC = () => {
                         <RadioInput
                           key={ele?.id}
                           name="property_type_details_id"
-                          onChange={(event) =>{
+                          onChange={(event) => {
                             setCriteria({
                               ...criteria,
                               unitType: Number(event?.target?.value),
-                            })
-                            setSelectedCites([])}
-                          }
+                            });
+                            setSelectedCites([]);
+                          }}
                           value={ele.id}
                           label={ele?.title}
                         />
@@ -368,37 +356,35 @@ const AddYourRequest: React.FC = () => {
           )}
           <div className=" w-full  items-start justify-start p-4">
             <div className="bg-white rounded-lg border border-[#E5E7EB] p-4 mb-4">
-
-            <div className="flex items-center justify-end">
-              <p className="text-base font-bold text-[#4B5563]">
-                {" "}
-                موقع العقار{" "}
-              </p>
-            </div>
-            <div className="flex items-end gap-2 justify-end flex-col mt-5">
-              <p className="text-base font-medium text-[#4B5563]">المدينة</p>
-              <div className=" w-full">
-                <select
-                  className="border w-full text-right border-[#D1D5DB] rounded-lg"
-                  onChange={(event) =>
-                    setCriteria({ ...criteria, city: event?.target?.value })
-                  }
-                >
-                  {city?.map((city:any) => (
-                    <option key={city.id} value={city.nameAr}>
-                      {city?.nameAr}
-                    </option>
-                  ))}
-                </select>
+              <div className="flex items-center justify-end">
+                <p className="text-base font-bold text-[#4B5563]">
+                  {" "}
+                  موقع العقار{" "}
+                </p>
               </div>
+              <div className="flex items-end gap-2 justify-end flex-col mt-5">
+                <p className="text-base font-medium text-[#4B5563]">المدينة</p>
+                <div className=" w-full">
+                  <select
+                    className="border w-full text-right border-[#D1D5DB] rounded-lg"
+                    onChange={(event) =>
+                      setCriteria({ ...criteria, city: event?.target?.value })
+                    }
+                  >
+                    {city?.map((city: any) => (
+                      <option key={city.id} value={city.nameAr}>
+                        {city?.nameAr}
+                      </option>
+                    ))}
+                  </select>
+                </div>
 
-              {errors?.city && (
-                <p className="text-xs text-red-600 dark:text-red-500 text-right">
-                  {errors?.city}
+                {errors?.city && (
+                  <p className="text-xs text-red-600 dark:text-red-500 text-right">
+                    {errors?.city}
+                  </p>
+                )}
 
-                </p>)}
-             
-              
                 <div className="flex items-end gap-2 justify-end flex-row mt-5 ">
                   <p
                     className={`cursor-pointer text-[#3B73B9]  ${
@@ -502,7 +488,7 @@ const AddYourRequest: React.FC = () => {
               {selectedPropertyType?.title === "شقة" &&
                 criteria?.unitType == 8 && (
                   <>
-                     <RangeComponent 
+                    <RangeComponent
                       title="الادوار المرغوبة"
                       firstNumDes="1"
                       secondNumDes="+10"
@@ -510,29 +496,29 @@ const AddYourRequest: React.FC = () => {
                       min={1}
                       max={10}
                       values={criteria?.desiredRow}
-                      handleShareRangeChange={(values: number[]) =>{
+                      handleShareRangeChange={(values: number[]) => {
                         setCriteria({ ...criteria, desiredRow: values });
                       }}
                       unit="دور"
-                      />
+                    />
                   </>
                 )}
 
               {criteria?.unitType != 4 ? (
                 <>
-                      <RangeComponent 
-                      title="ميزانيتك"
-                      firstNumDes="500,000"
-                      secondNumDes="+20,000,000"
-                      step={500000}
-                      min={500000}
-                      max={20000000}
-                      values={criteria?.shareRange}
-                      handleShareRangeChange={(values: number[]) =>{
-                        setCriteria({ ...criteria, shareRange: values });
-                      }}
-                      unit="ريال"
-                      />
+                  <RangeComponent
+                    title="ميزانيتك"
+                    firstNumDes="500,000"
+                    secondNumDes="+20,000,000"
+                    step={500000}
+                    min={500000}
+                    max={20000000}
+                    values={criteria?.shareRange}
+                    handleShareRangeChange={(values: number[]) => {
+                      setCriteria({ ...criteria, shareRange: values });
+                    }}
+                    unit="ريال"
+                  />
                 </>
               ) : (
                 <>
@@ -552,31 +538,34 @@ const AddYourRequest: React.FC = () => {
                       value={floor?.name}
                     >
                       <>
-                      {(detailsVilla&&detailsVilla[ind])&&<RangeComponent 
-                      title="ميزانيتك"
-                      firstNumDes="500,000"
-                      secondNumDes="+20,000,000"
-                      step={500000}
-                      min={500000}
-                      max={20000000}
-                      values={[
-                        detailsVilla[ind]?.min_price,
-                        detailsVilla[ind]?.price,
-                      ]}
-                      handleShareRangeChange={(values: number[]) =>
-                        setDetails((prev) =>
-                          prev?.map((ele, i) =>
-                            i == ind
-                              ? {
-                                  ...ele,
-                                  min_price: values[0],
-                                  price: values[1],
-                                }
-                              : ele
-                          )
+                        {detailsVilla && detailsVilla[ind] && (
+                          <RangeComponent
+                            title="ميزانيتك"
+                            firstNumDes="500,000"
+                            secondNumDes="+20,000,000"
+                            step={500000}
+                            min={500000}
+                            max={20000000}
+                            values={[
+                              detailsVilla[ind]?.min_price,
+                              detailsVilla[ind]?.price,
+                            ]}
+                            handleShareRangeChange={(values: number[]) =>
+                              setDetails((prev) =>
+                                prev?.map((ele, i) =>
+                                  i == ind
+                                    ? {
+                                        ...ele,
+                                        min_price: values[0],
+                                        price: values[1],
+                                      }
+                                    : ele
+                                )
+                              )
+                            }
+                            unit="ريال"
+                          />
                         )}
-                      unit="ريال"
-                      />}
                       </>
                     </AccordionComponent>
                   ))}
@@ -669,12 +658,16 @@ const AddYourRequest: React.FC = () => {
                 />
               </div>
               <div className="p-7">
-                {loadingRequest?<button
-              className="relative flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-[#3B73B9] border border-transparent rounded-md group  focus:outline-none focus:ring-2 focus:ring-offset-2 "
-              disabled={loadingRequest}
-            ><AiOutlineLoading3Quarters className="rotate-90 text-gray-500"/>
-            </button>:<Button text="إضافة الطلب" onClick={onSubmit} />}
-                
+                {loadingRequest ? (
+                  <button
+                    className="relative flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-[#3B73B9] border border-transparent rounded-md group  focus:outline-none focus:ring-2 focus:ring-offset-2 "
+                    disabled={loadingRequest}
+                  >
+                    <AiOutlineLoading3Quarters className="rotate-90 text-gray-500" />
+                  </button>
+                ) : (
+                  <Button text="إضافة الطلب" onClick={onSubmit} />
+                )}
               </div>
             </div>
           </div>
@@ -704,7 +697,7 @@ const AddYourRequest: React.FC = () => {
                   />
                 </div>
                 <div className="flex flex-col items-end h-[500px] overflow-scroll  w-full">
-                  {filteredCites?.map((cite:any) => (
+                  {filteredCites?.map((cite: any) => (
                     <div
                       key={cite.id}
                       className="flex justify-end items-center w-full py-2"
@@ -738,38 +731,9 @@ const AddYourRequest: React.FC = () => {
           </footer>
         </form>
       ) : (
-        <div className="flex flex-col items-center min-h-screen h-full w-full bg-white">
-          <MainHeader />
-          <div className="flex items-center justify-center flex-col border border-[#F3F4F6] rounded-lg p-3 mb-6 w-4/5 shadow-sm">
-            <Succeeded />
-            <p className="font-bold text-xl text-[#1F2A37] mt-4 mb-4">
-              تم بنجاح إضافة طلب شراكة عقار
-            </p>
-            <div className=" flex mb-auto bg-[#F3F4F6] rounded-lg justify-center items-center w-24 h-6">
-              <p className="text-[#6B7280] text-xs font-normal">
-                رقم الطلب: {dataRequest?.id}
-              </p>
-            </div>
-          </div>
-          <div className="w-4/5 mb-28  ">
-            <Button
-              text="الذهاب الى طلباتي"
-              onClick={() => {
-              
-                router.push("/my-offer")
-              }}
-            />
-            <Button
-              text="العودة الى الرئيسية"
-              className="!text-[#3B73B9] !bg-white !border !border-[#3B73B9] rounded !mt-5"
-              onClick={() => {
-                router.refresh();
-                router.push("/");
-              }}
-            />
-          </div>
-          <Footer />
-        </div>
+        <>
+          <OnAddYourRequestSuccess dataRequest={dataRequest} />
+        </>
       )}
     </>
   );
