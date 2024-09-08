@@ -10,34 +10,32 @@ import { Range, getTrackBackground } from "react-range";
 import { Modal, ModalRef } from "../../components/shared/modal.component";
 import { BackButtonOutline } from "@/app/assets/svg";
 import toast from "react-hot-toast";
-import RangeComponent from "@/app/components/shared/range.component"
+import RangeComponent from "@/app/components/shared/range.component";
 import { useRouter, useParams } from "next/navigation";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import {
   RealEstateTypeInter,
-
   RealEstateErrrorTypeInter,
   putDetailsType,
   putLandDetailsType,
   putLocation,
   removeStateEdit,
-  removeState
+  removeState,
 } from "@/redux/features/postRealEstate";
 import {
   properityTypeInter,
   properityInfo,
-  properityErrorTypeInter
+  properityErrorTypeInter,
 } from "@/redux/features/postRequest";
 import AccordionComponent from "@/app/components/shared/Accordion.component";
 import { getRequestByid, dataReturn } from "@/redux/features/getRequest";
 import {
   getproperityType,
   getproperityTypeMore,
-  removeStatus
+  removeStatus,
 } from "@/redux/features/getProperity";
-import { getCity,getDistrict} from "@/redux/features/getCity"
-
+import { getCity, getDistrict } from "@/redux/features/getCity";
 
 const EditMyOrderBadge = () => {
   const [criteria, setCriteria] = useState<any>({
@@ -48,7 +46,7 @@ const EditMyOrderBadge = () => {
     status: "",
     shareRange: [1000000, 2000000],
     desiredRow: [1, 10],
-    finance: false
+    finance: false,
   });
   const [dataSend, setDataSend] = useState({
     city: "",
@@ -90,9 +88,11 @@ const EditMyOrderBadge = () => {
     data: dataReturn[];
     selectData: any;
   };
-  let { data: dataType, titleSection, detailsSection } = useSelector<RootState>(
-    (state) => state.properityType
-  ) as {
+  let {
+    data: dataType,
+    titleSection,
+    detailsSection,
+  } = useSelector<RootState>((state) => state.properityType) as {
     loading: boolean;
     message: string;
     data: any;
@@ -116,19 +116,18 @@ const EditMyOrderBadge = () => {
     dataPutLocat,
     messagePutLocat,
     dataPutDetail,
-    messagePutDetail
+    messagePutDetail,
   } = useSelector<RootState>((state) => state.realEstateRequest) as {
-    dataPut: any,
-    messagePut: string,
-    dataPutLocat: any,
-    messagePutLocat: string,
-    dataPutDetail: any,
-    messagePutDetail: string
+    dataPut: any;
+    messagePut: string;
+    dataPutLocat: any;
+    messagePutLocat: string;
+    dataPutDetail: any;
+    messagePutDetail: string;
   };
-  let {  city,district } =
-  useSelector<RootState>((state) => state.city) as {
-    district:any
-    city:any
+  let { city, district } = useSelector<RootState>((state) => state.city) as {
+    district: any;
+    city: any;
   };
   const propertyType = useMemo(() => {
     return {
@@ -136,13 +135,23 @@ const EditMyOrderBadge = () => {
       property_type_id: selectData?.propertyType?.id,
       unitType: selectData?.propertyTypeDetails?.id,
       city: selectData?.propertyLocation?.city,
-      district: selectData?.propertyLocation?.district?.replace(/[\[\]\\"]/g, '')?.split(","),
-      status: selectData?.details[0]?.status || selectData?.landDetails[0]?.status,
-      shareRange: [selectData?.details[0]?.min_price || selectData?.landDetails[0]?.min_price, selectData?.details[0]?.price || selectData?.landDetails[0]?.price],
+      district: selectData?.propertyLocation?.district
+        ?.replace(/[\[\]\\"]/g, "")
+        ?.split(","),
+      status:
+        selectData?.details[0]?.status || selectData?.landDetails[0]?.status,
+      shareRange: [
+        selectData?.details[0]?.min_price ||
+          selectData?.landDetails[0]?.min_price,
+        selectData?.details[0]?.price || selectData?.landDetails[0]?.price,
+      ],
       finance: selectData?.finance,
-      desiredRow: [selectData?.details[0]?.min_apartment_floor, selectData?.details[0]?.apartment_floor]
-    }
-  }, [selectData])
+      desiredRow: [
+        selectData?.details[0]?.min_apartment_floor,
+        selectData?.details[0]?.apartment_floor,
+      ],
+    };
+  }, [selectData]);
   const handleCiteChange = (cite: { id: number; name: string }) => {
     setSelectedCites((prevSelectedCites) => {
       if (prevSelectedCites.some((c) => c.id === cite.id)) {
@@ -151,7 +160,12 @@ const EditMyOrderBadge = () => {
         return [...prevSelectedCites, cite];
       }
     });
-    setCriteria((prev: any) => ({ ...prev, district: criteria?.district?.some((c: any) => c == cite.name) ? criteria?.district?.filter((c: any) => c != cite.name) : [...criteria?.district, cite?.name] }))
+    setCriteria((prev: any) => ({
+      ...prev,
+      district: criteria?.district?.some((c: any) => c == cite.name)
+        ? criteria?.district?.filter((c: any) => c != cite.name)
+        : [...criteria?.district, cite?.name],
+    }));
     // setCriteria({ ...criteria,  })
   };
   const handleShareRangeChange = (values: number[]) => {
@@ -161,8 +175,11 @@ const EditMyOrderBadge = () => {
   const citiesRef = useRef<ModalRef>(null);
   const handleRemoveCite = (cit: any) => {
     setSelectedCites(selectedCites.filter((cite) => cite.name !== cit));
-    setCriteria({ ...criteria, district: criteria?.district?.filter((c: any) => c != cit) })
-    // 
+    setCriteria({
+      ...criteria,
+      district: criteria?.district?.filter((c: any) => c != cit),
+    });
+    //
   };
   useEffect(() => {
     if (id) {
@@ -186,24 +203,25 @@ const EditMyOrderBadge = () => {
         );
       }
     }
-
   }, [criteria?.property_type_id, dispatch, detailsSection, titleSection]);
   useEffect(() => {
     // if(propertyType){
-    setCriteria({ ...propertyType })
+    setCriteria({ ...propertyType });
 
     // }
-  }, [propertyType])
+  }, [propertyType]);
   useEffect(() => {
     if (criteria?.unitType == 4) {
-      setDetails(selectData?.details?.map((detail: any) => ({
-        id: detail?.id,
-        type: detail?.type,
-        price: detail?.price,
-        min_price: detail?.min_price,
-      })))
+      setDetails(
+        selectData?.details?.map((detail: any) => ({
+          id: detail?.id,
+          type: detail?.type,
+          price: detail?.price,
+          min_price: detail?.min_price,
+        }))
+      );
     }
-  }, [criteria?.unitType, selectData])
+  }, [criteria?.unitType, selectData]);
   useEffect(() => {
     if (messagePut && Boolean(dataPut) == true) {
       toast.success(messagePut);
@@ -220,8 +238,15 @@ const EditMyOrderBadge = () => {
       router.push("/my-offer");
       // setSentYourRequest(true);
     }
-  }, [dataPut, messagePut, dataPutLocat, messagePutLocat, dataPutDetail,
-    messagePutDetail, router]);
+  }, [
+    dataPut,
+    messagePut,
+    dataPutLocat,
+    messagePutLocat,
+    dataPutDetail,
+    messagePutDetail,
+    router,
+  ]);
   useEffect(() => {
     return () => {
       setCriteria({
@@ -232,24 +257,24 @@ const EditMyOrderBadge = () => {
         unitType: 0,
         status: "",
         shareRange: [1000000, 2000000],
-        finance: false
-      })
-      dispatch(removeStatus())
-    }
-  }, [dispatch])
+        finance: false,
+      });
+      dispatch(removeStatus());
+    };
+  }, [dispatch]);
   useEffect(() => {
     return () => {
-      dispatch(removeStateEdit())
-    }
-  }, [dispatch])
-  useEffect(()=>{
+      dispatch(removeStateEdit());
+    };
+  }, [dispatch]);
+  useEffect(() => {
     dispatch(getCity());
-  },[dispatch])
-  useEffect(()=>{
-    if(criteria?.city){
-      dispatch(getDistrict({name:criteria?.city}));
+  }, [dispatch]);
+  useEffect(() => {
+    if (criteria?.city) {
+      dispatch(getDistrict({ name: criteria?.city }));
     }
-  },[criteria?.city,dispatch])
+  }, [criteria?.city, dispatch]);
   const data = [
     {
       id: 1,
@@ -271,20 +296,28 @@ const EditMyOrderBadge = () => {
         <div style={{ direction: "rtl" }}>
           <div className="mt-5 mb-2">
             <p>المدينة</p>
-            <select className="border w-full text-right  border-[#D1D5DB] rounded-lg"
+            <select
+              className="border w-full text-right  border-[#D1D5DB] rounded-lg"
               value={criteria?.city}
               onChange={(event) =>
-                setCriteria({ ...criteria, city: event?.target?.value,district: [] })
+                setCriteria({
+                  ...criteria,
+                  city: event?.target?.value,
+                  district: [],
+                })
               }
             >
-              {city?.map((city:any) => (
+              {city?.map((city: any) => (
                 <option key={city?.id} value={city?.nameAr}>
                   {city?.nameAr}
                 </option>
               ))}
             </select>
             <div className="flex flex-row gap-1 mt-4">
-              <AddButton fill="#3B73B9" onClick={() => citiesRef.current?.open()} />
+              <AddButton
+                fill="#3B73B9"
+                onClick={() => citiesRef.current?.open()}
+              />
               <p className="text-[#3B73B9] font-bold text-sm">
                 إضافة حي/ أحياء
               </p>
@@ -300,9 +333,7 @@ const EditMyOrderBadge = () => {
                   className="cursor-pointer w-4 h-4"
                   onClick={() => handleRemoveCite(cite)}
                 />
-                <p className="text-xs font-normal text-[#9CA3AF]">
-                  {cite}
-                </p>
+                <p className="text-xs font-normal text-[#9CA3AF]">{cite}</p>
               </div>
             ))}
           </div>
@@ -311,107 +342,134 @@ const EditMyOrderBadge = () => {
     },
     {
       id: 4,
-      title: (criteria?.property_type_id == 3 || criteria?.property_type_id == 4 || criteria?.property_type_id == 5) ? "حالة العقار " : "حدد نوع التملك",
+      title:
+        criteria?.property_type_id == 3 ||
+        criteria?.property_type_id == 4 ||
+        criteria?.property_type_id == 5
+          ? "حالة العقار "
+          : "حدد نوع التملك",
       english: "status",
-      option: (criteria?.property_type_id == 3 || criteria?.property_type_id == 4 || criteria?.property_type_id == 5) ? [{ id: "جديد", title: "جديد" }, { id: "مستخدم", title: "مستخدم" }, { id: "أي", title: "أي" }] : [{ id: "مشاع", title: "مشاع" }, { id: "حر", title: "حر" }],
+      option:
+        criteria?.property_type_id == 3 ||
+        criteria?.property_type_id == 4 ||
+        criteria?.property_type_id == 5
+          ? [
+              { id: "جديد", title: "جديد" },
+              { id: "مستخدم", title: "مستخدم" },
+              { id: "أي", title: "أي" },
+            ]
+          : [
+              { id: "مشاع", title: "مشاع" },
+              { id: "حر", title: "حر" },
+            ],
     },
     {
       id: 5,
       title: "",
       english: "shareRange",
-      copmonent: (criteria?.unitType == 4 ?
-        floorsVilla?.map((floor, ind) => (
-          <AccordionComponent
-            title={floor?.name}
-            key={ind}
-            floors={floorsVilla}
-
-            onChange={(e) => {
-              setDetails((prev) =>
-                prev?.map((ele, i) =>
-                  i == ind ? { ...ele, type: e.target.value } : ele
-                )
-              );
-            }}
-            value={floor?.name}
-          >
-            <>
-              {(detailsVilla && detailsVilla[ind]) && <RangeComponent
-                title="ميزانيتك"
-                firstNumDes="500,000"
-                secondNumDes="+20,000,000"
-                step={500000}
-                min={500000}
-                max={20000000}
-                values={[
-                  detailsVilla[ind]?.min_price,
-                  detailsVilla[ind]?.price,
-                ]}
-                handleShareRangeChange={(values: number[]) =>
-                  setDetails((prev) =>
-                    prev?.map((ele, i) =>
-                      i == ind
-                        ? {
-                          ...ele,
-                          min_price: values[0],
-                          price: values[1],
-                        }
-                        : ele
-                    )
-                  )}
-                unit="ريال"
-              />}
-            </>
-          </AccordionComponent>
-        )) : criteria?.unitType == 8 ? <>
-          <RangeComponent
-            title="الادوار المرغوبة"
-            firstNumDes="1"
-            secondNumDes="+10"
-            step={1}
-            min={1}
-            max={10}
-            values={criteria?.desiredRow}
-            handleShareRangeChange={(values: number[]) => {
-              setCriteria({ ...criteria, desiredRow: values });
-            }}
-            unit="دور"
-          />
-          <RangeComponent
-            title="ميزانيتك"
-            firstNumDes="500,000"
-            secondNumDes="+20,000,000"
-            step={500000}
-            min={500000}
-            max={20000000}
-            values={criteria?.shareRange}
-            handleShareRangeChange={(values: number[]) => {
-              setCriteria({ ...criteria, shareRange: values });
-            }}
-            unit="ريال"
-          />
-        </> : <>
-          <RangeComponent
-            title="ميزانيتك"
-            firstNumDes="500,000"
-            secondNumDes="+20,000,000"
-            step={500000}
-            min={500000}
-            max={20000000}
-            values={criteria?.shareRange}
-            handleShareRangeChange={(values: number[]) => {
-              setCriteria({ ...criteria, shareRange: values });
-            }}
-            unit="ريال"
-          />
-        </>
-      ),
+      copmonent:
+        criteria?.unitType == 4 ? (
+          floorsVilla?.map((floor, ind) => (
+            <AccordionComponent
+              title={floor?.name}
+              key={ind}
+              floors={floorsVilla}
+              onChange={(e) => {
+                setDetails((prev) =>
+                  prev?.map((ele, i) =>
+                    i == ind ? { ...ele, type: e.target.value } : ele
+                  )
+                );
+              }}
+              value={floor?.name}
+            >
+              <>
+                {detailsVilla && detailsVilla[ind] && (
+                  <RangeComponent
+                    title="ميزانيتك"
+                    firstNumDes="500,000"
+                    secondNumDes="+20,000,000"
+                    step={500000}
+                    min={500000}
+                    max={20000000}
+                    values={[
+                      detailsVilla[ind]?.min_price,
+                      detailsVilla[ind]?.price,
+                    ]}
+                    handleShareRangeChange={(values: number[]) =>
+                      setDetails((prev) =>
+                        prev?.map((ele, i) =>
+                          i == ind
+                            ? {
+                                ...ele,
+                                min_price: values[0],
+                                price: values[1],
+                              }
+                            : ele
+                        )
+                      )
+                    }
+                    unit="ريال"
+                  />
+                )}
+              </>
+            </AccordionComponent>
+          ))
+        ) : criteria?.unitType == 8 ? (
+          <>
+            <RangeComponent
+              title="الادوار المرغوبة"
+              firstNumDes="1"
+              secondNumDes="+10"
+              step={1}
+              min={1}
+              max={10}
+              values={criteria?.desiredRow}
+              handleShareRangeChange={(values: number[]) => {
+                setCriteria({ ...criteria, desiredRow: values });
+              }}
+              unit="دور"
+            />
+            <RangeComponent
+              title="ميزانيتك"
+              firstNumDes="500,000"
+              secondNumDes="+20,000,000"
+              step={500000}
+              min={500000}
+              max={20000000}
+              values={criteria?.shareRange}
+              handleShareRangeChange={(values: number[]) => {
+                setCriteria({ ...criteria, shareRange: values });
+              }}
+              unit="ريال"
+            />
+          </>
+        ) : (
+          <>
+            <RangeComponent
+              title="ميزانيتك"
+              firstNumDes="500,000"
+              secondNumDes="+20,000,000"
+              step={500000}
+              min={500000}
+              max={20000000}
+              values={criteria?.shareRange}
+              handleShareRangeChange={(values: number[]) => {
+                setCriteria({ ...criteria, shareRange: values });
+              }}
+              unit="ريال"
+            />
+          </>
+        ),
     },
     {
       id: 6,
       title: "هل ترغب في تمويل عقاري؟",
       english: "finance",
-      option: [{ id: true, title: "نعم" }, { id: false, title: "لا" }],
+      option: [
+        { id: true, title: "نعم" },
+        { id: false, title: "لا" },
+      ],
     },
   ];
 
@@ -423,17 +481,14 @@ const EditMyOrderBadge = () => {
     const datasend = {
       property_id: Number(id),
       city: criteria?.city,
-      district: criteria?.district?.map((dis: any) => dis)
-    } as properityInfo
+      district: criteria?.district?.map((dis: any) => dis),
+    } as properityInfo;
     dispatch(
       putLocation({
         ...datasend,
       })
     );
-    if (
-      criteria?.property_type_id == 1 ||
-      criteria?.property_type_id == 2
-    ) {
+    if (criteria?.property_type_id == 1 || criteria?.property_type_id == 2) {
       dispatch(
         putLandDetailsType({
           price: criteria?.shareRange[1],
@@ -441,53 +496,51 @@ const EditMyOrderBadge = () => {
           finance: criteria?.finance == "false" ? false : true,
 
           status: criteria?.status, /// مشاع او حر
-          land_details_id: selectData?.landDetails[0]?.id
+          land_details_id: selectData?.landDetails[0]?.id,
         })
       );
-
     } else {
       if (selectData?.details?.length == 1) {
-        selectData?.details.map((ele: any) => dispatch(
+        selectData?.details.map((ele: any) =>
+          dispatch(
+            putDetailsType(
+              ele?.min_apartment_floor && ele?.apartment_floor
+                ? {
+                    finance: criteria?.finance == "false" ? false : true,
 
-          putDetailsType(ele?.min_apartment_floor && ele?.apartment_floor ? {
-
-            finance: criteria?.finance=="false"?false:true,
-
-            status: criteria?.status,
-            details_id: ele?.id,
-            price: criteria?.shareRange[1],
-            min_price: criteria?.shareRange[0],
-            min_apartment_floor: criteria?.desiredRow[0],
-            apartment_floor: String(criteria?.desiredRow[1])
-            // details: detailsVilla,
-          } : {
-            status: criteria?.status,
-            details_id: ele?.id,
-            price: criteria?.shareRange[1],
-            min_price: criteria?.shareRange[0],
-            finance: criteria?.finance == "false" ? false : true
-          })
-        ))
+                    status: criteria?.status,
+                    details_id: ele?.id,
+                    price: criteria?.shareRange[1],
+                    min_price: criteria?.shareRange[0],
+                    min_apartment_floor: criteria?.desiredRow[0],
+                    apartment_floor: String(criteria?.desiredRow[1]),
+                    // details: detailsVilla,
+                  }
+                : {
+                    status: criteria?.status,
+                    details_id: ele?.id,
+                    price: criteria?.shareRange[1],
+                    min_price: criteria?.shareRange[0],
+                    finance: criteria?.finance == "false" ? false : true,
+                  }
+            )
+          )
+        );
       } else if (selectData?.details?.length > 1) {
         detailsVilla?.map((ele: any) => {
           dispatch(
             putDetailsType({
-
               status: criteria?.status,
               details_id: ele?.id,
               price: ele?.price,
-              min_price: ele?.min_price
+              min_price: ele?.min_price,
               // details: detailsVilla,
             })
           );
-        })
-
+        });
       }
-
-
     }
-
-  }
+  };
   return (
     <form className="bg-white flex w-full h-full min-h-screen  flex-col p-5">
       <MainHeader />
@@ -507,56 +560,87 @@ const EditMyOrderBadge = () => {
       </div>
       <hr className="border-gray-300 dark:border-white my-2" />
       <div className="bg-white w-full mb-4 items-start justify-start  mt-4">
-        {data.map((item) => (item?.english != "unitType" ?
-          <div
-            key={item.id}
-            className="bg-white rounded-lg border border-[#E5E7EB] w-full mb-4 items-start justify-start p-4 mt-6"
-          >
-            <h2 className="text-lg font-bold text-[#333] mb-2 flex justify-end">
-              {item.title}
-            </h2>
-            {item.option && (
-              <div className="flex flex-row-reverse justify-start  flex-wrap">
-                {item.option.map((option: any, index: number) => (
-                  <RadioInput
-                    key={item?.english + index}
-                    label={option?.title || option}
-                    name={item?.english}
-                    value={item?.english + option?.id}
-                    disabled={(item.english == "property_type_id") || (item.english == "unitType")}
-                    checked={item?.english + criteria[item.english] == item?.english + option?.id}
-                    onChange={(e) => { setCriteria({ ...criteria, [item.english]: e.target.value.replace(item?.english, "") }); console.log(item?.english, e.target.value.replace(item?.english, "")) }}
-                  />
-                ))}
-              </div>
-            )}
-            {item.copmonent}
-          </div> : item?.english == "unitType" && titleSection && detailsSection ? <div
-            key={item.id}
-            className="bg-white rounded-lg border border-[#E5E7EB] w-full mb-4 items-start justify-start p-4 mt-6"
-          >
-            <h2 className="text-lg font-bold text-[#333] mb-2 flex justify-end">
-              {item.title}
-            </h2>
-            {item.option && (
-              <div className="flex flex-row-reverse justify-start  flex-wrap">
-                {item.option.map((option: any, index: number) => (
-                  <RadioInput
-                    key={item?.english + index}
-                    label={option?.title || option}
-                    name={item?.english}
-                    value={item?.english + option?.id}
-                    checked={item?.english + criteria[item.english] == item?.english + option?.id}
-                    onChange={(e) => { setCriteria({ ...criteria, [item.english]: e.target.value.replace(item?.english, "") }); console.log(item?.english) }}
-                    disabled={(item.english == "property_type_id") || (item.english == "unitType")}
-
-                  />
-                ))}
-              </div>
-            )}
-            {item.copmonent}
-          </div> : null
-        ))}
+        {data.map((item) =>
+          item?.english != "unitType" ? (
+            <div
+              key={item.id}
+              className="bg-white rounded-lg border border-[#E5E7EB] w-full mb-4 items-start justify-start p-4 mt-6"
+            >
+              <h2 className="text-lg font-bold text-[#333] mb-2 flex justify-end">
+                {item.title}
+              </h2>
+              {item.option && (
+                <div className="flex flex-row-reverse justify-start  flex-wrap">
+                  {item.option.map((option: any, index: number) => (
+                    <RadioInput
+                      key={item?.english + index}
+                      label={option?.title || option}
+                      name={item?.english}
+                      value={item?.english + option?.id}
+                      disabled={
+                        item.english == "property_type_id" ||
+                        item.english == "unitType"
+                      }
+                      checked={
+                        item?.english + criteria[item.english] ==
+                        item?.english + option?.id
+                      }
+                      onChange={(e) => {
+                        setCriteria({
+                          ...criteria,
+                          [item.english]: e.target.value.replace(
+                            item?.english,
+                            ""
+                          ),
+                        });
+                      }}
+                    />
+                  ))}
+                </div>
+              )}
+              {item.copmonent}
+            </div>
+          ) : item?.english == "unitType" && titleSection && detailsSection ? (
+            <div
+              key={item.id}
+              className="bg-white rounded-lg border border-[#E5E7EB] w-full mb-4 items-start justify-start p-4 mt-6"
+            >
+              <h2 className="text-lg font-bold text-[#333] mb-2 flex justify-end">
+                {item.title}
+              </h2>
+              {item.option && (
+                <div className="flex flex-row-reverse justify-start  flex-wrap">
+                  {item.option.map((option: any, index: number) => (
+                    <RadioInput
+                      key={item?.english + index}
+                      label={option?.title || option}
+                      name={item?.english}
+                      value={item?.english + option?.id}
+                      checked={
+                        item?.english + criteria[item.english] ==
+                        item?.english + option?.id
+                      }
+                      onChange={(e) => {
+                        setCriteria({
+                          ...criteria,
+                          [item.english]: e.target.value.replace(
+                            item?.english,
+                            ""
+                          ),
+                        });
+                      }}
+                      disabled={
+                        item.english == "property_type_id" ||
+                        item.english == "unitType"
+                      }
+                    />
+                  ))}
+                </div>
+              )}
+              {item.copmonent}
+            </div>
+          ) : null
+        )}
       </div>
 
       <div className="bg-white rounded-lg border border-[#E5E7EB] w-full mb-4 items-start justify-start p-4 mt-6">
@@ -614,10 +698,12 @@ const EditMyOrderBadge = () => {
           <div className="border border-[#E5E7EB] w-full mb-4" />
 
           <div className="flex flex-row items-center justify-center gap-3  w-full">
-            
             <Button
               text=" تعديل"
-              onClick={() => { modalRef.current?.close(); onSubmit() }}
+              onClick={() => {
+                modalRef.current?.close();
+                onSubmit();
+              }}
               className="!text-xs !font-medium"
             />
             <Button
@@ -653,7 +739,7 @@ const EditMyOrderBadge = () => {
             />
           </div>
           <div className="flex flex-col items-end h-[500px] overflow-scroll  w-full">
-            {district?.map((cite:any) => (
+            {district?.map((cite: any) => (
               <div
                 key={cite?.id}
                 className="flex justify-end items-center w-full py-2"
@@ -661,7 +747,9 @@ const EditMyOrderBadge = () => {
                 <span className="mr-2">{cite?.name}</span>
                 <input
                   type="checkbox"
-                  checked={criteria?.district?.some((c: any) => c == cite?.name)}
+                  checked={criteria?.district?.some(
+                    (c: any) => c == cite?.name
+                  )}
                   onChange={() => handleCiteChange(cite)}
                   className="checked:accent-[#3B73B9] w-[16px] h-[16px]"
                 />
@@ -674,10 +762,7 @@ const EditMyOrderBadge = () => {
               onClick={() => citiesRef.current?.close()}
               className="!bg-[#E5E7EB] !text-[#1F2A37]"
             />
-            <Button
-              text="حفظ"
-              onClick={() => citiesRef.current?.close()}
-            />
+            <Button text="حفظ" onClick={() => citiesRef.current?.close()} />
           </div>
         </div>
       </Modal>
