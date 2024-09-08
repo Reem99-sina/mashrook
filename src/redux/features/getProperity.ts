@@ -1,16 +1,27 @@
 import { createSlice,createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import React from "react";
+import {dataTypeOfRealEstate,detailsType,detailsMoreType}from "@/type/addrealestate"
+
 export interface returnType{
     loading:boolean,
     message:string | undefined,
-    data:any
+    data:dataTypeOfRealEstate
+}
+interface INitialInterface{
+    loading:boolean,
+    message:string | undefined,
+    data:dataTypeOfRealEstate|null,
+    title:string| undefined,
+    details:detailsType[]|null|undefined,
+    titleSection:string| undefined,
+    detailsSection:detailsMoreType[]|null|undefined,
 }
 export interface returnMoreType{
   message:string,
   data: {
     title:string,
-    details:any
+    details:detailsMoreType[]
   }
 }
 export interface properityTypeInter {
@@ -44,7 +55,7 @@ export const getproperityTypeMore=createAsyncThunk<returnMoreType,propsMoreInter
     .catch((error)=>error?.response?.data) 
     return response;
 })
-const initialstate={
+const initialstate:INitialInterface={
     loading:false,
     message:"",
     data:null,
@@ -60,7 +71,7 @@ const properityTypeSlice=createSlice({
     reducers:{
         removeStatus:(state) => {
             state.titleSection="",
-            state.detailsSection=null
+            state.detailsSection=[]
           }
     },extraReducers:(builder)=>{
         builder.addCase(getproperityType.fulfilled,(state,action)=>{
@@ -72,7 +83,7 @@ const properityTypeSlice=createSlice({
         }),
         builder.addCase(getproperityType.pending,(state,action)=>{
             state.loading=true
-            state.message="loading..."
+            state.message=""
             state.data=null
         }),
         builder.addCase(getproperityType.rejected,(state,action)=>{

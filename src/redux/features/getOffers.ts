@@ -53,7 +53,7 @@ const getOfferSlice=createSlice({
         }),
         builder.addCase(getOffer.pending,(state,action)=>{
             state.loading=true
-            state.message="loading..."
+            state.message=""
             state.data=null
         }),
         builder.addCase(getOffer.rejected,(state,action)=>{

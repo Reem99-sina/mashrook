@@ -231,7 +231,7 @@ const requestGetSlice = createSlice({
     }),
       builder.addCase(getRequest.pending, (state, action) => {
         state.loading = true;
-        state.message = "loading...";
+        state.message = "";
         state.data = null;
       }),
       builder.addCase(getRequest.rejected, (state, action) => {

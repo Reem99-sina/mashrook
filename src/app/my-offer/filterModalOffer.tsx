@@ -110,7 +110,6 @@ let {
     }
   }, [criteria?.city, dispatch])
 
-console.log(dataDetails,"console.log()")
   return (
    
     <Modal ref={refFilter} className="flex rounded-lg items-start justify-center font-[Cairo] w-full " size="xs">

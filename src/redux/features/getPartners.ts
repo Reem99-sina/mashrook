@@ -100,7 +100,7 @@ const getPartnerSlice=createSlice({
         }),
         builder.addCase(getPartner.pending,(state,action)=>{
             state.loading=true
-            state.message="loading..."
+            state.message=""
             state.data=null
         }),
         builder.addCase(getPartner.rejected,(state,action)=>{
@@ -127,7 +127,7 @@ const getPartnerSlice=createSlice({
         }),
         builder.addCase(withDrawProperty.pending,(state,action)=>{
             
-            state.messageWithDraw="loading..."
+            state.messageWithDraw=""
           
         }),
         builder.addCase(withDrawProperty.rejected,(state,action)=>{

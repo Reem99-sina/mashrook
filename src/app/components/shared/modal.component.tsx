@@ -1,4 +1,3 @@
-/* eslint-disable react/display-name */
 "use client";
 
 import React, { forwardRef, useImperativeHandle } from "react";
@@ -25,7 +24,7 @@ export const Modal = forwardRef<ModalRef, Props>(
       open: () => setIsVisible(true),
       close: () => setIsVisible(false),
     }));
-    
+
     return (
       <Dialog
         open={isVisible}

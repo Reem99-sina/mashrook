@@ -1,10 +1,11 @@
 import { createSlice,createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import React from "react";
+import {detailsType}from "@/type/addrealestate"
 export interface returnType{
     loading:boolean,
     message:string | undefined,
-    data:any
+    data:detailsType[]|null
 }
 
 export const getproperityPurposeType=createAsyncThunk<returnType>("properityPurpose", async (_, { rejectWithValue }) => {  
@@ -13,8 +14,12 @@ export const getproperityPurposeType=createAsyncThunk<returnType>("properityPurp
         .catch((error)=>error?.response?.data) 
         return response;
 })
-
-const initialstate={
+interface initialInfo{
+    loading:boolean,
+    message:string|undefined,
+    data:detailsType[]|null
+}
+const initialstate:initialInfo={
     loading:false,
     message:"",
     data:null
@@ -32,7 +37,7 @@ const properityPurposeSlice=createSlice({
         }),
         builder.addCase(getproperityPurposeType.pending,(state,action)=>{
             state.loading=true
-            state.message="loading..."
+            state.message=""
             state.data=null
         }),
         builder.addCase(getproperityPurposeType.rejected,(state,action)=>{

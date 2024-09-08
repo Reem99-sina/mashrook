@@ -30,7 +30,6 @@ const ForgetPassword: React.FC = () => {
     new_password: "",
     repeate_new_password: ""
   })
-  console.log(token,"token")
   const dispatch = useDispatch<AppDispatch>();
   let {     messageRest,
     dataRest}=useSelector<RootState>((state)=>state.login)as { messageForget:string,dataForget:any,messageRest:string,

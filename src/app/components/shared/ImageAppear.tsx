@@ -3,12 +3,13 @@ import {useEffect,useState} from "react"
 import Image from "next/image"
 import {Button} from "./button.component"
 import {X} from "@/app/assets/svg"
-const ImageAppear: React.FC<{images?:any,onDelete:(index:any)=>void,links?:any}>=({images,onDelete,links})=>{
+import {imageInfo} from "@/type/addrealestate"
+
+const ImageAppear: React.FC<{images?:(imageInfo|File)[],onDelete:(index:imageInfo)=>void,links?:imageInfo[]}>=({images,onDelete,links})=>{
  
-    let [urls,setUrls]=useState<{ name: string; link: string | ArrayBuffer|null  }[]>(links)
+    const [urls,setUrls]=useState<imageInfo[]>(links?links:[])
     function readAndPreview(file:any) {
         // Make sure `file.name` matches our extensions criteria
-        
         if((file instanceof File)==true){
           if (/\.(jpe?g|png|gif)$/i.test(file.name)) {
             const reader = new FileReader();

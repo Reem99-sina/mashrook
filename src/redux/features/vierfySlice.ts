@@ -39,11 +39,10 @@ const verifySlice=createSlice({
         }),
         builder.addCase(verifyRequest.pending,(state,action)=>{
             state.loading=true
-            state.message="loading..."
+            state.message=""
             state.data=null
         }),
         builder.addCase(verifyRequest.rejected,(state,action)=>{
-            console.log(action.error.message,"action.error.message")
             state.loading=false
             state.message=action.error.message?action.error.message:"error"
             state.data=null
@@ -55,7 +54,7 @@ const verifySlice=createSlice({
         }),
         builder.addCase(resendCodeRequest.pending,(state,action)=>{
             
-            state.message="loading..."
+            state.message=""
             
         }),
         builder.addCase(resendCodeRequest.rejected,(state,action)=>{

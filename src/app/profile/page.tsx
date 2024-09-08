@@ -43,7 +43,6 @@ const ProfilePage=()=>{
         e.preventDefault()
         router.push("/my-account");
       };
-      console.log(url,"url")
     return (
         <>
          <div className="flex items-center justify-center m-2">

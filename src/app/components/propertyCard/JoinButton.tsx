@@ -29,7 +29,7 @@ const JoinStatusButtons: React.FC<JoinStatusButtonsProps> = ({
   const availableAmount = 600000;
   const dispatch = useDispatch<AppDispatch>();
   const tooltipRef = useRef<HTMLDivElement>(null);
-  let { selectData } = useSelector<RootState>((state) => state.getRequest) as {
+  const { selectData } = useSelector<RootState>((state) => state.getRequest) as {
     loading: boolean;
     message: string;
     data: dataReturn[];
@@ -98,7 +98,7 @@ const JoinStatusButtons: React.FC<JoinStatusButtonsProps> = ({
   useEffect(()=>{
     if(typeof window !="undefined"){
       const userItem = Cookie?.get("user");  
-      let user = userItem ? JSON.parse(userItem) : null;  // Ensure user is either the parsed object or null  
+      const user = userItem ? JSON.parse(userItem) : null;  // Ensure user is either the parsed object or null  
       if (user) {  
         setUser(user);  
       }  
@@ -126,7 +126,6 @@ const JoinStatusButtons: React.FC<JoinStatusButtonsProps> = ({
       setPartnershipPercentage(newPercentage);
     }
   };
-console.log(user,";user",dataMain?.user?.email)
   return (
     <div id="joinStatus" className="py-4">
       {/* {currentDealStatus === "محجوز" ? (

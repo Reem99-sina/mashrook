@@ -8,11 +8,13 @@ import {
   Undo,
 } from "../assets/svg";
 import { Button } from "../components/shared/button.component";
+import Cookie from "js-cookie"
 import Stepper from "../components/shared/Stepper";
 import {
 
   IoMdCloseCircleOutline,
 } from "react-icons/io";
+import Link from "next/link"
 interface PartnersCardProps {
   title?: string;
   date: string;
@@ -31,7 +33,9 @@ interface PartnersCardProps {
   bidRequestNumber: number;
   partnershipRatio: number;
   purpose:string,
-  finance:boolean
+  finance:boolean,
+  details_id:number,
+  land_details_id:number
 }
 
 export const PartnersCard: React.FC<PartnersCardProps> = ({
@@ -51,8 +55,9 @@ export const PartnersCard: React.FC<PartnersCardProps> = ({
   realEstate,
   bidRequestNumber,
   partnershipRatio,
-  purpose,finance
-
+  purpose,finance,
+  details_id,
+  land_details_id
 }) => {
   const steps = ["التعبئة", "الإفراغ", "الإرسال"];
   const currentStep = 1;
@@ -62,13 +67,19 @@ export const PartnersCard: React.FC<PartnersCardProps> = ({
       <div className="items-center justify-between  flex-row flex relative ">
         <p className="text-xl font-bold text-[#374151] flex-1">{title} </p>
 
-        <span className="items-center justify-center flex border border-[#E5E7EB] p-2 rounded-md gap-1 ">
+        <Link className="items-center justify-center flex border border-[#E5E7EB] p-2 rounded-md gap-1 " href={`chatpartner/${details_id?details_id:land_details_id}`} onClick={()=>{
+          if(details_id){
+            Cookie.set("detail",JSON.stringify(title))
+          }else{
+            Cookie.set("land",JSON.stringify(title))
+          }
+          }}>
           <p className="font-medium text-sm text-[#3B73B9]">عرض المحادثات </p>
           <ChatIconSmall />
-          <span className=" flex items-center justify-center p-1 w-4 h-4 absolute left-[-9px] top-[-2px] text-[11px] text-white bg-[#F05252] rounded-full">
+          {/* <span className=" flex items-center justify-center p-1 w-4 h-4 absolute left-[-9px] top-[-2px] text-[11px] text-white bg-[#F05252] rounded-full">
             {count}
-          </span>
-        </span>
+          </span> */}
+        </Link>
       </div>
 
       <div className="flex gap-2 mt-2">

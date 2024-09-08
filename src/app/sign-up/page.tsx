@@ -4,6 +4,8 @@ import React from "react";
 import { CloseButton, MashrookLogo } from "@/app/assets/svg";
 import { TextInput } from "../components/shared/text-input.component";
 import { Button } from "../components/shared/button.component";
+import 'react-phone-number-input/style.css'
+import PhoneInput from 'react-phone-number-input'
 import { useRouter } from "next/navigation";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,6 +19,7 @@ import Cookie from "js-cookie"
 export interface userRegister {
   username: string;
   email: string;
+  // phone:string;
   password: string;
   repeate_password: string;
 }
@@ -26,6 +29,7 @@ const SignUp: React.FC = () => {
   const [user, setUser] = useState<userRegister>({
     username: "",
     email: "",
+    // phone:"",
     password: "",
     repeate_password: "",
   });
@@ -36,6 +40,7 @@ const SignUp: React.FC = () => {
   const [errors, setErrors] = useState<{
     username: string;
     email: string;
+    // phone:string;
     password: string;
     repeate_password: string;
   }>();
@@ -50,6 +55,7 @@ const SignUp: React.FC = () => {
         setErrors({
           username: "",
           email: "",
+          // phone:"",
           password: "",
           repeate_password: "",
         });
@@ -134,6 +140,16 @@ const SignUp: React.FC = () => {
                   </p>
                 )}
               </div>
+              {/* <div className="!mb-2" style={{direction:"rtl"}}>
+                <h3>ادخل الرقم الهاتف</h3>
+              <PhoneInput
+              placeholder="ادخل الرقم الهاتف"
+              className="border-2 border-gray-300 p-1 rounded-md"
+      value={user?.phone}
+      country="SA"
+      onChange={(value)=>setUser({ ...user, phone: String(value) })}/>
+</div> */}
+
               <div className="!mb-2">
                 <TextInput
                   label="كلمة المرور"

@@ -53,7 +53,6 @@ const EditMyOffer = () => {
     }
   }, []);
   useEffect(() => {
-    console.log(messagePut, dataPut)
     if (messagePut && Boolean(dataPut) == true) {
       toast.success(messagePut);
       router.push("/my-offer");

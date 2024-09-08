@@ -43,7 +43,7 @@ export const reset=createAsyncThunk<returnType,resetLogin>("reset", async (data:
     return response;
 })
 export const getUserRequest=createAsyncThunk("putUser", async (_, { rejectWithValue }) => {  
-    const response = await axios.put("https://server.mashrook.sa/auth/token", {},{ headers: {
+    const response = await axios.get("https://server.mashrook.sa/user",{ headers: {
         Authorization: Cookie.get("token"),
       }}).then((response)=>response.data).catch((error)=>error?.response?.data)// Adjust your endpoint as necessary
     return response // Return the user data from API response  
@@ -64,6 +64,9 @@ const loginSlice=createSlice({
     name:"login",
     initialState:initialstate,
     reducers:{
+        // getToken:(state)=>{
+        //     Cookie.get("token")
+        // },
         removeLogin:(state)=>{
             state.message=""
             state.data=null
@@ -74,6 +77,9 @@ const loginSlice=createSlice({
             state.dataForget=null
             state.messageRest=""
             state.dataRest=null
+        },
+        removeToken:(state)=>{
+            Cookie.remove("token")
         }
     },extraReducers:(builder)=>{
         builder.addCase(login.fulfilled,(state,action)=>{
@@ -124,5 +130,5 @@ const loginSlice=createSlice({
         })
     }
 })
-export const { removeLogin,removeForget } = loginSlice.actions;
+export const { removeLogin,removeForget,removeToken } = loginSlice.actions;
 export default loginSlice.reducer

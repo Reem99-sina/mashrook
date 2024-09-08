@@ -2,10 +2,11 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import React from "react";
 import Cookie from 'js-cookie';
+import {returnRealState,landDetailPutINfo,locationInfo} from "@/type/addrealestate"
 export interface returnType {
   loading: boolean;
   message: string | undefined;
-  data: any;
+  data: returnRealState|null;
 }
 export interface typeInput {
   property_owner_type_id?: number; // وسيط عقاري, مطور عقاري, وسيط
@@ -215,7 +216,7 @@ export const postrealEstateType = createAsyncThunk<
     })
     .then(async (response) => {
       // postImageRealEstate(response.data)
-      if(images){
+      if(images&&images?.length>0){
         const res = await imageRequest({
           id: response?.data?.data?.id,
           images: images,
@@ -333,8 +334,20 @@ any
     .catch((error) => error?.response?.data);
   return response;
 })
-
-const initialstate = {
+interface IntitalState{
+  loading: boolean,
+  message: string|undefined ,
+  data:  returnRealState|null,
+  dataPut:landDetailPutINfo|null,
+  messagePut:string|undefined ,
+  dataPutLocat:locationInfo|null,
+  messagePutLocat:string|undefined ,
+  dataPutDetail:any|null,
+  messagePutDetail:string|undefined ,
+  messageDeleteImage:string|undefined ,
+  messageUpdateImage:string|undefined 
+}
+const initialstate:IntitalState = {
   loading: false,
   message: "",
   data: null,

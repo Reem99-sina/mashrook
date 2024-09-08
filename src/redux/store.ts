@@ -20,7 +20,9 @@ import saveSlice from "./features/mySave"
 import getMessageSlice from "./features/getMessages"
 import getPartnerMessageSlice from "./features/getMessagePartner"
 import getMessageByid from "./features/getMessage"
+import getMessageByDetailById from "./features/getMessageBydetailsId"
 import uploadReciptSlice from "./features/uploadRecipt"
+import getMessageByLandId from "./features/getMessageBylandId"
 const store = configureStore({
   reducer: {
     register:userReducer,
@@ -41,9 +43,10 @@ const store = configureStore({
     messagePartners:getPartnerMessageSlice,
     uploadRecipt:uploadReciptSlice,
     save:saveSlice,
-    messageByID:getMessageByid
+    messageByID:getMessageByid,
+    messageByDetailsId:getMessageByDetailById,
+    messageByLandId:getMessageByLandId
   }
-
 });
 export default store;
 

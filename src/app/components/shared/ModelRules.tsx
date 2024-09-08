@@ -1,74 +1,43 @@
 "use client";
 import React, { useState } from "react";
-import MainHeader from "../components/header/MainHeader";
-import Footer from "../components/header/Footer2";
-import Link from "next/link";
-import { FaChevronRight } from "react-icons/fa";
+import MainHeader from "@/app/components/header/MainHeader";
+import Footer from "@/app/components/header/Footer2";
 import { MdOutlineInfo } from "react-icons/md";
-import BackButton from "../paymentpage/backButton";
-import { AppDispatch,RootState } from "@/redux/store";
-import { useDispatch,useSelector } from "react-redux";
-import { dataReturn } from "@/redux/features/getRequest";
-import {postPaymentType,removeStatePayment} from "@/redux/features/postRequest"
-export default function TermsAndConditions() {
-  const [isChecked, setIsChecked] = useState(false);
-  let dispatch=useDispatch<AppDispatch>()
-  const [showNotification, setShowNotification] = useState(false);
-  let { selectData } = useSelector<RootState>(
-    (state) => state.getRequest
-  ) as { loading: boolean; message: string; data: dataReturn[], selectData:{
-    id:number,detail_id?:number,title:string,numberPiece:number,
-    type:boolean,
-    propertyOwnerType:string,
-    propertyPurpose:string|number
-  }
-};
-  const handleCheckboxChange = () => {
-    setIsChecked(!isChecked);
-  };
- 
-  const handleButtonClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    if (!isChecked) {
-      e.preventDefault();
-      setShowNotification(true);
-      setTimeout(() => {
-        setShowNotification(false);
-      }, 5000);
-    }else if(selectData?.propertyPurpose!=1){
-      if(selectData?.type){
-        dispatch(postPaymentType({
-          property_id: selectData?.id,
-          land_details_id: selectData?.detail_id,
-      // land_details_id: selectData?.detail_id,
-      amount:Number(sessionStorage.getItem("amount"))
-        }))
-      }else{
-        dispatch(postPaymentType({
-          property_id: selectData?.id,
-          details_id: selectData?.detail_id,
-      // land_details_id: selectData?.detail_id,
-      amount:Number(sessionStorage.getItem("amount"))
-        }))
-      }
-    }
-  };
-  return (
-    <div className="flex justify-center w-dvh h-max">
+import {
+    CloseIconSmall
+  } from "@/app/assets/svg";
+import { Modal, ModalRef } from "@/app/components/shared/modal.component";
+const ModelRules=({refModel,deal,onChange}:{refModel:React.RefObject<ModalRef>,deal:boolean,onChange:(e:React.ChangeEvent<HTMLInputElement>)=>void})=>{
+    const [showNotification, setShowNotification] = useState(false);
+      const handleButtonClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+          e.preventDefault();
+          setShowNotification(true);
+          setTimeout(() => {
+            setShowNotification(false);
+          }, 5000);
+        }
+    return (
+        <Modal ref={refModel} size="sm" >
+        <div className="flex justify-center w-dvh h-[600px] overflow-y-auto">
       <div className="w-full bg-white rounded text-black shadow">
-        <div className="w-full z-50">
-          <MainHeader />
-        </div>
+     
         <div className="flex">
           <main className="container mx-auto">
             <section className="rounded text-center">
               <div>
-                <div className="flex items-center justify-between">
-                  <p></p>
-                  <h1 className="text-3xl font-bold"> الشروط والاحكام</h1>
-                  <BackButton />
+                <div className="flex items-center justify-between p-2">
+                  
+                  <h1 className="text-3xl font-bold flex-1"> الشروط والاحكام</h1>
+                  <div
+              className=" cursor-pointer p-2"
+              onClick={() => refModel.current?.close()}
+            >
+              <CloseIconSmall />
+            </div>
+                  {/* <BackButton /> */}
                 </div>
                 <div className="text-right p-4 m-4">
-                <h3 className="font-bold">احكام وشروط الاستخدام لمنصة مشروك العقارية</h3>
+                  <h3 className="font-bold">احكام وشروط الاستخدام لمنصة مشروك العقارية</h3>
                   <h3 className="font-bold">قبول شروط الخدمة</h3>
                   <p>
                   يسري هذا الاتفاق بين كل من (مالك – أو مطور – أو وكيل – أو وسيط – أو مستفيد) موقع منصة مشروك
@@ -108,8 +77,8 @@ export default function TermsAndConditions() {
                     type="checkbox"
                     id="terms"
                     className="mx-4 p-2 size-4 form-checkbox"
-                    checked={isChecked}
-                    onChange={handleCheckboxChange}
+                    checked={deal}
+                    onChange={onChange}
                   />
                   <div className="flex flex-row items-center align-middle justify-end p-2 text-blue-450">
                     <p>
@@ -129,15 +98,7 @@ export default function TermsAndConditions() {
                       <MdOutlineInfo className="mx-2" />
                     </span>
                   </div>
-                  <div className="flex flex-row items-center align-middle justify-center p-2 text-blue-450">
-                    <Link
-                      href={selectData?.propertyPurpose==1?"/paymentpage":"/JoiningSuccess"}
-                      onClick={handleButtonClick}
-                      className="bg-blue-450 text-white px-4 py-2 rounded-2xl p-2 m-2 flex-grow text-center"
-                    >
-                      متابعة
-                    </Link>
-                  </div>
+                
                 </div>
 
                 {showNotification && (
@@ -147,15 +108,13 @@ export default function TermsAndConditions() {
                 )}
               </div>
 
-              <div className="pt-8">
-                <Footer />
-              </div>
+
             </section>
           </main>
         </div>
       </div>
     </div>
-  );
+    </Modal>
+    )
 }
-
-//last modified by Omar Marei 1/8/2024
+export default ModelRules

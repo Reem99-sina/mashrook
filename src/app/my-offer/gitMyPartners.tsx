@@ -105,8 +105,7 @@ export const GitMyPartners = () => {
       (dataPartnerOne?.propertyDetailsOwnership?.map((ele:any)=>{
         let id=ele?.details_id
         let idLand=ele?.land_details_id
-        let title=(dataPartnerOne?.propertyTypeDetails?.title||dataPartnerOne?.propertyType?.title)+" "+(ele?.details?.type||ele?.landDetails?.type||ele?.landDetails?.piece_number)
-       
+        let title=(dataPartnerOne?.propertyTypeDetails?.title||dataPartnerOne?.propertyType?.title)+" "+(ele?.details?.type||ele?.landDetails?.type||("رقم القطعة"+ele?.landDetails?.piece_number))
         setNewData((prev:any)=>[...prev,{ id:dataPartnerOne?.id,title: title?title:"",
         date:dataPartnerOne?.createdAt?format(new Date( dataPartnerOne?.createdAt), "yyyy-MM-dd"):"",
         requestNumber: ele?.id,
@@ -125,9 +124,9 @@ export const GitMyPartners = () => {
       }])
       }
       ))))
-      return ()=>{
-        setNewData([])
-      }
+      // return ()=>{
+      //   setNewData([])
+      // }
   },[dataPartner])
   let fiterData = useMemo(() => {
     return {
@@ -145,7 +144,7 @@ export const GitMyPartners = () => {
     }
   }, [criteria,optionFilter])
   let dataNew=useMemo(()=>{
-    console.log(newData,"newData")
+
   },[
     newData
   ])
@@ -287,6 +286,8 @@ export const GitMyPartners = () => {
                   purpose={offer.purpose}
                   finance={offer.finance}
                   PartnershipNumber={offer.PartnershipNumber}
+                  details_id={offer?.details_id}
+        land_details_id={offer?.land_details_id}
                   inProgress={offer.inProgress}
                   realEstate={offer.realEstate}
                   bidRequestNumber={offer.bidRequestNumber}

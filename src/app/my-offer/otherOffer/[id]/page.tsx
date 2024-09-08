@@ -29,7 +29,6 @@ function OtherOffer() {
       dispatch(getOtherOrders({id:Number(id)}))
     }
   },[id,dispatch])
-  console.log(dataOther,"dataOther")
   return (
     <div className="flex flex-col items-center min-h-screen h-full w-full bg-white">
        <MainHeader />
