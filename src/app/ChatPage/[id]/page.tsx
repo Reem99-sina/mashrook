@@ -19,6 +19,7 @@ import { useDispatch, useSelector } from "react-redux";
 const ChatPage = () => {
   const params = useParams();
   const [user, setUser] = useState<any>();
+  const [title, setTitle] = useState<string>();
   const { loading, message, data } = useSelector<RootState>(
     (state) => state.messageByID
   ) as {
@@ -76,8 +77,12 @@ const ChatPage = () => {
   };
   useEffect(() => {
     const storedToken = Cookie.get("user");
+    const title=Cookie.get("title")
     if (storedToken) {
       setUser(JSON.parse(storedToken));
+    }
+    if(title){
+      setTitle(title)
     }
   }, []);
   useEffect(() => {
@@ -114,7 +119,7 @@ const ChatPage = () => {
                 <Block />
               </span>
               <h1 className="text-sm font-bold text-[#36343B]">
-                ارض سكنية - قطعة رقم 1234 (رقم الطلب 2022)
+                {title}
               </h1>
             </div>
             <div className="flex items-center ">
@@ -164,7 +169,14 @@ const ChatPage = () => {
                             : "bg-gray-100"
                         }`}
                       >
-                        <p className="mt-1">{msg?.message}</p>
+                         <p className="my-1">{msg?.message}</p>
+                        {msg?.type=="share_property"&&
+                        <div className="bg-white rounded-lg shadow-lg flex flex-col items-center justify-center p-2">
+                          <p className="text-[#98CC5D] text-sm">انضمام الشركاء</p>
+                          <p className="text-blue-450 text-xs">(تم  التحقق من الدفع وقبول طلب الشراكة)</p>
+                        </div>
+                        }
+                       
                       </div>
                     </div>
                   </div>

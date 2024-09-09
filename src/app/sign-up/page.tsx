@@ -1,10 +1,11 @@
 "use client";
 
-import React from "react";
+import React,{useRef} from "react";
 import { CloseButton, MashrookLogo } from "@/app/assets/svg";
 import { TextInput } from "../components/shared/text-input.component";
 import { Button } from "../components/shared/button.component";
 import 'react-phone-number-input/style.css'
+import {  ModalRef } from "../components/shared/modal.component";
 import PhoneInput from 'react-phone-number-input'
 import { useRouter } from "next/navigation";
 import { AppDispatch, RootState } from "@/redux/store";
@@ -15,21 +16,23 @@ import toast from "react-hot-toast";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { registerSchema } from "@/typeSchema/schema";
 import { validateForm } from "@/app/hooks/validate";
+import ModelRules from "@/app/components/shared/ModelRules";
 import Cookie from "js-cookie"
 export interface userRegister {
   username: string;
   email: string;
-  // phone:string;
+  phone:string;
   password: string;
   repeate_password: string;
 }
 const SignUp: React.FC = () => {
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
+  const modalRefRules = useRef<ModalRef>(null);
   const [user, setUser] = useState<userRegister>({
     username: "",
     email: "",
-    // phone:"",
+    phone:"",
     password: "",
     repeate_password: "",
   });
@@ -40,7 +43,7 @@ const SignUp: React.FC = () => {
   const [errors, setErrors] = useState<{
     username: string;
     email: string;
-    // phone:string;
+    phone:string;
     password: string;
     repeate_password: string;
   }>();
@@ -55,7 +58,7 @@ const SignUp: React.FC = () => {
         setErrors({
           username: "",
           email: "",
-          // phone:"",
+          phone:"",
           password: "",
           repeate_password: "",
         });
@@ -140,15 +143,21 @@ const SignUp: React.FC = () => {
                   </p>
                 )}
               </div>
-              {/* <div className="!mb-2" style={{direction:"rtl"}}>
-                <h3>ادخل الرقم الهاتف</h3>
+              <div className="!my-2" style={{direction:"rtl"}}>
+                <h3 className="font-bold text-[#4B5563] my-2">ادخل الرقم الجوال</h3>
               <PhoneInput
-              placeholder="ادخل الرقم الهاتف"
-              className="border-2 border-gray-300 p-1 rounded-md"
+              placeholder="ادخل الرقم الجوال"
+              className="border-2 border-gray-300 p-1 rounded-md text-end"
       value={user?.phone}
+      defaultCountry="SA"
       country="SA"
-      onChange={(value)=>setUser({ ...user, phone: String(value) })}/>
-</div> */}
+      onChange={(value)=>setUser({ ...user, phone: value?String(value):"" })}/>
+      {errors?.phone && (
+                  <p className="text-xs text-red-600 dark:text-red-500 text-right">
+                    {errors?.phone}
+                  </p>
+                )}
+</div>
 
               <div className="!mb-2">
                 <TextInput
@@ -194,9 +203,25 @@ const SignUp: React.FC = () => {
                 htmlFor="remember-me"
                 className="block ml-2 text-sm text-gray-900"
               >
-                لقد قرأت ووافقت على{" "}
-                <a className="text-[#3B73B9]">شروط الاستخدام</a> و{" "}
-                <a className="text-[#3B73B9]">سياسة الخصوصية</a>
+                  <button
+                    className="text-[#98CC5D]"
+                    onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                      e.preventDefault();
+                      modalRefRules?.current?.open();
+                    }}
+                  >
+                    الأحكام 
+                  </button>
+                <button
+                    className="text-[#98CC5D]"
+                    onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                      e.preventDefault();
+                      modalRefRules?.current?.open();
+                    }}
+                  >
+                    الشروط و
+                  </button>
+                  لقد قرأت ووافقت على
               </label>
               <input
                 id="remember-me"
@@ -204,10 +229,17 @@ const SignUp: React.FC = () => {
                 type="checkbox"
                 className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
                 onChange={(e) => setCheckBox(e.target.checked)}
+                checked={checkBox}
               />
             </div>
           </div>
-
+          <ModelRules
+              refModel={modalRefRules}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setCheckBox(e.target.checked)
+              }
+              deal={checkBox}
+            />
           <div>
           {loading?<button
               className="relative flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-[#3B73B9] border border-transparent rounded-md group  focus:outline-none focus:ring-2 focus:ring-offset-2 "

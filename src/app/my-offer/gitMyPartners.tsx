@@ -76,7 +76,7 @@ export const GitMyPartners = () => {
     city: "",
     district: "",
     unitType: "",
-    unitStatus: "",
+    unitStatus: false,
     purposeStatus: "",
     priceRange: [500000, 20000000],
     shareRange: [10, 90],
@@ -186,10 +186,10 @@ export const GitMyPartners = () => {
           : optionFilter == "الميزانية ( الأعلى الى الأدنى)"
           ? "price_decs"
           : "",
+      finance: criteria?.unitStatus,
       // option=="الأحدث إلى الأقدم"?handleSelect("latest"):option=="الأقدم الى الأحدث"?handleSelect("oldest"):option=="الميزانية ( الأدنى الى الأعلى)"?handleSelect("priceLowToHigh"):handleSelect("priceHighToLow")
     };
   }, [criteria, optionFilter]);
-  let dataNew = useMemo(() => {}, [newData]);
 
   let dataPagination = useMemo(() => {
     return newData?.slice((currentPage - 1) * 3, currentPage * 3);

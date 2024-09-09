@@ -16,7 +16,7 @@ interface Props {
   className?: string;
 }
 
-export const Modal = forwardRef<ModalRef, Props>(
+ export const Modal = forwardRef<ModalRef, Props>(
   ({ children, size, className }, ref) => {
     const [isVisible, setIsVisible] = React.useState(false);
 
@@ -40,3 +40,4 @@ export const Modal = forwardRef<ModalRef, Props>(
     );
   }
 );
+Modal.displayName = 'Modal';

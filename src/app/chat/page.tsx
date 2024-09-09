@@ -10,8 +10,15 @@ import { AppDispatch } from "@/redux/store";
 import { useDispatch } from "react-redux";
 import { getMessageOrders } from "@/redux/features/getMessages";
 import { getMessagePartners } from "@/redux/features/getMessagePartner";
+import { BackButtonOutline } from "@/app/assets/svg";
+import { useRouter } from "next/navigation";
 const Chat: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
+  const router = useRouter();
+  const handleBack = (e:React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+    router.push("/");
+  };
   useEffect(() => {
     dispatch(getMessageOrders());
     dispatch(getMessagePartners());
@@ -23,10 +30,17 @@ const Chat: React.FC = () => {
         <div style={{ direction: "rtl" }} className=" w-full">
           <div>
             {/* elpo */}
-            <div className="flex items-center justify-center">
-              <p className="flex items-center justify-center text-[#36343B] font-bold text-xl">
-                محادثاتي
-              </p>
+           
+            <div className="flex items-center justify-center w-full"style={{direction:"rtl"}}>
+              <div className="justify-start">
+                <button onClick={handleBack}>
+                  <BackButtonOutline />
+                </button>
+              </div>
+              <div className="flex flex-1  items-center justify-center">
+                <p className="flex items-center justify-center text-[#36343B] font-bold text-xl">
+                محادثاتي </p>
+              </div>
             </div>
 
             <div className=" w-full">

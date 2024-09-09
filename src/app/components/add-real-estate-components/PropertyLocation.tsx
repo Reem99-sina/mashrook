@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import React,{useState} from "react";
 import Image from "next/image";
 import { Add } from "@/app/assets/svg";
@@ -36,15 +36,27 @@ const PropertyLocation: React.FC<PropertyLocationProps> = ({
           <p className="text-base font-medium text-[#4B5563]">الحي</p>
           <select
             className="border w-full text-right  border-[#D1D5DB] rounded-lg "
-            onChange={(event) =>
-              setDataSend({
-                ...dataSend,
-                district: event?.target?.value,
-              })
+            onChange={(event) =>{
+              if(event?.target?.value=="other"){
+                setOpen(true)
+                setDataSend({
+                  ...dataSend,
+                  district: "اخري",
+                })
+              }else{
+                setOpen(false)
+                setDataSend({
+                  ...dataSend,
+                  district: event?.target?.value,
+                })
+              }
+             }
             }
-            disabled={open==true}
             value={dataSend?.district}
           >
+             <option key={"other"} value={"other"}>
+                اخري
+              </option>
             {district?.map((cityItem) => (
               <option key={cityItem?.id} value={cityItem?.name}>
                 {cityItem?.name}
@@ -81,7 +93,7 @@ const PropertyLocation: React.FC<PropertyLocationProps> = ({
        
       </div>
       <div className="mt-3" style={{direction:"rtl"}}>
-            <p className="cursor-pointer text-blue-450" onClick={()=>setOpen(!open)}>اضافة</p>
+            {/* <p className="cursor-pointer text-blue-450" onClick={()=>setOpen(!open)}> {open? "حذف":"اضافة"}</p> */}
             <input
             onChange={(event) =>
               setDataSend({

@@ -8,15 +8,18 @@ import { RootState } from "@/redux/store";
 import { useSelector } from "react-redux";
 import { format } from "date-fns";
 import Cookie from "js-cookie";
-
+import {chatInfo} from "@/type/chatinterface"
 import { Note } from "../assets/svg";
 import { FaRegUserCircle } from "react-icons/fa";
 
 export const MyPartnerships = () => {
   const router = useRouter();
   const [token, setToken] = useState<string | null>(null);
-  const OnClick = () => {
-    router.push("/ChatPage");
+  const OnClick = (message:chatInfo) => {
+    Cookie.set("title",  message?.details?.type
+      ? `${message?.property?.propertyTypeDetails?.title} ${message?.property?.propertyType?.title}`
+      : `${message?.property?.propertyType?.title} قطعة رقم ${message?.landDetails?.plan_number}`)
+    router.push(`/ChatPage/${message?.id}`);
   };
   const {
     loading,
@@ -62,19 +65,19 @@ export const MyPartnerships = () => {
             </div>
           </>
         ) : data?.length > 0 ? (
-          data?.map((message: any, index: number) => (
+          data?.map((message: chatInfo, index: number) => (
             <ChatCard
               key={message?.id}
               count={1}
               subtitle={message.lastMessage.message}
               title={
-                message?.property?.propertyTypeDetails?.title
+                message?.details?.type
                   ? `${message?.property?.propertyTypeDetails?.title} ${message?.property?.propertyType?.title}`
                   : `${message?.property?.propertyType?.title} قطعة رقم ${message?.landDetails?.plan_number}`
               }
               time={format(message.lastMessage?.createdAt, "hh:mm a")}
               image={<Block />}
-              onClick={OnClick}
+              onClick={() => OnClick(message)}
             />
           ))
         ) : (

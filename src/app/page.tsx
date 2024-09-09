@@ -69,7 +69,7 @@ export default function Home() {
     const interval = setInterval(checkAndRemoveCookie, 60 * 1000);
     // Cleanup the interval when the component unmounts
     return () => clearInterval(interval);
-  }, []);
+  }, [dispatch]);
   useEffect(() => {
     dispatch(getRequest({}));
   }, [dispatch]);

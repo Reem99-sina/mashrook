@@ -51,10 +51,12 @@ const UpdateMapCenter = ({ center }: { center: LatLngTuple }) => {
 const Map: React.FC<{
   latitude: number;
   longitude: number;
-  handleSearch: (lat: number, lng: number) => Promise<void>;
+  handleSearch?: (lat: number, lng: number) => Promise<void>;
 }> = ({ latitude, longitude, handleSearch }) => {
   const handleLocationSelected = (lat: number, lng: number) => {
-    handleSearch(lat, lng);
+    if(handleSearch){
+      handleSearch(lat, lng);
+    }
   };
 
   useEffect(() => {}, [latitude, longitude]);
@@ -72,9 +74,11 @@ const Map: React.FC<{
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution='&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
       />
-
-      <LocationSelector onLocationSelected={handleLocationSelected} />
-      <UpdateMapCenter center={[latitude, longitude]} />
+       {!handleSearch?<Marker position={[latitude, longitude]} icon={icon}/>:<>
+       <LocationSelector onLocationSelected={handleLocationSelected} />
+       <UpdateMapCenter center={[latitude, longitude]} />
+       </>}
+     
     </MapContainer>
   );
 };

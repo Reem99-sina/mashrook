@@ -187,7 +187,7 @@ export let paymentSchema = object().shape({
 export let registerSchema=object().shape({
   username:string().required("ادخل اسم ؟"),
   email:string().email().matches(/^(?!.*@[^,]*,)/,"يجب ادخال البريد الالكتروني صحيح").required("يجب ادخال البريد الالكتروني صحيح"),
-  phone:string().required("ادخل رقم الهاتف ؟"),
+  phone:string().notOneOf([""],"ادخل رقم الجوال ؟").required("ادخل رقم الجوال ؟"),
   password:string().min(8,"يجب ادخال 8 حروف او ارقام").required("يجب ادخال 8 حروف او ارقام"),
   repeate_password:string().oneOf([ref('password')], 'لا يوجد تشابة بينه وبين كلمة السر').min(8,"يجب ادخال 8 حروف او ارقام").required("لا يوجد تشابة بينه وبين كلمة السر")
 })
