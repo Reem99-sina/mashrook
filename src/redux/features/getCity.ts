@@ -2,10 +2,18 @@ import { createSlice,createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import React from "react";
 import Cookie from 'js-cookie';
+import {cityDetial,districtDetail }from "@/type/addrealestate"
+
 export interface returnType{
     loading:boolean,
     message:string | undefined,
-    data:any
+    data:cityDetial[]|districtDetail[]|null
+}
+interface CityInfo{
+    loading:boolean,
+    message:string | undefined,
+    city:cityDetial[]|null|districtDetail[],
+    district:null|districtDetail[]|cityDetial[]
 }
 interface getType{
     name:string
@@ -30,11 +38,11 @@ export const getDistrict=createAsyncThunk<returnType,getType>("district/get", as
     .catch((error)=>error?.response?.data) 
     return response;
 })
-const initialstate={
-    loading:false,
-    message:"",
-    city:null,
-   district:null
+const initialstate:CityInfo={
+     loading:false,
+     message:"",
+     city:null,
+     district:null
 }
 
 const getCitySlice=createSlice({
@@ -49,7 +57,7 @@ const getCitySlice=createSlice({
         }),
         builder.addCase(getCity.pending,(state,action)=>{
             state.loading=true
-            state.message="loading..."
+            state.message=""
             state.city=null
         }),
         builder.addCase(getCity.rejected,(state,action)=>{
@@ -57,7 +65,6 @@ const getCitySlice=createSlice({
             state.message=action.error.message?action.error.message:"error"
             state.city=null
         }), builder.addCase(getDistrict.fulfilled,(state,action)=>{
-           
             state.district=action?.payload?.data
         })
     }

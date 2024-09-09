@@ -4,7 +4,7 @@ export let earthSchema = object().shape({
   property_owner_type_id: number().required(" ما صفة مقدم الغرض؟ "),
   property_purpose_id: number().required(" ما الغرض ؟"),
   property_type_id: number().required(" ما نوع العقار ؟"),
-  images: array().min(1, " مطلوب اضافة صوره").required(" مطلوب اضافة صوره"),
+  images: array(),
   address: string().required("عنوان مطلوب"),
   lat: number()
     .notOneOf([0], "احداثيات مكان مطلوبة")
@@ -17,7 +17,7 @@ export let earthSchema = object().shape({
   is_divisible: boolean().required("هل العقار قابل للتجزئة؟"),
   advertisement_number: string(),
   license_number: string(),
-  landDetails: array()
+  landDetails: array().min(1, "معلومات الارض مطلوبة")
     .of(
       object().shape({
         plan_number: string().required("ما رقم المخطط ؟"),
@@ -26,7 +26,7 @@ export let earthSchema = object().shape({
         price: number().notOneOf([0], "سعر مطلوب").required("سعر مطلوب"),
       })
     )
-    .min(1, "معلومات الارض مطلوبة"),
+   ,
 });
 export let earthDevSchema = object().shape({
   advertisement_number: string().required("ما رقم الاعلان؟"),
@@ -46,7 +46,7 @@ export let departmentOrRowSchema = object().shape({
     .required("احداثيات مكان مطلوبة"),
   city: string().required(" مدينة مطلوب"),
   area: number().notOneOf([0], "مساحة مطلوبة").required("مساحة مطلوبة"),
-  images: array().min(1, " مطلوب اضافة صوره").required(" مطلوب اضافة صوره"),
+  images: array(),
   price: number().notOneOf([0], "سعر مطلوب").required("سعر مطلوب"),
   is_divisible: boolean().required("هل العقار قابل للتجزئة؟"),
   advertisement_number: string(),
@@ -72,7 +72,7 @@ export let departmentOrRowArchSchema = object().shape({
   property_purpose_id: number().required(" ما الغرض ؟"),
   property_type_id: number().required(" ما نوع العقار ؟"),
   district: string().required("حي مطلوب"),
-  images: array().min(1, " مطلوب اضافة صوره").required(" مطلوب اضافة صوره"),
+  images: array(),
   address: string().required("عنوان مطلوب"),
   lat: number()
     .notOneOf([0], "احداثيات مكان مطلوبة")
@@ -114,7 +114,7 @@ export let departmentWithVillaSchema = object().shape({
   property_type_id: number().required(" ما نوع العقار ؟"),
   district: string().required("حي مطلوب"),
   city: string().required(" مدينة مطلوب"),
-  images: array().min(1, " مطلوب اضافة صوره").required(" مطلوب اضافة صوره"),
+  images: array(),
   address: string().required("عنوان مطلوب"),
   lat: number()
     .notOneOf([0], "احداثيات مكان مطلوبة")
@@ -163,7 +163,7 @@ export let villaOwnSchema = object().shape({
   property_purpose_id: number().required(" ما الغرض ؟"),
   property_type_id: number().required(" ما نوع العقار ؟"),
   property_type_details_id: number().required(" ما نوع العقار ؟"),
-  images: array().min(1, " مطلوب اضافة صوره").required(" مطلوب اضافة صوره"),
+  images: array(),
   address: string().required("عنوان مطلوب"),
   lat: number()
     .notOneOf([0], "احداثيات مكان مطلوبة")

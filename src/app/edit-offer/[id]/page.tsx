@@ -47,7 +47,7 @@ const EditOffer = () => {
   const params = useParams();
   let refImage = useRef<HTMLInputElement>(null);
   const [images, setImages] = useState<File[] | undefined>([]);
-  const [Links, setLinks] = useState<string[] | undefined>([]);
+  
 
   const modalRef = useRef<ModalRef>(null);
   const checkRef = useRef<ModalRef>(null);
@@ -1474,7 +1474,7 @@ const EditOffer = () => {
           <div className="flex items-center justify-end">
             <p className="text-base font-bold text-[#4B5563]">المرفقات</p>
           </div>
-          <ImageAppear images={images} onDelete={onDelete} links={Links} />
+          <ImageAppear images={images} onDelete={onDelete} />
           <div className="flex flex-row justify-end mt-1 gap-8">
             <div className="flex gap-2  flex-row mt-5">
               <p className="text-sm text-[#3B73B9] font-bold">أضف صورة / صور</p>

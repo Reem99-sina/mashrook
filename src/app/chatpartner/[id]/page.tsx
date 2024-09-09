@@ -1,8 +1,8 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState,useEffect } from "react";
 import MainHeader from "@/app/components/header/MainHeader";
 import Pusher from "pusher-js";
-import Cookie from "js-cookie";
+import Cookie from 'js-cookie';
 import { TextInput } from "@/app/components/shared/text-input.component";
 import {
   BackButtonOutline,
@@ -11,22 +11,24 @@ import {
   Search,
 } from "@/app/assets/svg";
 import { IoAttach } from "react-icons/io5";
-import { useRouter, useParams } from "next/navigation";
-import { getMessageByid } from "@/redux/features/getMessage";
+import { useRouter,useParams } from "next/navigation";
+import {getMessageByid} from "@/redux/features/getMessage"
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 
 const ChatPage = () => {
   const params = useParams();
-  const [user, setUser] = useState<any>();
-  const { loading, message, data } = useSelector<RootState>(
+  const [user,setUser]=useState<any>()
+  const { loading,
+    message,
+    data } = useSelector<RootState>(
     (state) => state.messageByID
   ) as {
     loading: boolean;
     message: string;
     data: any;
   };
-  const { id } = params;
+  const {id}=params
   const [messages, setMessages] = useState([
     {
       sender: "إدارة مشروك",
@@ -49,8 +51,11 @@ const ChatPage = () => {
   ]);
 
   const [newMessage, setNewMessage] = useState("");
+  const [detail, setdetail] = useState();
+  const [land, setland] = useState();
   const dispatch = useDispatch<AppDispatch>();
   const handleSendMessage = () => {
+    
     if (newMessage.trim() !== "") {
       const currentTime = new Date().toLocaleTimeString([], {
         hour: "2-digit",
@@ -75,26 +80,40 @@ const ChatPage = () => {
     router.back();
   };
   useEffect(() => {
+   
     const storedToken = Cookie.get("user");
-    if (storedToken) {
+    const land = Cookie.get("land");
+    const detail = Cookie.get("detail");
+    if(storedToken){
       setUser(JSON.parse(storedToken));
     }
-  }, []);
+    if(land){
+      setland(JSON.parse(land))
+    }
+    if(detail){
+      setdetail(JSON.parse(detail))
+    }
+}, []);
   useEffect(() => {
     const pusher = new Pusher("eac8985b87012d5f5753", {
-      cluster: "mt1",
+      cluster:"mt1"
     });
     const channel = pusher.subscribe("chat");
-
+    // channel.bind("chat-event", function (data) {
+    //   setChats((prevState) => [
+    //     ...prevState,
+    //     { sender: data.sender, message: data.message },
+    //   ]);
+    // });
     return () => {
       pusher.unsubscribe("chat");
     };
   }, []);
-  useEffect(() => {
-    if (id) {
-      dispatch(getMessageByid({ id: Number(id) }));
+  useEffect(()=>{
+    if(id){
+      dispatch(getMessageByid({id:Number(id)}))
     }
-  }, [id, dispatch]);
+  },[id,dispatch])
   return (
     <>
       <div className="flex flex-col h-screen bg-white">
@@ -114,7 +133,7 @@ const ChatPage = () => {
                 <Block />
               </span>
               <h1 className="text-sm font-bold text-[#36343B]">
-                ارض سكنية - قطعة رقم 1234 (رقم الطلب 2022)
+                {land?land:detail} (رقم الطلب 2022)
               </h1>
             </div>
             <div className="flex items-center ">
@@ -126,22 +145,20 @@ const ChatPage = () => {
 
           <div className="flex-1  p-4 gap-4 flex flex-col">
             {data?.length > 0
-              ? data.map((msg: any, index: number) => (
+              ? data.map((msg:any, index:number) => (
                   <div
                     key={index}
                     className={`flex ${
-                      user?.id == msg?.user_id ? "justify-start" : "justify-end"
+                      user?.id==msg?.user_id? "justify-start" : "justify-end"
                     } mb-2`}
                   >
                     <div className="flex flex-col gap-1">
                       <div
                         className={`flex flex-row items-center justify-center gap-3 ${
-                          user?.id == msg?.user_id
-                            ? "flex-row"
-                            : "flex-row-reverse"
+                          user?.id==msg?.user_id ? "flex-row" : "flex-row-reverse"
                         }`}
                       >
-                        {user?.id == msg?.user_id ? (
+                        {user?.id==msg?.user_id ? (
                           <span className="bg-[#E5E7EB] text-[#111928] font-normal items-center justify-center rounded-full w-9 h-9 flex">
                             ي
                           </span>
@@ -149,9 +166,7 @@ const ChatPage = () => {
                           <MashrookLogoChat />
                         )}
                         <p className="text-[#4B5563] text-sm font-semibold">
-                          {user?.id == msg?.user_id
-                            ? msg?.sender
-                            : "ادارة مشروك"}
+                          {user?.id==msg?.user_id?msg?.sender:"ادارة مشروك"}
                         </p>
                         <span className="text-xs font-normal text-[#9CA3AF]">
                           {msg?.createdAt}
@@ -159,7 +174,7 @@ const ChatPage = () => {
                       </div>
                       <div
                         className={`max-w-xs p-3 rounded-lg ${
-                          user?.id == msg?.user_id
+                          user?.id==msg?.user_id
                             ? "bg-[#3B73B9] text-white"
                             : "bg-gray-100"
                         }`}

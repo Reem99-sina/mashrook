@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef, useState, useEffect } from "react";
-import { AddButton, Add, CloseIconSmall, Succeeded } from "@/app/assets/svg";
+import { Add, BackButtonOutline } from "@/app/assets/svg";
 import { RadioInput } from "../components/shared/radio.component";
 import { Button } from "../components/shared/button.component";
 import { Modal, ModalRef } from "../components/shared/modal.component";
@@ -9,34 +9,42 @@ import ImageAppear from "../components/shared/ImageAppear";
 import AccordionComponent from "../components/shared/Accordion.component";
 import Image from "next/image";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { RiSubtractFill } from "react-icons/ri";
 import NumberRoom from "./components/NumberRoom";
 import Footer from "../components/header/Footer2";
 import MainHeader from "../components/header/MainHeader";
 import { useRouter } from "next/navigation";
 import { TextInput } from "../components/shared/text-input.component";
-
+import {
+  dataTypeOfRealEstate,
+  detailsType,
+  detailsMoreType,
+  cityDetial,
+  districtDetail,
+  returnRealState,
+  imageInfo,
+  DataSendInfo,
+} from "@/type/addrealestate";
 import CountElement from "./components/CountElemet";
 import CheckFeature from "./components/CheckFeature";
 import InputAreaPrice from "./components/InputAreaPrice";
-
+import ModelRules from "@/app/components/shared/ModelRules";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getproperityType,
   getproperityTypeMore,
 } from "@/redux/features/getProperity";
-import Cookie from 'js-cookie';
+import Cookie from "js-cookie";
 import { getproperityPurposeType } from "@/redux/features/getproperityPurpose";
 import { getproperityOwnerType } from "@/redux/features/getProperityOwnerType";
 import {
-  RealEstateTypeInter,
   RealEstateErrrorTypeInter,
   postrealEstateType,
   earthInter,
   removeState,
 } from "@/redux/features/postRealEstate";
-import { getCity, getDistrict } from "@/redux/features/getCity"
-import { cites } from "@/typeSchema/schema";
+import { getCity, getDistrict } from "@/redux/features/getCity";
 import { validateForm } from "../hooks/validate";
 import toast from "react-hot-toast";
 import {
@@ -49,9 +57,14 @@ import {
   schemaMain,
   earthDevSchema,
 } from "@/typeSchema/schemaRealestate";
-// import Map from "../components/shared/map";
-import MapLocation from "./components/MapLocation";
-
+import VillaDetails from "./VillaDetails";
+import OnSuccess from "./OnSuccess";
+import AddLocation from "../components/add-real-estate-components/AddLocation";
+import PropertyLocation from "../components/add-real-estate-components/PropertyLocation";
+type Option = {
+  id: number;
+  title: string;
+};
 const dataa = [
   {
     id: 1,
@@ -86,33 +99,16 @@ interface typeSelectedProperty {
 const AddYourRealEstate: React.FC = () => {
   const router = useRouter();
   const modalRef = useRef<ModalRef>(null);
-  let refImage = useRef<HTMLInputElement>(null);
+  const modalRefRules = useRef<ModalRef>(null);
+  const refImage = useRef<HTMLInputElement>(null);
 
   const [sentYourRequest, setSentYourRequest] = useState<boolean>(false);
-  const [errors, setErrors] = useState<RealEstateErrrorTypeInter>();
-  const [selectedPropertyType, setSelectedPropertyType] =
-    useState<typeSelectedProperty>();
-  const handleOptionChange = (option: any, title: string) => {
-    if (title == "صفة مقدم العرض") {
-      setDataSend({ ...dataSend, property_owner_type_id: option?.id });
-    } else if (title == "الغرض من عرض العقار") {
-      setDataSend({ ...dataSend, property_purpose_id: option?.id });
-    } else {
-      setDataSend({ ...dataSend, property_type_id: option?.id });
-      setSelectedPropertyType(option);
-    }
-    // setSelectedPropertyType(option);
-  };
-  const [token, setToken] = useState<string | null>(null);
-  const [haveNumber, setHaveNumber] = useState(false);
-  const [deal, setDeal] = useState(false);
-
-  const [dataSend, setDataSend] = useState({
-    property_owner_type_id: 0, // وسيط عقاري, مطور عقاري, وسيط
-    property_purpose_id: 0, //بيع, تطوير (شراكة برأس المال أو البنا
+  const [dataSend, setDataSend] = useState<DataSendInfo>({
+    property_owner_type_id: 0,
+    property_purpose_id: 0,
     property_type_id: 0,
     partner_type_id: 0,
-    city: "",
+    city: "تبوك",
     district: "",
     address: "",
     area: 0,
@@ -121,8 +117,26 @@ const AddYourRealEstate: React.FC = () => {
     long: 46.72,
     is_divisible: false,
   });
+  const [errors, setErrors] = useState<RealEstateErrrorTypeInter>();
+  const [selectedPropertyType, setSelectedPropertyType] =
+    useState<typeSelectedProperty>();
+  const handleOptionChange = (option: Option, title: string) => {
+    if (title == "صفة مقدم العرض") {
+      setDataSend((prev) => ({ ...prev, property_owner_type_id: option?.id }));
+    } else if (title == "الغرض من عرض العقار") {
+      setDataSend((prev) => ({ ...prev, property_purpose_id: option?.id }));
+    } else {
+      setDataSend((prev) => ({ ...prev, property_type_id: option?.id }));
+      setSelectedPropertyType(option);
+    }
+    setDataSend((prev) => ({ ...prev, city: "تبوك" }));
+  };
+  const [token, setToken] = useState<string | null>(null);
+  const [haveNumber, setHaveNumber] = useState(false);
+  const [deal, setdeal] = useState(false);
+
   const [mediator, setMediator] = useState({
-    advertisement_number: "", // رقم الاعلان
+    advertisement_number: "",
     license_number: "",
   });
   const initialVillaData: earthInter[] = Array.from({ length: 3 }, () => ({
@@ -154,9 +168,7 @@ const AddYourRealEstate: React.FC = () => {
     apartment_number: "", // رقم الاعلان
     apartment_floor: "",
   });
-  const [earth, setEarth] = useState({
-    plan_number: "",
-  });
+
   const [landDetails, setlandDetails] = useState<
     { piece_number: string; area: number; price: number; plan_number: string }[]
   >([]);
@@ -187,47 +199,42 @@ const AddYourRealEstate: React.FC = () => {
     garage: false,
   });
   const [images, setImages] = useState<File[] | undefined>([]);
-  let { loading, message, data, title, details, titleSection, detailsSection } =
+  const { data, title, details, titleSection, detailsSection } =
     useSelector<RootState>((state) => state.properityType) as {
       loading: boolean;
       message: string;
-      data: any;
+      data: dataTypeOfRealEstate;
       title: string;
-      details: any;
+      details: detailsType[];
       titleSection: string;
-      detailsSection: any;
+      detailsSection: detailsMoreType[];
     };
-  let { city, district } =
-    useSelector<RootState>((state) => state.city) as {
-      district: any
-      city: any
-    };
-  let {
-    loading: loadingproperty_purpose_id,
-    message: messagePurpose,
-    data: dataPurpose,
-  } = useSelector<RootState>((state) => state.properityPurpose) as {
+  const { city, district } = useSelector<RootState>((state) => state.city) as {
+    district: districtDetail[] | null;
+    city: cityDetial[] | null;
+  };
+  const { data: dataPurpose } = useSelector<RootState>(
+    (state) => state.properityPurpose
+  ) as {
     loading: boolean;
     message: string;
-    data: any;
+    data: detailsType[];
   };
-  let {
-    loading: loadingOwnerType,
-    message: messageOwnerType,
-    data: dataOwnerType,
-  } = useSelector<RootState>((state) => state.properityOwnerType) as {
+  const { data: dataOwnerType } = useSelector<RootState>(
+    (state) => state.properityOwnerType
+  ) as {
     loading: boolean;
     message: string;
-    data: any;
+    data: detailsType[];
   };
-  let {
+  const {
     loading: loadingrealEstateRequest,
     message: messagerealEstateRequest,
     data: datarealEstateRequest,
   } = useSelector<RootState>((state) => state.realEstateRequest) as {
     loading: boolean;
     message: string;
-    data: any;
+    data: returnRealState;
   };
   const dispatch = useDispatch<AppDispatch>();
   const handlePercentageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -235,7 +242,6 @@ const AddYourRealEstate: React.FC = () => {
       ...departmentArch,
       [e.target.name]: Number(e.target.value),
     });
-    // set(Number(e.target.value));
   };
 
   const handleDepartmentVillaChange = (
@@ -245,7 +251,10 @@ const AddYourRealEstate: React.FC = () => {
       ...departmentvilla,
       [e.target.name]: Number(e.target.value),
     });
-    // set(Number(e.target.value));
+  };
+  const handleBack = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    router.push("/");
   };
   const onSubmit = async () => {
     if (deal) {
@@ -259,7 +268,6 @@ const AddYourRealEstate: React.FC = () => {
           schemaMain,
           setErrors
         );
-        // if (images && images?.length > 0) {
         if (title && details) {
           validationMain =
             validationMain &&
@@ -455,14 +463,12 @@ const AddYourRealEstate: React.FC = () => {
     } else {
       toast.error(" يجب الموافقه علي شروط الاستخدام وسياسية الخصوصية");
     }
-    // setSentYourRequest(true);
   };
 
-  const onDelete = (index: any) => {
-   
-      setImages(images?.filter((ele, ind) => ele?.name != index?.name));
-
+  const onDelete = (index: imageInfo) => {
+    setImages(images?.filter((ele) => ele?.name != index?.name));
   };
+
   useEffect(() => {
     dispatch(getproperityType({ num: 1 }));
     dispatch(getproperityPurposeType());
@@ -478,7 +484,7 @@ const AddYourRealEstate: React.FC = () => {
     if (dataSend?.city) {
       dispatch(getDistrict({ name: dataSend?.city }));
     }
-  }, [dataSend?.city, dispatch])
+  }, [dataSend?.city, dispatch]);
   useEffect(() => {
     dispatch(getproperityType({ num: dataSend?.property_purpose_id || 1 }));
   }, [dataSend?.property_purpose_id, dispatch]);
@@ -491,7 +497,6 @@ const AddYourRealEstate: React.FC = () => {
     );
   }, [dataSend?.property_type_id, dispatch]);
   useEffect(() => {
-
     const storedToken = Cookie.get("token");
     if (storedToken) {
       setToken(storedToken);
@@ -519,15 +524,15 @@ const AddYourRealEstate: React.FC = () => {
     setlandDetails((prev) =>
       prev.length < count.nums
         ? [
-          ...prev,
-          {
-            piece_number: "", // في حالة اختيار ارض (رقم القطعة)
-            plan_number: "",
-            area: 0,
-            price: 0,
-          },
-        ]
-        : [...prev]
+            ...prev,
+            {
+              piece_number: "", // في حالة اختيار ارض (رقم القطعة)
+              plan_number: "",
+              area: 0,
+              price: 0,
+            },
+          ]
+        : prev.filter((ele, index) => index + 1 <= count.nums)
     );
   }, [count.nums]);
   return (
@@ -535,8 +540,20 @@ const AddYourRealEstate: React.FC = () => {
       {!sentYourRequest ? (
         <form className="flex flex-col items-center min-h-screen h-full w-full bg-[url('/background-cover.png')] bg-cover">
           <MainHeader />
-          <div className="p-4">
-            <p className="text-2xl font-medium text-[#374151]">أضف عقارك</p>
+          <div
+            className="flex items-center justify-center w-full"
+            style={{ direction: "rtl" }}
+          >
+            <div className="justify-start">
+              <button onClick={handleBack}>
+                <BackButtonOutline />
+              </button>
+            </div>
+            <div className="flex flex-1  items-center justify-center">
+              <p className="flex items-center justify-center text-[#36343B] font-bold text-xl">
+                اضف عقارك
+              </p>
+            </div>
           </div>
           <div className="p-4 w-full flex gap-4 flex-col">
             <div>
@@ -571,27 +588,21 @@ const AddYourRealEstate: React.FC = () => {
                   <div className="flex flex-row-reverse flex-wrap justify-start mt-6 gap-8">
                     {item.tattle == "نوع العقار"
                       ? data?.data?.map(
-                        (
-                          option: { id: number; title: string },
-                          index: number
-                        ) => (
-                          <RadioInput
-                            name={`realstateType`}
-                            onChange={() =>
-                              handleOptionChange(option, item.tattle)
-                            }
-                            value={option?.title}
-                            key={option?.id}
-                            label={option?.title}
-                          />
+                          (option: { id: number; title: string }) => (
+                            <RadioInput
+                              name={`realstateType`}
+                              onChange={() =>
+                                handleOptionChange(option, item.tattle)
+                              }
+                              value={option?.title}
+                              key={option?.id}
+                              label={option?.title}
+                            />
+                          )
                         )
-                      )
                       : item.tattle == "صفة مقدم العرض"
-                        ? dataOwnerType?.map(
-                          (
-                            option: { id: number; title: string },
-                            index: number
-                          ) => (
+                      ? dataOwnerType?.map(
+                          (option: { id: number; title: string }) => (
                             <RadioInput
                               name={item.tattle}
                               onChange={() =>
@@ -603,11 +614,8 @@ const AddYourRealEstate: React.FC = () => {
                             />
                           )
                         )
-                        : dataPurpose?.map(
-                          (
-                            option: { id: number; title: string },
-                            index: number
-                          ) => (
+                      : dataPurpose?.map(
+                          (option: { id: number; title: string }) => (
                             <RadioInput
                               key={option?.id}
                               name={item.tattle}
@@ -746,75 +754,17 @@ const AddYourRealEstate: React.FC = () => {
               </div>
             )}
 
-            <div className="bg-white rounded-lg border border-[#E5E7EB] w-full mb-4 items-start justify-start p-4">
-              <div className="flex items-center justify-end">
-                <p className="text-base font-bold text-[#4B5563]">
-                  {" "}
-                  موقع العقار{" "}
-                </p>
-              </div>
-              <div className="flex items-end gap-2 justify-end flex-row mt-5">
-                <div className="flex flex-col items-end gap-2 justify-end w-full">
-                  <p className="text-base font-medium text-[#4B5563]">الحي</p>
-                  <select
-                    className="border w-full text-right  border-[#D1D5DB] rounded-lg "
-                    onChange={(event) =>
-                      setDataSend({
-                        ...dataSend,
-                        district: event?.target?.value,
-                      })
-                    }
-                  >
-                    {district?.map((city: any) => (
-                      <option key={city?.id} value={city?.name}>
-                        {city?.name}
-                      </option>
-                    ))}
-                  </select>
-                  {errors?.district && (
-                    <p className="text-xs text-red-600 dark:text-red-500 text-right">
-                      {errors?.district}
-                    </p>
-                  )}
-                </div>
-                <div className="flex flex-col items-end gap-2 justify-end  w-full">
-                  <p className="text-base font-medium text-[#4B5563]">
-                    المدينة
-                  </p>
-                  <select
-                    className="border w-full text-right  border-[#D1D5DB] rounded-lg"
-                    onChange={(event) =>
-                      setDataSend({ ...dataSend, city: event?.target?.value })
-                    }
-                  >
-                    {city?.map((cit: any) => (
-                      <option key={cit.id} value={cit?.nameAr}>
-                        {cit?.nameAr}
-                      </option>
-                    ))}
-                  </select>
-                  {errors?.district && (
-                    <p className="text-xs text-red-600 dark:text-red-500 text-right">
-                      {errors?.district}
-                    </p>
-                  )}
-                </div>
-              </div>
-              <div className="flex items-end gap-2 justify-end flex-row mt-5">
-                <p className="text-sm text-[#3B73B9] font-bold">إضافة الموقع</p>
-                <div
-                  onClick={() => modalRef.current?.open()}
-                  className="cursor-pointer bg-[#3B73B9]"
-                >
-                  <Image src={Add} width={21} height={21} alt={"add"} />
-                </div>
-              </div>
-              {(errors?.address || errors?.lat || errors?.long) && (
-                <p className="text-xs text-red-600 dark:text-red-500 text-right">
-                  {errors?.address || errors?.lat || errors?.long}
-                </p>
-              )}
+            <div>
+              <PropertyLocation
+                dataSend={dataSend}
+                setDataSend={setDataSend}
+                city={city}
+                district={district}
+                errors={errors}
+                modalRef={modalRef}
+              />
             </div>
+
             <div className="bg-white rounded-lg border border-[#E5E7EB] w-full mb-4 items-start justify-start p-4">
               <div className="flex items-center justify-end">
                 <p className="text-base font-bold text-[#4B5563]">
@@ -877,9 +827,9 @@ const AddYourRealEstate: React.FC = () => {
                               prevs.map((ele, i) =>
                                 i == index
                                   ? {
-                                    ...ele,
-                                    piece_number: event?.target?.value,
-                                  }
+                                      ...ele,
+                                      piece_number: event?.target?.value,
+                                    }
                                   : ele
                               )
                             )
@@ -906,9 +856,9 @@ const AddYourRealEstate: React.FC = () => {
                                 prevs.map((ele, i) =>
                                   i == index
                                     ? {
-                                      ...ele,
-                                      plan_number: event?.target?.value,
-                                    }
+                                        ...ele,
+                                        plan_number: event?.target?.value,
+                                      }
                                     : ele
                                 )
                               )
@@ -930,9 +880,9 @@ const AddYourRealEstate: React.FC = () => {
                             prevs.map((ele, i) =>
                               i == index
                                 ? {
-                                  ...ele,
-                                  area: Number(event?.target?.value),
-                                }
+                                    ...ele,
+                                    area: Number(event?.target?.value),
+                                  }
                                 : ele
                             )
                           )
@@ -947,9 +897,9 @@ const AddYourRealEstate: React.FC = () => {
                             prevs.map((ele, i) =>
                               i == index
                                 ? {
-                                  ...ele,
-                                  price: Number(event?.target?.value),
-                                }
+                                    ...ele,
+                                    price: Number(event?.target?.value),
+                                  }
                                 : ele
                             )
                           )
@@ -963,36 +913,36 @@ const AddYourRealEstate: React.FC = () => {
 
                 {(selectedPropertyType?.title == "شقة" ||
                   selectedPropertyType?.title == "دور") && (
-                    <>
-                      <InputAreaPrice
-                        title="المساحة"
-                        onChange={(event) =>
-                          setDataSend({
-                            ...dataSend,
-                            area: Number(event?.target?.value),
-                          })
-                        }
-                        errors={errors?.area}
-                        measurement="متر"
-                      />
-                      <InputAreaPrice
-                        title="السعر"
-                        onChange={(event) =>
-                          setDataSend({
-                            ...dataSend,
-                            price: Number(event?.target?.value),
-                          })
-                        }
-                        errors={errors?.price}
-                        measurement="ريال"
-                        desc="(بدون القيمة المضافة والسعي)"
-                      />
-                    </>
-                  )}
+                  <>
+                    <InputAreaPrice
+                      title="المساحة"
+                      onChange={(event) =>
+                        setDataSend({
+                          ...dataSend,
+                          area: Number(event?.target?.value),
+                        })
+                      }
+                      errors={errors?.area}
+                      measurement="متر"
+                    />
+                    <InputAreaPrice
+                      title="السعر"
+                      onChange={(event) =>
+                        setDataSend({
+                          ...dataSend,
+                          price: Number(event?.target?.value),
+                        })
+                      }
+                      errors={errors?.price}
+                      measurement="ريال"
+                      desc="(بدون القيمة المضافة والسعي)"
+                    />
+                  </>
+                )}
               </div>
 
               {selectedPropertyType?.title === "شقة" ||
-                selectedPropertyType?.title === "دور" ? (
+              selectedPropertyType?.title === "دور" ? (
                 <>
                   <NumberRoom
                     errors={String(errors?.age)}
@@ -1081,205 +1031,12 @@ const AddYourRealEstate: React.FC = () => {
                         value={floor?.name}
                         error={errors && errors[`details[${index}].type`]}
                       >
-                        <>
-                          <InputAreaPrice
-                            title="المساحة"
-                            onChange={(e) =>
-                              setvilla((prev) =>
-                                prev.map((ele, i) =>
-                                  i == index
-                                    ? { ...ele, area: Number(e.target.value) }
-                                    : ele
-                                )
-                              )
-                            }
-                            errors={errors && errors[`details[${index}].area`]}
-                            measurement="متر"
-                          />
-                          <InputAreaPrice
-                            title="السعر"
-                            onChange={(e) =>
-                              setvilla((prev) =>
-                                prev.map((ele, i) =>
-                                  i == index
-                                    ? { ...ele, price: Number(e.target.value) }
-                                    : ele
-                                )
-                              )
-                            }
-                            errors={errors && errors[`details[${index}].price`]}
-                            measurement="ريال"
-                            desc="(بدون القيمة المضافة والسعي)"
-                          />
-                          <NumberRoom
-                            errors={
-                              errors && errors[`details[${index}].rooms_number`]
-                            }
-                            value={villa[index]?.rooms_number}
-                            onChange={(e) =>
-                              setvilla((prev) =>
-                                prev.map((ele, i) =>
-                                  i == index
-                                    ? {
-                                      ...ele,
-                                      rooms_number: Number(e.target.value),
-                                    }
-                                    : ele
-                                )
-                              )
-                            }
-                            name="rooms_number"
-                            title={"عدد الغرف"}
-                            firstNumber={"غرفة"}
-                            secondNumber={"+10 غرف"}
-                            max={10}
-                          />
-                          <NumberRoom
-                            errors={
-                              errors && errors[`details[${index}].halls_number`]
-                            }
-                            value={villa[index]?.halls_number}
-                            onChange={(e) =>
-                              setvilla((prev) =>
-                                prev.map((ele, i) =>
-                                  i == index
-                                    ? {
-                                      ...ele,
-                                      halls_number: Number(e.target.value),
-                                    }
-                                    : ele
-                                )
-                              )
-                            }
-                            name="halls_number"
-                            title={"عدد الصالات"}
-                            firstNumber={"صالة"}
-                            secondNumber={"3+ صالات "}
-                            max={3}
-                          />
-                          <NumberRoom
-                            errors={
-                              errors &&
-                              errors[`details[${index}].bathrooms_number`]
-                            }
-                            value={villa[index]?.bathrooms_number}
-                            onChange={(e) =>
-                              setvilla((prev) =>
-                                prev.map((ele, i) =>
-                                  i == index
-                                    ? {
-                                      ...ele,
-                                      bathrooms_number: Number(
-                                        e.target.value
-                                      ),
-                                    }
-                                    : ele
-                                )
-                              )
-                            }
-                            name="bathrooms_number"
-                            title={"عدد دورات المياه"}
-                            firstNumber={"دورة مياه"}
-                            secondNumber={"3+ دورة مياه "}
-                            max={3}
-                          />
-                          <NumberRoom
-                            errors={
-                              errors &&
-                              errors[`details[${index}].kitchens_number`]
-                            }
-                            value={villa[index]?.kitchens_number}
-                            onChange={(e) =>
-                              setvilla((prev) =>
-                                prev.map((ele, i) =>
-                                  i == index
-                                    ? {
-                                      ...ele,
-                                      kitchens_number: Number(e.target.value),
-                                    }
-                                    : ele
-                                )
-                              )
-                            }
-                            name="kitchens_number"
-                            title={" عدد المطابخ"}
-                            firstNumber={"مطبخ"}
-                            secondNumber={"3+ مطابخ"}
-                            max={3}
-                          />
-                          <div className="mt-2">
-                            <div
-                              className="flex justify-between text-sm mt-2"
-                              style={{ direction: "rtl" }}
-                            >
-                              <p className="font-medium text-base text-[#4B5563]">
-                                مزايا إضافية:
-                              </p>
-                            </div>
-                            <div
-                              className=" flex flex-row flex-wrap gap-8"
-                              style={{ direction: "rtl" }}
-                            >
-                              <CheckFeature
-                                title="مكيفة"
-                                onChange={(event) =>
-                                  setvilla((prev) =>
-                                    prev.map((ele, i) =>
-                                      i == index
-                                        ? { ...ele, ac: event.target.checked }
-                                        : ele
-                                    )
-                                  )
-                                }
-                              />
-                              <CheckFeature
-                                title="مدخل سيارة"
-                                onChange={(event) =>
-                                  setvilla((prev) =>
-                                    prev.map((ele, i) =>
-                                      i == index
-                                        ? {
-                                          ...ele,
-                                          car_entrance: event.target.checked,
-                                        }
-                                        : ele
-                                    )
-                                  )
-                                }
-                              />
-                              <CheckFeature
-                                title="مطبخ راكب"
-                                onChange={(event) =>
-                                  setvilla((prev) =>
-                                    prev.map((ele, i) =>
-                                      i == index
-                                        ? {
-                                          ...ele,
-                                          kitchen: event.target.checked,
-                                        }
-                                        : ele
-                                    )
-                                  )
-                                }
-                              />
-                              <CheckFeature
-                                title="مؤثثة"
-                                onChange={(event) =>
-                                  setvilla((prev) =>
-                                    prev.map((ele, i) =>
-                                      i == index
-                                        ? {
-                                          ...ele,
-                                          furnished: event.target.checked,
-                                        }
-                                        : ele
-                                    )
-                                  )
-                                }
-                              />
-                            </div>
-                          </div>
-                        </>
+                        <VillaDetails
+                          villa={villa}
+                          index={index}
+                          setvilla={setvilla}
+                          errors={errors}
+                        />
                       </AccordionComponent>
                     ))}
                   </>
@@ -1444,7 +1201,7 @@ const AddYourRealEstate: React.FC = () => {
                   </>
                 )}
               {selectedPropertyType?.title === "فيلا" &&
-                departmentArch?.property_type_details_id == 3 ? (
+              departmentArch?.property_type_details_id == 3 ? (
                 <div className="mt-2">
                   <div
                     className="flex justify-between text-sm mt-2"
@@ -1555,66 +1312,80 @@ const AddYourRealEstate: React.FC = () => {
               {(selectedPropertyType?.title == "أرض سكنية" ||
                 selectedPropertyType?.title == "أرض تجارية" ||
                 selectedPropertyType?.title == "أرض سكنية تجارية") && (
-                  <div className="mb-4" style={{ direction: "rtl" }}>
-                    <div className="flex gap-2  flex-row mt-5">
-                      <div
-                        onClick={() =>
-                          setCount((prev) => ({ nums: prev.nums + 1 }))
-                        }
-                        className="cursor-pointer bg-[#3B73B9]"
-                      >
-                        <Image src={Add} width={21} height={21} alt={"add"} />
-                      </div>
-
-                      <p className="text-sm text-[#3B73B9] font-bold">
-                        إضافة عقار اخر
-                      </p>
+                <div className="mb-4" style={{ direction: "rtl" }}>
+                  <div className="flex gap-2  flex-row mt-5">
+                    {count?.nums > 1 && (
+                      <>
+                        <div
+                          onClick={() =>
+                            setCount((prev) => ({ nums: prev.nums - 1 }))
+                          }
+                          className="cursor-pointer bg-[#3B73B9] p-1"
+                        >
+                          <RiSubtractFill className="text-white" />
+                        </div>
+                      </>
+                    )}
+                    <div
+                      onClick={() =>
+                        setCount((prev) => ({ nums: prev.nums + 1 }))
+                      }
+                      className="cursor-pointer bg-[#3B73B9]"
+                    >
+                      <Image src={Add} width={21} height={21} alt={"add"} />
                     </div>
-                  </div>
-                )}
-            </div>
 
-            <div className="bg-white rounded-lg border border-[#E5E7EB] w-full mb-4 items-start justify-start p-4">
-              <div className="flex items-center justify-end">
-                <p className="text-base font-bold text-[#4B5563]">
-                  هل العقار قابل للتجزئة؟
-                </p>
-              </div>
-              <div className="flex flex-row justify-end mt-6 gap-8">
-                <RadioInput
-                  name="isDivisibleType"
-                  onChange={(event) =>
-                    setDataSend({
-                      ...dataSend,
-                      is_divisible:
-                        event?.target?.value == "نعم" ? true : false,
-                    })
-                  }
-                  checked={dataSend?.is_divisible == true}
-                  value="نعم"
-                  label="نعم"
-                />
-                <RadioInput
-                  name="isDivisibleType"
-                  onChange={(event) =>
-                    setDataSend({
-                      ...dataSend,
-                      is_divisible:
-                        event?.target?.value == "نعم" ? true : false,
-                    })
-                  }
-                  checked={dataSend?.is_divisible == false}
-                  value="لا"
-                  label="لا"
-                />
-              </div>
-              {errors?.is_divisible && (
-                <p className="text-xs text-red-600 dark:text-red-500 text-right">
-                  {errors?.is_divisible}
-                </p>
+                    <p className="text-sm text-[#3B73B9] font-bold">
+                      إضافة عقار اخر
+                    </p>
+                  </div>
+                </div>
               )}
             </div>
-
+            {(selectedPropertyType?.title == "أرض سكنية" ||
+              selectedPropertyType?.title == "أرض تجارية" ||
+              selectedPropertyType?.title == "أرض سكنية تجارية") && (
+              <div className="bg-white rounded-lg border border-[#E5E7EB] w-full mb-4 items-start justify-start p-4">
+                <div className="flex items-center justify-end">
+                  <p className="text-base font-bold text-[#4B5563]">
+                    هل العقار قابل للتجزئة؟
+                  </p>
+                </div>
+                <div className="flex flex-row justify-end mt-6 gap-8">
+                  <RadioInput
+                    name="isDivisibleType"
+                    onChange={(event) =>
+                      setDataSend({
+                        ...dataSend,
+                        is_divisible:
+                          event?.target?.value == "نعم" ? true : false,
+                      })
+                    }
+                    checked={dataSend?.is_divisible == true}
+                    value="نعم"
+                    label="نعم"
+                  />
+                  <RadioInput
+                    name="isDivisibleType"
+                    onChange={(event) =>
+                      setDataSend({
+                        ...dataSend,
+                        is_divisible:
+                          event?.target?.value == "نعم" ? true : false,
+                      })
+                    }
+                    checked={dataSend?.is_divisible == false}
+                    value="لا"
+                    label="لا"
+                  />
+                </div>
+                {errors?.is_divisible && (
+                  <p className="text-xs text-red-600 dark:text-red-500 text-right">
+                    {errors?.is_divisible}
+                  </p>
+                )}
+              </div>
+            )}
             <div className="bg-white rounded-lg border border-[#E5E7EB] w-full mb-4 items-start justify-start p-4">
               <div className="flex items-center justify-end">
                 <p className="text-base font-bold text-[#4B5563]">المرفقات</p>
@@ -1710,57 +1481,73 @@ const AddYourRealEstate: React.FC = () => {
               <div className="flex items-center justify-end gap-2">
                 <p className="text-xs text-[#6B7280] font-bold">
                   أوافق على{" "}
-                  <span
+                  <button
                     className="text-[#98CC5D]"
-                    onClick={() => modalRef.current?.open()}
+                    onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                      e.preventDefault();
+                      modalRefRules?.current?.open();
+                    }}
                   >
                     الشروط
-                  </span>{" "}
-                  و<span className="text-[#98CC5D]">الأحكام</span> الخاصة بمشروك
+                  </button>{" "}
+                  و
+                  <button
+                    className="text-[#98CC5D]"
+                    onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                      e.preventDefault();
+                      modalRefRules?.current?.open();
+                    }}
+                  >
+                    الأحكام
+                  </button>{" "}
+                  الخاصة بمشروك
                 </p>
                 <input
                   type="checkbox"
                   className="h-4 w-4 rounded-2xl accent-[#3B73B9]"
-                  onChange={(event) => setDeal(event?.target?.checked)}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setdeal(e.target.checked)
+                  }
+                  checked={deal}
                 />
               </div>
               <div className="p-7">
-                {loadingrealEstateRequest ? <button
-                  className="relative flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-[#3B73B9] border border-transparent rounded-md group  focus:outline-none focus:ring-2 focus:ring-offset-2 "
-                  disabled={loadingrealEstateRequest}
-                ><AiOutlineLoading3Quarters className="rotate-90 text-gray-500" />
-                </button> : <Button text="إضافة العقار" onClick={onSubmit} />}
-
+                {loadingrealEstateRequest ? (
+                  <button
+                    className="relative flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-[#3B73B9] border border-transparent rounded-md group  focus:outline-none focus:ring-2 focus:ring-offset-2 "
+                    disabled={loadingrealEstateRequest}
+                  >
+                    <AiOutlineLoading3Quarters className="rotate-90 text-gray-500" />
+                  </button>
+                ) : (
+                  <Button text="إضافة العقار" onClick={onSubmit} />
+                )}
               </div>
             </div>
           </div>
 
           <div>
+            <ModelRules
+              refModel={modalRefRules}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setdeal(e.target.checked)
+              }
+              deal={deal}
+            />
             <Modal ref={modalRef} size="xl">
-              <div className="items-start flex justify-center flex-col p-4">
-                <MapLocation
-                  lat={dataSend?.lat}
-                  long={dataSend?.long}
-                  onChange={({ lat, long, address }: { lat: number, long: number, address: string }) => setDataSend({ ...dataSend, lat: lat, long: long, address: address })}
+              <>
+                <AddLocation
+                  dataSend={{
+                    lat: dataSend.lat,
+                    long: dataSend.long,
+                    address: dataSend.address,
+                  }}
+                  setDataSend={(updatedLocation) =>
+                    setDataSend((prev) => ({ ...prev, ...updatedLocation }))
+                  }
+                  modalRef={modalRef}
                 />
-                {/* <Map /> */}
-                {/* <div></div> */}
-                {/* <div className="flex flex-col  mt-6 gap-3 mb-6 w-full  items-end justify-start">
-                  <p className="text-base font-bold text-[#4B5563]">العنوان</p>
-                  <input className="w-full h-10 rounded-lg bg-[#D1D5DB]" />
-                </div> */}
-                <div className="flex flex-row items-center justify-center gap-3  w-full">
-                  <Button
-                    text="الغاء"
-                    onClick={() => modalRef.current?.close()}
-                    className="!bg-[#E5E7EB] !text-[#1F2A37]"
-                  />
-                  <Button
-                    text="حفظ"
-                    onClick={() => modalRef.current?.close()}
-                  />
-                </div>
-              </div>
+              </>
             </Modal>
           </div>
 
@@ -1769,33 +1556,9 @@ const AddYourRealEstate: React.FC = () => {
           </footer>
         </form>
       ) : (
-        <div className="flex flex-col items-center min-h-screen h-full w-full bg-white">
-          <MainHeader />
-          <div className="flex items-center justify-center flex-col border border-[#F3F4F6] rounded-lg p-3 mb-6 w-4/5 shadow-sm">
-            <Succeeded />
-            <p className="font-bold text-xl text-[#1F2A37] mt-4 mb-4">
-              تم بنجاح إضافة طلب شراكة عقار
-            </p>
-            <div className=" flex mb-auto bg-[#F3F4F6] rounded-lg justify-center items-center w-24 h-6">
-              <p className="text-[#6B7280] text-xs font-normal">
-                رقم الطلب: {datarealEstateRequest?.id}
-              </p>
-            </div>
-          </div>
-          <div className="w-4/5 mb-28  ">
-            <Button text="الذهاب الى طلباتي" onClick={() => {
-              router.push("/my-offer");
-            }} />
-            <Button
-              text="العودة الى الرئيسية"
-              className="!text-[#3B73B9] !bg-white !border !border-[#3B73B9] rounded !mt-5"
-              onClick={() => {
-                router.replace("/");
-              }}
-            />
-          </div>
-          <Footer />
-        </div>
+        <>
+          <OnSuccess datarealEstateRequest={datarealEstateRequest} />
+        </>
       )}
     </>
   );

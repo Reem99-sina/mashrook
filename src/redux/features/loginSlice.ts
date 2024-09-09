@@ -67,15 +67,11 @@ export const getUserRequest = createAsyncThunk(
   "putUser",
   async (_, { rejectWithValue }) => {
     const response = await axios
-      .put(
-        "https://server.mashrook.sa/auth/token",
-        {},
-        {
-          headers: {
-            Authorization: Cookie.get("token"),
-          },
-        }
-      )
+      .get("https://server.mashrook.sa/user", {
+        headers: {
+          Authorization: Cookie.get("token"),
+        },
+      })
       .then((response) => response.data)
       .catch((error) => error?.response?.data); // Adjust your endpoint as necessary
     return response; // Return the user data from API response
@@ -92,11 +88,22 @@ const initialstate = {
   dataRest: null,
   // token:sessionStorage.getItem("token")
 };
+export interface forgetLogin {
+  email: string;
+}
+export interface resetLogin {
+  new_password: string;
+  repeate_new_password: string;
+  token: string;
+}
 
 const loginSlice = createSlice({
   name: "login",
   initialState: initialstate,
   reducers: {
+    // getToken:(state)=>{
+    //     Cookie.get("token")
+    // },
     removeLogin: (state) => {
       state.message = "";
       state.data = null;
@@ -107,6 +114,9 @@ const loginSlice = createSlice({
       state.dataForget = null;
       state.messageRest = "";
       state.dataRest = null;
+    },
+    removeToken: (state) => {
+      Cookie.remove("token");
     },
   },
   extraReducers: (builder) => {
@@ -139,18 +149,21 @@ const loginSlice = createSlice({
         state.dataUser = null;
       }),
       builder.addCase(forget.fulfilled, (state, action) => {
+        console.log(action.payload, "actio");
         (state.messageForget = action?.payload?.message
           ? action?.payload?.message
           : "done"),
           (state.dataForget = action.payload.data);
       }),
       builder.addCase(forget.rejected, (state, action) => {
+        console.log(action.payload, "actio");
         (state.messageForget = action?.error?.message
           ? action?.error?.message
           : "error"),
           (state.dataForget = null);
       }),
       builder.addCase(forget.pending, (state, action) => {
+        console.log(action.payload, "actio");
         (state.messageForget = ""), (state.dataForget = null);
       }),
       builder.addCase(reset.rejected, (state, action) => {
@@ -171,5 +184,5 @@ const loginSlice = createSlice({
       });
   },
 });
-export const { removeLogin, removeForget } = loginSlice.actions;
+export const { removeLogin, removeForget, removeToken } = loginSlice.actions;
 export default loginSlice.reducer;

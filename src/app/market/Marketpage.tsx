@@ -1,6 +1,12 @@
 "use client";
 
-import React, { useState, ChangeEvent, useRef, useEffect, useMemo } from "react";
+import React, {
+  useState,
+  ChangeEvent,
+  useRef,
+  useEffect,
+  useMemo,
+} from "react";
 import PropertyCard from "../components/propertyCard/PropertyCard";
 import { sampleData5 } from "../assets/data/data";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
@@ -9,25 +15,24 @@ import Footer from "../components/header/Footer2";
 import SortPopup from "./SortPopup";
 import FilterModal from "./FilterModal2";
 import { TbArrowsSort } from "react-icons/tb";
-import { RiEqualizerFill } from "react-icons/ri";
 import { getRequest } from "@/redux/features/getRequest";
-import { getDetailsType } from "@/redux/features/getDetailsType"
+import { getDetailsType } from "@/redux/features/getDetailsType";
 import { IoIosSearch } from "react-icons/io";
 import Link from "next/link";
-import { Tune, MenuWhite } from "@/app/assets/svg"
+import { Tune, MenuWhite } from "@/app/assets/svg";
 
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { getproperityPurposeType } from "@/redux/features/getproperityPurpose";
-import { dataReturn, addUnqiue } from "@/redux/features/getRequest";
+import { dataReturn } from "@/redux/features/getRequest";
 export interface criteriaInfo {
-  dealStatus: string,
-  city: string,
-  district: string,
-  unitType: string | number,
-  unitStatus: string,
-  priceRange: number[],
-  shareRange: number[],
+  dealStatus: string;
+  city: string;
+  district: string;
+  unitType: string | number;
+  unitStatus: string;
+  priceRange: number[];
+  shareRange: number[];
 }
 const MarketPage: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -52,30 +57,46 @@ const MarketPage: React.FC = () => {
   }>({ top: 0, left: 0 });
   const sortButtonRef = useRef<HTMLButtonElement>(null);
   const popupRef = useRef<HTMLDivElement>(null);
-  let fiterData = useMemo(() => {
+  const fiterData = useMemo(() => {
     return {
       min_price: criteria?.priceRange[0] != 0 ? criteria?.priceRange[0] : null,
-      max_price: criteria?.priceRange[1] != 200000 ? criteria?.priceRange[1] : null,
+      max_price:
+        criteria?.priceRange[1] != 200000 ? criteria?.priceRange[1] : null,
       property_purpose_id: status || criteria?.unitStatus,
-      property_type_details_id: criteria?.unitType!=0?criteria?.unitType:null,
-      min_percentage: criteria?.shareRange[0] != 10 ? criteria?.shareRange[0] : null,
-      max_percentage: criteria?.shareRange[1] != 50 ? criteria?.shareRange[0] : null
-      , status: criteria?.dealStatus == "متاح" ? "available" : criteria?.dealStatus ? "complete" : "",
-      sort: sortOption == "latest" ? "created_asc" : sortOption == "oldest" ? "created_decs" : sortOption == "priceLowToHigh" ? "price_decs" : "price_asc"
-    }
-  }, [criteria, status, sortOption])
-  let {
-    loading: loadingproperty_purpose_id,
-    message: messagePurpose,
-    data: dataPurpose,
-  } = useSelector<RootState>((state) => state.properityPurpose) as {
+      property_type_details_id:
+        criteria?.unitType != 0 ? criteria?.unitType : null,
+      min_percentage:
+        criteria?.shareRange[0] != 10 ? criteria?.shareRange[0] : null,
+      max_percentage:
+        criteria?.shareRange[1] != 50 ? criteria?.shareRange[0] : null,
+      status:
+        criteria?.dealStatus == "متاح"
+          ? "available"
+          : criteria?.dealStatus
+          ? "complete"
+          : "",
+      sort:
+        sortOption == "latest"
+          ? "created_asc"
+          : sortOption == "oldest"
+          ? "created_decs"
+          : sortOption == "priceLowToHigh"
+          ? "price_decs"
+          : "price_asc",
+    };
+  }, [criteria, status, sortOption]);
+  const { data: dataPurpose } = useSelector<RootState>(
+    (state) => state.properityPurpose
+  ) as {
     loading: boolean;
     message: string;
     data: any;
   };
-  let { loading, message, data } = useSelector<RootState>(
-    (state) => state.getRequest
-  ) as { loading: boolean; message: string; data: dataReturn[] };
+  const { data } = useSelector<RootState>((state) => state.getRequest) as {
+    loading: boolean;
+    message: string;
+    data: dataReturn[];
+  };
   const offersPerPage = 5;
   const totalOffers = sampleData5.offerId.length;
   const totalPages = Math.ceil(totalOffers / offersPerPage);
@@ -125,11 +146,6 @@ const MarketPage: React.FC = () => {
       });
   };
 
-  const currentOffers = filterOffers().slice(
-    (currentPage - 1) * offersPerPage,
-    currentPage * offersPerPage
-  );
-
   const goToNextPage = () => {
     if (currentPage < totalPages) {
       setCurrentPage(currentPage + 1);
@@ -154,9 +170,9 @@ const MarketPage: React.FC = () => {
   };
   const onFilter = (criteria: criteriaInfo) => {
     // Filter logic to be added later
-    dispatch(getRequest(fiterData))
+    dispatch(getRequest(fiterData));
     setIsFilterModalOpen(false);
-  }
+  };
   const onClose = () => {
     setIsFilterModalOpen(false);
     setCriteria({
@@ -166,13 +182,13 @@ const MarketPage: React.FC = () => {
       unitType: "",
       unitStatus: "",
       priceRange: [0, 20000000],
-      shareRange: [10, 90]
-    })
-    dispatch(getRequest({}))
-  }
+      shareRange: [10, 90],
+    });
+    dispatch(getRequest({}));
+  };
   const onCloseModal = () => {
     setIsFilterModalOpen(false);
-  }
+  };
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -192,12 +208,11 @@ const MarketPage: React.FC = () => {
   useEffect(() => {
     dispatch(getproperityPurposeType());
     dispatch(getDetailsType());
-
-  }, [dispatch])
+  }, [dispatch]);
 
   useEffect(() => {
-    dispatch(getRequest(fiterData))
-  }, [status, sortOption, dispatch, fiterData])
+    dispatch(getRequest(fiterData));
+  }, [status, sortOption, dispatch, fiterData]);
   return (
     <div dir="">
       <div className="bg-white">
@@ -245,8 +260,16 @@ const MarketPage: React.FC = () => {
               onClick={() => setIsFilterModalOpen(!isFilterModalOpen)}
               className="flex items-center"
             >
-              <div className={`py-1 rounded-md border-2 border-blue-500 ${isFilterModalOpen ? "bg-blue-450" : "bg-white"}`}>
-                {isFilterModalOpen ? <MenuWhite className={`text-xl mx-2 my-1`} /> : <Tune className={`text-xl mx-2`} />}
+              <div
+                className={`py-1 rounded-md border-2 border-blue-500 ${
+                  isFilterModalOpen ? "bg-blue-450" : "bg-white"
+                }`}
+              >
+                {isFilterModalOpen ? (
+                  <MenuWhite className={`text-xl mx-2 my-1`} />
+                ) : (
+                  <Tune className={`text-xl mx-2`} />
+                )}
               </div>
             </button>
             <button
@@ -264,29 +287,19 @@ const MarketPage: React.FC = () => {
           {dataPurpose?.map((purpose: any) => (
             <button
               key={purpose?.id}
-              className={`px-4 py-2 m-1 rounded-md border ${status == purpose?.id ? "bg-blue-450 text-white" :
-                  "bg-white text-gray-900"
-                }`}
+              className={`px-4 py-2 m-1 rounded-md border ${
+                status == purpose?.id
+                  ? "bg-blue-450 text-white"
+                  : "bg-white text-gray-900"
+              }`}
               onClick={() => setstatus(purpose?.id)}
             >
-              {purpose?.title=="بيع"?"للبيع":"للتطوير"}
+              {purpose?.title == "بيع" ? "للبيع" : "للتطوير"}
             </button>
           ))}
-
-          {/* <button
-                // key={status}
-                className={`px-4 py-2 m-1 rounded-md border ${
-                  status=="للتطوير"  ? "bg-blue-450 text-white" :
-                   "bg-white text-gray-900"
-                }`}
-                onClick={() => setstatus("للتطوير")}
-              >
-            للتطوير
-              </button> */}
         </div>
 
         <PropertyCard page={currentPage} limit={4} />
-
 
         <div className="flex justify-center items-center p-6">
           <button
@@ -301,10 +314,11 @@ const MarketPage: React.FC = () => {
               <button
                 key={index + 1}
                 onClick={() => setCurrentPage(index + 1)}
-                className={`px-3 py-1 mx-2 rounded-md border-2 ${currentPage === index + 1
+                className={`px-3 py-1 mx-2 rounded-md border-2 ${
+                  currentPage === index + 1
                     ? "bg-blue-450 text-white"
                     : "bg-gray-200 text-blue-450"
-                  }`}
+                }`}
               >
                 {index + 1}
               </button>
@@ -340,5 +354,3 @@ const MarketPage: React.FC = () => {
 };
 
 export default MarketPage;
-
-//last modified by Omar Marei 3/8/2024

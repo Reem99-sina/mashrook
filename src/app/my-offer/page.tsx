@@ -31,7 +31,7 @@ const Chat: React.FC = () => {
               </div>
               <div className="flex flex-1  items-center justify-center">
                 <p className="flex items-center justify-center text-[#36343B] font-bold text-xl">
-                  طلباتي
+                  شروطي-طلباتي-عروضي
                 </p>
               </div>
             </div>

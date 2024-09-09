@@ -19,6 +19,8 @@ const Verify: React.FC = () => {
   const inputRefs = useRef<(HTMLInputElement|null)[]>([]);  
   const { email } = router;
   const [code, setCode] = useState(Array(4).fill(""));
+  const [time, settime] = useState(60);
+  const [canResend, setCanResend] = useState(false);
   let dispatch = useDispatch<AppDispatch>();
   let { loading, message, data } = useSelector<RootState>(
     (state) => state.verify
@@ -62,9 +64,21 @@ const Verify: React.FC = () => {
       Cookie.set("token", data?.token);
       links.push(`/`);
     }else if(message=="تم إرسال الكود اللي الايميل." && Boolean(data) == false){
+      settime(60)
       toast.success(message)
     }
   }, [message, links, data]);
+  useEffect(() => {
+    let interval:NodeJS.Timeout;
+    if (time > 0) {
+      interval = setInterval(() => {
+        settime((prevTimer) => prevTimer - 1);
+      }, 1000);
+    } else if (time === 0) {
+      setCanResend(true); // Re-enable the button after 60 seconds
+    }
+    return () => clearInterval(interval);
+  }, [time]);
 
   return (
     <div className="flex items-center  min-h-screen h-full  w-full flex-col bg-white">
@@ -101,8 +115,8 @@ const Verify: React.FC = () => {
             </div>
             <p className="text-center text-sm text-gray-500 mb-4">
               لم يصلك الرمز؟{" "}
-              <button className="text-[#98CC5D]" onClick={onResend} type="button">
-                إعادة إرسال الرمز خلال 60 ثانية
+              <button className="text-[#98CC5D]" onClick={onResend} type="button" disabled={time!=0}>
+                إعادة إرسال الرمز خلال {time} ثانية
               </button>
             </p>
           </div>

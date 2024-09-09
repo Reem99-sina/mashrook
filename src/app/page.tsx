@@ -9,8 +9,9 @@ import ClientJourney2 from "../app/components/landingPage/ClientJourney2";
 import { sampleData5 } from "../app/assets/data/data";
 import Link from "next/link";
 import { AppDispatch, RootState } from "@/redux/store";
-import Cookie from 'js-cookie';
+import Cookie from "js-cookie";
 import { useDispatch, useSelector } from "react-redux";
+import { removeToken } from "@/redux/features/loginSlice";
 import PropertyCard from "./components/propertyCard/PropertyCard";
 import { MdKeyboardArrowLeft } from "react-icons/md";
 import { useRouter } from "next/navigation";
@@ -40,24 +41,37 @@ const slicedData = {
 
 export default function Home() {
   const [token, setToken] = useState<string | null>(null);
-  let router = useRouter();
-  let { loading, message, data } = useSelector<RootState>(
+  const router = useRouter();
+  const { loading, message, data } = useSelector<RootState>(
     (state) => state.getRequest
   ) as { loading: boolean; message: string; data: any };
   const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
-    
-      const storedToken = Cookie.get("token");
-      if(storedToken){
-        setToken(storedToken);
-      }
-// 24 * 60 * 60 * 1000
+    const storedToken = Cookie.get("token");
+    if (storedToken) {
+      setToken(storedToken);
+    }
+    // 24 * 60 * 60 * 1000
   }, []);
-
   useEffect(() => {
-
-   dispatch(getRequest({}))
-
+    const checkAndRemoveCookie = () => {
+      const now = new Date();
+      const hours = now.getHours();
+      // Check if it's 12 AM
+      if (hours === 0) {
+        // Remove the token from cookies
+        dispatch(removeToken());
+        Cookie.remove("user");
+        setToken("");
+      }
+    };
+    // Run every minute to check if it's 12 AM
+    const interval = setInterval(checkAndRemoveCookie, 60 * 1000);
+    // Cleanup the interval when the component unmounts
+    return () => clearInterval(interval);
+  }, []);
+  useEffect(() => {
+    dispatch(getRequest({}));
   }, [dispatch]);
   return (
     <div className="flex justify-center w-dvh h-max ">
@@ -78,27 +92,25 @@ export default function Home() {
                 <div className="flex justify-center space-x-2 space-y-2 items-end">
                   <button
                     // href={"add-your-real-estate"}
-                    className="flex "
+                    className="flex hover:shadow-lg"
                     onClick={() => {
                       if (!token) {
                         toast.error("انت تحتاج الي تسجيل دخول");
                         router.push("/login");
                       } else {
-                        router.refresh();
-                        router.replace("/add-your-real-estate");
+                        router.push("/add-your-real-estate");
                       }
                     }}
                   >
                     <Addrequest />
                   </button>
                   <button
-                    className="flex "
+                    className="flex hover:shadow-lg"
                     onClick={() => {
                       if (!token) {
                         toast.error("انت تحتاج الي تسجيل دخول");
                         router.push("/login");
                       } else {
-                        router.refresh();
                         router.replace("/add-your-request");
                       }
                     }}
@@ -110,7 +122,7 @@ export default function Home() {
               <div className=" p-4 rounded shadow-md w-full">
                 <div dir="rtl">
                   <div className="flex justify-between mx-6">
-                    <h2 className=" font-bold mb-4 text-2xl">آخر العقارات</h2>
+                    <h2 className=" font-bold mb-4 text-2xl">آخر العروض</h2>
 
                     <Link href="/market">
                       <h2 className="flex items-center text-2xl font-bold mb-4 text-blue-450">

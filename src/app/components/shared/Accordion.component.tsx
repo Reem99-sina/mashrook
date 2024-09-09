@@ -1,10 +1,8 @@
-import React, { ReactNode, useState, useRef, ChangeEvent } from "react";
+import React, { ReactNode, useState, ChangeEvent } from "react";
 function AccordionComponent({
   children,
   title,
-  floors,
   onChange,
-  value,
   error,
 }: {
   children: ReactNode;
@@ -14,7 +12,7 @@ function AccordionComponent({
   value: string;
   error?: string;
 }) {
-  let [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false);
   return (
     <div className="relative mb-3 border-b border-solid">
       <h6 className="mb-0">
@@ -24,8 +22,6 @@ function AccordionComponent({
         >
           <input
             type="checkbox"
-            
-            // onChange={() => handleCiteChange(cite)}
             className="checked:accent-[#3B73B9] w-[16px] h-[16px]  radioCheck"
             onChange={(e) => {
               onChange(e);

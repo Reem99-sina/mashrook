@@ -51,7 +51,7 @@ const uploadReciptSlice=createSlice({
         }),
         builder.addCase(uploadReciptPut.pending,(state,action)=>{
             state.loading=true
-            state.message="loading..."
+            state.message=""
             state.data=null
         }),
         builder.addCase(uploadReciptPut.rejected,(state,action)=>{

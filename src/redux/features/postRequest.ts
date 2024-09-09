@@ -149,7 +149,7 @@ const properityTypeSlice = createSlice({
     }),
       builder.addCase(postProperityType.pending, (state, action) => {
         state.loading = true;
-        state.message = "loading...";
+        state.message = "";
         state.data = null;
       }),
       builder.addCase(postProperityType.rejected, (state, action) => {

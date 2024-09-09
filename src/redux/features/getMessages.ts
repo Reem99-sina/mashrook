@@ -40,7 +40,7 @@ const getMessageSlice=createSlice({
         }),
         builder.addCase(getMessageOrders.pending,(state,action)=>{
             state.loading=true
-            state.message="loading..."
+            state.message=""
             state.data=null
         }),
         builder.addCase(getMessageOrders.rejected,(state,action)=>{

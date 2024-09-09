@@ -36,6 +36,7 @@ interface responseData {
   message: string;
   data: any;
 }
+
 const verifySlice = createSlice({
   name: "verify",
   initialState: initialstate,
@@ -51,7 +52,7 @@ const verifySlice = createSlice({
     }),
       builder.addCase(verifyRequest.pending, (state, action) => {
         state.loading = true;
-        state.message = "loading...";
+        state.message = "";
         state.data = null;
       }),
       builder.addCase(verifyRequest.rejected, (state, action) => {
@@ -65,11 +66,12 @@ const verifySlice = createSlice({
           : "success";
       }),
       builder.addCase(resendCodeRequest.pending, (state, action) => {
-        state.message = "loading...";
+        state.message = "";
       }),
       builder.addCase(resendCodeRequest.rejected, (state, action) => {
         state.message = action.error.message ? action.error.message : "error";
       });
   },
 });
+
 export default verifySlice.reducer;

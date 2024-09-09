@@ -1,62 +1,16 @@
 "use client";
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { TextInput } from "../components/shared/text-input.component";
 import { Block, MessageIcon, Search } from "@/app/assets/svg";
 import { ChatCard } from "./ChatCard";
 import { useRouter } from "next/navigation";
-import { AppDispatch, RootState } from "@/redux/store";
-import { useDispatch, useSelector } from "react-redux";
-import { format } from 'date-fns';  
-import Cookie from 'js-cookie';
+import { RootState } from "@/redux/store";
+import { useSelector } from "react-redux";
+import { format } from "date-fns";
+import Cookie from "js-cookie";
 
-import {
-  Note
-} from "../assets/svg";
+import { Note } from "../assets/svg";
 import { FaRegUserCircle } from "react-icons/fa";
-const message = [
-  {
-    count: 2,
-    subtitle: "هذا النص هو مثال لنص.....",
-    title: "ارض سكنية - قطعة رقم 1234 (رقم الطلب 2022)",
-    time: "8:53AM",
-    image: <Block />,
-  },
-  {
-    count: 5,
-    subtitle: "هذا النص هو مثال لنص.....",
-    title: "ارض سكنية - قطعة رقم 1234 (رقم الطلب 2022)",
-    time: "8:53AM",
-    image: <Block />,
-  },
-  {
-    count: 8,
-    subtitle: "هذا النص هو مثال لنص.....",
-    title: "ارض سكنية - قطعة رقم 1234 (رقم الطلب 2022)",
-    time: "8:53AM",
-    image: <Block />,
-  },
-  {
-    count: 1,
-    subtitle: "هذا النص هو مثال لنص.....",
-    title: "ارض سكنية - قطعة رقم 1234 (رقم الطلب 2022)",
-    time: "8:53AM",
-    image: <Block />,
-  },
-  {
-    count: 1,
-    subtitle: "هذا النص هو مثال لنص.....",
-    title: "ارض سكنية - قطعة رقم 1234 (رقم الطلب 2022)",
-    time: "8:53AM",
-    image: <Block />,
-  },
-  {
-    count: 1,
-    subtitle: "هذا النص هو مثال لنص.....",
-    title: "ارض سكنية - قطعة رقم 1234 (رقم الطلب 2022)",
-    time: "8:53AM",
-    image: <Block />,
-  },
-];
 
 export const MyPartnerships = () => {
   const router = useRouter();
@@ -64,18 +18,20 @@ export const MyPartnerships = () => {
   const OnClick = () => {
     router.push("/ChatPage");
   };
-  let{loading,message:messagePartners,data}=useSelector<RootState>((state)=>state.messagePartners) as {
-    loading:boolean,
-    message:string,
-    data:any
-  }
+  const {
+    loading,
+    message: messagePartners,
+    data,
+  } = useSelector<RootState>((state) => state.messagePartners) as {
+    loading: boolean;
+    message: string;
+    data: any;
+  };
   useEffect(() => {
-   
-      const storedToken = Cookie.get("token");
-      if(storedToken){
-        setToken(storedToken);
-      }
-    
+    const storedToken = Cookie.get("token");
+    if (storedToken) {
+      setToken(storedToken);
+    }
   }, []);
   return (
     <div className="p-4 bg-white">
@@ -84,7 +40,7 @@ export const MyPartnerships = () => {
       </div>
 
       <div>
-      {!token ? (
+        {!token ? (
           <>
             <div className="flex flex-col items-center justify-center p-9 w-full gap-y-3">
               <Note />
@@ -105,19 +61,22 @@ export const MyPartnerships = () => {
               <button></button>
             </div>
           </>
-
-        ) :data?.length > 0 ? (
-          data?.map(((message:any, index:number) => (
+        ) : data?.length > 0 ? (
+          data?.map((message: any, index: number) => (
             <ChatCard
               key={message?.id}
               count={1}
               subtitle={message.lastMessage.message}
-              title={message?.property?.propertyTypeDetails?.title?`${message?.property?.propertyTypeDetails?.title} ${message?.property?.propertyType?.title}`:`${message?.property?.propertyType?.title} قطعة رقم ${message?.landDetails?.plan_number}`}
-              time={format(message.lastMessage?.createdAt, 'hh:mm a')}
+              title={
+                message?.property?.propertyTypeDetails?.title
+                  ? `${message?.property?.propertyTypeDetails?.title} ${message?.property?.propertyType?.title}`
+                  : `${message?.property?.propertyType?.title} قطعة رقم ${message?.landDetails?.plan_number}`
+              }
+              time={format(message.lastMessage?.createdAt, "hh:mm a")}
               image={<Block />}
               onClick={OnClick}
             />
-          )))
+          ))
         ) : (
           <div className="flex flex-col items-center justify-center p-9 w-full">
             <MessageIcon />

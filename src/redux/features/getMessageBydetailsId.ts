@@ -7,9 +7,11 @@ export interface returnType{
     message:string | undefined,
     data:any
 }
-
-export const getDetailsType=createAsyncThunk<returnType>("Offer/get", async (_, { rejectWithValue }) => {  
-        const response = await axios.get(`https://server.mashrook.sa/property-type/get/details`,{
+interface getIdType{
+    id:number
+}
+export const getMessageByDetailId=createAsyncThunk<returnType,getIdType>("messageDetailById", async (data:getIdType, { rejectWithValue }) => {  
+        const response = await axios.get(`https://server.mashrook.sa/message/details/${data?.id}`,{
             headers: {
               Authorization: Cookie.get("token"),
             },
@@ -23,29 +25,29 @@ const initialstate={
     loading:false,
     message:"",
     data:null,
-   
+  
 }
 
-const getDetailTypesSlice=createSlice({
-    name:"getDetails",
+const getMessageByDetailIdSlice=createSlice({
+    name:"getMessageByDetailId",
     initialState:initialstate,
     reducers:{
     },extraReducers:(builder)=>{
-        builder.addCase(getDetailsType.fulfilled,(state,action)=>{
+        builder.addCase(getMessageByDetailId.fulfilled,(state,action)=>{
             state.loading=false
             state.message=action?.payload?.message?action.payload.message:"success"
             state.data=action?.payload?.data
         }),
-        builder.addCase(getDetailsType.pending,(state,action)=>{
+        builder.addCase(getMessageByDetailId.pending,(state,action)=>{
             state.loading=true
             state.message=""
             state.data=null
         }),
-        builder.addCase(getDetailsType.rejected,(state,action)=>{
+        builder.addCase(getMessageByDetailId.rejected,(state,action)=>{
             state.loading=false
             state.message=action.error.message?action.error.message:"error"
             state.data=null
         })
     }
 })
-export default getDetailTypesSlice.reducer
+export default getMessageByDetailIdSlice.reducer

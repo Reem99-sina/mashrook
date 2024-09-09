@@ -125,8 +125,7 @@ export const GitMyPartners = () => {
           " " +
           (ele?.details?.type ||
             ele?.landDetails?.type ||
-            ele?.landDetails?.piece_number);
-
+            "رقم القطعة" + ele?.landDetails?.piece_number);
         setNewData((prev: any) => [
           ...prev,
           {
@@ -159,9 +158,6 @@ export const GitMyPartners = () => {
         ]);
       })
     );
-    return () => {
-      setNewData([]);
-    };
   }, [dataPartner]);
   let fiterData = useMemo(() => {
     return {
@@ -358,6 +354,8 @@ export const GitMyPartners = () => {
                   purpose={offer.purpose}
                   finance={offer.finance}
                   PartnershipNumber={offer.PartnershipNumber}
+                  details_id={offer?.details_id}
+                  land_details_id={offer?.land_details_id}
                   inProgress={offer.inProgress}
                   realEstate={offer.realEstate}
                   bidRequestNumber={offer.bidRequestNumber}
