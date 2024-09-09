@@ -41,7 +41,7 @@ const PropertyLocation: React.FC<PropertyLocationProps> = ({
                 setOpen(true)
                 setDataSend({
                   ...dataSend,
-                  district: "اخري",
+                  district: "",
                 })
               }else{
                 setOpen(false)
@@ -55,7 +55,7 @@ const PropertyLocation: React.FC<PropertyLocationProps> = ({
             value={dataSend?.district}
           >
              <option key={"other"} value={"other"}>
-                اخري
+                أخرى
               </option>
             {district?.map((cityItem) => (
               <option key={cityItem?.id} value={cityItem?.name}>

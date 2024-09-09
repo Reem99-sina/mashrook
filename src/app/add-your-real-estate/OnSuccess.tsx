@@ -20,7 +20,7 @@ const OnSuccess: React.FC<OnSuccessProps> = ({ datarealEstateRequest }) => {
       <div className="flex items-center justify-center flex-col border border-[#F3F4F6] rounded-lg p-3 mb-6 w-4/5 shadow-sm">
         <Succeeded />
         <p className="font-bold text-xl text-[#1F2A37] mt-4 mb-4">
-          تم بنجاح إضافة طلب شراكة عقار
+          تم بنجاح إضافة  عقار
         </p>
         <div className="flex mb-auto bg-[#F3F4F6] rounded-lg justify-center items-center w-24 h-6">
           <p className="text-[#6B7280] text-xs font-normal">
@@ -39,7 +39,7 @@ const OnSuccess: React.FC<OnSuccessProps> = ({ datarealEstateRequest }) => {
           text="العودة الى الرئيسية"
           className="!text-[#3B73B9] !bg-white !border !border-[#3B73B9] rounded !mt-5"
           onClick={() => {
-            router.replace("/");
+            router.push("/");
           }}
         />
       </div>

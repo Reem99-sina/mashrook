@@ -22,7 +22,7 @@ const OnAddYourRequestSuccess: FC<OnAddYourRequestSuccessProps> = ({
       <div className="flex items-center justify-center flex-col border border-[#F3F4F6] rounded-lg p-3 mb-6 w-4/5 shadow-sm">
         <Succeeded />
         <p className="font-bold text-xl text-[#1F2A37] mt-4 mb-4">
-          تم بنجاح إضافة طلب شراكة عقار
+          تم بنجاح إضافة طلب  عقار
         </p>
         <div className="flex mb-auto bg-[#F3F4F6] rounded-lg justify-center items-center w-24 h-6">
           <p className="text-[#6B7280] text-xs font-normal">

@@ -134,14 +134,14 @@ const JoinStatusButtons: React.FC<JoinStatusButtonsProps> = ({
           className={`${
             data?.stage === "finished" ||
             Boolean(token) == false ||
-            user?.email == dataMain?.user?.email
+            user?.id == dataMain?.user_id
               ? "bg-gray-300 text-gray-800"
               : "bg-blue-450 text-white hover:bg-blue-800 border-2 border-blue-500"
           } w-3/4 font-medium rounded-lg text-sm px-5 py-2.5 flex justify-center rtl:flex-row-reverse dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
           disabled={
             data?.stage === "finished" ||
             Boolean(token) == false ||
-            user?.email == dataMain?.user?.email
+            user?.id == dataMain?.user_id
           }
           onClick={handleDialogToggle}
         >
@@ -149,7 +149,7 @@ const JoinStatusButtons: React.FC<JoinStatusButtonsProps> = ({
             className={`mr-4 text-xl ${
               data?.stage === "finished" ||
               Boolean(token) == false ||
-              user?.email == dataMain?.user?.email
+              user?.id == dataMain?.user_id
                 ? "text-gray-600"
                 : "text-white"
             }`}

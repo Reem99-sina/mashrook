@@ -2,7 +2,7 @@
 "use client";
 
 import React, { useRef, useState, useEffect, useMemo } from "react";
-
+import InputRange from "./component/inputRange"
 import { Add, CloseIconSmall,BackButtonOutline } from "@/app/assets/svg";
 import RangeComponent from "@/app/components/shared/range.component";
 import { RadioInput } from "../components/shared/radio.component";
@@ -431,20 +431,6 @@ const AddYourRequest: React.FC = () => {
                     <Image src={Add} width={21} height={21} alt={"add"} />
                   </div>
                 </div>
-                <div className="mt-3" style={{direction:"rtl"}}>
-            <p className="cursor-pointer text-blue-450" onClick={()=>setOpen(!open)}> {open? "حذف":"اضافة"}</p>
-            <input
-            onBlur={(event) =>{
-              if(event?.target?.value){
-                handleCiteInputChange(event?.target?.value)
-              }
-            }
-            }
-            className={`${open==false?"hidden":"block"} p-2 border border-gray-300 rounded-r-lg w-full`}
-           
-            disabled={open==false}
-            />
-        </div>
               </div>
               <div className="flex flex-row gap-3 items-center justify-end flex-wrap mb-5">
                 {selectedCites.map((cite) => (
@@ -563,6 +549,9 @@ const AddYourRequest: React.FC = () => {
                     }}
                     unit="ريال"
                   />
+                  <InputRange onChange={(values: number[]) => {
+                      setCriteria({ ...criteria, shareRange: values });
+                    }} price={criteria?.shareRange}/>
                 </>
               ) : (
                 <>
@@ -583,6 +572,7 @@ const AddYourRequest: React.FC = () => {
                     >
                       <>
                         {detailsVilla && detailsVilla[ind] && (
+                          <>
                           <RangeComponent
                             title="ميزانيتك"
                             firstNumDes="500,000"
@@ -609,6 +599,23 @@ const AddYourRequest: React.FC = () => {
                             }
                             unit="ريال"
                           />
+                          <InputRange onChange={(values: number[]) => {
+                            setDetails((prev) =>
+                              prev?.map((ele, i) =>
+                                i == ind
+                                  ? {
+                                      ...ele,
+                                      min_price: values[0],
+                                      price: values[1],
+                                    }
+                                  : ele
+                              )
+                            )
+                          }} price={[
+                            detailsVilla[ind]?.min_price,
+                            detailsVilla[ind]?.price,
+                          ]}/>
+                          </>
                         )}
                       </>
                     </AccordionComponent>
@@ -750,6 +757,31 @@ const AddYourRequest: React.FC = () => {
                   />
                 </div>
                 <div className="flex flex-col items-end h-[400px] overflow-scroll  w-full">
+                <div
+                      key={"other"}
+                      className="flex justify-end items-center w-full py-2"
+                    >
+                       <span className="mr-2">أخرى</span>
+                      <input
+                        type="checkbox"
+                        onClick={()=>setOpen(!open)}
+                        checked={open==true}
+                        className="checked:accent-[#3B73B9] w-[16px] h-[16px]"
+                      />
+                    </div>
+                
+              
+                <input
+            onBlur={(event) =>{
+              if(event?.target?.value){
+                handleCiteInputChange(event?.target?.value)
+              }
+            }
+            }
+            className={`${open==false?"hidden":"block"} p-2 border border-gray-300 rounded-r-lg w-full`}
+           
+            disabled={open==false}
+            />
                   {filteredCites?.map((cite: any) => (
                     <div
                       key={cite.id}
