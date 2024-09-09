@@ -2,11 +2,11 @@
 
 import { Whatsapp } from "@/app/assets/svg";
 import Link from "next/link";
-import {useEffect,useState} from "react"
+import { useEffect, useState } from "react";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
-import {removeLogin} from "@/redux/features/loginSlice"
-import Cookie from 'js-cookie';
+import { removeLogin } from "@/redux/features/loginSlice";
+import Cookie from "js-cookie";
 
 interface SideBarProps {
   sidebarOpen: boolean;
@@ -17,14 +17,12 @@ export default function SideBar({ sidebarOpen, toggleSidebar }: SideBarProps) {
   const [token, setToken] = useState<string | null>(null);
   const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
-   
-      const storedToken = Cookie.get("token");
-      if(storedToken){
-        setToken(storedToken);        
-      }
-    
+    const storedToken = Cookie.get("token");
+    if (storedToken) {
+      setToken(storedToken);
+    }
   }, []);
-  
+
   return (
     <div>
       {sidebarOpen && (
@@ -32,23 +30,25 @@ export default function SideBar({ sidebarOpen, toggleSidebar }: SideBarProps) {
           <div className=" w-full">
             <div className="text-right text-bold text-2xl ">
               <ul>
-                {!token&&<>
-                  <li className="mb-4 text-xl hover:text-gray-800 ">
-                  <Link
-                    href="/login"
-                    className=" text-gray-500 hover:text-[#3B73B9] "
-                  >
-                    تسجيل الدخول
-                  </Link>
-                </li>
+                {!token && (
+                  <>
+                    <li className="mb-4 text-xl hover:text-gray-800 ">
+                      <Link
+                        href="/login"
+                        className=" text-gray-500 hover:text-[#3B73B9] "
+                      >
+                        تسجيل الدخول
+                      </Link>
+                    </li>
 
-                <li className="mb-4 text-xl text-gray-500 hover:text-[#3B73B9]">
-                  <Link href="/sign-up" className=" ">
-                    إنشاء حساب
-                  </Link>
-                </li>
-                <hr className="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700" />
-                </>}
+                    <li className="mb-4 text-xl text-gray-500 hover:text-[#3B73B9]">
+                      <Link href="/sign-up" className=" ">
+                        إنشاء حساب
+                      </Link>
+                    </li>
+                    <hr className="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700" />
+                  </>
+                )}
                 <li className="mb-4 mt-4  hover:bg-gray-200">
                   <Link href="/market" className=" ">
                     السوق
@@ -57,7 +57,6 @@ export default function SideBar({ sidebarOpen, toggleSidebar }: SideBarProps) {
 
                 <li className="mb-4 hover:bg-gray-200">
                   <Link href="/my-offer" className=" ">
-
                     طلباتي
                   </Link>
                 </li>
@@ -67,7 +66,7 @@ export default function SideBar({ sidebarOpen, toggleSidebar }: SideBarProps) {
                   </Link>
                 </li>
                 <li className="mb-4 ">
-                  <Link href="/" className=" ">
+                  <Link href="/frequently-asked-questions" className=" ">
                     الأسئلة الشائعة
                   </Link>
                 </li>
@@ -81,34 +80,41 @@ export default function SideBar({ sidebarOpen, toggleSidebar }: SideBarProps) {
                     تواصل معنا
                   </Link>
                 </li>
-                {token&&<>
-                  <hr className="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700" />
-                  <li className="mb-4 text-xl hover:text-gray-800 ">
-                  <Link
-                    href="/my-account"
-                    className=" text-blue-450 hover:text-[#3B73B9] "
-                  >
-                    حسابي
-                  </Link>
-                  </li>
-                  <li className="mb-4 text-xl hover:text-gray-800 ">
-                  <Link
-                    href="/"
-                    className=" text-blue-450 hover:text-[#3B73B9] "
-                  >
-                    الاشعارات
-                  </Link>
-                </li>
-                <li className="mb-4 text-xl hover:text-gray-800 ">
-                  <Link
-                    href="/"
-                    className=" text-black hover:text-[#3B73B9] "
-                    onClick={()=>{Cookie.remove("token"); setToken("");Cookie.remove("user");dispatch(removeLogin())}}
-                  >
-                    تسجيل خروج
-                  </Link>
-                </li>
-                </>}
+                {token && (
+                  <>
+                    <hr className="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700" />
+                    <li className="mb-4 text-xl hover:text-gray-800 ">
+                      <Link
+                        href="/my-account"
+                        className=" text-blue-450 hover:text-[#3B73B9] "
+                      >
+                        حسابي
+                      </Link>
+                    </li>
+                    <li className="mb-4 text-xl hover:text-gray-800 ">
+                      <Link
+                        href="/"
+                        className=" text-blue-450 hover:text-[#3B73B9] "
+                      >
+                        الاشعارات
+                      </Link>
+                    </li>
+                    <li className="mb-4 text-xl hover:text-gray-800 ">
+                      <Link
+                        href="/"
+                        className=" text-black hover:text-[#3B73B9] "
+                        onClick={() => {
+                          Cookie.remove("token");
+                          setToken("");
+                          Cookie.remove("user");
+                          dispatch(removeLogin());
+                        }}
+                      >
+                        تسجيل خروج
+                      </Link>
+                    </li>
+                  </>
+                )}
               </ul>
             </div>
             <div className=" justify-center items-center flex flex-col w-full">
