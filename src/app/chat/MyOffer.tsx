@@ -12,6 +12,7 @@ import Cookie from "js-cookie";
 
 import { Note } from "../assets/svg";
 import { FaRegUserCircle } from "react-icons/fa";
+import {chatInfo} from "@/type/chatinterface"
 const message = [
   {
     count: 1,
@@ -60,8 +61,12 @@ const message = [
 export const MyOffer = () => {
   const router = useRouter();
   const [token, setToken] = useState<string | null>(null);
-  const OnClick = (id: number) => {
-    router.push(`/ChatPage/${id}`);
+  const OnClick = (message:chatInfo) => {
+    Cookie.set("title",  message?.details?.type
+      ? `${message?.property?.propertyTypeDetails?.title} ${message?.property?.propertyType?.title}`
+      : `${message?.property?.propertyType?.title} قطعة رقم ${message?.landDetails?.plan_number}`)
+    router.push(`/ChatPage/${message?.id}`);
+
   };
   const {
     loading,
@@ -107,19 +112,19 @@ export const MyOffer = () => {
             </div>
           </>
         ) : data?.length > 0 ? (
-          data?.map((message: any, index: number) => (
+          data?.map((message: chatInfo, index: number) => (
             <ChatCard
               key={message?.id}
               count={1}
               subtitle={message.lastMessage.message}
               title={
-                message?.property?.propertyTypeDetails?.title
+                message?.details?.type
                   ? `${message?.property?.propertyTypeDetails?.title} ${message?.property?.propertyType?.title}`
                   : `${message?.property?.propertyType?.title} قطعة رقم ${message?.landDetails?.plan_number}`
               }
               time={format(message.lastMessage?.createdAt, "hh:mm a")}
               image={<Block />}
-              onClick={() => OnClick(message?.id)}
+              onClick={() => OnClick(message)}
             />
           ))
         ) : (

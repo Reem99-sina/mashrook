@@ -73,7 +73,7 @@ export const GitMyPartners = () => {
     city: "",
     district: "",
     unitType: "",
-    unitStatus: "",
+    unitStatus: false,
     purposeStatus: "",
     priceRange: [500000, 20000000],
     shareRange: [10, 90],
@@ -139,15 +139,12 @@ export const GitMyPartners = () => {
       property_type_details_id: criteria?.unitType!=0?criteria?.unitType:null
       ,property_purpose_id:criteria?.purposeStatus!=0?criteria?.purposeStatus:null
       ,status: (criteria?.dealStatus=="متكامل")?"complete":"available" ,
-      sort: optionFilter == "الأحدث الى الأقدم" ? "created_desc" : optionFilter == "الأقدم الى الأحدث" ? "created_asc" : optionFilter == "الميزانية ( الأدنى الى الأعلى)" ? "price_asc" : optionFilter == "الميزانية ( الأعلى الى الأدنى)"?"price_decs":""
+      sort: optionFilter == "الأحدث الى الأقدم" ? "created_desc" : optionFilter == "الأقدم الى الأحدث" ? "created_asc" : optionFilter == "الميزانية ( الأدنى الى الأعلى)" ? "price_asc" : optionFilter == "الميزانية ( الأعلى الى الأدنى)"?"price_decs":"",
+      finance:criteria?.unitStatus
       // option=="الأحدث إلى الأقدم"?handleSelect("latest"):option=="الأقدم الى الأحدث"?handleSelect("oldest"):option=="الميزانية ( الأدنى الى الأعلى)"?handleSelect("priceLowToHigh"):handleSelect("priceHighToLow")
     }
   }, [criteria,optionFilter])
-  let dataNew=useMemo(()=>{
-
-  },[
-    newData
-  ])
+  
   
   let dataPagination=useMemo(()=>{
     return newData?.slice(

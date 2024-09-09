@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { useState, useEffect } from "react";
 import SideBar from "./SideBar2";
 import {
@@ -43,13 +43,13 @@ export default function MainHeader() {
       <div className="flex items-center justify-between">
         <div className="w-full self-center p-4">
           <button onClick={toggleSidebar}>
-            {!dataUser?.token ? (
+            {!dataUser ? (
               <Mainnavigationmenu />
             ) : (
               <div className="flex items-center flex-row-reverse gap-x-2 border-2 border-gray-200 p-2 rounded-full">
                 <div className="relative inline-flex items-center justify-center flex-row-reverse w-5 h-5 overflow-hidden bg-gray-200 rounded-full dark:bg-gray-600">
                   <span className="font-medium text-gray-600 dark:text-gray-300 p-2">
-                    {dataUser?.user?.username[0].toUpperCase()}
+                    {dataUser?.username[0].toUpperCase()}
                   </span>
                 </div>
                 <User />

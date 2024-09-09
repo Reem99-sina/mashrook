@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo,useEffect } from "react";
+import React, { useState, useMemo,useEffect,useRef } from "react";
 import {
   FaRegCalendarAlt,
   FaBookmark,
@@ -26,6 +26,8 @@ import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { dataReturn, addUnqiue } from "@/redux/features/getRequest";
 import Cookie from 'js-cookie';
+import ModalMapComponent from "@/app/components/shared/ModalMap"
+import {  ModalRef } from "@/app/components/shared/modal.component";
 type PropertyCardProps = {
   page?: number;
   limit?: number;
@@ -39,7 +41,11 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ page, limit }) => {
   const [show, setShow] = useState(false);
   const [user, setUser] = useState<any | null>(null);
   const [notificationMessage, setNotificationMessage] = useState("");
-  
+  const [location,setLocation]=useState({
+    lat:0,
+    long:0
+  })
+  const modalRef = useRef<ModalRef>(null);
   let { loading, message, data } = useSelector<RootState>(
     (state) => state.getRequest
   ) as { loading: boolean; message: string; data: dataReturn[] };
@@ -305,7 +311,13 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ page, limit }) => {
                   </div>
                 </div>
               </div>
-              <div className="w-[40px] h-[40px] border-2 rounded-full flex items-center justify-center">
+              <div className="w-[40px] h-[40px] border-2 rounded-full flex items-center justify-center cursor-pointer" onClick={()=>{
+                  setLocation({
+                    lat:ele?.propertyLocation?.lat,
+                    long:ele?.propertyLocation?.long
+                  })
+                  modalRef?.current?.open()
+              }}>
                 <CiLocationOn className="text-5xl w-[24px] h-[24px]" />
               </div>
             </div>
@@ -369,6 +381,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ page, limit }) => {
           </div>
         </div>
       ))}
+      <ModalMapComponent refModel={modalRef} lat={location?.lat} long={location?.long}/>
     </div>
   );
 };

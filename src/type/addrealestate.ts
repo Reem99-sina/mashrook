@@ -70,7 +70,8 @@ export interface detailOneInfo{
     min_apartment_floor: string|null,
     createdAt:string,
     updatedAt: string,
-    property_id: number
+    property_id: number,
+    type:string
 }
 export interface amenitiesInfo{
     id: number,

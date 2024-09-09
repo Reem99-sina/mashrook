@@ -14,7 +14,7 @@ interface criteriaInfo {
   city: string,
   district: string,
   unitType: string | number,
-  unitStatus: string,
+  unitStatus: boolean,
   priceRange: number[]
 }
 type FilterModalProps = {
@@ -26,7 +26,6 @@ type FilterModalProps = {
 };
 
 const FilterModal: React.FC<FilterModalProps> = ({ onClose, onFilter,open, criteria, setCriteria}) => {
-  const [boolStatus, setbool] = useState<boolean>(false);
   const dispatch = useDispatch<AppDispatch>();
   const [sortOption, setSortOption] = useState<string>("");
   let refFilter=useRef<ModalRef>(null)
@@ -272,18 +271,18 @@ useEffect(() => {
         <button
                 key={"yes"}
                 className={`px-4 py-2 m-1 rounded-md border text-sm ${
-                    boolStatus == true ? "bg-blue-450 text-white" : "bg-white text-gray-900"
+                  criteria?.unitStatus == true ? "bg-blue-450 text-white" : "bg-white text-gray-900"
                 }`}
-                onClick={() => setbool(true)}
+                onClick={() => setCriteria({ ...criteria, unitStatus: true })}
               >
                نعم
               </button>
               <button
                 key={"no"}
                 className={`px-4 py-2 m-1 rounded-md border text-sm ${
-                    boolStatus == false ? "bg-blue-450 text-white" : "bg-white text-gray-900"
+                  criteria?.unitStatus == false ? "bg-blue-450 text-white" : "bg-white text-gray-900"
                 }`}
-                onClick={() => setbool(false)}
+                onClick={() => setCriteria({ ...criteria, unitStatus: false })}
               >
                لا
               </button>
@@ -303,7 +302,7 @@ useEffect(() => {
               city: "",
               district: "",
               unitType: "",
-              unitStatus: "",
+              unitStatus: true,
               priceRange: [500000, 20000000]
             })
             onClose()

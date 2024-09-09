@@ -12,21 +12,30 @@ import {
 } from "@/app/assets/svg";
 import { IoAttach } from "react-icons/io5";
 import { useRouter,useParams } from "next/navigation";
-import {getMessageByid} from "@/redux/features/getMessage"
+import {getMessageByDetailId} from "@/redux/features/getMessageBydetailsId"
+import {getMessageByLandId} from "@/redux/features/getMessageBylandId"
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
-
+import {chatdetailinfo} from "@/type/chatinterface"
+import { format } from "date-fns";
 const ChatPage = () => {
   const params = useParams();
   const [user,setUser]=useState<any>()
-  const { loading,
-    message,
-    data } = useSelector<RootState>(
-    (state) => state.messageByID
+  const { 
+    data:dataDetail } = useSelector<RootState>(
+    (state) => state.messageByDetailsId
   ) as {
     loading: boolean;
     message: string;
-    data: any;
+    data: chatdetailinfo[];
+  };
+  const { 
+    data:dataLand } = useSelector<RootState>(
+    (state) => state.messageByLandId
+  ) as {
+    loading: boolean;
+    message: string;
+    data: chatdetailinfo[];
   };
   const {id}=params
   const [messages, setMessages] = useState([
@@ -111,9 +120,14 @@ const ChatPage = () => {
   }, []);
   useEffect(()=>{
     if(id){
-      dispatch(getMessageByid({id:Number(id)}))
+      if(detail){
+        dispatch(getMessageByDetailId({id:Number(id)}))
+      }else{
+        dispatch(getMessageByLandId({id:Number(id)}))
+        // getMessageByLandId
+      }
     }
-  },[id,dispatch])
+  },[id,dispatch,detail])
   return (
     <>
       <div className="flex flex-col h-screen bg-white">
@@ -133,7 +147,7 @@ const ChatPage = () => {
                 <Block />
               </span>
               <h1 className="text-sm font-bold text-[#36343B]">
-                {land?land:detail} (رقم الطلب 2022)
+                {land?land:detail}
               </h1>
             </div>
             <div className="flex items-center ">
@@ -144,8 +158,8 @@ const ChatPage = () => {
           </div>
 
           <div className="flex-1  p-4 gap-4 flex flex-col">
-            {data?.length > 0
-              ? data.map((msg:any, index:number) => (
+            {dataDetail?.length > 0
+              ? dataDetail?.map((msg:any, index:number) => (
                   <div
                     key={index}
                     className={`flex ${
@@ -169,7 +183,7 @@ const ChatPage = () => {
                           {user?.id==msg?.user_id?msg?.sender:"ادارة مشروك"}
                         </p>
                         <span className="text-xs font-normal text-[#9CA3AF]">
-                          {msg?.createdAt}
+                          {format(msg?.createdAt, "hh:mm a")}
                         </span>
                       </div>
                       <div
@@ -180,11 +194,61 @@ const ChatPage = () => {
                         }`}
                       >
                         <p className="mt-1">{msg?.message}</p>
+                        {msg?.type=="share_property"&&
+                        <div className="bg-white rounded-lg shadow-lg flex flex-col items-center justify-center p-2">
+                          <p className="text-[#98CC5D] text-sm">انضمام الشركاء</p>
+                          <p className="text-blue-450 text-xs">(تم  التحقق من الدفع وقبول طلب الشراكة)</p>
+                        </div>
+                        }
                       </div>
                     </div>
                   </div>
                 ))
-              : ""}
+              : dataLand?.map((msg:any, index:number) => (
+                <div
+                  key={index}
+                  className={`flex ${
+                    user?.id==msg?.user_id? "justify-start" : "justify-end"
+                  } mb-2`}
+                >
+                  <div className="flex flex-col gap-1">
+                    <div
+                      className={`flex flex-row items-center justify-center gap-3 ${
+                        user?.id==msg?.user_id ? "flex-row" : "flex-row-reverse"
+                      }`}
+                    >
+                      {user?.id==msg?.user_id ? (
+                        <span className="bg-[#E5E7EB] text-[#111928] font-normal items-center justify-center rounded-full w-9 h-9 flex">
+                          ي
+                        </span>
+                      ) : (
+                        <MashrookLogoChat />
+                      )}
+                      <p className="text-[#4B5563] text-sm font-semibold">
+                        {user?.id==msg?.user_id?msg?.sender:"ادارة مشروك"}
+                      </p>
+                      <span className="text-xs font-normal text-[#9CA3AF]">
+                        {msg?.createdAt}
+                      </span>
+                    </div>
+                    <div
+                      className={`max-w-xs p-3 rounded-lg ${
+                        user?.id==msg?.user_id
+                          ? "bg-[#3B73B9] text-white"
+                          : "bg-gray-100"
+                      }`}
+                    >
+                      <p className="mt-1">{msg?.message}</p>
+                      {msg?.type=="share_property"&&
+                        <div className="bg-white rounded-lg shadow-lg flex flex-col items-center justify-center p-2">
+                          <p className="text-[#98CC5D] text-sm">انضمام الشركاء</p>
+                          <p className="text-blue-450 text-xs">(تم  التحقق من الدفع وقبول طلب الشراكة)</p>
+                        </div>
+                        }
+                    </div>
+                  </div>
+                </div>
+              ))}
           </div>
 
           <div className="flex items-center border-t p-4 gap-2">

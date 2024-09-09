@@ -30,7 +30,7 @@ interface criteriaInfo {
   city: string,
   district: string,
   unitType: string | number,
-  unitStatus: string,
+  unitStatus: boolean,
   priceRange: number[],
   shareRange: number[],
 }
@@ -80,7 +80,7 @@ export const GitMyOrders = () => {
     city: "",
     district: "",
     unitType: "",
-    unitStatus: "",
+    unitStatus: true,
     priceRange: [500000, 20000000],
 
   });
@@ -157,7 +157,8 @@ export const GitMyOrders = () => {
       district: criteria?.district,
       property_type_details_id: criteria?.unitType != 0 ? criteria?.unitType : null
       , status: (criteria?.dealStatus == "متكامل" || criteria?.dealStatus == "منتهي") ? "complete" : "available",
-      sort: optionFilter == "الأحدث الى الأقدم" ? "created_desc" : optionFilter == "الأقدم الى الأحدث" ? "created_asc" : optionFilter == "الميزانية ( الأدنى الى الأعلى)" ? "price_asc" : optionFilter == "الميزانية ( الأعلى الى الأدنى)" ? "price_decs" : ""
+      sort: optionFilter == "الأحدث الى الأقدم" ? "created_desc" : optionFilter == "الأقدم الى الأحدث" ? "created_asc" : optionFilter == "الميزانية ( الأدنى الى الأعلى)" ? "price_asc" : optionFilter == "الميزانية ( الأعلى الى الأدنى)" ? "price_decs" : "",
+      finance:criteria?.unitStatus
       // option=="الأحدث إلى الأقدم"?handleSelect("latest"):option=="الأقدم الى الأحدث"?handleSelect("oldest"):option=="الميزانية ( الأدنى الى الأعلى)"?handleSelect("priceLowToHigh"):handleSelect("priceHighToLow")
     }
   }, [criteria, optionFilter])

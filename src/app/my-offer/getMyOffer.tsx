@@ -32,7 +32,7 @@ interface criteriaInfo {
   city: string,
   district: string,
   unitType: string | number,
-  unitStatus: string,
+  unitStatus: boolean,
   realEstateStatus:string,
   purposeStatus:string,
   priceRange: number[],
@@ -56,7 +56,8 @@ export const GitMyOffers = () => {
     realEstateStatus: "",
     purposeStatus:"",
     priceRange: [500000, 20000000],
-    shareRange: [10, 90]
+    shareRange: [10, 90],
+    unitStatus: false,
   });
   const [idDelete, setId] = useState<number>();
   const dispatch = useDispatch<AppDispatch>();
@@ -130,6 +131,7 @@ export const GitMyOffers = () => {
       ,property_purpose_id:criteria?.purposeStatus!=0?criteria?.purposeStatus:null
       ,status: (criteria?.dealStatus=="متكامل")?"complete":"available" ,
       sort: optionFilter == "الأحدث الى الأقدم" ? "created_desc" : optionFilter == "الأقدم الى الأحدث" ? "created_asc" : optionFilter == "الميزانية ( الأدنى الى الأعلى)" ? "price_asc" : optionFilter == "الميزانية ( الأعلى الى الأدنى)"?"price_decs":""
+      ,finance:criteria?.unitStatus
       // option=="الأحدث إلى الأقدم"?handleSelect("latest"):option=="الأقدم الى الأحدث"?handleSelect("oldest"):option=="الميزانية ( الأدنى الى الأعلى)"?handleSelect("priceLowToHigh"):handleSelect("priceHighToLow")
     }
   }, [criteria,optionFilter])

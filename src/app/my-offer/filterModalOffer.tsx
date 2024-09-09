@@ -14,7 +14,7 @@ interface criteriaInfo {
   city: string,
   district: string,
   unitType: string | number,
-  unitStatus: string,
+  unitStatus: boolean,
   realEstateStatus:string,
   purposeStatus:string,
   priceRange: number[],
@@ -32,7 +32,7 @@ type FilterModalProps = {
 const FilterModalOffer: React.FC<FilterModalProps> = ({ onClose, onFilter,open,criteria,setCriteria,onCloseRequest }) => {
   let refFilter=useRef<ModalRef>(null)
   const dispatch = useDispatch<AppDispatch>();
-  const [boolStatus, setbool] = useState<boolean>(false);
+ 
   // Example data for dropdowns
   const cities = ["الرياض", "الدمام", "جدة"];
   const districts = ["الياسمين", "البنفسج", "الورود"];
@@ -399,18 +399,18 @@ let {
         <button
                 key={"yes"}
                 className={`px-4 py-2 m-1 rounded-md border text-sm ${
-                    boolStatus == true ? "bg-blue-450 text-white" : "bg-white text-gray-900"
+                  criteria?.unitStatus == true ? "bg-blue-450 text-white" : "bg-white text-gray-900"
                 }`}
-                onClick={() => setbool(true)}
+                onClick={() => setCriteria({ ...criteria, unitStatus: true })}
               >
                نعم
               </button>
               <button
                 key={"no"}
                 className={`px-4 py-2 m-1 rounded-md border text-sm ${
-                    boolStatus == false ? "bg-blue-450 text-white" : "bg-white text-gray-900"
+                  criteria?.unitStatus == false ? "bg-blue-450 text-white" : "bg-white text-gray-900"
                 }`}
-                onClick={() => setbool(false)}
+                onClick={() => setCriteria({ ...criteria, unitStatus: false })}
               >
                لا
               </button>
@@ -431,7 +431,7 @@ let {
                 city: "",
                 district: "",
                 unitType: "",
-                unitStatus: "",
+                unitStatus: true,
                 realEstateStatus:"",
                 purposeStatus:"",
                 priceRange: [500000, 20000000],

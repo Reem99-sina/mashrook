@@ -71,7 +71,7 @@ const AddYourRequest: React.FC = () => {
   const router = useRouter();
   const [token, setToken] = useState<string | null>(null);
   const [selectedCites, setSelectedCites] = useState<
-    { id: number; name: string }[]
+    { id?: number; name: string }[]
   >([]);
   const modalRef = useRef<ModalRef>(null);
   const modalRefRules = useRef<ModalRef>(null);
@@ -106,6 +106,7 @@ const AddYourRequest: React.FC = () => {
     floorType: "",
   });
   const [sentYourRequest, setSentYourRequest] = useState<boolean>(false);
+  let [open,setOpen]=useState<boolean>(false)
   const [errors, setErrors] = useState<properityErrorTypeInter>();
   const { data, titleSection, detailsSection } =
   useSelector<RootState>((state) => state.properityType) as {
@@ -147,9 +148,16 @@ const AddYourRequest: React.FC = () => {
       }
     });
   };
-
+  const handleCiteInputChange = (cite:string) => {
+    setSelectedCites((prevSelectedCites) => {
+        return [...prevSelectedCites, {name:cite,id:undefined}];
+    });
+  };
   const handleRemoveCite = (id: number) => {
     setSelectedCites(selectedCites.filter((cite) => cite.id !== id));
+  };
+  const handleRemoveInputCite = (name: string) => {
+    setSelectedCites(selectedCites.filter((cite) => cite.name !== name));
   };
   const handleBack = (e:React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
@@ -423,6 +431,20 @@ const AddYourRequest: React.FC = () => {
                     <Image src={Add} width={21} height={21} alt={"add"} />
                   </div>
                 </div>
+                <div className="mt-3" style={{direction:"rtl"}}>
+            <p className="cursor-pointer text-blue-450" onClick={()=>setOpen(!open)}> {open? "حذف":"اضافة"}</p>
+            <input
+            onBlur={(event) =>{
+              if(event?.target?.value){
+                handleCiteInputChange(event?.target?.value)
+              }
+            }
+            }
+            className={`${open==false?"hidden":"block"} p-2 border border-gray-300 rounded-r-lg w-full`}
+           
+            disabled={open==false}
+            />
+        </div>
               </div>
               <div className="flex flex-row gap-3 items-center justify-end flex-wrap mb-5">
                 {selectedCites.map((cite) => (
@@ -432,8 +454,8 @@ const AddYourRequest: React.FC = () => {
                   >
                     <CloseIconSmall
                       className="cursor-pointer w-4 h-4"
-                      onClick={() => handleRemoveCite(cite.id)}
-                    />
+                      onClick={() =>cite?.id?handleRemoveCite(cite.id):handleRemoveInputCite(cite?.name)}
+                    />  
                     <p className="text-xs font-normal text-[#9CA3AF]">
                       {cite.name}
                     </p>
