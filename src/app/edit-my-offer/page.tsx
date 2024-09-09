@@ -14,16 +14,14 @@ import toast from "react-hot-toast";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import {
-
   putDetailsType,
   putLandDetailsType,
-  removeStateEdit
+  removeStateEdit,
 } from "@/redux/features/postRealEstate";
-
 
 const EditMyOffer = () => {
   const modalRef = useRef<ModalRef>(null);
-  let [offer, setOffer] = useState<any>()
+  let [offer, setOffer] = useState<any>();
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
   let {
@@ -31,21 +29,21 @@ const EditMyOffer = () => {
     messagePut,
 
     dataPutDetail,
-    messagePutDetail
+    messagePutDetail,
   } = useSelector<RootState>((state) => state.realEstateRequest) as {
-    dataPut: any,
-    messagePut: string,
+    dataPut: any;
+    messagePut: string;
 
-    dataPutDetail: any,
-    messagePutDetail: string
+    dataPutDetail: any;
+    messagePutDetail: string;
   };
   const handleBack = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     router.push("/my-offer");
   };
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const offer = sessionStorage.getItem('offer');
+    if (typeof window !== "undefined") {
+      const offer = sessionStorage.getItem("offer");
       if (offer !== null) {
         const storedToken = JSON.parse(offer);
         setOffer(storedToken);
@@ -63,18 +61,16 @@ const EditMyOffer = () => {
       router.push("/my-offer");
       // setSentYourRequest(true);
     }
-  }, [dataPut, messagePut, dataPutDetail,
-    messagePutDetail, router]);
+  }, [dataPut, messagePut, dataPutDetail, messagePutDetail, router]);
   useEffect(() => {
     return () => {
-      dispatch(removeStateEdit())
-    }
-  }, [dispatch])
+      dispatch(removeStateEdit());
+    };
+  }, [dispatch]);
   const onSubmit = () => {
     if (offer?.type) {
       dispatch(
         putDetailsType({
-
           area: offer?.area,
           price: offer?.price,
           rooms_number: offer?.rooms_number,
@@ -90,23 +86,22 @@ const EditMyOffer = () => {
           car_entrance: offer?.amenities?.car_entrance,
           garage: offer?.amenities?.garage,
           kitchen: offer?.amenities?.kitchen,
-          details_id: offer?.id
+          details_id: offer?.id,
         })
-      )
+      );
     } else {
       dispatch(
         putLandDetailsType({
-
           area: Number(offer?.area),
           price: Number(offer?.price),
           piece_number: offer?.piece_number,
           plan_number: offer?.plan_number,
           // status: dataCom?.status, /// مشاع او حر
-          land_details_id: offer?.id
+          land_details_id: offer?.id,
         })
-      )
+      );
     }
-  }
+  };
   return (
     <form className="bg-white flex w-full h-full min-h-screen  flex-col p-5">
       <MainHeader />
@@ -127,124 +122,138 @@ const EditMyOffer = () => {
         </div>
       </div>
 
-      <div className="bg-white rounded-lg border border-[#E5E7EB] w-full mb-4 items-start justify-start p-5 mt-6" dir="rtl">
-        {!offer?.type ? <><div className="flex items-start gap-2 justify-end flex-col mt-5">
-          <p className="text-base text-[#4B5563] font-medium">
-            رقم المخطط{" "}
-          </p>
-          <input
-
-            placeholder="-- الرجاء الادخال --"
-            className="w-full p-2 border border-gray-300 rounded-lg"
-            onChange={(event) => setOffer((prev: any) => ({ ...prev, piece_number: event?.target?.value }))}
-            value={offer?.piece_number}
-          />
-        </div>
-          <div className="mb-4">
-            <label className="block mb-2 font-medium mt-2">
-              رقم القطعة{" "}
-            </label>
-            <div className="flex items-center">
+      <div
+        className="bg-white rounded-lg border border-[#E5E7EB] w-full mb-4 items-start justify-start p-5 mt-6"
+        dir="rtl"
+      >
+        {!offer?.type ? (
+          <>
+            <div className="flex items-start gap-2 justify-end flex-col mt-5">
+              <p className="text-base text-[#4B5563] font-medium">
+                رقم المخطط{" "}
+              </p>
               <input
-                type="text"
-                className="w-full p-2 border border-gray-300 rounded-lg"
                 placeholder="-- الرجاء الادخال --"
-                onChange={(event) => setOffer((prev: any) => ({ ...prev, plan_number: event?.target?.value }))}
-                value={offer?.plan_number}
+                className="w-full p-2 border border-gray-300 rounded-lg"
+                onChange={(event) =>
+                  setOffer((prev: any) => ({
+                    ...prev,
+                    piece_number: event?.target?.value,
+                  }))
+                }
+                value={offer?.piece_number}
               />
             </div>
-          </div>
-        </> : <></>}
-        <InputAreaPrice title="المساحة" onChange={(event) => setOffer((prev: any) => ({ ...prev, area: Number(event?.target?.value) }))} measurement="متر" value={offer?.area} />
+            <div className="mb-4">
+              <label className="block mb-2 font-medium mt-2">رقم القطعة </label>
+              <div className="flex items-center">
+                <input
+                  type="text"
+                  className="w-full p-2 border border-gray-300 rounded-lg"
+                  placeholder="-- الرجاء الادخال --"
+                  onChange={(event) =>
+                    setOffer((prev: any) => ({
+                      ...prev,
+                      plan_number: event?.target?.value,
+                    }))
+                  }
+                  value={offer?.plan_number}
+                />
+              </div>
+            </div>
+          </>
+        ) : (
+          <></>
+        )}
+        <InputAreaPrice
+          title="المساحة"
+          onChange={(event) =>
+            setOffer((prev: any) => ({
+              ...prev,
+              area: Number(event?.target?.value),
+            }))
+          }
+          measurement="متر"
+          value={offer?.area}
+        />
 
         <InputAreaPrice
           title="السعر"
-          onChange={(event) => setOffer((prev: any) => ({ ...prev, price: Number(event?.target?.value) }))}
+          onChange={(event) =>
+            setOffer((prev: any) => ({
+              ...prev,
+              price: Number(event?.target?.value),
+            }))
+          }
           measurement="ريال"
           value={offer?.price}
           desc="(بدون القيمة المضافة والسعي)"
         />
-        {offer?.type ? <>
-          <NumberRoom
-            value={offer?.rooms_number}
-            onChange={(event) => setOffer((prev: any) => ({ ...prev, rooms_number: Number(event?.target?.value) }))}
-            name="rooms_number"
-            title={"عدد الغرف"}
-            firstNumber={"غرفة"}
-            secondNumber={"+10 غرف"}
-            max={10}
-          />
-          <NumberRoom
-            value={offer?.halls_number}
-            onChange={(event) => setOffer((prev: any) => ({ ...prev, halls_number: Number(event?.target?.value) }))}
+        {offer?.type ? (
+          <>
+            <NumberRoom
+              value={offer?.rooms_number}
+              onChange={(event) =>
+                setOffer((prev: any) => ({
+                  ...prev,
+                  rooms_number: Number(event?.target?.value),
+                }))
+              }
+              name="rooms_number"
+              title={"عدد الغرف"}
+              firstNumber={"غرفة"}
+              secondNumber={"+10 غرف"}
+              max={10}
+            />
+            <NumberRoom
+              value={offer?.halls_number}
+              onChange={(event) =>
+                setOffer((prev: any) => ({
+                  ...prev,
+                  halls_number: Number(event?.target?.value),
+                }))
+              }
+              name="halls_number"
+              title={"عدد الصالات"}
+              firstNumber={"صالة"}
+              secondNumber={"3+ صالات "}
+              max={3}
+            />
+            <NumberRoom
+              value={offer?.bathrooms_number}
+              onChange={(event) =>
+                setOffer((prev: any) => ({
+                  ...prev,
+                  bathrooms_number: Number(event?.target?.value),
+                }))
+              }
+              name="bathrooms_number"
+              title={"عدد دورات المياه"}
+              firstNumber={"دورة مياه"}
+              secondNumber={"3+ دورة مياه "}
+              max={3}
+            />
+            <NumberRoom
+              value={offer?.kitchens_number}
+              onChange={(event) =>
+                setOffer((prev: any) => ({
+                  ...prev,
+                  kitchens_number: Number(event?.target?.value),
+                }))
+              }
+              name="kitchens_number"
+              title={" عدد المطابخ"}
+              firstNumber={"مطبخ"}
+              secondNumber={"3+ مطابخ"}
+              max={3}
+            />
+          </>
+        ) : (
+          <></>
+        )}
 
-            name="halls_number"
-            title={"عدد الصالات"}
-            firstNumber={"صالة"}
-            secondNumber={"3+ صالات "}
-            max={3}
-          />
-          <NumberRoom
-            value={offer?.bathrooms_number}
-            onChange={(event) => setOffer((prev: any) => ({ ...prev, bathrooms_number: Number(event?.target?.value) }))}
-            name="bathrooms_number"
-            title={"عدد دورات المياه"}
-            firstNumber={"دورة مياه"}
-            secondNumber={"3+ دورة مياه "}
-            max={3}
-          />
-          <NumberRoom
-            value={offer?.kitchens_number}
-            onChange={(event) => setOffer((prev: any) => ({ ...prev, kitchens_number: Number(event?.target?.value) }))}
-            name="kitchens_number"
-            title={" عدد المطابخ"}
-            firstNumber={"مطبخ"}
-            secondNumber={"3+ مطابخ"}
-            max={3}
-          />
-        </> : <></>}
-
-        {offer?.type && offer?.type != "الفيلا" ? <>
-
-          <div className="mt-2">
-            <div
-              className="flex justify-between text-sm mt-2"
-              style={{ direction: "rtl" }}
-            >
-              <p className="font-medium text-base text-[#4B5563]">
-                مزايا إضافية:
-              </p>
-            </div>
-            <div
-              className=" flex flex-row flex-wrap gap-8"
-              style={{ direction: "rtl" }}
-            >
-
-              <CheckFeature title="مكيفة" onChange={(event) => setOffer((prev: any) => (
-                { ...prev, amenities: { ...prev.amenities, ac: event?.target?.checked } }
-              ))} checked={offer?.amenities?.ac} />
-              <CheckFeature title="مدخل سيارة" onChange={(event) => setOffer((prev: any) => (
-                { ...prev, amenities: { ...prev.amenities, car_entrance: event?.target?.checked } }
-              ))} checked={offer?.amenities?.car_entrance} />
-              <CheckFeature title="مطبخ راكب" onChange={(event) => setOffer((prev: any) => (
-                { ...prev, amenities: { ...prev.amenities, kitchen: event?.target?.checked } }
-              ))} checked={offer?.amenities?.kitchen} />
-              <CheckFeature title="مؤثثة" onChange={(event) => setOffer((prev: any) => (
-                { ...prev, amenities: { ...prev.amenities, finance: event?.target?.checked } }
-              ))} checked={offer?.amenities?.finance} />
-              <CheckFeature title="مسبح" onChange={(event) => setOffer((prev: any) => (
-                  { ...prev, amenities: { ...prev.amenities, pool: event?.target?.checked } }
-                ))} checked={offer?.amenities?.pool} />
-                <CheckFeature title="كراج للسيارات" onChange={(event) => setOffer((prev: any) => (
-                  { ...prev, amenities: { ...prev.amenities, garage: event?.target?.checked } }
-                ))} checked={offer?.amenities?.garage} />
-                <CheckFeature title="غرفة خدم" onChange={(event) => setOffer((prev: any) => (
-                  { ...prev, amenities: { ...prev.amenities, servants_room: event?.target?.checked } }
-                ))} checked={offer?.amenities?.servants_room} />
-                
-
-            </div>
-          </div></> : offer?.type && offer?.type == "الفيلا" ? <>
+        {offer?.type && offer?.type != "الفيلا" ? (
+          <>
             <div className="mt-2">
               <div
                 className="flex justify-between text-sm mt-2"
@@ -258,34 +267,212 @@ const EditMyOffer = () => {
                 className=" flex flex-row flex-wrap gap-8"
                 style={{ direction: "rtl" }}
               >
-
-<CheckFeature title="مكيفة" onChange={(event) => setOffer((prev: any) => (
-                { ...prev, amenities: { ...prev.amenities, ac: event?.target?.checked } }
-              ))} checked={offer?.amenities?.ac} />
-              <CheckFeature title="مدخل سيارة" onChange={(event) => setOffer((prev: any) => (
-                { ...prev, amenities: { ...prev.amenities, car_entrance: event?.target?.checked } }
-              ))} checked={offer?.amenities?.car_entrance} />
-              <CheckFeature title="مطبخ راكب" onChange={(event) => setOffer((prev: any) => (
-                { ...prev, amenities: { ...prev.amenities, kitchen: event?.target?.checked } }
-              ))} checked={offer?.amenities?.kitchen} />
-              <CheckFeature title="مؤثثة" onChange={(event) => setOffer((prev: any) => (
-                { ...prev, amenities: { ...prev.amenities, finance: event?.target?.checked } }
-              ))} checked={offer?.amenities?.finance} />
-              <CheckFeature title="مسبح" onChange={(event) => setOffer((prev: any) => (
-                  { ...prev, amenities: { ...prev.amenities, pool: event?.target?.checked } }
-                ))} checked={offer?.amenities?.pool} />
-                <CheckFeature title="كراج للسيارات" onChange={(event) => setOffer((prev: any) => (
-                  { ...prev, amenities: { ...prev.amenities, garage: event?.target?.checked } }
-                ))} checked={offer?.amenities?.garage} />
-                <CheckFeature title="غرفة خدم" onChange={(event) => setOffer((prev: any) => (
-                  { ...prev, amenities: { ...prev.amenities, servants_room: event?.target?.checked } }
-                ))} checked={offer?.amenities?.servants_room} />
-             
-
-
+                <CheckFeature
+                  title="مكيفة"
+                  onChange={(event) =>
+                    setOffer((prev: any) => ({
+                      ...prev,
+                      amenities: {
+                        ...prev.amenities,
+                        ac: event?.target?.checked,
+                      },
+                    }))
+                  }
+                  checked={offer?.amenities?.ac}
+                />
+                <CheckFeature
+                  title="مدخل سيارة"
+                  onChange={(event) =>
+                    setOffer((prev: any) => ({
+                      ...prev,
+                      amenities: {
+                        ...prev.amenities,
+                        car_entrance: event?.target?.checked,
+                      },
+                    }))
+                  }
+                  checked={offer?.amenities?.car_entrance}
+                />
+                <CheckFeature
+                  title="مطبخ راكب"
+                  onChange={(event) =>
+                    setOffer((prev: any) => ({
+                      ...prev,
+                      amenities: {
+                        ...prev.amenities,
+                        kitchen: event?.target?.checked,
+                      },
+                    }))
+                  }
+                  checked={offer?.amenities?.kitchen}
+                />
+                <CheckFeature
+                  title="مؤثثة"
+                  onChange={(event) =>
+                    setOffer((prev: any) => ({
+                      ...prev,
+                      amenities: {
+                        ...prev.amenities,
+                        finance: event?.target?.checked,
+                      },
+                    }))
+                  }
+                  checked={offer?.amenities?.finance}
+                />
+                <CheckFeature
+                  title="مسبح"
+                  onChange={(event) =>
+                    setOffer((prev: any) => ({
+                      ...prev,
+                      amenities: {
+                        ...prev.amenities,
+                        pool: event?.target?.checked,
+                      },
+                    }))
+                  }
+                  checked={offer?.amenities?.pool}
+                />
+                <CheckFeature
+                  title="كراج للسيارات"
+                  onChange={(event) =>
+                    setOffer((prev: any) => ({
+                      ...prev,
+                      amenities: {
+                        ...prev.amenities,
+                        garage: event?.target?.checked,
+                      },
+                    }))
+                  }
+                  checked={offer?.amenities?.garage}
+                />
+                <CheckFeature
+                  title="غرفة خدم"
+                  onChange={(event) =>
+                    setOffer((prev: any) => ({
+                      ...prev,
+                      amenities: {
+                        ...prev.amenities,
+                        servants_room: event?.target?.checked,
+                      },
+                    }))
+                  }
+                  checked={offer?.amenities?.servants_room}
+                />
               </div>
             </div>
-          </> : <></>}
+          </>
+        ) : offer?.type && offer?.type == "الفيلا" ? (
+          <>
+            <div className="mt-2">
+              <div
+                className="flex justify-between text-sm mt-2"
+                style={{ direction: "rtl" }}
+              >
+                <p className="font-medium text-base text-[#4B5563]">
+                  مزايا إضافية:
+                </p>
+              </div>
+              <div
+                className=" flex flex-row flex-wrap gap-8"
+                style={{ direction: "rtl" }}
+              >
+                <CheckFeature
+                  title="مكيفة"
+                  onChange={(event) =>
+                    setOffer((prev: any) => ({
+                      ...prev,
+                      amenities: {
+                        ...prev.amenities,
+                        ac: event?.target?.checked,
+                      },
+                    }))
+                  }
+                  checked={offer?.amenities?.ac}
+                />
+                <CheckFeature
+                  title="مدخل سيارة"
+                  onChange={(event) =>
+                    setOffer((prev: any) => ({
+                      ...prev,
+                      amenities: {
+                        ...prev.amenities,
+                        car_entrance: event?.target?.checked,
+                      },
+                    }))
+                  }
+                  checked={offer?.amenities?.car_entrance}
+                />
+                <CheckFeature
+                  title="مطبخ راكب"
+                  onChange={(event) =>
+                    setOffer((prev: any) => ({
+                      ...prev,
+                      amenities: {
+                        ...prev.amenities,
+                        kitchen: event?.target?.checked,
+                      },
+                    }))
+                  }
+                  checked={offer?.amenities?.kitchen}
+                />
+                <CheckFeature
+                  title="مؤثثة"
+                  onChange={(event) =>
+                    setOffer((prev: any) => ({
+                      ...prev,
+                      amenities: {
+                        ...prev.amenities,
+                        finance: event?.target?.checked,
+                      },
+                    }))
+                  }
+                  checked={offer?.amenities?.finance}
+                />
+                <CheckFeature
+                  title="مسبح"
+                  onChange={(event) =>
+                    setOffer((prev: any) => ({
+                      ...prev,
+                      amenities: {
+                        ...prev.amenities,
+                        pool: event?.target?.checked,
+                      },
+                    }))
+                  }
+                  checked={offer?.amenities?.pool}
+                />
+                <CheckFeature
+                  title="كراج للسيارات"
+                  onChange={(event) =>
+                    setOffer((prev: any) => ({
+                      ...prev,
+                      amenities: {
+                        ...prev.amenities,
+                        garage: event?.target?.checked,
+                      },
+                    }))
+                  }
+                  checked={offer?.amenities?.garage}
+                />
+                <CheckFeature
+                  title="غرفة خدم"
+                  onChange={(event) =>
+                    setOffer((prev: any) => ({
+                      ...prev,
+                      amenities: {
+                        ...prev.amenities,
+                        servants_room: event?.target?.checked,
+                      },
+                    }))
+                  }
+                  checked={offer?.amenities?.servants_room}
+                />
+              </div>
+            </div>
+          </>
+        ) : (
+          <></>
+        )}
       </div>
 
       <div className="bg-white rounded-lg border border-[#E5E7EB] w-full mb-4 items-start justify-start p-4 mt-6">
@@ -329,7 +516,8 @@ const EditMyOffer = () => {
           <div>
             <span>
               <p className="text-base font-normal text-[#4B5563]">
-                هل أنت متأكد من رغبتك في تنفيذ اجراء تعديل الطلب رقم ({offer?.id}) ؟
+                هل أنت متأكد من رغبتك في تنفيذ اجراء تعديل الطلب رقم (
+                {offer?.id}) ؟
               </p>
             </span>
             <div className="bg-[#FDE8E8] rounded-md mt-5 mb-5 flex items-center justify-start p-1 flex-row gap-1 ">
@@ -346,7 +534,10 @@ const EditMyOffer = () => {
           <div className="flex flex-row items-center justify-center gap-3  w-full">
             <Button
               text=" تعديل"
-              onClick={() => { modalRef.current?.close(); onSubmit() }}
+              onClick={() => {
+                modalRef.current?.close();
+                onSubmit();
+              }}
               className="!text-xs !font-medium"
             />
             <Button

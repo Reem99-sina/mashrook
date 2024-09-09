@@ -1,17 +1,16 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import React from "react";
-import Cookie from 'js-cookie';
+import Cookie from "js-cookie";
 export interface returnType {
   loading: boolean;
   message: string | undefined;
   data: any;
-  status:number
+  status: number;
 }
-interface typeofReport{
-    
-  property_id: number,
-  message: string
+interface typeofReport {
+  property_id: number;
+  message: string;
 }
 export interface dataReturn {
   id: number;
@@ -54,9 +53,9 @@ export interface dataReturn {
     property_id: number;
     area: number;
     price: number;
-    stage:string;
-    available_percentage:number;
-    available_price:number;
+    stage: string;
+    available_percentage: number;
+    available_price: number;
   }[];
   details: {
     id: number;
@@ -67,9 +66,9 @@ export interface dataReturn {
     halls_number: number;
     bathrooms_number: number;
     kitchens_number: number;
-    stage:string;
-    available_percentage:number;
-    available_price:number;
+    stage: string;
+    available_percentage: number;
+    available_price: number;
     age: number;
     status: any;
     location: any;
@@ -79,7 +78,7 @@ export interface dataReturn {
     createdAt: string;
     updatedAt: string;
     property_id: number;
-    amenities?:{
+    amenities?: {
       pool?: boolean; // مزايا اضافية مسبح
       garden?: boolean; // مزايا اضافية
       servants_room?: boolean; // مزايا اضافية غرفة خدم
@@ -87,8 +86,8 @@ export interface dataReturn {
       furnished?: boolean; // مزايا اضافية مؤثثة
       kitchen?: boolean; // مزايا اضافية مطبخ راكب
       garage?: boolean;
-      car_entrance?: boolean;  
-    }
+      car_entrance?: boolean;
+    };
   }[];
   amenities: any[];
   user: {
@@ -152,27 +151,30 @@ export interface typePay {
   apartment_number?: any;
   apartment_floor?: any;
   min_apartment_floor?: any;
-  stage:string;
-  available_percentage:number;
-  available_price:number;
+  stage: string;
+  available_percentage: number;
+  available_price: number;
   property_id?: number;
 }
-interface paramsInput{
-  min_price?:number|null,
-max_price?:number|null,
-property_type_details_id?:number|null|string,
+interface paramsInput {
+  min_price?: number | null;
+  max_price?: number | null;
+  property_type_details_id?: number | null | string;
 
-property_purpose_id?:number|null|string,
+  property_purpose_id?: number | null | string;
 
-min_percentage?:number|null,
-max_percentage?:number|null
-,status?:string|null
+  min_percentage?: number | null;
+  max_percentage?: number | null;
+  status?: string | null;
 }
-export const getRequest = createAsyncThunk<returnType,(paramsInput|null)>(
+export const getRequest = createAsyncThunk<returnType, paramsInput | null>(
   "requestGet",
-  async (data:(paramsInput|null), { rejectWithValue }) => {
+  async (data: paramsInput | null, { rejectWithValue }) => {
     const response = await axios
-      .get("https://server.mashrook.sa/property/offer", { headers: {} ,params:data?data:{}})
+      .get("https://server.mashrook.sa/property/offer", {
+        headers: {},
+        params: data ? data : {},
+      })
       .then((response) => response.data)
       .catch((error) => error?.response?.data);
 
@@ -184,7 +186,7 @@ export const getRequestByid = createAsyncThunk<returnType, { id: number }>(
   async (data: { id: number }, { rejectWithValue }) => {
     const response = await axios
       .get(`https://server.mashrook.sa/property/get/${data?.id}`, {
-        headers: {}
+        headers: {},
       })
       .then((response) => response.data)
       .catch((error) => error?.response?.data);
@@ -192,25 +194,33 @@ export const getRequestByid = createAsyncThunk<returnType, { id: number }>(
     return response;
   }
 );
-export const postReport=createAsyncThunk<returnType,typeofReport>("postReport", async (data:{
-    
-  property_id: number,
-  message: string
-}, { rejectWithValue }) => {  
-  const response = await axios.post("https://server.mashrook.sa/property-report",data,{headers: {
-    Authorization: Cookie.get("token"),
-  },})
-  .then((response)=>response.data)
-  .catch((error)=>error?.response?.data) 
-  return response;
-})
+export const postReport = createAsyncThunk<returnType, typeofReport>(
+  "postReport",
+  async (
+    data: {
+      property_id: number;
+      message: string;
+    },
+    { rejectWithValue }
+  ) => {
+    const response = await axios
+      .post("https://server.mashrook.sa/property-report", data, {
+        headers: {
+          Authorization: Cookie.get("token"),
+        },
+      })
+      .then((response) => response.data)
+      .catch((error) => error?.response?.data);
+    return response;
+  }
+);
 const initialstate = {
   loading: false,
   message: "",
   data: null,
   selectData: null,
-  messageReport:"",
-  status:200
+  messageReport: "",
+  status: 200,
 };
 
 const requestGetSlice = createSlice({
@@ -240,19 +250,19 @@ const requestGetSlice = createSlice({
         state.data = null;
       }),
       builder.addCase(getRequestByid.fulfilled, (state, action) => {
-       
         state.loading = false;
         state.message = action?.payload?.message
           ? action.payload.message
           : "success";
         state.selectData = action?.payload?.data;
       }),
-      builder.addCase(getRequestByid.rejected, (state, action) => {
-        console.log("data", action.error.message);
-      }),builder.addCase(postReport.fulfilled,(state,action)=>{
-        state.messageReport=action?.payload?.message?action?.payload?.message:""
-        state.status=action?.payload?.status?action?.payload?.status:200
-      })
+      builder.addCase(getRequestByid.rejected, (state, action) => {}),
+      builder.addCase(postReport.fulfilled, (state, action) => {
+        state.messageReport = action?.payload?.message
+          ? action?.payload?.message
+          : "";
+        state.status = action?.payload?.status ? action?.payload?.status : 200;
+      });
   },
 });
 
