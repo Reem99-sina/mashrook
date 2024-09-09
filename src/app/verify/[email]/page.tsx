@@ -115,7 +115,7 @@ const Verify: React.FC = () => {
             </div>
             <p className="text-center text-sm text-gray-500 mb-4">
               لم يصلك الرمز؟{" "}
-              <button className="text-[#98CC5D]" onClick={onResend} type="button" disabled={time!=0}>
+              <button className={`${time!=0?"text-gray-500":"text-[#98CC5D]"}`} onClick={onResend} type="button" disabled={time!=0}>
                 إعادة إرسال الرمز خلال {time} ثانية
               </button>
             </p>

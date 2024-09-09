@@ -147,7 +147,8 @@ const SignUp: React.FC = () => {
                 <h3 className="font-bold text-[#4B5563] my-2">ادخل الرقم الجوال</h3>
               <PhoneInput
               placeholder="ادخل الرقم الجوال"
-              className="border-2 border-gray-300 p-1 rounded-md text-end"
+              className="border-2 border-gray-300 p-1 rounded-md "
+          numberInputProps={{style:{textAlign:"end"}}}
       value={user?.phone}
       defaultCountry="SA"
       country="SA"
