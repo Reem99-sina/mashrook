@@ -56,6 +56,7 @@ const RangeComponent:React.FC<propsRange>=({title, firstNumDes,secondNumDes,step
                                 }),
                                 alignSelf: "center",
                               }}
+                              
                             >
                               {children}
                             </div>
