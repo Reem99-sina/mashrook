@@ -93,17 +93,17 @@ const saveSlice=createSlice({
         , builder.addCase(deleteSaves.fulfilled,(state,action)=>{
             state.loading=false
             state.message=action?.payload?.message?action.payload.message:"success"
-            state.data=action?.payload?.data
+            // state.data=action?.payload?.data
         }),
         builder.addCase(deleteSaves.pending,(state,action)=>{
             state.loading=true
             state.message=""
-            state.data=null
+            // state.data=null
         }),
         builder.addCase(deleteSaves.rejected,(state,action)=>{
             state.loading=false
             state.message=action.error.message?action.error.message:"error"
-            state.data=null
+            // state.data=null
         })
     }
 })

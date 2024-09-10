@@ -139,6 +139,12 @@ const loginSlice = createSlice({
         state.data = null;
       }),
       builder.addCase(getUserRequest.fulfilled, (state, action) => {
+        if(action?.payload?.data){
+          Cookie.set("user", JSON.stringify(action?.payload?.data));
+        }else{
+          Cookie.remove("token");
+          Cookie.remove("user")
+        }
         state.dataUser = action?.payload?.data;
       }),
       builder.addCase(getUserRequest.rejected, (state, action) => {

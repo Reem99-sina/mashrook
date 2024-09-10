@@ -2,6 +2,8 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import React from "react";
 import Cookie from "js-cookie";
+import {saveElement,initialOffer} from "@/type/addrealestate"
+
 export interface returnType {
   loading: boolean;
   message: string | undefined;
@@ -130,6 +132,7 @@ export interface dataReturn {
     updatedAt: string;
     property_id: number;
   }[];
+  propertySaved?: saveElement[];
 }
 export interface typePay {
   id?: number;
@@ -170,7 +173,20 @@ interface paramsInput {
 export const getRequest = createAsyncThunk<returnType, paramsInput | null>(
   "requestGet",
   async (data: paramsInput | null, { rejectWithValue }) => {
-    const response = await axios
+    if(Cookie.get("token")){
+      const response = await axios
+      .get("https://server.mashrook.sa/property/offer-login", {
+        headers: {
+          Authorization: Cookie.get("token"),
+        },
+        params: data ? data : {},
+      })
+      .then((response) => response.data)
+      .catch((error) => error?.response?.data);
+
+    return response;
+    }else{
+      const response = await axios
       .get("https://server.mashrook.sa/property/offer", {
         headers: {},
         params: data ? data : {},
@@ -179,6 +195,7 @@ export const getRequest = createAsyncThunk<returnType, paramsInput | null>(
       .catch((error) => error?.response?.data);
 
     return response;
+    }
   }
 );
 export const getRequestByid = createAsyncThunk<returnType, { id: number }>(
@@ -214,7 +231,7 @@ export const postReport = createAsyncThunk<returnType, typeofReport>(
     return response;
   }
 );
-const initialstate = {
+const initialstate:initialOffer = {
   loading: false,
   message: "",
   data: null,
@@ -230,6 +247,24 @@ const requestGetSlice = createSlice({
     addUnqiue: (state, action) => {
       state.selectData = action.payload;
     },
+    addSave:(state, action)=>{
+      state.data = state.data&&state.data?.map((ele:dataReturn)=>{
+        if(ele?.id==action?.payload?.id){
+          return ({...ele,propertySaved:ele?.propertySaved?[...ele?.propertySaved,action.payload.data]:[action.payload.data]})
+        }else{
+          return ele
+        }
+      }) 
+    },
+    removeSave:(state, action)=>{
+      state.data = state.data&&state.data?.map((ele:dataReturn)=>{
+        if(ele?.id==action?.payload?.id){
+          return ({...ele,propertySaved:ele?.propertySaved?.filter((removeSave:saveElement)=>removeSave?.property_id!=action?.payload?.id)})
+        }else{
+          return ele
+        }
+      }) 
+    }
   },
   extraReducers: (builder) => {
     builder.addCase(getRequest.fulfilled, (state, action) => {
@@ -266,5 +301,5 @@ const requestGetSlice = createSlice({
   },
 });
 
-export const { addUnqiue } = requestGetSlice.actions;
+export const { addUnqiue,addSave ,removeSave} = requestGetSlice.actions;
 export default requestGetSlice.reducer;

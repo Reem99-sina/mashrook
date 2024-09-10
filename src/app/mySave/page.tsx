@@ -11,6 +11,9 @@ import { useDispatch, useSelector } from "react-redux";
 import {getSaves} from "@/redux/features/mySave"
 import { OfferCard } from "./component/offerCard";
 import { format } from "date-fns";
+import {
+  Note
+} from "@/app/assets/svg";
 const MySavePage=()=>{
     const router = useRouter();
     let [user,setUser]=useState("")
@@ -84,10 +87,20 @@ const MySavePage=()=>{
                <div style={{direction:"ltr"}} className="m-5">
                   <FilterPart/>
                </div>
-              {dataSaves?.length>0&&dataSaves?.map((offer:any,index:number)=> <OfferCard
+              {dataSaves?.length>0?dataSaves?.map((offer:any,index:number)=> <OfferCard
               key={offer?.id}
                  offer={offer}
-                />)}
+                />): (
+                  <div className="flex flex-col items-center justify-center p-9 w-full">
+                    <Note />
+                    <p className="font-medium text-3xl text-[#6B7280] mt-6">
+                      لا شيء هنا!
+                    </p>
+                    <p className="text-base font-normal text-[#9CA3AF] mt-3">
+                      لا توجد لديك طلبات لعرضها
+                    </p>
+                  </div>
+                )}
            </>
       
     )
