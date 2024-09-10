@@ -308,6 +308,7 @@ const FilterModalOffer: React.FC<FilterModalProps> = ({
                       alignItems: "center",
                       boxShadow: "0px 2px 6px #AAA",
                     }}
+                    key={index}
                   >
                     <div
                       style={{
@@ -390,6 +391,7 @@ const FilterModalOffer: React.FC<FilterModalProps> = ({
                       alignItems: "center",
                       boxShadow: "0px 2px 6px #AAA",
                     }}
+                    key={index}
                   >
                     <div
                       style={{

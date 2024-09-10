@@ -274,6 +274,7 @@ useEffect(() => {
                     alignItems: "center",
                     boxShadow: "0px 2px 6px #AAA",
                   }}
+                  key={index}
                 >
                   <div
                     style={{
@@ -356,6 +357,7 @@ useEffect(() => {
                     alignItems: "center",
                     boxShadow: "0px 2px 6px #AAA",
                   }}
+                  key={index}
                 >
                   <div
                     style={{

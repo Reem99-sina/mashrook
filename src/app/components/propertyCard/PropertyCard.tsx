@@ -23,9 +23,11 @@ import {postSave,deleteSave,deleteSaves} from "@/redux/features/mySave"
 import Link from "next/link";
 import JoinStatusButtons from "./JoinButton";
 import { AppDispatch, RootState } from "@/redux/store";
+import {addSave,removeSave} from "@/redux/features/getRequest"
 import { useDispatch, useSelector } from "react-redux";
 import { dataReturn, addUnqiue } from "@/redux/features/getRequest";
 import Cookie from 'js-cookie';
+import {userInfo,saveElement} from "@/type/addrealestate"
 import ModalMapComponent from "@/app/components/shared/ModalMap"
 import {  ModalRef } from "@/app/components/shared/modal.component";
 type PropertyCardProps = {
@@ -34,13 +36,18 @@ type PropertyCardProps = {
 };
 
 const PropertyCard: React.FC<PropertyCardProps> = ({ page, limit }) => {
-  const [saved, setSaved] = useState(false);
+  const [saved, setSaved] = useState<dataReturn|null>(null);
   let router = useRouter();
   let dispatch = useDispatch<AppDispatch>();
   const [showNotification, setShowNotification] = useState(false);
   const [show, setShow] = useState(false);
-  const [user, setUser] = useState<any | null>(null);
+  const [user, setUser] = useState<userInfo | null>(null);
   const [notificationMessage, setNotificationMessage] = useState("");
+  let save=useMemo(()=>{
+      return (ele:dataReturn)=>{
+       return ele?.propertySaved?.map(({property_id}:saveElement)=>property_id).includes(ele?.id)
+      }
+  },[])
   const [location,setLocation]=useState({
     lat:0,
     long:0
@@ -52,13 +59,13 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ page, limit }) => {
   let { loading:loadingSave, message:messageSave, data:dataSave } = useSelector<RootState>(
     (state) => state.save
   ) as { loading: boolean; message: string; data: any };
-  const handleSaveClick = (id:number) => {
-    if(id){
-      if(saved==false){
-        dispatch(postSave({property_id:id}))
-
+  const handleSaveClick = (ele:any) => {
+    setSaved(ele)
+    if(ele?.id){
+      if(save(ele)==false){
+        dispatch(postSave({property_id:ele?.id}))
       }else{
-        dispatch(deleteSaves({id:id}))
+        dispatch(deleteSaves({id:ele?.id}))
       }
     }
   };
@@ -226,17 +233,16 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ page, limit }) => {
     return page && limit ? data?.slice((page - 1) * limit, page * limit) : data;
   }, [data, page, limit]);
   useEffect(() => {
-   
     const storedToken = Cookie.get("user");
-    if(storedToken){
-      setUser(storedToken);
+    if(storedToken&&storedToken!="undefined" ){
+      const makeObject=JSON.parse(storedToken)
+      setUser(makeObject);
     }
-  
 }, []);
   useEffect(()=>{
     if(messageSave&&Boolean(dataSave)==true){
         setNotificationMessage("تم الحفظ");
-      setSaved(!saved);
+        dispatch(addSave({id:dataSave?.property_id,data:dataSave}))
       setShowNotification(true);
       setTimeout(() => {
         setShowNotification(false);
@@ -245,7 +251,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ page, limit }) => {
     }else if (messageSave=="Properties removed successfully"&&Boolean(dataSave)==false){
       
       setNotificationMessage("تم الغاء الحفظ");
-      setSaved(!saved);
+      dispatch(removeSave({id:saved?.id}))
       setShowNotification(true);
       setTimeout(() => {
         setShowNotification(false);
@@ -253,8 +259,9 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ page, limit }) => {
     }
     return ()=>{
       dispatch(deleteSave())
+      setSaved(null)
     }
-  },[messageSave,dataSave,dispatch,saved])
+  },[messageSave,dataSave,dispatch,saved?.id])
   return (
     <div className="mb-4">
       {dataPage?.map((ele: dataReturn, offerIndex: number) => (
@@ -363,13 +370,13 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ page, limit }) => {
 
               <div className="flex flex-row py-1 items-center justify-center">
                 <button
-                  onClick={()=>handleSaveClick(ele?.id)}
-                  className={`${ele?.user?.email==user?.email?"text-gray-500":"text-blue-500"} mx-2 align-middle`}
-                  disabled={ele?.user?.email==user?.email}
+                  onClick={()=>handleSaveClick(ele)}
+                  className={`${ele?.user_id==user?.id?"text-gray-500":"text-blue-500"} mx-2 align-middle`}
+                  disabled={ele?.user_id==user?.id}
                 >
-                  {saved ? "إلغاء الحفظ" : "حفظ"}
+                  {save(ele) ? "إلغاء الحفظ" : "حفظ"}
                 </button>
-                <FaBookmark className={`${ele?.user?.email==user?.email?"text-gray-500":"text-blue-500"} mx-2 text-xl align-middle`} />
+                <FaBookmark className={`${ele?.user_id==user?.id?"text-gray-500":"text-blue-500"} mx-2 text-xl align-middle`} />
               </div>
 
               {showNotification && (

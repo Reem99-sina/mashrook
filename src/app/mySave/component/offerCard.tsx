@@ -46,6 +46,7 @@ offer
   const [saved, setSaved] = useState(false);
   let router = useRouter();
   const handleSaveClick = (id:number) => {
+ 
     if(id){
     
         dispatch(deleteSaves({id:id}))
@@ -202,8 +203,9 @@ offer
               <div className="bg-gray-300 inline-block h-12 w-0.5 self-stretch"></div>
 
               <div className="flex flex-row py-1 items-center justify-center">
+                {/* {   console.log(offer,"id")} */}
                 <div
-                  onClick={()=>handleSaveClick(offer?.id)}
+                  onClick={()=>handleSaveClick(offer?.property_id)}
                  
                   className={`text-blue-500 mx-2 align-middle cursor-pointer`}
                   // disabled={ele?.user?.email==user?.email}

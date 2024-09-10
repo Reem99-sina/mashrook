@@ -257,6 +257,7 @@ const FilterModal: React.FC<FilterModalProps> = ({ onClose, onFilter, open, setC
                       alignItems: "center",
                       boxShadow: "0px 2px 6px #AAA",
                     }}
+                    key={index}
                   >
                     <div
                       style={{
@@ -347,6 +348,7 @@ const FilterModal: React.FC<FilterModalProps> = ({ onClose, onFilter, open, setC
                       alignItems: "center",
                       boxShadow: "0px 2px 6px #AAA",
                     }}
+                    key={index}
                   >
                     <div
                       style={{

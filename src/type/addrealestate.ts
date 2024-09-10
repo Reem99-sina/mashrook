@@ -1,3 +1,4 @@
+import { dataReturn } from "@/redux/features/getRequest";
 export interface detailsType{
     id:number,
     title:string,
@@ -10,6 +11,13 @@ export interface detailsMoreType{
     createdAt:string,
     updatedAt:string,
     property_type_id:number
+}
+export interface saveElement{
+    id: number,
+    createdAt: string,
+    updatedAt: string,
+    property_id: number,
+    user_id: number
 }
 export interface dataTypeOfRealEstate{
     title?:string,
@@ -95,6 +103,16 @@ status: string,
 createdAt: string,
 updatedAt:string
 }
+//  "id": 6,
+// "username": "reem",
+// "email": "reemsina2@gmail.com",
+// "phone": "+966222555888",
+// "val_license": null,
+// "image": null,
+// "status": "active",
+// "userType": "user",
+// "createdAt": "2024-09-09T14:30:58.000Z",
+// "updatedAt": "2024-09-09T14:31:52.000Z"
 export interface returnRealState{
     id:number,
     type:string,
@@ -174,4 +192,12 @@ export interface locationInfo{
     property_purpose_id:number,
     property_type_details_id:number,
     propertyLocation:properityLocationInfo,
+}
+export interface initialOffer{
+    loading: boolean,
+  message: string,
+  data: dataReturn[]|null,
+  selectData: dataReturn|null,
+  messageReport: string,
+  status: number,
 }
