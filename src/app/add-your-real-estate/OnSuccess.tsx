@@ -32,7 +32,7 @@ const OnSuccess: React.FC<OnSuccessProps> = ({ datarealEstateRequest }) => {
         <Button
           text="الذهاب الى عروضي"
           onClick={() => {
-            router.push("/my-offer");
+            router.push(`/my-offer?title=عروضي`);
           }}
         />
         <Button

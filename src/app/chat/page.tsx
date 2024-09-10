@@ -11,10 +11,12 @@ import { useDispatch } from "react-redux";
 import { getMessageOrders } from "@/redux/features/getMessages";
 import { getMessagePartners } from "@/redux/features/getMessagePartner";
 import { BackButtonOutline } from "@/app/assets/svg";
-import { useRouter } from "next/navigation";
+import { useRouter,useSearchParams } from "next/navigation";
 const Chat: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
+  const params=useSearchParams()
+  const title=params.get('title')
   const handleBack = (e:React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
     router.push("/");
@@ -49,11 +51,13 @@ const Chat: React.FC = () => {
                   {
                     Component: <MyOffer />,
                     title: "عروضي",
+                    active:(Boolean(title)?title=="عروضي":true)
                   },
 
                   {
                     Component: <MyPartnerships />,
                     title: "شراكاتي",
+                    active:(Boolean(title)?title=="شراكاتي":false)
                   },
                 ]}
               />
@@ -65,7 +69,7 @@ const Chat: React.FC = () => {
           <Footer />
         </footer>
       </form>
-      )
+      
     </>
   );
 };

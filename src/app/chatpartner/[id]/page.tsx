@@ -14,15 +14,17 @@ import { IoAttach } from "react-icons/io5";
 import { useRouter,useParams } from "next/navigation";
 import {getMessageByDetailId} from "@/redux/features/getMessageBydetailsId"
 import {getMessageByLandId} from "@/redux/features/getMessageBylandId"
+import {postMessage} from "@/redux/features/getMessage"
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import {chatdetailinfo} from "@/type/chatinterface"
+import {userInfo} from "@/type/addrealestate"
 import { format } from "date-fns";
 const ChatPage = () => {
   const params = useParams();
-  const [user,setUser]=useState<any>()
+  const [user,setUser]=useState<userInfo>()
   const { 
-    data:dataDetail } = useSelector<RootState>(
+    data:dataDetail, message: messageDetail } = useSelector<RootState>(
     (state) => state.messageByDetailsId
   ) as {
     loading: boolean;
@@ -64,32 +66,18 @@ const ChatPage = () => {
   const [land, setland] = useState();
   const dispatch = useDispatch<AppDispatch>();
   const handleSendMessage = () => {
-    
-    if (newMessage.trim() !== "") {
-      const currentTime = new Date().toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-      });
-
-      setMessages([
-        ...messages,
-        {
-          sender: "أنت",
-          content: newMessage,
-          time: currentTime,
-          isReceiver: true,
-        },
-      ]);
-
-      setNewMessage("");
+    if(newMessage){
+      dispatch(postMessage({
+        room_id:Number(id),
+        message:newMessage
+      }))
     }
-  };
+    }
   const router = useRouter();
   const handleBack = () => {
     router.back();
   };
   useEffect(() => {
-   
     const storedToken = Cookie.get("user");
     const land = Cookie.get("land");
     const detail = Cookie.get("detail");
@@ -103,31 +91,33 @@ const ChatPage = () => {
       setdetail(JSON.parse(detail))
     }
 }, []);
+// console.log(,"user")
   useEffect(() => {
     const pusher = new Pusher("eac8985b87012d5f5753", {
       cluster:"mt1"
     });
     const channel = pusher.subscribe("chat");
-    // channel.bind("chat-event", function (data) {
-    //   setChats((prevState) => [
-    //     ...prevState,
-    //     { sender: data.sender, message: data.message },
-    //   ]);
-    // });
+    channel.bind(`chat-${id}`, function () {
+      // console.log(data,"data")
+      // setChats((prevState) => [
+      //   ...prevState,
+      //   { sender: data.sender, message: data.message },
+      // ]);
+    });
     return () => {
       pusher.unsubscribe("chat");
     };
-  }, []);
+  }, [id]);
   useEffect(()=>{
     if(id){
-      if(detail){
+      if(Cookie.get("detail")){
         dispatch(getMessageByDetailId({id:Number(id)}))
       }else{
         dispatch(getMessageByLandId({id:Number(id)}))
         // getMessageByLandId
       }
     }
-  },[id,dispatch,detail])
+  },[id,dispatch])
   return (
     <>
       <div className="flex flex-col h-screen bg-white">
@@ -159,7 +149,7 @@ const ChatPage = () => {
 
           <div className="flex-1  p-4 gap-4 flex flex-col">
             {dataDetail?.length > 0
-              ? dataDetail?.map((msg:any, index:number) => (
+              ? dataDetail?.map((msg:chatdetailinfo, index:number) => (
                   <div
                     key={index}
                     className={`flex ${
@@ -174,13 +164,13 @@ const ChatPage = () => {
                       >
                         {user?.id==msg?.user_id ? (
                           <span className="bg-[#E5E7EB] text-[#111928] font-normal items-center justify-center rounded-full w-9 h-9 flex">
-                            ي
+                             {user?.username[0]}
                           </span>
                         ) : (
                           <MashrookLogoChat />
                         )}
                         <p className="text-[#4B5563] text-sm font-semibold">
-                          {user?.id==msg?.user_id?msg?.sender:"ادارة مشروك"}
+                          {user?.id==msg?.user_id?user?.username:"ادارة مشروك"}
                         </p>
                         <span className="text-xs font-normal text-[#9CA3AF]">
                           {format(msg?.createdAt, "hh:mm a")}
@@ -204,7 +194,7 @@ const ChatPage = () => {
                     </div>
                   </div>
                 ))
-              : dataLand?.map((msg:any, index:number) => (
+              : dataLand?.map((msg:chatdetailinfo, index:number) => (
                 <div
                   key={index}
                   className={`flex ${
@@ -225,7 +215,7 @@ const ChatPage = () => {
                         <MashrookLogoChat />
                       )}
                       <p className="text-[#4B5563] text-sm font-semibold">
-                        {user?.id==msg?.user_id?msg?.sender:"ادارة مشروك"}
+                        {user?.id==msg?.user_id?user?.username:"ادارة مشروك"}
                       </p>
                       <span className="text-xs font-normal text-[#9CA3AF]">
                         {msg?.createdAt}

@@ -81,27 +81,27 @@ const AddYourRequest: React.FC = () => {
     {
       type: "",
       price: 20000000,
-      min_price: 1000000,
+      min_price: 10000,
     },
     {
       type: "",
       price: 20000000,
-      min_price: 1000000,
+      min_price: 10000,
     },
     {
       type: "",
       price: 20000000,
-      min_price: 1000000,
+      min_price: 10000,
     },
   ]);
   const [criteria, setCriteria] = useState<any>({
     dealStatus: "",
-    city: "",
+    city: "تبوك",
     district: null,
     unitType: 0,
     unitStatus: "",
-    priceRange: [500000, 20000000],
-    shareRange: [1000000, 2000000],
+    priceRange: [10000, 20000000],
+    shareRange: [10000, 2000000],
     desiredRow: [1, 1],
     floorType: "",
   });
@@ -415,18 +415,16 @@ const AddYourRequest: React.FC = () => {
                   </p>
                 )}
 
-                <div className="flex items-end gap-2 justify-end flex-row mt-5 ">
+                <div className="flex items-end gap-2 justify-end flex-row mt-5 cursor-pointer"onClick={() => modalRef.current?.open()}>
                   <p
-                    className={`cursor-pointer text-[#3B73B9]  ${
+                    className={` text-[#3B73B9]  ${
                       selectedCites ? "" : "text-gray-500"
                     }`}
                   >
                     إضافة حي/ أحياء
                   </p>
-
-                  <div
-                    onClick={() => modalRef.current?.open()}
-                    className="cursor-pointer bg-[#3B73B9]"
+                  <div 
+                    className=" bg-[#3B73B9]"
                   >
                     <Image src={Add} width={21} height={21} alt={"add"} />
                   </div>
@@ -538,10 +536,10 @@ const AddYourRequest: React.FC = () => {
                 <>
                   <RangeComponent
                     title="ميزانيتك"
-                    firstNumDes="500,000"
+                    firstNumDes="10,000"
                     secondNumDes="+20,000,000"
-                    step={500000}
-                    min={500000}
+                    step={10000}
+                    min={10000}
                     max={20000000}
                     values={criteria?.shareRange}
                     handleShareRangeChange={(values: number[]) => {
@@ -575,10 +573,10 @@ const AddYourRequest: React.FC = () => {
                           <>
                           <RangeComponent
                             title="ميزانيتك"
-                            firstNumDes="500,000"
+                            firstNumDes="10,000"
                             secondNumDes="+20,000,000"
-                            step={500000}
-                            min={500000}
+                            step={10000}
+                            min={10000}
                             max={20000000}
                             values={[
                               detailsVilla[ind]?.min_price,
@@ -805,7 +803,12 @@ const AddYourRequest: React.FC = () => {
                   />
                   <Button
                     text="حفظ"
-                    onClick={() => modalRef.current?.close()}
+                    onClick={() => {
+                      if(open!=true){
+
+                        setSelectedCites((prev)=>prev.filter((ele)=>ele?.id!=undefined));
+                      }
+                      modalRef.current?.close()}}
                   />
                 </div>
               </div>

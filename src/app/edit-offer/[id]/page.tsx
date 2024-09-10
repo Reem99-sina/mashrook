@@ -1,5 +1,6 @@
 "use client";
 import MainHeader from "@/app/components/header/MainHeader";
+import ModelRules from "@/app/components/shared/ModelRules"
 import { BackButtonOutline, Add } from "@/app/assets/svg";
 import { useRouter, useParams } from "next/navigation";
 import { AppDispatch, RootState } from "@/redux/store";
@@ -47,8 +48,7 @@ const EditOffer = () => {
   const params = useParams();
   let refImage = useRef<HTMLInputElement>(null);
   const [images, setImages] = useState<File[] | undefined>([]);
-  
-
+  const modalRefRules = useRef<ModalRef>(null);
   const modalRef = useRef<ModalRef>(null);
   const checkRef = useRef<ModalRef>(null);
   const { id } = params;
@@ -140,7 +140,7 @@ const EditOffer = () => {
   };
   const handleBack = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    router.push("/my-offer");
+    router.push(`/my-offer?title=عروضي`);
   };
   const handleOptionChange = (option: any, title: string) => {
     if (title == "صفة مقدم العرض") {
@@ -266,7 +266,7 @@ const EditOffer = () => {
   useEffect(() => {
     if (messagePut && Boolean(dataPut) == true) {
       toast.success(messagePut);
-      router.push("/my-offer");
+      router.push(`/my-offer?title=عروضي`);
       // setSentYourRequest(true);
     }
     if (messagePutLocat && Boolean(dataPutLocat) == true) {
@@ -276,7 +276,7 @@ const EditOffer = () => {
     }
     if (messagePutDetail && Boolean(dataPutDetail) == true) {
       toast.success(messagePutDetail);
-      router.push("/my-offer");
+      router.push(`/my-offer?title=عروضي`);
       // setSentYourRequest(true);
     }
   }, [
@@ -1504,10 +1504,18 @@ const EditOffer = () => {
         </div>
         <div className="bg-white rounded-lg border border-[#E5E7EB] w-full mb-4 items-start justify-start p-4">
           <div className="flex items-center justify-end gap-2">
-            <p className="text-xs text-[#6B7280] font-bold">
-              أوافق على <span className="text-[#98CC5D]">الشروط</span> و
-              <span className="text-[#98CC5D]">الأحكام</span> الخاصة بمشروك
-            </p>
+          <p className="text-xs text-[#6B7280] font-bold">
+                  أوافق على <button className="text-[#98CC5D]" onClick={(e:React.MouseEvent<HTMLButtonElement>)=>{
+                    e.preventDefault()
+                    modalRefRules?.current?.open()
+                    }}>الشروط</button> و
+                  <button className="text-[#98CC5D]"
+                  onClick={(e:React.MouseEvent<HTMLButtonElement>)=>{
+                    e.preventDefault()
+                    modalRefRules?.current?.open()
+                    }}
+                  >الأحكام</button> الخاصة بمشروك
+                </p>
             <input
               type="checkbox"
               className="h-4 w-4 rounded-2xl accent-[#3B73B9]"
@@ -1522,6 +1530,7 @@ const EditOffer = () => {
           </div>
         </div>
       </div>
+      <ModelRules refModel={modalRefRules}  onChange={(e:React.ChangeEvent<HTMLInputElement>) => setDeal(e.target.checked)} deal={deal}/>
       <Modal ref={checkRef} size="xs">
         <div
           className="items-start flex justify-center flex-col p-4 "

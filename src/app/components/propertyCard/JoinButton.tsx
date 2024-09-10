@@ -98,9 +98,9 @@ const JoinStatusButtons: React.FC<JoinStatusButtonsProps> = ({
   useEffect(() => {
     if (typeof window != "undefined") {
       const userItem = Cookie?.get("user");
-      const user = userItem ? JSON.parse(userItem) : null; // Ensure user is either the parsed object or null
-      if (user) {
-        setUser(user);
+      if(userItem&&userItem!="undefined"){
+        const makeObject=JSON.parse(userItem)
+        setUser(makeObject);
       }
     }
   }, []);
