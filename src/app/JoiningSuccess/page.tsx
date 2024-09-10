@@ -38,7 +38,7 @@ export default function JoiningSuccess() {
                   عرض المحادثات
                 </Link>
                 <Link
-                  href="/my-offer"
+                  href={`/my-offer?title=طلباتي`}
                   className=" text-blue-450 border-2 border-blue-600 font-medium rounded-lg text-sm px-5 py-2.5 mx-4 my-4 flex justify-center"
                   
                 >

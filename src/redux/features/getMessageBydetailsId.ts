@@ -10,6 +10,7 @@ export interface returnType{
 interface getIdType{
     id:number
 }
+
 export const getMessageByDetailId=createAsyncThunk<returnType,getIdType>("messageDetailById", async (data:getIdType, { rejectWithValue }) => {  
         const response = await axios.get(`https://server.mashrook.sa/message/details/${data?.id}`,{
             headers: {

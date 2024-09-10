@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect,useCallback } from "react";
 import { Add, BackButtonOutline } from "@/app/assets/svg";
 import { RadioInput } from "../components/shared/radio.component";
 import { Button } from "../components/shared/button.component";
@@ -101,7 +101,6 @@ const AddYourRealEstate: React.FC = () => {
   const modalRef = useRef<ModalRef>(null);
   const modalRefRules = useRef<ModalRef>(null);
   const refImage = useRef<HTMLInputElement>(null);
-
   const [sentYourRequest, setSentYourRequest] = useState<boolean>(false);
   const [dataSend, setDataSend] = useState<DataSendInfo>({
     property_owner_type_id: 0,
@@ -463,7 +462,7 @@ const AddYourRealEstate: React.FC = () => {
     } else {
       toast.error(" يجب الموافقه علي شروط الاستخدام وسياسية الخصوصية");
     }
-  };
+  }
 
   const onDelete = (index: imageInfo) => {
     setImages(images?.filter((ele) => ele?.name != index?.name));
@@ -474,7 +473,6 @@ const AddYourRealEstate: React.FC = () => {
     dispatch(getproperityPurposeType());
     dispatch(getproperityOwnerType());
     dispatch(getCity());
-
     dispatch(getproperityTypeMore({ num: 1, type: "offer" }));
     return () => {
       dispatch(removeState());
@@ -519,22 +517,6 @@ const AddYourRealEstate: React.FC = () => {
       setSentYourRequest(false);
     };
   }, []);
-
-  useEffect(() => {
-    setlandDetails((prev) =>
-      prev.length < count.nums
-        ? [
-            ...prev,
-            {
-              piece_number: "", // في حالة اختيار ارض (رقم القطعة)
-              plan_number: "",
-              area: 0,
-              price: 0,
-            },
-          ]
-        : prev.filter((ele, index) => index + 1 <= count.nums)
-    );
-  }, [count.nums]);
   return (
     <>
       {!sentYourRequest ? (
@@ -908,6 +890,18 @@ const AddYourRealEstate: React.FC = () => {
                         measurement="ريال"
                         desc="(بدون القيمة المضافة والسعي)"
                       />
+                      {index > 0 && (
+                      <>
+                        <div
+                          onClick={() =>
+                            setCount((prev) => ({ nums: prev.nums - 1 }))
+                          }
+                          className="cursor-pointer bg-[#3B73B9] p-1"
+                        >
+                          <RiSubtractFill className="text-white" />
+                        </div>
+                      </>
+                    )}
                     </div>
                   ))}
 
@@ -1314,18 +1308,6 @@ const AddYourRealEstate: React.FC = () => {
                 selectedPropertyType?.title == "أرض سكنية تجارية") && (
                 <div className="mb-4" style={{ direction: "rtl" }}>
                   <div className="flex gap-2  flex-row mt-5">
-                    {count?.nums > 1 && (
-                      <>
-                        <div
-                          onClick={() =>
-                            setCount((prev) => ({ nums: prev.nums - 1 }))
-                          }
-                          className="cursor-pointer bg-[#3B73B9] p-1"
-                        >
-                          <RiSubtractFill className="text-white" />
-                        </div>
-                      </>
-                    )}
                     <div
                       onClick={() =>
                         setCount((prev) => ({ nums: prev.nums + 1 }))

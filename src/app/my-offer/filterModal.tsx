@@ -184,13 +184,13 @@ useEffect(() => {
           <h3 className="font-semibold mb-2">الميزانية</h3>
           <div className="flex flex-col">
             <div className="flex justify-between mb-2 text-sm text-gray-500 mx-5">
-              <span> 500000 ريال</span>
+              <span> 10000 ريال</span>
               
               <span>20 مليون</span>
             </div>
             <Range
               step={100000}
-              min={500000}
+              min={10000}
               max={20000000}
               values={criteria.priceRange}
               onChange={handlePriceRangeChange}
@@ -217,7 +217,7 @@ useEffect(() => {
                       background: getTrackBackground({
                         values: criteria.priceRange,
                         colors: ["#ccc", "#548BF4", "#ccc"],
-                        min: 500000,
+                        min: 10000,
                         max: 20000000,
                         rtl: true,
                       }),
@@ -304,7 +304,7 @@ useEffect(() => {
               district: "",
               unitType: "",
               unitStatus: true,
-              priceRange: [500000, 20000000]
+              priceRange: [10000, 20000000]
             })
             onClose()
           }}

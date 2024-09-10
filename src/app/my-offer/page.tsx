@@ -9,14 +9,16 @@ import { BackButtonOutline,IconNoData } from "../assets/svg";
 import { GitMyPartners } from "./gitMyPartners";
 import { GitMyOrders } from "./gitMyOrders";
 import {GitMyOffers} from "./getMyOffer"
-
+import { useSearchParams } from 'next/navigation'
 const Chat: React.FC = () => {
   const router = useRouter();
+  const params=useSearchParams()
+  const title=params.get('title')
   const handleBack = (e:React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
     router.push("/");
   };
- 
+
   return (
     <>
     <form className="flex flex-col items-center min-h-screen h-full w-full bg-white">
@@ -31,7 +33,7 @@ const Chat: React.FC = () => {
               </div>
               <div className="flex flex-1  items-center justify-center">
                 <p className="flex items-center justify-center text-[#36343B] font-bold text-xl">
-                  شروطي-طلباتي-عروضي
+                 طالباتي-شراكاتي-عروضي
                 </p>
               </div>
             </div>
@@ -42,16 +44,18 @@ const Chat: React.FC = () => {
                   {
                     Component: <GitMyOrders />,
                     title: "طلباتي",
+                    active:(title=="طلباتي")
                   },
-
                   {
                     Component: <GitMyPartners />,
                     title: "شراكاتي",
+                    active:(title=="شراكاتي")
                   },
                   {
                     Component: <GitMyOffers/>,
                     title: "عروضي",
-                  },
+                    active:(title=="عروضي")
+                  }
                 ]}
               />
             </div>

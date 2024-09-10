@@ -106,11 +106,10 @@ const PropertyLocation: React.FC<PropertyLocationProps> = ({
             disabled={open==false}
             />
         </div>
-      <div className="flex items-end gap-2 justify-end flex-row mt-2">
+      <div className="flex items-end gap-2 justify-end flex-row mt-2 cursor-pointer "onClick={() => modalRef.current?.open()}>
         <p className="text-sm text-[#3B73B9] font-bold">إضافة الموقع</p>
         <div
-          onClick={() => modalRef.current?.open()}
-          className="cursor-pointer bg-[#3B73B9]"
+          className="bg-[#3B73B9]"
         >
           <Image src={Add} width={21} height={21} alt={"add"} />
         </div>
