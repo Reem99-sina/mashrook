@@ -86,3 +86,7 @@ export { default as MenuWhite } from "./menuWhite.svg";
 export { default as Rebuild } from "./rebuild.svg";
 export { default as Dots } from "./dots.svg";
 export { default as IconNoData } from "./icon.svg";
+export { default as Posts } from "./posts.svg";
+export { default as Plus } from "./plus.svg";
+export { default as RotateRealEstate } from "./rotate-real-estate.svg";
+export { default as RotateRight } from "./rotate-right.svg";

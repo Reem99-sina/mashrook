@@ -108,6 +108,14 @@ export default function SideBar({ sidebarOpen, toggleSidebar }: SideBarProps) {
                       >
                         الاشعارات
                       </Link>
+                      <li className="mb-4 text-xl hover:text-gray-800 mt-4 ">
+                        <Link
+                          href="/my-posts"
+                          className=" text-blue-450 hover:text-[#3B73B9] "
+                        >
+                          إعلاناتي
+                        </Link>
+                      </li>
                     </li>
                     <li className="mb-4 text-xl hover:text-gray-800 ">
                       <Link
