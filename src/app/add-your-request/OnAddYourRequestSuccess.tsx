@@ -34,7 +34,7 @@ const OnAddYourRequestSuccess: FC<OnAddYourRequestSuccessProps> = ({
         <Button
           text="الذهاب الى طلباتي"
           onClick={() => {
-            router.push("/my-offer");
+            router.push(`/my-offer?title=طلباتي`);
           }}
         />
         <Button

@@ -99,9 +99,13 @@ export interface userInfo{
 id: number,
 username: string,
 email:string,
+image: null|string,
+phone: string,
 status: string,
-createdAt: string,
-updatedAt:string
+createdAt:string,
+updatedAt:string,
+userType: string,
+val_license: null
 }
 //  "id": 6,
 // "username": "reem",

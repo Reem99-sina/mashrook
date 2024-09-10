@@ -70,8 +70,10 @@ export const PartnersCard: React.FC<PartnersCardProps> = ({
         <Link className="items-center justify-center flex border border-[#E5E7EB] p-2 rounded-md gap-1 " href={`chatpartner/${details_id?details_id:land_details_id}`} onClick={()=>{
           if(details_id){
             Cookie.set("detail",JSON.stringify(title))
+            Cookie.remove("land")
           }else{
             Cookie.set("land",JSON.stringify(title))
+            Cookie.remove("detail")
           }
           }}>
           <p className="font-medium text-sm text-[#3B73B9]">عرض المحادثات </p>

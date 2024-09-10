@@ -12,9 +12,10 @@ import {
 } from "@/app/assets/svg";
 import { IoAttach } from "react-icons/io5";
 import { useRouter, useParams } from "next/navigation";
-import { getMessageByid } from "@/redux/features/getMessage";
+import { getMessageByid,postMessage } from "@/redux/features/getMessage";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
+import { format } from "date-fns";
 
 const ChatPage = () => {
   const params = useParams();
@@ -52,25 +53,13 @@ const ChatPage = () => {
   const [newMessage, setNewMessage] = useState("");
   const dispatch = useDispatch<AppDispatch>();
   const handleSendMessage = () => {
-    if (newMessage.trim() !== "") {
-      const currentTime = new Date().toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-      });
-
-      setMessages([
-        ...messages,
-        {
-          sender: "أنت",
-          content: newMessage,
-          time: currentTime,
-          isReceiver: true,
-        },
-      ]);
-
-      setNewMessage("");
+    if(newMessage){
+      dispatch(postMessage({
+        room_id:Number(id),
+        message:newMessage
+      }))
     }
-  };
+    }
   const router = useRouter();
   const handleBack = () => {
     router.back();
@@ -90,11 +79,17 @@ const ChatPage = () => {
       cluster: "mt1",
     });
     const channel = pusher.subscribe("chat");
-
+    channel.bind(`chat-${id}`, function () {
+      // console.log(data,"data")
+      // setChats((prevState) => [
+      //   ...prevState,
+      //   { sender: data.sender, message: data.message },
+      // ]);
+    });
     return () => {
       pusher.unsubscribe("chat");
     };
-  }, []);
+  }, [id]);
   useEffect(() => {
     if (id) {
       dispatch(getMessageByid({ id: Number(id) }));
@@ -102,10 +97,10 @@ const ChatPage = () => {
   }, [id, dispatch]);
   return (
     <>
-      <div className="flex flex-col h-screen bg-white">
+      <div className="flex flex-col  bg-white">
         <MainHeader />
         <div
-          className="flex flex-col h-screen bg-white"
+          className="flex flex-col  bg-white"
           style={{ direction: "rtl" }}
         >
           <div className="flex justify-between items-center p-4 gap-2 flex-row border-b">
@@ -148,18 +143,18 @@ const ChatPage = () => {
                       >
                         {user?.id == msg?.user_id ? (
                           <span className="bg-[#E5E7EB] text-[#111928] font-normal items-center justify-center rounded-full w-9 h-9 flex">
-                            ي
+                            {user?.username[0]}
                           </span>
                         ) : (
                           <MashrookLogoChat />
                         )}
                         <p className="text-[#4B5563] text-sm font-semibold">
                           {user?.id == msg?.user_id
-                            ? msg?.sender
+                            ? user?.username
                             : "ادارة مشروك"}
                         </p>
                         <span className="text-xs font-normal text-[#9CA3AF]">
-                          {msg?.createdAt}
+                        {format(msg?.createdAt, "hh:mm a")}
                         </span>
                       </div>
                       <div

@@ -39,7 +39,7 @@ const EditMyOffer = () => {
   };
   const handleBack = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    router.push("/my-offer");
+    router.push(`/my-offer?title=عروضي`);
   };
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -53,12 +53,12 @@ const EditMyOffer = () => {
   useEffect(() => {
     if (messagePut && Boolean(dataPut) == true) {
       toast.success(messagePut);
-      router.push("/my-offer");
+      router.push(`/my-offer?title=عروضي`);
       // setSentYourRequest(true);
     }
     if (messagePutDetail && Boolean(dataPutDetail) == true) {
       toast.success(messagePutDetail);
-      router.push("/my-offer");
+      router.push(`/my-offer?title=عروضي`);
       // setSentYourRequest(true);
     }
   }, [dataPut, messagePut, dataPutDetail, messagePutDetail, router]);

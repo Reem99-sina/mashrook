@@ -272,7 +272,7 @@ const FilterModalOffer: React.FC<FilterModalProps> = ({
             <h3 className="font-semibold mb-2">الميزانية</h3>
             <div className="flex flex-col">
               <div className="flex justify-between mb-2 text-sm text-gray-500 mx-5">
-                <span> 500000 ريال</span>
+                <span> 10000 ريال</span>
 
                 <span>20 مليون</span>
               </div>
@@ -480,7 +480,7 @@ const FilterModalOffer: React.FC<FilterModalProps> = ({
                 unitStatus: true,
                 realEstateStatus: "",
                 purposeStatus: "",
-                priceRange: [500000, 20000000],
+                priceRange: [10000, 20000000],
                 shareRange: [10, 90],
               });
               onCloseRequest();

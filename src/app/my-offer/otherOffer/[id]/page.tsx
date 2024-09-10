@@ -20,7 +20,7 @@ function OtherOffer() {
   const params = useParams();
   let { id } = params;
   const handleBack = () => {
-    router.push("/my-offer");
+    router.push(`/my-offer?title=طلباتي`);
   };
   useEffect(() => {
     if (id) {

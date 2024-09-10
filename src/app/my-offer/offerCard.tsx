@@ -12,6 +12,7 @@ import {
 } from "../assets/svg";
 import { BsChatSquareText } from "react-icons/bs";
 import Link from "next/link"
+import Cookie from "js-cookie"
 import { Button } from "../components/shared/button.component";
 import Stepper from "../components/shared/Stepper";
 import { CgSmartphoneShake } from "react-icons/cg";
@@ -248,17 +249,28 @@ export const OfferCard: React.FC<ChatCardProps> = ({
                   disabled={detail?.currentStep > 1}
                 />
               </div>
-              <button
-                type="button"
+              <Link
+                href={`/chatpartner/${detail?.id}`} 
                 className={`${
-                  detail?.stage === "finished"
-                    ? "bg-gray-300 text-gray-800"
-                    : "bg-blue-450 text-white hover:bg-blue-800 border-2 border-blue-500"
+                  "bg-blue-450 text-white hover:bg-blue-800 border-2 border-blue-500"
                 }  font-medium rounded-lg text-sm px-5 py-2.5 flex justify-center w-full rtl:flex-row-reverse dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
-                disabled={detail?.stage === "finished"}
-                //   onClick={handleDialogToggle}
-              >
                 
+                  onClick={()=>{
+                    if(detail?.type){
+                      Cookie.set("detail",JSON.stringify(detail?.type
+                        ? detail?.type
+                        : detail?.plan_number &&
+                          `قطعة رقم  ${detail?.plan_number}`))
+                          Cookie.remove("land")
+                    }else{
+                      Cookie.set("land",JSON.stringify(detail?.type
+                        ? detail?.type
+                        : detail?.plan_number &&
+                          `قطعة رقم  ${detail?.plan_number}`))
+                          Cookie.remove("detail")
+                    }
+                  }}
+              >
                 عرض المحادثات
                 <BsChatSquareText
                   className={`mr-4 text-xl ${
@@ -267,7 +279,7 @@ export const OfferCard: React.FC<ChatCardProps> = ({
                       : "text-white"
                   }`}
                 />
-              </button>
+              </Link>
             </div>
           </>
         ))}

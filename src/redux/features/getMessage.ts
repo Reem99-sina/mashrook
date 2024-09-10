@@ -10,6 +10,10 @@ export interface returnType{
 interface getIdType{
     id:number
 }
+interface sendMessage{
+    room_id: number,
+ message: string
+ }
 export const getMessageByid=createAsyncThunk<returnType,getIdType>("messageid/get", async (data:getIdType, { rejectWithValue }) => {  
         const response = await axios.get(`https://server.mashrook.sa/message/${data?.id}`,{
             headers: {
@@ -20,7 +24,16 @@ export const getMessageByid=createAsyncThunk<returnType,getIdType>("messageid/ge
         .catch((error)=>error?.response?.data) 
         return response;
 })
-
+export const postMessage=createAsyncThunk<returnType,sendMessage>("sendmessage", async (data:sendMessage, { rejectWithValue }) => {  
+    const response = await axios.post(`https://server.mashrook.sa/message`,data,{
+        headers: {
+          Authorization: Cookie.get("token"),
+        },
+      })
+    .then((response)=>response.data)
+    .catch((error)=>error?.response?.data) 
+    return response;
+})
 const initialstate={
     loading:false,
     message:"",
@@ -44,6 +57,20 @@ const getMessageByIdSlice=createSlice({
             state.data=null
         }),
         builder.addCase(getMessageByid.rejected,(state,action)=>{
+            state.loading=false
+            state.message=action.error.message?action.error.message:"error"
+            state.data=null
+        }),builder.addCase(postMessage.fulfilled,(state,action)=>{
+            state.loading=false
+            state.message=action?.payload?.message?action.payload.message:"success"
+            state.data=action?.payload?.data
+        }),
+        builder.addCase(postMessage.pending,(state,action)=>{
+            state.loading=true
+            state.message=""
+            state.data=null
+        }),
+        builder.addCase(postMessage.rejected,(state,action)=>{
             state.loading=false
             state.message=action.error.message?action.error.message:"error"
             state.data=null

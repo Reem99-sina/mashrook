@@ -155,21 +155,18 @@ const loginSlice = createSlice({
         state.dataUser = null;
       }),
       builder.addCase(forget.fulfilled, (state, action) => {
-        console.log(action.payload, "actio");
         (state.messageForget = action?.payload?.message
           ? action?.payload?.message
           : "done"),
           (state.dataForget = action.payload.data);
       }),
       builder.addCase(forget.rejected, (state, action) => {
-        console.log(action.payload, "actio");
         (state.messageForget = action?.error?.message
           ? action?.error?.message
           : "error"),
           (state.dataForget = null);
       }),
       builder.addCase(forget.pending, (state, action) => {
-        console.log(action.payload, "actio");
         (state.messageForget = ""), (state.dataForget = null);
       }),
       builder.addCase(reset.rejected, (state, action) => {
