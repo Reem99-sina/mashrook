@@ -142,9 +142,9 @@ export const OfferCard: React.FC<ChatCardProps> = ({
       </div>
       <div className="gap-1 mt-2 flex flex-col">
         {details?.map((detail:any, index:number) => (
-          <>
+          <div  key={`detail-${index}`}>
             <div
-              key={`detail-${index}`}
+             
               className="bg-white shadow-lg rounded-lg p-2 mb-4"
             >
               <div className="flex flex-row flex-no-wrap items-center justify-center md:flex-row sm:flex-col ">
@@ -281,7 +281,7 @@ export const OfferCard: React.FC<ChatCardProps> = ({
                 />
               </Link>
             </div>
-          </>
+          </div>
         ))}
       </div>
 

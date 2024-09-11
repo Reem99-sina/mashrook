@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState, useEffect,useCallback } from "react";
+import React, { useRef, useState, useEffect,useMemo } from "react";
 import { Add, BackButtonOutline } from "@/app/assets/svg";
 import { RadioInput } from "../components/shared/radio.component";
 import { Button } from "../components/shared/button.component";
@@ -117,6 +117,7 @@ const AddYourRealEstate: React.FC = () => {
     is_divisible: false,
   });
   const [errors, setErrors] = useState<RealEstateErrrorTypeInter>();
+  const [indexRemove, setIndex] = useState<number|null>();
   const [selectedPropertyType, setSelectedPropertyType] =
     useState<typeSelectedProperty>();
   const handleOptionChange = (option: Option, title: string) => {
@@ -236,6 +237,7 @@ const AddYourRealEstate: React.FC = () => {
     data: returnRealState;
   };
   const dispatch = useDispatch<AppDispatch>();
+
   const handlePercentageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setdepartmentArch({
       ...departmentArch,
@@ -517,6 +519,21 @@ const AddYourRealEstate: React.FC = () => {
       setSentYourRequest(false);
     };
   }, []);
+  useEffect(() => {
+    setlandDetails((prev) =>
+      prev.length < count.nums
+        ? [
+            ...prev,
+            {
+              piece_number: "", // في حالة اختيار ارض (رقم القطعة)
+              plan_number: "",
+              area: 0,
+              price: 0,
+            },
+          ]
+        : prev.filter((ele, index) => index !=indexRemove)
+    );
+  }, [count.nums,indexRemove]);
   return (
     <>
       {!sentYourRequest ? (
@@ -796,7 +813,7 @@ const AddYourRealEstate: React.FC = () => {
                 {(selectedPropertyType?.title == "أرض سكنية" ||
                   selectedPropertyType?.title == "أرض تجارية" ||
                   selectedPropertyType?.title == "أرض سكنية تجارية") &&
-                  Array.from({ length: count.nums }).map((_, index) => (
+                  landDetails?.map((ele, index) => (
                     <div key={index}>
                       <div className="flex items-start gap-2 justify-end flex-col mt-5">
                         <p className="text-base text-[#4B5563] font-medium">
@@ -816,6 +833,7 @@ const AddYourRealEstate: React.FC = () => {
                               )
                             )
                           }
+                          value={ele?.piece_number}
                         />
                         {errors &&
                           errors[`landDetails[${index}].plan_number`] && (
@@ -833,6 +851,7 @@ const AddYourRealEstate: React.FC = () => {
                             type="text"
                             className="w-full p-2 border border-gray-300 rounded-lg"
                             placeholder="-- الرجاء الادخال --"
+                            value={ele?.plan_number}
                             onChange={(event) =>
                               setlandDetails((prevs) =>
                                 prevs.map((ele, i) =>
@@ -857,6 +876,7 @@ const AddYourRealEstate: React.FC = () => {
                       </div>
                       <InputAreaPrice
                         title="المساحة"
+                        value={ele?.area}
                         onChange={(event) =>
                           setlandDetails((prevs) =>
                             prevs.map((ele, i) =>
@@ -874,6 +894,7 @@ const AddYourRealEstate: React.FC = () => {
                       />
                       <InputAreaPrice
                         title="السعر"
+                        value={ele?.price}
                         onChange={(event) =>
                           setlandDetails((prevs) =>
                             prevs.map((ele, i) =>
@@ -893,10 +914,11 @@ const AddYourRealEstate: React.FC = () => {
                       {index > 0 && (
                       <>
                         <div
-                          onClick={() =>
-                            setCount((prev) => ({ nums: prev.nums - 1 }))
-                          }
-                          className="cursor-pointer bg-[#3B73B9] p-1"
+                          onClick={() =>{
+                            setIndex(index);
+                            setCount((prev)=>({nums:prev?.nums-1}))
+                          }}
+                          className="cursor-pointer bg-[#3B73B9] p-1 flex justify-center"
                         >
                           <RiSubtractFill className="text-white" />
                         </div>
@@ -1309,9 +1331,9 @@ const AddYourRealEstate: React.FC = () => {
                 <div className="mb-4" style={{ direction: "rtl" }}>
                   <div className="flex gap-2  flex-row mt-5">
                     <div
-                      onClick={() =>
-                        setCount((prev) => ({ nums: prev.nums + 1 }))
-                      }
+                      onClick={() =>{
+                        setCount((prev)=>({nums:prev?.nums+1}))
+                      }}
                       className="cursor-pointer bg-[#3B73B9]"
                     >
                       <Image src={Add} width={21} height={21} alt={"add"} />

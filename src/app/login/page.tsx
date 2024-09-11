@@ -22,6 +22,7 @@ export interface userLogin {
 const Login: React.FC = () => {
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
+  const [remember,setRemember]=useState(false)
   const [user, setUser] = useState<userLogin>({
     email: "",
     password: "",
@@ -86,7 +87,7 @@ const Login: React.FC = () => {
           <MashrookLogo />
           <p className="mt-6 text-2xl font-bold text-[#374151]">تسجيل الدخول</p>
         </div>
-        <form className="mt-8 space-y-6 p-8 " onSubmit={onSubmit}>
+        <form className="mt-8 space-y-6 p-8 " onSubmit={onSubmit} autoComplete={remember?"on":"off"}>
           <div className="rounded-md shadow-sm">
             <div className="mb-4 gap-4">
               <div className="!mb-2">
@@ -99,6 +100,7 @@ const Login: React.FC = () => {
                     setUser({ ...user, email: event.target.value })
                   }
                   disabled={loading}
+                  autoComplete={remember?"email":""}
                 />
                 {errors?.email && (
                   <p className="text-xs text-red-600 dark:text-red-500 text-right">
@@ -116,6 +118,7 @@ const Login: React.FC = () => {
                     setUser({ ...user, password: event.target.value })
                   }
                   disabled={loading}
+                  autoComplete={"password"}
                 />
                 {errors?.password && (
                   <p className="text-xs text-red-600 dark:text-red-500 text-right">
@@ -138,6 +141,8 @@ const Login: React.FC = () => {
                 name="remember-me"
                 type="checkbox"
                 className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+                 onChange={(event :React.ChangeEvent<HTMLInputElement>)=>setRemember(event?.target?.checked)}
+                 checked={remember}
               />
               <label
                 htmlFor="remember-me"

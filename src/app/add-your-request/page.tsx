@@ -23,7 +23,7 @@ import {
   postProperityType,
   properityTypeInter,
   properityErrorTypeInter,
-  removeState,
+  removeState
 } from "@/redux/features/postRequest";
 import {
   dataTypeOfRealEstate
@@ -33,7 +33,7 @@ import {
   districtDetail,
   returnRealState,
   imageInfo,
-  DataSendInfo
+  DataSendInfo,CriteriaInter
 }from "@/type/addrealestate"
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
@@ -94,7 +94,7 @@ const AddYourRequest: React.FC = () => {
       min_price: 10000,
     },
   ]);
-  const [criteria, setCriteria] = useState<any>({
+  const [criteria, setCriteria] = useState<CriteriaInter>({
     dealStatus: "",
     city: "تبوك",
     district: null,
@@ -126,7 +126,7 @@ const AddYourRequest: React.FC = () => {
   } = useSelector<RootState>((state) => state.properityRequest) as {
     loading: boolean;
     message: string;
-    data: any;
+    data: properityTypeInter;
   };
   const { city, district } = useSelector<RootState>((state) => state.city) as {
     district: districtDetail[]|null;
@@ -164,7 +164,7 @@ const AddYourRequest: React.FC = () => {
     router.push("/");
   };
   const filteredCites = useMemo(() => {
-    return district?.filter((cite: any) =>
+    return district?.filter((cite: districtDetail) =>
       cite?.name?.toLowerCase()?.includes(searchTerm?.toLowerCase())
     );
   }, [district, searchTerm]);
@@ -401,7 +401,7 @@ const AddYourRequest: React.FC = () => {
                       setCriteria({ ...criteria, city: event?.target?.value })
                     }
                   >
-                    {city?.map((city: any) => (
+                    {city?.map((city: cityDetial) => (
                       <option key={city.id} value={city.nameAr}>
                         {city?.nameAr}
                       </option>
@@ -780,7 +780,7 @@ const AddYourRequest: React.FC = () => {
            
             disabled={open==false}
             />
-                  {filteredCites?.map((cite: any) => (
+                  {filteredCites?.map((cite: districtDetail) => (
                     <div
                       key={cite.id}
                       className="flex justify-end items-center w-full py-2"
@@ -788,7 +788,7 @@ const AddYourRequest: React.FC = () => {
                       <span className="mr-2">{cite.name}</span>
                       <input
                         type="checkbox"
-                        checked={selectedCites.some((c) => c.id === cite.id)}
+                        checked={selectedCites.some((c) => (c?.id&&c?.id == cite.id))}
                         onChange={() => handleCiteChange(cite)}
                         className="checked:accent-[#3B73B9] w-[16px] h-[16px]"
                       />
@@ -820,7 +820,7 @@ const AddYourRequest: React.FC = () => {
         </form>
       ) : (
         <>
-          <OnAddYourRequestSuccess dataRequest={dataRequest} />
+          <OnAddYourRequestSuccess dataRequest={{id:dataRequest?.id}} />
         </>
       )}
     </>

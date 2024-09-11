@@ -1,5 +1,5 @@
 "use client";
-import React, { useState,useEffect } from "react";
+import React, { useState,useEffect,useMemo,useRef } from "react";
 import MainHeader from "@/app/components/header/MainHeader";
 import Pusher from "pusher-js";
 import Cookie from 'js-cookie';
@@ -14,14 +14,15 @@ import { IoAttach } from "react-icons/io5";
 import { useRouter,useParams } from "next/navigation";
 import {getMessageByDetailId} from "@/redux/features/getMessageBydetailsId"
 import {getMessageByLandId} from "@/redux/features/getMessageBylandId"
-import {postMessage} from "@/redux/features/getMessage"
+import {postMessage,postFileMessage} from "@/redux/features/getMessage"
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
-import {chatdetailinfo} from "@/type/chatinterface"
+import {chatdetailinfo,messagePusher} from "@/type/chatinterface"
 import {userInfo} from "@/type/addrealestate"
 import { format } from "date-fns";
 const ChatPage = () => {
   const params = useParams();
+  let refImage = useRef<HTMLInputElement>(null);
   const [user,setUser]=useState<userInfo>()
   const { 
     data:dataDetail, message: messageDetail } = useSelector<RootState>(
@@ -40,35 +41,26 @@ const ChatPage = () => {
     data: chatdetailinfo[];
   };
   const {id}=params
-  const [messages, setMessages] = useState([
-    {
-      sender: "إدارة مشروك",
-      content: "هنا تستطيع متابعة إدارة...",
-      time: "1:30 PM",
-      isReceiver: false,
-    },
-    {
-      sender: "باسم الحسيني",
-      content: "تم استلام الرسالة...",
-      time: "1:30 PM",
-      isReceiver: true,
-    },
-    {
-      sender: "إدارة مشروك",
-      content: "الرجاء متابعة الطلب...",
-      time: "1:32 PM",
-      isReceiver: false,
-    },
-  ]);
-
-  const [newMessage, setNewMessage] = useState("");
+  const [newMessages,setMessage]=useState<chatdetailinfo[]>([])
+  const [newMessage, setNewMessage] = useState<string|File>("");
   const [detail, setdetail] = useState();
   const [land, setland] = useState();
   const dispatch = useDispatch<AppDispatch>();
+  const room_id=useMemo(()=>{
+    if(newMessages?.length>0){
+      return newMessages[0]?.room_id
+    }
+  },[newMessages])
+
   const handleSendMessage = () => {
-    if(newMessage){
+    if((newMessage instanceof File)==true){
+      dispatch(postFileMessage({
+        room_id:Number(room_id),
+        message:newMessage
+      }))
+    }else{
       dispatch(postMessage({
-        room_id:Number(id),
+        room_id:Number(room_id),
         message:newMessage
       }))
     }
@@ -84,30 +76,44 @@ const ChatPage = () => {
     if(storedToken){
       setUser(JSON.parse(storedToken));
     }
-    if(land){
+    if(land&&land!="undefined"){
       setland(JSON.parse(land))
     }
-    if(detail){
+    if(detail&&detail!="undefined"){
       setdetail(JSON.parse(detail))
     }
 }, []);
-// console.log(,"user")
-  useEffect(() => {
-    const pusher = new Pusher("eac8985b87012d5f5753", {
-      cluster:"mt1"
+useEffect(() => {
+  const pusher = new Pusher("eac8985b87012d5f5753", {
+    cluster: "mt1",
+  });
+  
+    const channel = pusher.subscribe(`chats-${user?.id}`);
+    channel.bind(`newMessage`, function (message:messagePusher) {
+      console.log(message,"message")
+      const urlPattern = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i;
+      setMessage((prev)=>[...prev,{
+  message: message?.message,
+  room_id: Number(room_id),
+  type: urlPattern.test(message?.message)?"file":"string",
+  user_id:message?.authorId,
+  createdAt:String(new Date())
+      }])
     });
-    const channel = pusher.subscribe("chat");
-    channel.bind(`chat-${id}`, function () {
-      // console.log(data,"data")
-      // setChats((prevState) => [
-      //   ...prevState,
-      //   { sender: data.sender, message: data.message },
-      // ]);
-    });
-    return () => {
-      pusher.unsubscribe("chat");
-    };
-  }, [id]);
+  
+  return () => {
+    pusher.unsubscribe(`chats-${user?.id}`);
+  };
+}, [user?.id,room_id]);
+useEffect(()=>{
+  if(dataDetail?.length>0){
+    setMessage(dataDetail)
+  }
+  if(dataLand?.length>0){
+    setMessage(dataLand)
+  }
+},[dataDetail,dataLand])
+
   useEffect(()=>{
     if(id){
       if(Cookie.get("detail")){
@@ -120,10 +126,8 @@ const ChatPage = () => {
   },[id,dispatch])
   return (
     <>
-      <div className="flex flex-col h-screen bg-white">
-        <MainHeader />
         <div
-          className="flex flex-col h-screen bg-white"
+          className={`flex flex-col  bg-white ${newMessages?.length==0?"h-screen":"min-h-screen"}`}
           style={{ direction: "rtl" }}
         >
           <div className="flex justify-between items-center p-4 gap-2 flex-row border-b">
@@ -148,8 +152,8 @@ const ChatPage = () => {
           </div>
 
           <div className="flex-1  p-4 gap-4 flex flex-col">
-            {dataDetail?.length > 0
-              ? dataDetail?.map((msg:chatdetailinfo, index:number) => (
+            {newMessages?.length > 0
+              ? newMessages?.map((msg:chatdetailinfo, index:number) => (
                   <div
                     key={index}
                     className={`flex ${
@@ -158,7 +162,7 @@ const ChatPage = () => {
                   >
                     <div className="flex flex-col gap-1">
                       <div
-                        className={`flex flex-row items-center justify-center gap-3 ${
+                        className={`flex flex-row items-center justify-start gap-3 ${
                           user?.id==msg?.user_id ? "flex-row" : "flex-row-reverse"
                         }`}
                       >
@@ -183,70 +187,44 @@ const ChatPage = () => {
                             : "bg-gray-100"
                         }`}
                       >
-                        <p className="mt-1">{msg?.message}</p>
+                         {msg?.type=="string"&& <p className="my-1">{msg?.message}</p>}
                         {msg?.type=="share_property"&&
                         <div className="bg-white rounded-lg shadow-lg flex flex-col items-center justify-center p-2">
                           <p className="text-[#98CC5D] text-sm">انضمام الشركاء</p>
                           <p className="text-blue-450 text-xs">(تم  التحقق من الدفع وقبول طلب الشراكة)</p>
                         </div>
                         }
+                       {msg?.type=="file"&&
+                        <div className="bg-white rounded-lg shadow-lg flex flex-col items-center justify-center p-2">
+                          <p className="text-[#98CC5D] text-sm">انضمام الشركاء</p>
+                          <a className="text-blue-450 text-xs" href={msg?.message}>(تم  التحقق من الدفع وقبول طلب الشراكة)</a>
+                        </div>
+                        }
                       </div>
                     </div>
                   </div>
                 ))
-              : dataLand?.map((msg:chatdetailinfo, index:number) => (
-                <div
-                  key={index}
-                  className={`flex ${
-                    user?.id==msg?.user_id? "justify-start" : "justify-end"
-                  } mb-2`}
-                >
-                  <div className="flex flex-col gap-1">
-                    <div
-                      className={`flex flex-row items-center justify-center gap-3 ${
-                        user?.id==msg?.user_id ? "flex-row" : "flex-row-reverse"
-                      }`}
-                    >
-                      {user?.id==msg?.user_id ? (
-                        <span className="bg-[#E5E7EB] text-[#111928] font-normal items-center justify-center rounded-full w-9 h-9 flex">
-                          ي
-                        </span>
-                      ) : (
-                        <MashrookLogoChat />
-                      )}
-                      <p className="text-[#4B5563] text-sm font-semibold">
-                        {user?.id==msg?.user_id?user?.username:"ادارة مشروك"}
-                      </p>
-                      <span className="text-xs font-normal text-[#9CA3AF]">
-                        {msg?.createdAt}
-                      </span>
-                    </div>
-                    <div
-                      className={`max-w-xs p-3 rounded-lg ${
-                        user?.id==msg?.user_id
-                          ? "bg-[#3B73B9] text-white"
-                          : "bg-gray-100"
-                      }`}
-                    >
-                      <p className="mt-1">{msg?.message}</p>
-                      {msg?.type=="share_property"&&
-                        <div className="bg-white rounded-lg shadow-lg flex flex-col items-center justify-center p-2">
-                          <p className="text-[#98CC5D] text-sm">انضمام الشركاء</p>
-                          <p className="text-blue-450 text-xs">(تم  التحقق من الدفع وقبول طلب الشراكة)</p>
-                        </div>
-                        }
-                    </div>
-                  </div>
-                </div>
-              ))}
+              :""}
           </div>
 
           <div className="flex items-center border-t p-4 gap-2">
             <TextInput
               onChange={(e) => setNewMessage(e.target.value)}
               inputProps={{ placeholder: "اكتب رسالة هنا..." }}
-              icon={<IoAttach />}
+              icon={<IoAttach    onClick={() => refImage.current?.click()}/>}
             />
+             <input
+                type="file"
+                className="hidden"
+                ref={refImage}
+                accept="application/pdf,image/*"
+                onChange={(event) => {
+                  const files = event.target.files;
+                  if(files){
+                    setNewMessage(files[0])
+                  }
+                }}
+              />
             <button
               className="ml-4 bg-[#9CA3AF] text-white px-4 py-2 rounded-lg"
               onClick={handleSendMessage}
@@ -255,7 +233,6 @@ const ChatPage = () => {
             </button>
           </div>
         </div>
-      </div>
     </>
   );
 };

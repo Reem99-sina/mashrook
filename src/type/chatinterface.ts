@@ -1,10 +1,10 @@
 import {detailsMoreType,detailsType,landInfo,detailOneInfo} from "./addrealestate"
 export interface chatdetailinfo{
-    id: number,
+    id?: number,
     message: string,
     type: string,
     createdAt: string,
-    updatedAt:string,
+    updatedAt?:string,
     room_id: number,
     user_id: number
 }
@@ -45,4 +45,7 @@ receiver_id: number,
 sender_id: number,
 status: string,
 updatedAt: string
+}
+export interface messagePusher{
+    authorId: number, message: string
 }

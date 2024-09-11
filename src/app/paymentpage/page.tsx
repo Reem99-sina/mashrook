@@ -101,12 +101,12 @@ let [url,setUrl]=useState<any>()
     }
     
   }
-  function readAndPreview(file:any) {
+  function readAndPreview(file:File) {
     // Make sure `file.name` matches our extensions criteria
     
     if((file instanceof File)==true){
       setRecipt(file)
-      if (/\.(pdf?g|pdf)$/i.test(file.name)) {
+      if (/\.(pdf|png|jpg|jpeg?g|pdf|png|jpg|jpeg)$/i.test(file.name)) {
         const reader = new FileReader();
       
         reader.addEventListener(
@@ -248,12 +248,11 @@ let [url,setUrl]=useState<any>()
                 type="file"
                 className="hidden"
                 ref={refImage}
-                accept="application/pdf"
+                accept="application/pdf,image/*"
                 onChange={(event) => {
                   const files = event.target.files;
                   if(files){
                     readAndPreview(files[0])
-                    
                   }
                 }}
               />

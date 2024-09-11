@@ -46,6 +46,7 @@ export default function SideBar({ sidebarOpen, toggleSidebar }: SideBarProps) {
                         إنشاء حساب
                       </Link>
                     </li>
+                    
                     <hr className="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700" />
                   </>
                 )}
@@ -55,8 +56,8 @@ export default function SideBar({ sidebarOpen, toggleSidebar }: SideBarProps) {
                   </Link>
                 </li>
 
-                <li className="mb-4 hover:bg-gray-200">
-                  <Link href="/my-offer?title=طلباتي" className=" ">
+                <li className="mb-4 hover:bg-gray-200" >
+                  <Link href="/my-offer?title=طلباتي" className="">
                  طلباتي
                   </Link>
                 </li>
