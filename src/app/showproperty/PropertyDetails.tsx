@@ -1,6 +1,6 @@
 "use client";
 
-import React ,{useEffect}from "react";
+import React ,{useEffect,useMemo}from "react";
 import MainHeader from "../components/header/MainHeader";
 import Footer from "../components/header/Footer2";
 import { useState } from "react";
@@ -11,6 +11,7 @@ import { BsPerson } from "react-icons/bs";
 import { format } from "date-fns";
 import { FaBookmark, FaChevronRight, FaRegCalendarAlt } from "react-icons/fa";
 import { CgSmartphoneShake } from "react-icons/cg";
+import {userInfo,saveElement} from "@/type/addrealestate"
 import {
   IoIosCheckmarkCircleOutline,
   IoMdCloseCircleOutline,
@@ -62,7 +63,11 @@ const PropertyDetails: React.FC<{id:number}> = ({id}:{id:number}) => {
   const maxChars = 250;
 
   const currentDealStatus = "متاح";
-
+  let save=useMemo(()=>{
+    return (ele:dataReturn)=>{
+     return ele?.propertySaved?.map(({property_id}:saveElement)=>property_id).includes(ele?.id)
+    }
+},[])
   const handleReportClick = () => {
     setIsDialogOpen(true);
   };
@@ -111,14 +116,14 @@ const PropertyDetails: React.FC<{id:number}> = ({id}:{id:number}) => {
     }, 3000);
   };
 
-  const handleSaveClick= (id:number) => {
-    if(id){
-      if (!saved) {
-      dispatch(postSave({property_id:id}))
-    }else{
-      dispatch(deleteSaves({id:id}))
+  const handleSaveClick = (ele:dataReturn) => {
+    if(ele?.id){
+      if(save(ele)==false){
+        dispatch(postSave({property_id:ele?.id}))
+      }else{
+        dispatch(deleteSaves({id:ele?.id}))
+      }
     }
-  }
     // if (!saved) {
     //   setNotificationMessage("تم الحفظ");
     // } else {
@@ -133,14 +138,15 @@ const PropertyDetails: React.FC<{id:number}> = ({id}:{id:number}) => {
   useEffect(() => {
    
     const storedToken = Cookie.get("user");
-    if(storedToken){
-      setUser(storedToken);
+    if(storedToken&&storedToken!="undefined" ){
+      const makeObject=JSON.parse(storedToken)
+      setUser(makeObject);
     }
   
 }, []);
 useEffect(()=>{
   if(messageSave&&Boolean(dataSave)==true){
-      setNotificationMessage("تم الحفظ");
+    setNotificationMessage("تم الحفظ");
     setSaved(!saved);
     setShowNotification(true);
     setTimeout(() => {
@@ -569,16 +575,16 @@ useEffect(()=>{
         id="bookmarkReport"
         className="flex justify-around items-center mt-4 text-lg border-2 rounded-t-xl z-50 bg-white"
       >
-        <div className="flex flex-row py-4 items-center justify-center">
-          <button
-            onClick={()=>handleSaveClick(selectData?.id)}
-            className={`${selectData?.user?.email==user?.email?"text-gray-500":"text-blue-500"} mx-2 align-middle`}
-                  disabled={selectData?.user?.email==user?.email}
-          >
-            {saved ? "إلغاء الحفظ" : "حفظ"}
-          </button>
-          <FaBookmark className={`${selectData?.user?.email==user?.email?"text-gray-500":"text-blue-500"} mx-2 text-xl align-middle`} />
-        </div>
+        <div className="flex flex-row py-1 items-center justify-center">
+                <button
+                  onClick={()=>handleSaveClick(selectData)}
+                  className={`${selectData?.user_id==user?.id?"text-gray-500":"text-blue-500"} mx-2 align-middle`}
+                  disabled={selectData?.user_id==user?.id}
+                >
+                  {save(selectData) ? "إلغاء الحفظ" : "حفظ"}
+                </button>
+                <FaBookmark className={`${selectData?.user_id==user?.id?"text-gray-500":"text-blue-500"} mx-2 text-xl align-middle`} />
+              </div>
 
         <div className="bg-gray-300 inline-block h-10 w-0.5 align-bottom"></div>
         {showNotification && (
@@ -586,15 +592,15 @@ useEffect(()=>{
             {notificationMessage}
           </div>
         )}
-
         <div className="flex flex-row py-4 items-center justify-center">
           <button
             onClick={handleReportClick}
-            className="text-red-500 mx-2 align-middle"
+            className={`${selectData?.user_id==user?.id?"text-gray-500":"text-red-500"}  mx-2 align-middle`}
+            disabled={selectData?.user_id==user?.id}
           >
             ابلاغ
           </button>
-          <MdOutlineFlag className="text-red-500 mx-2 text-xl align-middle" />
+          <MdOutlineFlag className={`${selectData?.user_id==user?.id?"text-gray-500":"text-red-500"} mx-2 text-xl align-middle`} />
         </div>
 
         {isDialogOpen && (

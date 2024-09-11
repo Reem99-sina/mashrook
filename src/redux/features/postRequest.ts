@@ -24,6 +24,7 @@ export interface properityInfo{
   address?: string
 }
 export interface properityTypeInter {
+  id?:string;
   property_type_id?: Number | String |undefined; /// get the ids from property type getAll
   city?: String;
   district?: String[];

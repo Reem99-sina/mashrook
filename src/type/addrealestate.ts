@@ -32,8 +32,7 @@ export interface cityDetial{
         
 }
 export interface districtDetail{
-    
-        id: string,
+        id: number,
         city_name: string,
         name:string
 }
@@ -106,6 +105,17 @@ createdAt:string,
 updatedAt:string,
 userType: string,
 val_license: null
+}
+export interface CriteriaInter{
+    dealStatus: boolean|string,
+    city: string,
+    district: string|null,
+    unitType: number|string,
+    unitStatus: string,
+    priceRange: number[],
+    shareRange: number[],
+    desiredRow: number[],
+    floorType: string,
 }
 //  "id": 6,
 // "username": "reem",

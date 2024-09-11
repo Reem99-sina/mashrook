@@ -17,7 +17,7 @@ import { MdKeyboardArrowLeft } from "react-icons/md";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { getRequest } from "@/redux/features/getRequest";
+import { getRequest,dataReturn } from "@/redux/features/getRequest";
 const limit = 5;
 
 const slicedData = {
@@ -44,7 +44,7 @@ export default function Home() {
   const router = useRouter();
   const { loading, message, data } = useSelector<RootState>(
     (state) => state.getRequest
-  ) as { loading: boolean; message: string; data: any };
+  ) as { loading: boolean; message: string; data: dataReturn[] };
   const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
     const storedToken = Cookie.get("token");

@@ -25,6 +25,8 @@ interface Props {
   maxLength?: number;
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
   value?: any;
+  autoComplete?:string,
+  name?:string
 }
 
 export const TextInput: FC<Props> = ({
@@ -40,6 +42,7 @@ export const TextInput: FC<Props> = ({
   maxLength,
   onChange,
   value,
+  autoComplete,name
 }) => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -78,6 +81,8 @@ export const TextInput: FC<Props> = ({
           maxLength={maxLength}
           onChange={onChange}
           value={value}
+          name={name}
+           autoComplete={`${autoComplete}`}
         />
 
         {currency && (

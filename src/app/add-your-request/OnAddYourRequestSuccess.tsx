@@ -7,7 +7,7 @@ import { Succeeded } from "../assets/svg";
 
 interface OnAddYourRequestSuccessProps {
   dataRequest?: {
-    id: string;
+    id?: string;
   };
 }
 

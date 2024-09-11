@@ -83,7 +83,6 @@ const SignUp: React.FC = () => {
       const storedToken =  Cookie.remove("token");
     }
   }, []);
-
   return (
     <div className="flex items-center justify-center min-h-screen h-full  w-full flex-col">
       {/* <div className="flex items-end justify-start p-4 w-full h-full lg:hidden bg-white ">
@@ -115,10 +114,12 @@ const SignUp: React.FC = () => {
                   label="اسم المستخدم"
                   inputProps={{ placeholder: "اسم المستخدم" }}
                   value={user.username}
+                  autoComplete={"username"}
                   onChange={(event) =>
                     setUser({ ...user, username: event.target.value })
                   }
                   disabled={loading}
+                  name="username"
                 />
                 {errors?.username && (
                   <p className="text-xs text-red-600 dark:text-red-500 text-right">
@@ -131,6 +132,8 @@ const SignUp: React.FC = () => {
                   label="البريد الإلكتروني "
                   inputProps={{ placeholder: "البريد الإلكتروني" }}
                   type="email"
+                  name="email"
+                  autoComplete={"email"}
                   value={user.email}
                   onChange={(event) =>
                     setUser({ ...user, email: event.target.value })
@@ -151,7 +154,9 @@ const SignUp: React.FC = () => {
           numberInputProps={{style:{textAlign:"end"}}}
       value={user?.phone}
       defaultCountry="SA"
-      country="SA"
+      countries={["SA"]}
+      labels={{"SA":"المملكة العربية السعودية"}}
+      addInternationalOption={false}
       onChange={(value)=>setUser({ ...user, phone: value?String(value):"" })}/>
       {errors?.phone && (
                   <p className="text-xs text-red-600 dark:text-red-500 text-right">

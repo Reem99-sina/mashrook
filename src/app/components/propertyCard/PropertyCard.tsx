@@ -249,7 +249,6 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ page, limit }) => {
       }, 5000);
   
     }else if (messageSave=="Properties removed successfully"&&Boolean(dataSave)==false){
-      
       setNotificationMessage("تم الغاء الحفظ");
       dispatch(removeSave({id:saved?.id}))
       setShowNotification(true);
@@ -259,7 +258,6 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ page, limit }) => {
     }
     return ()=>{
       dispatch(deleteSave())
-      setSaved(null)
     }
   },[messageSave,dataSave,dispatch,saved?.id])
   return (
