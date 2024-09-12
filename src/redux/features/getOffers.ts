@@ -19,6 +19,10 @@ interface paramsInput{
   min_percentage?:number|null,
       max_percentage?:number|null,
   }
+  interface paramsDetail{
+    detail_id?:number,
+    land_detail_id?:number
+  }
 export const getOffer=createAsyncThunk<returnType,(paramsInput|null)>("Offer/get", async (data:(paramsInput|null), { rejectWithValue }) => {  
         const response = await axios.get(`https://server.mashrook.sa/property/get/mine/offers`,{
             headers: {
@@ -30,12 +34,32 @@ export const getOffer=createAsyncThunk<returnType,(paramsInput|null)>("Offer/get
         .catch((error)=>error?.response?.data) 
         return response;
 })
-
+export const deleteOfferDetailOrLand=createAsyncThunk<returnType,(paramsDetail)>("detail/delete", async (data:(paramsDetail), { rejectWithValue }) => {  
+    if(data?.detail_id){
+        const response = await axios.delete(`https://server.mashrook.sa/property/details/${data?.detail_id}`,{
+            headers: {
+              Authorization: Cookie.get("token"),
+            }
+          })
+        .then((response)=>response.data)
+        .catch((error)=>error?.response?.data) 
+        return response;
+    }else{
+        const response = await axios.delete(`https://server.mashrook.sa/property/land-details/${data?.land_detail_id}`,{
+            headers: {
+              Authorization: Cookie.get("token"),
+            }
+          })
+        .then((response)=>response.data)
+        .catch((error)=>error?.response?.data) 
+        return response;
+    }
+   
+})
 const initialstate={
     loading:false,
     message:"",
-    data:null,
-   
+    data:null
 }
 
 const getOfferSlice=createSlice({
@@ -43,6 +67,10 @@ const getOfferSlice=createSlice({
     initialState:initialstate,
     reducers:{
         deleteOffer:(state,action)=>{
+            state.data=action.payload.data
+        },
+        deleteOfferDetail:(state,action)=>{
+            console.log(action.payload.data,"action.payload.data")
             state.data=action.payload.data
         }
     },extraReducers:(builder)=>{
@@ -60,8 +88,23 @@ const getOfferSlice=createSlice({
             state.loading=false
             state.message=action.error.message?action.error.message:"error"
             state.data=null
+        }),
+        builder.addCase(deleteOfferDetailOrLand.fulfilled,(state,action)=>{
+            state.loading=false
+            state.message=action?.payload?.message?action.payload.message:"success"
+            // state.data=action?.payload?.data
+        }),
+        builder.addCase(deleteOfferDetailOrLand.pending,(state,action)=>{
+            state.loading=true
+            state.message=""
+            // state.data=null
+        }),
+        builder.addCase(deleteOfferDetailOrLand.rejected,(state,action)=>{
+            state.loading=false
+            state.message=action.error.message?action.error.message:"error"
+            // state.data=null
         })
     }
 })
-export const { deleteOffer } = getOfferSlice.actions;
+export const { deleteOffer,deleteOfferDetail } = getOfferSlice.actions;
 export default getOfferSlice.reducer

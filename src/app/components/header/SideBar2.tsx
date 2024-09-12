@@ -55,8 +55,9 @@ export default function SideBar({ sidebarOpen, toggleSidebar }: SideBarProps) {
                     السوق
                   </Link>
                 </li>
-
-                <li className="mb-4 hover:bg-gray-200" >
+                {token&&<>
+                
+                  <li className="mb-4 hover:bg-gray-200" >
                   <Link href="/my-offer?title=طلباتي" className="">
                  طلباتي
                   </Link>
@@ -76,6 +77,7 @@ export default function SideBar({ sidebarOpen, toggleSidebar }: SideBarProps) {
                     محادثاتي
                   </Link>
                 </li>
+                </>}
                 <li className="mb-4 ">
                   <Link href="/frequently-asked-questions" className=" ">
                     الأسئلة الشائعة
@@ -102,6 +104,7 @@ export default function SideBar({ sidebarOpen, toggleSidebar }: SideBarProps) {
                         حسابي
                       </Link>
                     </li>
+                    
                     <li className="mb-4 text-xl hover:text-gray-800 ">
                       <Link
                         href="/"

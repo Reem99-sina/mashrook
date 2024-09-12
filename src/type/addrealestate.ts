@@ -5,6 +5,7 @@ export interface detailsType{
     createdAt:string,
     updatedAt:string
 }
+
 export interface detailsMoreType{
     id:number,
     title:string,
@@ -24,6 +25,7 @@ export interface dataTypeOfRealEstate{
     details?:detailsType[],
     data:detailsType[]
 }
+
 export interface cityDetial{
 
         id: string,
@@ -47,6 +49,21 @@ export interface properityLocationInfo{
       updatedAt:string,
       property_id: number
 }
+export interface roomType{
+    
+        id: number,
+        status: string,
+        createdAt: string,
+        updatedAt: string,
+        details_id: number|null,
+        land_details_id: null|number,
+        last_message_id: number,
+        property_id: number,
+        sender_id: number,
+        receiver_id: number,
+        blocker_id: null|number
+    
+}
 export interface landInfo{
     id: number,
     area: number,
@@ -58,7 +75,7 @@ export interface landInfo{
     type: null|string,
     createdAt: string,
     updatedAt: string,
-    property_id: number
+    property_id: number,
 }
 export interface detailOneInfo{
     id: number,
@@ -144,13 +161,30 @@ export interface returnRealState{
     property_purpose_id:number,
     property_type_details_id:number,
     propertyLocation:properityLocationInfo,
-    landDetails:landInfo[],
-    details:detailOneInfo[],
     amenities:amenitiesInfo[],
     user:userInfo,
     propertyType:detailsType,
     partnerType:detailsType,
     propertyTypeDetails:detailsMoreType
+}
+export interface realEstatePartner{
+    percentage: number,
+    amount: number,
+    id:number,
+    status:string,
+    createdAt:string,
+    updatedAt:string,
+    partner_type_id:number,
+    details_id:number|null,
+    land_details_id:number|null,
+    user_id:number,
+    property_id:number,
+    landDetails:landInfo & { room: roomType[] } |null,
+    details: detailOneInfo & { room: roomType[] } |null,
+    property:returnRealState&{
+        propertyPurpose:detailsType,
+        propertyOwnerType:detailsType
+    }
 }
 export interface imageInfo{
     name: string;
@@ -187,7 +221,7 @@ export interface landDetailPutINfo{
     property_purpose_id:number,
     property_type_details_id:number,
     propertyLocation:properityLocationInfo,
-    landDetails:landInfo[],
+    landDetails?:landInfo[]|null,
 }
 export interface locationInfo{
     id:number,
@@ -214,4 +248,19 @@ export interface initialOffer{
   selectData: dataReturn|null,
   messageReport: string,
   status: number,
+}
+export interface partnerInterface{
+    id: number,
+    percentage: number,
+    amount: number,
+    status: string,
+    createdAt: string,
+    updatedAt: string,
+    details_id: number|null,
+    land_details_id: number|null,
+    property_id: number,
+    user_id: number,
+    landDetails: null|landInfo,
+    details: null|detailOneInfo
+    // property:
 }

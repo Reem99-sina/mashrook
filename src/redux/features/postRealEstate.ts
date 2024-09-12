@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import React from "react";
 import Cookie from 'js-cookie';
-import {returnRealState,landDetailPutINfo,locationInfo} from "@/type/addrealestate"
+import {returnRealState,landDetailPutINfo,locationInfo,realEstatePartner,detailsType} from "@/type/addrealestate"
 export interface returnType {
   loading: boolean;
   message: string | undefined;
@@ -67,19 +67,24 @@ export interface RealEstateTypeInter {
     bathrooms_number?: number; // في حالة الفيلا عدد دورات المياه
     kitchens_number?: number;
   };
-  propertyDetailsOwnership?:any;
-  propertyPurpose?:any;
+  propertyDetailsOwnership?:realEstatePartner[];
+  propertyPurpose?:detailsType;
   finance?:boolean;
   alternativeCount?:number;
-  landDetails?: {
-    area?: number | string;
-    price?: number | string;
-    piece_number?: string;
-    plan_number?: string|number;
-    id?:number;
-    min_price?:number;
-    status?:string;
-  }[];
+  landDetails?:{
+    id?: number,
+    area?: number,
+    price?: number,
+    min_price?: null|number,
+    is_divisible?: boolean,
+    piece_number?: string,
+    plan_number?: string,
+    type?: null|string,
+    createdAt?: string,
+    updatedAt?: string,
+    property_id?: number,
+    status?:string
+}[];
   createdAt?:string;
   id?:string;
   details?: earthInter[];

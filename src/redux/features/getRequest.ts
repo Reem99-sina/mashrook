@@ -269,7 +269,7 @@ const requestGetSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(getRequest.fulfilled, (state, action) => {
       state.loading = false;
-      state.message = action.payload.message
+      state.message = action?.payload?.message
         ? action.payload.message
         : "success";
       state.data = action.payload.data;

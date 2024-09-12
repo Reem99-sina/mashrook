@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React,{useRef,useState,useEffect} from "react";
 import {
   Accreditation,
   Dots,
@@ -7,22 +7,27 @@ import {
   EditIcon,
   OtherOffer,
   UpdateIcon,
-  Rebuild,
-  ChatIconSmall,
+  InfoOutLine,
+  CloseIconSmall,
 } from "../assets/svg";
+import toast from "react-hot-toast"
+import { RealEstateTypeInter ,earthInter} from "@/redux/features/postRealEstate";
+import { Modal, ModalRef } from "../components/shared/modal.component";
+import { AppDispatch, RootState } from "@/redux/store";
+import { useDispatch, useSelector } from "react-redux";
 import { BsChatSquareText } from "react-icons/bs";
 import Link from "next/link"
 import Cookie from "js-cookie"
 import { Button } from "../components/shared/button.component";
-import Stepper from "../components/shared/Stepper";
 import { CgSmartphoneShake } from "react-icons/cg";
 import CircularProgressBar from "../components/propertyCard/RadialProgressBar";
 import { FinishedShares } from "@/app/assets/svg";
 import { GoLocation } from "react-icons/go";
 import { LuTag } from "react-icons/lu";
 import { BiArea } from "react-icons/bi";
-import { CiLocationOn } from "react-icons/ci";
+import {deleteOfferDetailOrLand,deleteOfferDetail} from "@/redux/features/getOffers"
 import { useRouter } from "next/navigation";
+import {detailOneInfo} from "@/type/addrealestate"
 interface ChatCardProps {
   title: string;
   date: string;
@@ -47,6 +52,7 @@ interface ChatCardProps {
     price: string;
     area: string;
     stage: string;
+    room:any;
     available_price: string;
     available_percentage: string;
     type?: string;
@@ -56,7 +62,10 @@ interface ChatCardProps {
     currentStep: number;
   }[];
 }
-
+interface detailType{
+  detail_id?:number,
+  land_detail_id?:number
+}
 export const OfferCard: React.FC<ChatCardProps> = ({
   onEdit,
   onUpdate,
@@ -81,6 +90,44 @@ export const OfferCard: React.FC<ChatCardProps> = ({
   const steps = ["الانتهاء", "السعي", "دفع الرسوم", "انضمام الشركاء"];
   const currentStep = 1;
   let router = useRouter();
+  const modalRef = useRef<ModalRef>(null);
+  const [idDelete, setId] = useState<detailType>();
+  const dispatch = useDispatch<AppDispatch>();
+  let {
+    loading,
+    message,
+    data: dataOffer,
+  } = useSelector<RootState>((state) => state.offers) as {
+    loading: boolean;
+    message: string;
+    data: any;
+  };
+  const onDeleteDetail=()=>{
+    if(idDelete){
+      dispatch(deleteOfferDetailOrLand(idDelete))
+      modalRef.current?.close()
+    }
+  }
+  useEffect(()=>{
+    if(message=="تم حذف العقار بنجاح"){
+      toast?.success(message)
+      if(idDelete?.detail_id||idDelete?.land_detail_id){
+        dispatch(deleteOfferDetail({data:dataOffer?.map((ele:RealEstateTypeInter)=>{
+          if(ele?.id==String(requestNumber)){
+            if(idDelete?.detail_id){
+              return ({...ele,details:ele?.details?.filter((element:earthInter)=>element?.id!=idDelete?.detail_id)})
+            }else{
+              return ({...ele,landDetails:ele?.landDetails?.filter((element)=>element?.id!=idDelete?.land_detail_id)})
+            }
+          }
+            return ele
+        })
+      }))
+      }
+    }else if(message=="لايمكن حذف الطلب لوجود مشتركين فيه!"){
+      toast?.error(message)
+    }
+  },[message,requestNumber,dataOffer,dispatch,idDelete])
   return (
     <div className="mt-4 w-full border-2 border-[#E5E7EB] rounded-lg mb-4 flex flex-col p-4">
       <div className="items-center justify-between  flex-row flex relative">
@@ -107,22 +154,7 @@ export const OfferCard: React.FC<ChatCardProps> = ({
             {date}
           </span>
         </div>
-
-        {/* {inProgress ? (
-          <span className="rounded-xl bg-[#FEECDC] pl-2 pr-2 pt-[2px] pb-[2px] text-xs font-normal text-[#FF8A4C]">
-            تحت التقدم{" "}
-          </span>
-        ) : active ? (
-          <span className="rounded-xl bg-[#F3F4F6] pl-2 pr-2 pt-[2px] pb-[2px] text-xs font-normal text-[#6B7280]">
-            {count} ايام للانتهاء
-          </span>
-        ) : (
-          <span className="rounded-xl bg-[#FDE8E8] pl-2 pr-2 pt-[2px] pb-[2px] text-xs font-normal text-[#F98080]">
-            منتهي
-          </span>
-        )} */}
       </div>
-
       <div className=" mt-2">
         <p className="text-xs text-[#6B7280] font-normal">
           رقم الطلب: {requestNumber}
@@ -140,8 +172,58 @@ export const OfferCard: React.FC<ChatCardProps> = ({
           </p>
         </div>
       </div>
+      <Modal ref={modalRef} size="xs">
+        <div
+          className="items-start flex justify-center flex-col p-4 "
+          style={{ direction: "rtl" }}
+        >
+          <div className="flex flex-row items-center justify-center mb-3  w-full">
+            <div
+              className="flex flex-1 cursor-pointer "
+              onClick={() => modalRef.current?.close()}
+            >
+              <CloseIconSmall />
+            </div>
+            <div className="flex  w-full items-center justify-center">
+              <p className="font-bold text-base text-[#374151]">تحذير!</p>
+            </div>
+          </div>
+
+          <div className="border border-[#E5E7EB] w-full mb-4" />
+
+          <div>
+            <span>
+              <p className="text-base font-normal text-[#4B5563]">
+                هل أنت متأكد من رغبتك في تنفيذ اجراء حذف العرض رقم ({idDelete?.land_detail_id?idDelete?.land_detail_id:idDelete?.detail_id}) ؟
+              </p>
+            </span>
+            <div className="bg-[#FDE8E8] rounded-md mt-5 mb-5 flex items-center justify-start p-1 flex-row gap-1 ">
+              <InfoOutLine />
+              <p className="font-medium text-[10px] text-[#4B5563]">
+                في حال قمت بحذف الطلب سيتم حذف البيانات المتعلقة بالعرض ولن
+                تتمكن من استرجاع الطلب
+              </p>
+            </div>
+          </div>
+
+          <div className="border border-[#E5E7EB] w-full mb-4" />
+
+          <div className="flex flex-row items-center justify-center gap-3  w-full">
+            <Button
+              text=" حذف"
+              onClick={onDeleteDetail}
+              className="!text-xs !font-medium"
+            />
+            <Button
+              text="الغاء"
+              onClick={() => modalRef.current?.close()}
+              className="!bg-white !text-[#1F2A37] !border !border-[#E5E7EB] !rounded-lg !text-xs !font-medium"
+            />
+          </div>
+        </div>
+      </Modal>
       <div className="gap-1 mt-2 flex flex-col">
-        {details?.map((detail:any, index:number) => (
+        {details&&details?.length>0&&details?.map((detail:any, index:number) => (
           <div  key={`detail-${index}`}>
             <div
              
@@ -245,30 +327,20 @@ export const OfferCard: React.FC<ChatCardProps> = ({
                   }
                   text="حذف"
                   className="!bg-white disabled:!bg-gray-200 flex flex-row-reverse !text-[#F05252] disabled:!text-gray-500 !text-sm !font-medium !gap-1  !border-red-500 disabled:!border-gray-500 border-solid rounded-md border-2"
-                  onClick={onDelete}
+                  onClick={()=>{modalRef.current?.open();setId(detail?.type?{detail_id:detail?.id}:{land_detail_id:detail?.id})}}
                   disabled={detail?.currentStep > 1}
                 />
               </div>
               <Link
-                href={`/chatpartner/${detail?.id}`} 
+                href={`/ChatPage/${detail?.room[0]?.id}`} 
                 className={`${
                   "bg-blue-450 text-white hover:bg-blue-800 border-2 border-blue-500"
                 }  font-medium rounded-lg text-sm px-5 py-2.5 flex justify-center w-full rtl:flex-row-reverse dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
                 
                   onClick={()=>{
-                    if(detail?.type){
-                      Cookie.set("detail",JSON.stringify(detail?.type
-                        ? detail?.type
-                        : detail?.plan_number &&
-                          `قطعة رقم  ${detail?.plan_number}`))
-                          Cookie.remove("land")
-                    }else{
-                      Cookie.set("land",JSON.stringify(detail?.type
-                        ? detail?.type
-                        : detail?.plan_number &&
-                          `قطعة رقم  ${detail?.plan_number}`))
-                          Cookie.remove("detail")
-                    }
+                    Cookie.set("title",  detail?.type
+                      ? `${title} ${ detail?.type}`
+                      : `${title} قطعة رقم ${detail?.plan_number}`)
                   }}
               >
                 عرض المحادثات
@@ -311,6 +383,6 @@ export const OfferCard: React.FC<ChatCardProps> = ({
           onClick={onDelete}
         />
       </div>
-    </div>
+      </div>
   );
 };

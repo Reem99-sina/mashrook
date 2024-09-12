@@ -17,6 +17,7 @@ import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { format } from "date-fns";
 import {userInfo} from "@/type/addrealestate"
+import Image from "next/image"
 import {chatdetailinfo,messagePusher} from "@/type/chatinterface"
 const ChatPage = () => {
   const params = useParams();
@@ -75,22 +76,28 @@ const ChatPage = () => {
     const pusher = new Pusher("eac8985b87012d5f5753", {
       cluster: "mt1",
     });
-    const channel = pusher.subscribe(`chats-${user?.id}`);
+    const channel = pusher.subscribe(`chats-${2}`);
     channel.bind(`newMessage`, function (message:messagePusher) {
+      console.log(message,"message")
       const urlPattern = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i;
-      console.log(urlPattern.test(message?.message),"message")
       setMessage((prev)=>[...prev,{
 message: message?.message,
+alert_link:null, alert_link_text:null,
+ alert_link_type:null,
+ alert_message:null,
+ alert_message_text:null,
 room_id: Number(id),
-type: urlPattern.test(message?.message)?"file":"string",
+type: message?.type,
 user_id:message?.authorId,
 createdAt:String(new Date())
       }])
+      setNewMessage("")
     });
     return () => {
-      pusher.unsubscribe(`chats-${user?.id}`);
+      pusher.unsubscribe(`chats-${2}`);
     };
-  }, [user?.id,id]);
+  }, [id]);
+
   useEffect(() => {
     if (id) {
       dispatch(getMessageByid({ id: Number(id) }));
@@ -164,16 +171,24 @@ createdAt:String(new Date())
                         }`}
                       >
                         {msg?.type=="string"&& <p className="my-1">{msg?.message}</p>}
-                        {msg?.type=="share_property"&&
+                        {msg?.alert_message&&
                         <div className="bg-white rounded-lg shadow-lg flex flex-col items-center justify-center p-2">
-                          <p className="text-[#98CC5D] text-sm">انضمام الشركاء</p>
-                          <p className="text-blue-450 text-xs">(تم  التحقق من الدفع وقبول طلب الشراكة)</p>
+                          <p className="text-[#98CC5D] text-sm">{msg?.alert_message}</p>
+                          <p className="text-blue-450 text-xs">{msg?.alert_message_text}</p>
+                        </div>
+                        }
+                        {msg?.alert_link&&
+                        <div className="bg-white rounded-lg shadow-lg flex flex-col items-center justify-center p-2">
+                          <p className="text-[#98CC5D] text-sm">{msg?.alert_link}</p>
+                          <p className="text-blue-450 text-xs">{msg?.alert_link_type}</p>
+                          <p className="text-blue-450 text-xs">{msg?.alert_link_text}</p>
                         </div>
                         }
                        {msg?.type=="file"&&
                         <div className="bg-white rounded-lg shadow-lg flex flex-col items-center justify-center p-2">
-                          <p className="text-[#98CC5D] text-sm">انضمام الشركاء</p>
-                          <a className="text-blue-450 text-xs" href={msg?.message}>(تم  التحقق من الدفع وقبول طلب الشراكة)</a>
+                          {/* <p className="text-[#98CC5D] text-sm">انضمام الشركاء</p> */}
+                          <Image src={msg?.message} width={50} height={50} alt="message"/>
+                          {/* <a className="text-blue-450 text-xs" href={msg?.message}>(تم  التحقق من الدفع وقبول طلب الشراكة)</a> */}
                         </div>
                         }
                       </div>
@@ -188,6 +203,7 @@ createdAt:String(new Date())
               onChange={(e) => setNewMessage(e.target.value)}
               inputProps={{ placeholder: "اكتب رسالة هنا..." }}
               icon={<IoAttach    onClick={() => refImage.current?.click()}/>}
+              value={(newMessage instanceof File==true&&newMessage?.name)?newMessage?.name:newMessage}
             />
              <input
                 type="file"

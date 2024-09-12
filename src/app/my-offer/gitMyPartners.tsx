@@ -30,6 +30,7 @@ import FilterModalPartner from "./filterModalPartner";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { RealEstateTypeInter } from "@/redux/features/postRealEstate";
+import {realEstatePartner }from "@/type/addrealestate"
 const data = [
   {
     title: "ارض سكنية - قطعة رقم 1256",
@@ -88,7 +89,6 @@ export const GitMyPartners = () => {
   });
   const router = useRouter();
   const [token, setToken] = useState<string | null>(null);
-  let [newData, setNewData] = useState<any>([]);
   const onWithDraw = () => {
     modalRef.current?.close();
     dispatch(
@@ -114,51 +114,46 @@ export const GitMyPartners = () => {
     data: any;
     messageWithDraw: string;
   };
-  useEffect(() => {
-    dataPartner?.map((dataPartnerOne: RealEstateTypeInter) =>
-      dataPartnerOne?.propertyDetailsOwnership?.map((ele: any) => {
-        let id = ele?.details_id;
-        let idLand = ele?.land_details_id;
-        let title =
-          (dataPartnerOne?.propertyTypeDetails?.title ||
-            dataPartnerOne?.propertyType?.title) +
-          " " +
-          (ele?.details?.type ||
-            ele?.landDetails?.type ||
-            "رقم القطعة" + ele?.landDetails?.piece_number);
-        setNewData((prev: any) => [
-          ...prev,
-          {
-            id: dataPartnerOne?.id,
-            title: title ? title : "",
-            date: dataPartnerOne?.createdAt
-              ? format(new Date(dataPartnerOne?.createdAt), "yyyy-MM-dd")
-              : "",
-            requestNumber: ele?.id,
-            count: 8,
-            city: dataPartnerOne?.propertyLocation?.city,
-            district: dataPartnerOne?.propertyLocation?.district?.replace(
-              /[\[\]\\"]/g,
-              ""
-            ),
-            budget: `${ele?.amount} ريال`,
-            PartnershipNumber: ele?.id,
-            realEstate:
-              ele?.details?.type ||
-              (ele?.landDetails?.type
-                ? ele?.landDetails?.type
-                : "قطعة رقم " + ele?.landDetails?.piece_number),
-            bidRequestNumber: dataPartnerOne?.id,
-            partnershipRatio: ele?.percentage,
-            purpose: dataPartnerOne?.propertyPurpose?.title,
-            finance: dataPartnerOne?.finance,
-            details_id: ele?.details_id,
-            land_details_id: ele?.land_details_id,
-          },
-        ]);
-      })
-    );
-  }, [dataPartner]);
+  const newDataMemo=useMemo(()=>{
+   return dataPartner?.flatMap((dataPartnerOne: RealEstateTypeInter) =>dataPartnerOne?.propertyDetailsOwnership)
+  },[dataPartner])
+  const title=useMemo(()=>{
+    return (partner:realEstatePartner)=>{
+      return partner?.details_id?`${partner?.property?.propertyType?.title} ${partner?.details?.type}`:`${partner?.property?.propertyType?.title} 
+      ${partner?.landDetails?.plan_number}
+      `
+    }
+  },[])
+  const newData=useMemo(()=>{
+    return newDataMemo?.map((ele: any)=>({
+        id: ele?.property?.id,
+        title: title(ele),
+        date: ele?.property?.createdAt
+          ? format(new Date( ele?.property?.createdAt), "yyyy-MM-dd")
+          : "",
+        requestNumber: ele?.id,
+        count: 8,
+        city:  ele?.property?.propertyLocation?.city,
+        district:  ele?.property?.propertyLocation?.district?.replace(
+          /[\[\]\\"]/g,
+          ""
+        ),
+        budget: `${ele?.amount} ريال`,
+        PartnershipNumber: ele?.id,
+        realEstate:
+          ele?.details?.type ||
+          (ele?.landDetails?.type
+            ? ele?.landDetails?.type
+            : "قطعة رقم " + ele?.landDetails?.piece_number),
+        bidRequestNumber:  ele?.property?.id,
+        partnershipRatio: ele?.percentage,
+        purpose:  ele?.property?.propertyPurpose?.title,
+        finance:  ele?.property?.finance,
+        details_id: ele?.details_id,
+        land_details_id: ele?.land_details_id,
+        room_id:ele?.details?.room[0]?.id
+    }))
+  },[newDataMemo,title])
   let fiterData = useMemo(() => {
     return {
       min_price:
@@ -369,6 +364,7 @@ export const GitMyPartners = () => {
                     });
                   }}
                   onShow={() => router.push(`/showpartner/${offer?.id}`)}
+                  room_id={offer?.room_id}
                 />
               ))}
             </div>

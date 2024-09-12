@@ -6,7 +6,12 @@ export interface chatdetailinfo{
     createdAt: string,
     updatedAt?:string,
     room_id: number,
-    user_id: number
+    user_id: number,
+    alert_link: null|string,
+alert_link_text: null|string,
+alert_link_type:null|string ,
+alert_message: string|null,
+alert_message_text:string|null
 }
 export interface chatInfo{
     blocker_id:null|number ,
@@ -47,5 +52,6 @@ status: string,
 updatedAt: string
 }
 export interface messagePusher{
-    authorId: number, message: string
+    authorId: number, message: string,
+    type:string
 }

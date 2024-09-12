@@ -43,9 +43,10 @@ let statuses=[{title:"متاح"},{title:"محجوز"},{title:"تحت الشرا�
 export const GitMyOffers = () => {
   const router = useRouter();
   const modalRef = useRef<ModalRef>(null);
+  const modalRefDetail = useRef<ModalRef>(null);
+
   const modalRefUpdate = useRef<ModalRef>(null);
   const [currentPage, setCurrentPage] = useState(1);
-  
   const [isFilterModalOpen, setIsFilterModalOpen] = useState<boolean>(false);
   const [optionFilter, setOption] = useState<string>("");
   const [criteria, setCriteria] = useState<any>({
@@ -68,7 +69,7 @@ export const GitMyOffers = () => {
   } = useSelector<RootState>((state) => state.offers) as {
     loading: boolean;
     message: string;
-    data: any;
+    data: RealEstateTypeInter[];
   };
   let {
     messageDelete,
@@ -143,7 +144,6 @@ export const GitMyOffers = () => {
       dispatch(deleteProperty({id:idDelete}))
       modalRef.current?.close()
     }
-  
   }
   const onExpiredDate=()=>{
     if(idDelete){
@@ -163,7 +163,7 @@ export const GitMyOffers = () => {
   useEffect(()=>{
     if(messageDelete=="تم حذف العقار بنجاح"){
       toast.success(messageDelete)
-      dispatch(deleteOffer({data:dataOffer?.filter((dataOrderOne:any)=>dataOrderOne?.id!==idDelete)}))
+      dispatch(deleteOffer({data:dataOffer?.filter((dataOrderOne:RealEstateTypeInter)=>dataOrderOne?.id!==idDelete)}))
     }else if(messageDelete){
       toast.error(messageDelete)
     }
@@ -186,7 +186,6 @@ export const GitMyOffers = () => {
       sort: optionFilter == "الأحدث الى الأقدم" ? "created_desc" : optionFilter == "الأقدم الى الأحدث" ? "created_asc" : optionFilter == "الميزانية ( الأدنى الى الأعلى)" ? "price_asc" : optionFilter == "الميزانية ( الأعلى الى الأدنى)"?"price_decs":""
     }))
   }, [ optionFilter, dispatch])
-  
   return (
     <div className="p-4 bg-white">
       {isFilterModalOpen && (
@@ -297,6 +296,7 @@ export const GitMyOffers = () => {
                   onUpdate={() => {modalRefUpdate.current?.open();setId(offer?.id)}}
                   house={offer.house}
                   id={offer.id}
+                  // room_id={offer.details?.room[0]?.id}
                 />
               ))}
             </div>

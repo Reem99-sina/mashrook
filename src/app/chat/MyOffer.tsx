@@ -1,6 +1,6 @@
 "use client";
 import clsx from "clsx";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useMemo } from "react";
 import { TextInput } from "../components/shared/text-input.component";
 import { Block, MessageIcon, Search } from "@/app/assets/svg";
 import { ChatCard } from "./ChatCard";
@@ -13,57 +13,18 @@ import Cookie from "js-cookie";
 import { Note } from "../assets/svg";
 import { FaRegUserCircle } from "react-icons/fa";
 import {chatInfo} from "@/type/chatinterface"
-const message = [
-  {
-    count: 1,
-    subtitle: "هذا النص هو مثال لنص.....",
-    title: "ارض سكنية - قطعة رقم 1234 (رقم الطلب 2022)",
-    time: "8:53AM",
-    image: <Block />,
-  },
-  {
-    count: 1,
-    subtitle: "هذا النص هو مثال لنص.....",
-    title: "ارض سكنية - قطعة رقم 1234 (رقم الطلب 2022)",
-    time: "8:53AM",
-    image: <Block />,
-  },
-  {
-    count: 1,
-    subtitle: "هذا النص هو مثال لنص.....",
-    title: "ارض سكنية - قطعة رقم 1234 (رقم الطلب 2022)",
-    time: "8:53AM",
-    image: <Block />,
-  },
-  {
-    count: 1,
-    subtitle: "هذا النص هو مثال لنص.....",
-    title: "ارض سكنية - قطعة رقم 1234 (رقم الطلب 2022)",
-    time: "8:53AM",
-    image: <Block />,
-  },
-  {
-    count: 1,
-    subtitle: "هذا النص هو مثال لنص.....",
-    title: "ارض سكنية - قطعة رقم 1234 (رقم الطلب 2022)",
-    time: "8:53AM",
-    image: <Block />,
-  },
-  {
-    count: 1,
-    subtitle: "هذا النص هو مثال لنص.....",
-    title: "ارض سكنية - قطعة رقم 1234 (رقم الطلب 2022)",
-    time: "8:53AM",
-    image: <Block />,
-  },
-];
 
 export const MyOffer = () => {
   const router = useRouter();
   const [token, setToken] = useState<string | null>(null);
+  const messageFile=useMemo(()=>{
+    return(messageFrom:chatInfo)=>{
+      return messageFrom?.lastMessage?.type=="file"?"تم ارسال ملف":messageFrom?.lastMessage?.message
+    }
+  },[])
   const OnClick = (message:chatInfo) => {
     Cookie.set("title",  message?.details?.type
-      ? `${message?.property?.propertyTypeDetails?.title} ${message?.property?.propertyType?.title}`
+      ? `${message?.details?.type} ${message?.property?.propertyType?.title}`
       : `${message?.property?.propertyType?.title} قطعة رقم ${message?.landDetails?.plan_number}`)
     router.push(`/ChatPage/${message?.id}`);
 
@@ -116,10 +77,10 @@ export const MyOffer = () => {
             <ChatCard
               key={message?.id}
               count={1}
-              subtitle={message.lastMessage.message}
+              subtitle={messageFile(message)}
               title={
                 message?.details?.type
-                  ? `${message?.property?.propertyTypeDetails?.title} ${message?.property?.propertyType?.title}`
+                  ? `${message?.details?.type} ${message?.property?.propertyType?.title}`
                   : `${message?.property?.propertyType?.title} قطعة رقم ${message?.landDetails?.plan_number}`
               }
               time={format(message.lastMessage?.createdAt, "hh:mm a")}
