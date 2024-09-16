@@ -1,6 +1,6 @@
 "use client";
 
-import React ,{useEffect}from "react";
+import React ,{useEffect,useMemo}from "react";
 import MainHeader from "../components/header/MainHeader";
 import Footer from "../components/header/Footer2";
 import { useState } from "react";
@@ -9,6 +9,7 @@ import { CarouselDefault } from "./Carousel3";
 import { GoLocation } from "react-icons/go";
 import { BsPerson } from "react-icons/bs";
 import { format } from 'date-fns';
+import Cookie from 'js-cookie';
 import { FaBookmark, FaChevronRight, FaRegCalendarAlt } from "react-icons/fa";
 import { CgSmartphoneShake } from "react-icons/cg";
 import {
@@ -27,6 +28,9 @@ import { useDispatch,useSelector } from "react-redux";
 import {dataReturn} from "@/redux/features/getRequest"
 import {useRouter} from "next/navigation"
 import {Vector,Money,Diagram,Dance,Shower,Kitchen,CheckOut} from "@/app/assets/svg"
+import {realEstatePartner,landInfo} from "@/type/addrealestate"
+import dynamic from "next/dynamic"
+const Map = dynamic(() => import("@/app/components/shared/map"), { ssr:false })
 const PropertyDetails: React.FC<{id:any}> = ({id}:{id:any}) => {
   const [activeTab, setActiveTab] = useState<"location" | "details">(
     "location"
@@ -40,59 +44,22 @@ const PropertyDetails: React.FC<{id:any}> = ({id}:{id:any}) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
   const [reportText, setReportText] = useState("");
+  const [user, setUser] = useState<any | null>(null);
   const [showReportNotification, setShowReportNotification] = useState(false);
   const [reportNotificationMessage, setReportNotificationMessage] =
     useState("");
-
     let { loading, message, data,selectData,messageReport,status } = useSelector<RootState>(
       (state) => state.getRequest
     ) as { loading: boolean; message: string; data: dataReturn[], selectData:dataReturn,messageReport:string,status:number};
-
+  const userOwnerShipArray=useMemo(()=>{
+    return selectData?.propertyDetailsOwnership?.filter((ele:realEstatePartner)=>ele?.user_id==user?.id)
+  },[user,selectData])
+  const userOwnerShip=useMemo(()=>{
+    return (detail:landInfo)=>userOwnerShipArray?.find((ele:realEstatePartner)=>ele?.land_details_id==detail?.id||ele?.details_id==detail?.id)
+  },[userOwnerShipArray])
   const maxChars = 250;
 
   const currentDealStatus = "متاح";
-
-  const handleReportClick = () => {
-    setIsDialogOpen(true);
-  };
-
-  const handleCloseClick = () => {
-    setIsDialogOpen(false);
-    setReportText("");
-  };
-
-  const handleTextChange = (e: { target: { value: string } }) => {
-    setReportText(e.target.value.slice(0, maxChars));
-  };
-
-  const handleReportSubmit = () => {
-   
-    
-    dispatch(postReport({
-      message:reportText,
-      property_id:Number(id)
-    }))
-   
-    setIsDialogOpen(false);
-    setReportText("");
-  };
-
-  const handleCancelClick = () => {
-    setIsConfirmDialogOpen(true);
-  };
-
-  const handleConfirmCancel = () => {
-    setReportNotificationMessage("تم الغاء البلاغ");
-    showNotificationMessage();
-    setIsConfirmDialogOpen(false);
-    setIsDialogOpen(false);
-    setReportText("");
-  };
-
-  const handleCancelConfirmDialog = () => {
-    setIsConfirmDialogOpen(false);
-  };
-
   const showNotificationMessage = () => {
     setShowReportNotification(true);
     setTimeout(() => {
@@ -112,13 +79,20 @@ const PropertyDetails: React.FC<{id:any}> = ({id}:{id:any}) => {
       setShowNotification(false);
     }, 3000);
   };
-
+  useEffect(() => {
+   
+    const storedToken = Cookie.get("user");
+    if(storedToken&&storedToken!="undefined" ){
+      const makeObject=JSON.parse(storedToken)
+      setUser(makeObject);
+    }
+  
+}, []);
   useEffect(()=>{
     if(messageReport&&status){
       setReportNotificationMessage(messageReport);
       showNotificationMessage();
     }
-    
   },[messageReport,status])
   const detailsContent = (
     <div className="mt-4">
@@ -160,8 +134,22 @@ const PropertyDetails: React.FC<{id:any}> = ({id}:{id:any}) => {
                 <span>{ele?.price} ريال</span>
               </div>
             </div>
-
-            <JoinStatusButtons currentDealStatus={ele?.stage=="finished"} data={ele} dataMain={selectData}/> 
+              {userOwnerShip(ele)?.land_details_id==ele?.id&&<>
+                <div className="flex justify-between bg-gray-100 w-full items-center rounded-lg ml-2 mt-4 px-2  py-2">
+              <span>نسبة شراكتك</span>
+              <span className={`${userOwnerShip(ele)?.percentage==100?"bg-[#98CC5D]":"bg-blue-450"} rounded-lg p-2 text-white`}>
+               {userOwnerShip(ele)?.percentage}٪ متاح
+              </span>
+            </div>
+            <div className="flex justify-between bg-gray-100 w-full items-center rounded-lg ml-2 mt-4 px-2  py-2">
+              <span>مبلغ شراكتك</span>
+             <div className="flex justify-center items-center border-2 rounded-lg p-2 ">
+                <LuTag className="text-xl mx-2" />
+                <span>{userOwnerShip(ele)?.amount} ريال</span>
+              </div>
+            </div>
+              </>}
+            {/* <JoinStatusButtons currentDealStatus={ele?.stage=="finished"} data={ele} dataMain={selectData}/>  */}
           </div> 
         </div>)}
         {selectData?.details?.length>0&&<>
@@ -170,7 +158,7 @@ const PropertyDetails: React.FC<{id:any}> = ({id}:{id:any}) => {
             <div className="flex justify-between bg-gray-100 w-full items-center rounded-lg ml-2 mt-4 px-2  py-2">
               <span>العمر</span>
               <span >
-               {selectData?.age} سنين
+               {selectData?.age} {(selectData?.age&&selectData?.age>1)?"سنين":"سنة"}
               </span>
             </div>
             <div className="flex justify-between bg-gray-100 w-full items-center rounded-lg ml-2 mt-4 px-2  py-2">
@@ -270,7 +258,22 @@ const PropertyDetails: React.FC<{id:any}> = ({id}:{id:any}) => {
             </div>
             </div>
             </div>
-            <JoinStatusButtons currentDealStatus={ele?.stage=="finished"} data={ele} dataMain={selectData}/> 
+            {userOwnerShip(ele)?.details_id==ele?.id&&<>
+                <div className="flex justify-between bg-gray-100 w-full items-center rounded-lg ml-2 mt-4 px-2  py-2">
+              <span>نسبة شراكتك</span>
+              <span className={`${userOwnerShip(ele)?.percentage==100?"bg-[#98CC5D]":"bg-blue-450"} rounded-lg p-2 text-white`}>
+               {userOwnerShip(ele)?.percentage}٪ متاح
+              </span>
+            </div>
+            <div className="flex justify-between bg-gray-100 w-full items-center rounded-lg ml-2 mt-4 px-2  py-2">
+              <span>مبلغ شراكتك</span>
+             <div className="flex justify-center items-center border-2 rounded-lg p-2 ">
+                <LuTag className="text-xl mx-2" />
+                <span>{userOwnerShip(ele)?.amount} ريال</span>
+              </div>
+            </div>
+              </>}
+            {/* <JoinStatusButtons currentDealStatus={ele?.stage=="finished"} data={ele} dataMain={selectData}/>  */}
           </div> 
         </div>)}
       </div>
@@ -282,10 +285,11 @@ const PropertyDetails: React.FC<{id:any}> = ({id}:{id:any}) => {
         <h2 className="text-2xl font-bold mb-4">موقع العقار</h2>
 
         <div className="mt-2">
-          <div className="flex justify-between bg-gray-100 w-full items-center rounded-lg ml-2 mt-4 px-2  py-2">
+        {selectData?.landDetails?.map((ele:any)=>ele?.piece_number)?.join(",")&&<div className="flex justify-between bg-gray-100 w-full items-center rounded-lg ml-2 mt-4 px-2  py-2">
             <span>رقم المخطط</span>
-           
-          </div>
+            {/* <span>{selectData?.landDetails?.plan_number}</span> */}
+            <span>{selectData?.landDetails?.map((ele:any)=>ele?.piece_number)?.join(",")}</span>
+          </div>}
           <div className="flex justify-between bg-gray-100 w-full items-center rounded-lg ml-2 mt-4 px-2  py-2">
             <span>المدينة</span>
             <span>{selectData?.propertyLocation?.city}</span>
@@ -300,15 +304,9 @@ const PropertyDetails: React.FC<{id:any}> = ({id}:{id:any}) => {
           </div>
         </div>
         <div className="mt-4">
-          <Image
-            src="https://storage.googleapis.com/support-forums-api/attachment/thread-16305330-5132562364420730370.png"
-            alt="Map"
-            width={1024}
-            height={1024}
-            style={{ objectFit: "cover" }}
-            className="rounded-xl"
-            priority
-          />
+          {(selectData?.propertyLocation?.lat&&selectData?.propertyLocation?.long)&&
+          <Map latitude={selectData?.propertyLocation?.lat}longitude={selectData?.propertyLocation?.long}/>}
+        
         </div>
       </div>
     </div>
@@ -446,123 +444,6 @@ const PropertyDetails: React.FC<{id:any}> = ({id}:{id:any}) => {
           </div>
           {activeTab === "details" ? detailsContent : locationContent}
         </div>
-      </div>
-      <div
-        id="bookmarkReport"
-        className="flex justify-around items-center mt-4 text-lg border-2 rounded-t-xl z-50 bg-white"
-      >
-        <div className="flex flex-row py-4 items-center justify-center">
-          <button
-            onClick={handleSaveClick}
-            className="text-blue-500 mx-2 align-middle"
-          >
-            {saved ? "إلغاء الحفظ" : "حفظ"}
-          </button>
-          <FaBookmark className="text-blue-500 mx-2 text-xl align-middle" />
-        </div>
-
-        <div className="bg-gray-300 inline-block h-10 w-0.5 align-bottom"></div>
-        {showNotification && (
-          <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-500 text-white px-4 py-2 rounded-full">
-            {notificationMessage}
-          </div>
-        )}
-
-        <div className="flex flex-row py-4 items-center justify-center">
-          <button
-            onClick={handleReportClick}
-            className="text-red-500 mx-2 align-middle"
-          >
-            ابلاغ
-          </button>
-          <MdOutlineFlag className="text-red-500 mx-2 text-xl align-middle" />
-        </div>
-
-        {isDialogOpen && (
-          <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-900 bg-opacity-50">
-            <div className="bg-white p-4 rounded-lg shadow-lg w-96">
-              <div className="flex justify-between items-center border-b pb-2">
-                <button
-                  className="text-xl font-semibold"
-                  onClick={handleCloseClick}
-                >
-                  &times;
-                </button>
-                <h2 className="text-xl font-semibold">ابلاغ</h2>
-                <p></p>
-              </div>
-              <div className="py-2">
-                <p className="font-medium p-2">سبب الابلاغ</p>
-                <textarea
-                  className="w-full h-32 p-2 border rounded"
-                  placeholder="اكتب سبب الابلاغ هنا..."
-                  value={reportText}
-                  onChange={handleTextChange}
-                  maxLength={maxChars}
-                ></textarea>
-                <div className="text-right text-sm text-gray-500">
-                  {reportText.length}/{maxChars}
-                </div>
-              </div>
-              <div className="flex justify-between mt-4">
-                <button
-                  onClick={handleReportSubmit}
-                  className="bg-blue-450 text-white px-4 py-2 rounded-2xl p-2 m-2 flex-grow"
-                >
-                  ابلاغ
-                </button>
-                <button
-                  onClick={handleCancelClick}
-                  className="border-2 px-4 py-2 rounded-2xl p-2 m-2 flex-grow"
-                >
-                  الغاء
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {isConfirmDialogOpen && (
-          <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-900 bg-opacity-50">
-            <div className="bg-white p-4 rounded-lg shadow-lg w-96">
-              <div className="flex justify-between items-center border-b pb-2">
-                <button
-                  className="text-xl font-semibold"
-                  onClick={handleCancelConfirmDialog}
-                >
-                  &times;
-                </button>
-                <h2 className="text-xl font-semibold">الغاء البلاغ</h2>
-                <p></p>
-              </div>
-              <div className="py-2">
-                <p className="font-medium">
-                  هل انت متأكد من رغبتك في إلغاء البلاغ ؟
-                </p>
-              </div>
-              <div className="flex justify-between mt-4">
-                <button
-                  onClick={handleConfirmCancel}
-                  className="bg-blue-450 text-white px-4 py-2 rounded-2xl p-2 m-2 flex-grow"
-                >
-                  تأكيد
-                </button>
-                <button
-                  onClick={handleCancelConfirmDialog}
-                  className="border-2 px-4 py-2 rounded-2xl p-2 m-2 flex-grow"
-                >
-                  الغاء
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {showReportNotification && (
-          <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-500 text-white px-4 py-2 rounded">
-            {reportNotificationMessage}
-          </div>
-        )}
       </div>
 
       <Footer />

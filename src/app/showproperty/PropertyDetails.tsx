@@ -31,6 +31,8 @@ import {dataReturn} from "@/redux/features/getRequest"
 import {useRouter} from "next/navigation"
 import Cookie from 'js-cookie';
 import {Vector,Money,Diagram,Dance,Shower,Kitchen,CheckOut} from "@/app/assets/svg"
+import dynamic from "next/dynamic"
+const Map = dynamic(() => import("@/app/components/shared/map"), { ssr:false })
 const PropertyDetails: React.FC<{id:number}> = ({id}:{id:number}) => {
 
   const [activeTab, setActiveTab] = useState<"location" | "details">(
@@ -236,7 +238,7 @@ useEffect(()=>{
             {/* <h3 className="text-xl font-bold">قطعة {selectData?.landDetails?.piece_number}</h3> */}
             <div className="flex justify-between bg-gray-100 w-full items-center rounded-lg ml-2 mt-4 px-2  py-2">
               <span>العمر</span>
-              <span>{selectData?.age} سنين</span>
+              <span>   {selectData?.age} {(selectData?.age&&selectData?.age>1)?"سنين":"سنة"}</span>
             </div>
             <div className="flex justify-between bg-gray-100 w-full items-center rounded-lg ml-2 mt-4 px-2  py-2">
               <span>المساحة</span>
@@ -406,15 +408,8 @@ useEffect(()=>{
           </div>
         </div>
         <div className="mt-4">
-          <Image
-            src="https://storage.googleapis.com/support-forums-api/attachment/thread-16305330-5132562364420730370.png"
-            alt="Map"
-            width={1024}
-            height={1024}
-            style={{ objectFit: "cover" }}
-            className="rounded-xl"
-            priority
-          />
+        {(selectData?.propertyLocation?.lat&&selectData?.propertyLocation?.long)&&
+          <Map latitude={selectData?.propertyLocation?.lat}longitude={selectData?.propertyLocation?.long}/>}
         </div>
       </div>
     </div>

@@ -51,7 +51,7 @@ export let departmentOrRowSchema = object().shape({
   is_divisible: boolean().required("هل العقار قابل للتجزئة؟"),
   advertisement_number: string(),
   license_number: string(),
-  age: number().notOneOf([0], "ما عمر العقار ؟").required(" ما عمر العقار ؟"),
+  age: number().required(" ما عمر العقار ؟"),
   rooms_number: number().notOneOf([0], "ما عدد غرف؟").required("ما عدد غرف؟"),
   halls_number: number()
     .notOneOf([0], "ما عدد صالات؟")
@@ -92,7 +92,7 @@ export let departmentOrRowArchSchema = object().shape({
   is_divisible: boolean().required("هل العقار قابل للتجزئة؟"),
   advertisement_number: string(),
   license_number: string(),
-  age: number().notOneOf([0], "ما عمر العقار ؟").required(" ما عمر العقار ؟"),
+  age: number().required(" ما عمر العقار ؟"),
   rooms_number: number().notOneOf([0], "ما عدد غرف؟").required("ما عدد غرف؟"),
   halls_number: number()
     .notOneOf([0], "ما عدد صالات؟")
@@ -127,7 +127,7 @@ export let departmentWithVillaSchema = object().shape({
   is_divisible: boolean().required("هل العقار قابل للتجزئة؟"),
   advertisement_number: string(),
   license_number: string(),
-  age: number().notOneOf([0], "ما عمر العقار ؟").required(" ما عمر العقار ؟"),
+  age: number().required(" ما عمر العقار ؟"),
   rooms_number: number().notOneOf([0], "ما عدد غرف؟").required("ما عدد غرف؟"),
   halls_number: number()
     .notOneOf([0], "ما عدد صالات؟")
@@ -176,7 +176,7 @@ export let villaOwnSchema = object().shape({
   is_divisible: boolean().required("هل العقار قابل للتجزئة؟"),
   advertisement_number: string(),
   license_number: string(),
-  age: number().notOneOf([0], "ما عمر العقار ؟").required(" ما عمر العقار ؟"),
+  age: number().required(" ما عمر العقار ؟"),
   details: array()
     .min(1, "مطلوب اضافت نفاصيل الادوار")
     .required("مطلوب اضافت نفاصيل الادوار")

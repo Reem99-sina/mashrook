@@ -79,7 +79,7 @@ export const GitMyPartners = () => {
     unitType: "",
     unitStatus: false,
     purposeStatus: "",
-    priceRange: [500000, 20000000],
+    priceRange: [10000, 20000000],
     shareRange: [10, 90],
   });
   const [idDelete, setId] = useState<any>({
@@ -120,7 +120,7 @@ export const GitMyPartners = () => {
   const title=useMemo(()=>{
     return (partner:realEstatePartner)=>{
       return partner?.details_id?`${partner?.property?.propertyType?.title} ${partner?.details?.type}`:`${partner?.property?.propertyType?.title} 
-      ${partner?.landDetails?.plan_number}
+     القطعة رقم ${partner?.landDetails?.plan_number}
       `
     }
   },[])
@@ -157,7 +157,7 @@ export const GitMyPartners = () => {
   let fiterData = useMemo(() => {
     return {
       min_price:
-        criteria?.priceRange[0] != 500000 ? criteria?.priceRange[0] : null,
+        criteria?.priceRange[0] != 10000 ? criteria?.priceRange[0] : null,
       max_price:
         criteria?.priceRange[1] != 20000000 ? criteria?.priceRange[1] : null,
       min_percentage:
@@ -170,7 +170,7 @@ export const GitMyPartners = () => {
         criteria?.unitType != 0 ? criteria?.unitType : null,
       property_purpose_id:
         criteria?.purposeStatus != 0 ? criteria?.purposeStatus : null,
-      status: criteria?.dealStatus == "متكامل" ? "complete" : "available",
+      status: criteria?.dealStatus == "متكامل" ? "complete" :criteria?.dealStatus == "تحت التقدم"? "available":"",
       sort:
         optionFilter == "الأحدث الى الأقدم"
           ? "created_desc"
@@ -198,14 +198,13 @@ export const GitMyPartners = () => {
   useEffect(() => {
     if (messageWithDraw == "تم الإنسحاب من الطلب بنجاح.") {
       toast.success(messageWithDraw);
-
       dispatch(
         withdrawData({
           data: dataPartner?.map((dataPartnerOne: any) => ({
             ...dataPartnerOne,
             propertyDetailsOwnership:
               dataPartnerOne?.propertyDetailsOwnership?.filter(
-                (ele: any) => ele?.id != idDelete?.requestNumber
+                (ele: realEstatePartner) => ele?.id != idDelete?.requestNumber
               ),
           })),
         })
@@ -216,7 +215,7 @@ export const GitMyPartners = () => {
     return () => {
       dispatch(removeMessageWithDraw());
     };
-  }, [messageWithDraw, dataPartner, dispatch, idDelete?.requestNumber]);
+  }, [messageWithDraw, dataPartner, dispatch, idDelete]);
 
   useEffect(() => {
     if (token) {
@@ -224,21 +223,23 @@ export const GitMyPartners = () => {
     }
   }, [token, dispatch]);
   useEffect(() => {
-    dispatch(
-      getPartner({
-        sort:
-          optionFilter == "الأحدث الى الأقدم"
-            ? "created_desc"
-            : optionFilter == "الأقدم الى الأحدث"
-            ? "created_asc"
-            : optionFilter == "الميزانية ( الأدنى الى الأعلى)"
-            ? "price_asc"
-            : optionFilter == "الميزانية ( الأعلى الى الأدنى)"
-            ? "price_decs"
-            : "",
-        status: criteria?.dealStatus == "متكامل" ? "complete" : "available",
-      })
-    );
+    if(optionFilter||criteria?.dealStatus){
+      dispatch(
+        getPartner({
+          sort:
+            optionFilter == "الأحدث الى الأقدم"
+              ? "created_desc"
+              : optionFilter == "الأقدم الى الأحدث"
+              ? "created_asc"
+              : optionFilter == "الميزانية ( الأدنى الى الأعلى)"
+              ? "price_asc"
+              : optionFilter == "الميزانية ( الأعلى الى الأدنى)"
+              ? "price_decs"
+              : "",
+          status: criteria?.dealStatus == "متكامل" ? "complete" : "available",
+        })
+      );
+    }
   }, [optionFilter, dispatch, criteria?.dealStatus]);
   return (
     <div className="p-4 bg-white">

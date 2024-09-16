@@ -268,7 +268,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ page, limit }) => {
             <div className="flex justify-between py-2 container items-start">
               <div className="flex flex-col justify-between h-full items-start">
                 <p className="text-2xl px-4 text-black mb-4 font-bold">
-                  {ele?.propertyType?.title || ele?.propertyTypeDetails?.title}
+                  {ele?.propertyTypeDetails?.title||ele?.propertyType?.title }
                 </p>
                 <div className="flex flex-row gap-x-2">
                   <span

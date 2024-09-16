@@ -142,10 +142,10 @@ export const OfferCard: React.FC<ChatCardProps> = ({
         <div className="flex flex-row gap-x-2 text-xs">
           <span
             className={`text-white text-right px-4 py-1 rounded-2xl ${
-              purpose === "للبيع" ? "bg-green-450" : "bg-orange-450"
+              purpose === "بيع" ? "bg-green-450" : "bg-orange-450"
             }`}
           >
-            {purpose === "للبيع" ? purpose : "تطوير"}
+            {purpose === "بيع" ? purpose : "تطوير"}
           </span>
          
           <span
@@ -161,10 +161,10 @@ export const OfferCard: React.FC<ChatCardProps> = ({
         </p>
       </div>
       <div className="pt-1 mr-4 text-sm text-gray-700 mt-2">
-        <div className="flex items-center justify-start">
+        { lisNumber &&<div className="flex items-center justify-start">
           <CgSmartphoneShake className="w-[16px]" />
           <p className="px-2">ترخيص رقم: {lisNumber}</p>
-        </div>
+        </div>}
         <div className="flex items-center  justify-start">
           <GoLocation />
           <p className="px-2">

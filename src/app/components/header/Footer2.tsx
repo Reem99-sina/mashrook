@@ -6,7 +6,7 @@ import {
     Mashrooklogotextlarge,
   } from "@/app/assets/svg";
   import Image from "next/image";
-  
+  import Link from "next/link"
   export default function Footer() {
     return (
       <div className="flex flex-col items-center justify-center w-full h-full  border-2  bg-white ">
@@ -24,19 +24,18 @@ import {
           className="rounded-xl mt-4"
         />
   
-        <button><Butwhatsapp className="rounded-xl mt-4 mb-4" /></button>
+        <Link href={`whatsapp://send?phone=+9660000130244`}><Butwhatsapp className="rounded-xl mt-4 mb-4" /></Link>
         <Image
           src={Badge1}
           alt="image"
           style={{ objectFit: "cover" }}
           className="rounded-xl mt-4"
         />
-        <Image
-          src={Badge2}
-          alt="image"
-          style={{ objectFit: "cover" }}
-          className="rounded-xl mt-4"
-        />
+        
+        <div className="bg-[#f5faee] rounded-lg p-3 color-gray-500 text-xs my-5">
+            <span className="color-gray-500">رقم الترخيص</span>
+            <span className="color-gray-500">  0000130244 </span>
+        </div>
       </div>
     );
   }

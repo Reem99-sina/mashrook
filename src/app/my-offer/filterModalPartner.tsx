@@ -418,7 +418,7 @@ useEffect(() => {
                 city: "",
                 district: "",
                 unitType: "",
-                unitStatus: true,
+                unitStatus: false,
                 realEstateStatus:"",
                 purposeStatus:"",
                 priceRange: [10000, 20000000],

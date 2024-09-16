@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import React from "react";
 import Cookie from "js-cookie";
-import {saveElement,initialOffer} from "@/type/addrealestate"
+import {saveElement,initialOffer,realEstatePartner} from "@/type/addrealestate"
 
 export interface returnType {
   loading: boolean;
@@ -133,6 +133,7 @@ export interface dataReturn {
     property_id: number;
   }[];
   propertySaved?: saveElement[];
+  propertyDetailsOwnership?:realEstatePartner[]
 }
 export interface typePay {
   id?: number;
@@ -201,15 +202,29 @@ export const getRequest = createAsyncThunk<returnType, paramsInput | null>(
 export const getRequestByid = createAsyncThunk<returnType, { id: number }>(
   "requestGet/id",
   async (data: { id: number }, { rejectWithValue }) => {
+    if(Cookie.get("token")){
     const response = await axios
-      .get(`https://server.mashrook.sa/property/get/${data?.id}`, {
-        headers: {},
+      .get(`https://server.mashrook.sa/property/get-login/${data?.id}`, {
+        headers: {
+          Authorization: Cookie.get("token"),
+        },
       })
       .then((response) => response.data)
       .catch((error) => error?.response?.data);
 
     return response;
   }
+else{
+  const response = await axios
+  .get(`https://server.mashrook.sa/property/get/${data?.id}`, {
+    headers: {},
+  })
+  .then((response) => response.data)
+  .catch((error) => error?.response?.data);
+
+return response;
+}
+}
 );
 export const postReport = createAsyncThunk<returnType, typeofReport>(
   "postReport",

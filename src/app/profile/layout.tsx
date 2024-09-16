@@ -2,8 +2,8 @@
 import React from "react"
 import MainHeader from "../components/header/MainHeader";
 import Footer from "../components/header/Footer2";
-const MyAccountLayout=({
-    children,
+const ProfileLayout=({
+    children
   }: Readonly<{
     children: React.ReactNode;
   }>)=>{
@@ -19,4 +19,4 @@ const MyAccountLayout=({
       </div>
       </div>
 }
-export default MyAccountLayout
+export default ProfileLayout

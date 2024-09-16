@@ -96,7 +96,7 @@ export const GitMyOffers = () => {
       requestNumber: dataOrderOne?.id,
       count: 8,
       city: dataOrderOne?.propertyLocation?.city,
-
+      purpose:dataOrderOne?.propertyPurpose?.title,
       district: dataOrderOne?.propertyLocation?.district?.replace(/[\[\]\\"]/g, ''),
       house: true,
       budget:

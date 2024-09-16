@@ -3,7 +3,7 @@ import React from "react"
 import MainHeader from "../components/header/MainHeader";
 import Footer from "../components/header/Footer2";
 const MyAccountLayout=({
-    children,
+    children
   }: Readonly<{
     children: React.ReactNode;
   }>)=>{

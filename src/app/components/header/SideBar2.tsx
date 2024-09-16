@@ -15,6 +15,8 @@ interface SideBarProps {
 
 export default function SideBar({ sidebarOpen, toggleSidebar }: SideBarProps) {
   const [token, setToken] = useState<string | null>(null);
+  const [open, setOpen] = useState(false);
+
   const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
     const storedToken = Cookie.get("token");
@@ -77,21 +79,52 @@ export default function SideBar({ sidebarOpen, toggleSidebar }: SideBarProps) {
                     محادثاتي
                   </Link>
                 </li>
+                <li className="mb-4 hover:bg-gray-200">
+                        <Link
+                          href="/my-posts"
+                          className=""
+                        >
+                          إعلاناتي
+                        </Link>
+                      </li>
                 </>}
-                <li className="mb-4 ">
+                <li className="mb-4 hover:bg-gray-200">
                   <Link href="/frequently-asked-questions" className=" ">
                     الأسئلة الشائعة
                   </Link>
                 </li>
                 <li className="mb-4">
-                  <Link href="/" className="">
+                  <Link href="/about" className="">
                     عن مشروك
                   </Link>
                 </li>
                 <li className="mb-4">
-                  <Link href="/" className="">
-                    تواصل معنا
+                  <div className="cursor-pointer" onClick={()=>setOpen(!open)}>
+                   السياسات والاحكام
+                  </div>
+                  {open&&<ol className="ms-3 list-decimal text-[18px]" style={{direction:"rtl"}}>
+                    <li className="">
+                  <Link href="/privacy-policy" className="text-[18px]">
+                    سياسة الخصوصية
                   </Link>
+                </li>
+                <li className="">
+                  <Link href="/terms-and-conditions" className="text-[18px]">
+                    الشروط والاحكام 
+                  </Link>
+                </li>
+                <li className="">
+                  <Link href="/copy-right" className="text-[18px]">
+                  حقوق الملكية الفكرية 
+                  </Link>
+                </li>
+                <li className="">
+                  <Link href="/payment-policy" className="text-[18px]">
+                  سياسة الدفع
+                  </Link>
+                </li>
+                {/* سياسة الدفع */}
+                    </ol>}
                 </li>
                 {token && (
                   <>
@@ -112,14 +145,7 @@ export default function SideBar({ sidebarOpen, toggleSidebar }: SideBarProps) {
                       >
                         الاشعارات
                       </Link>
-                      <li className="mb-4 text-xl hover:text-gray-800 mt-4 ">
-                        <Link
-                          href="/my-posts"
-                          className=" text-blue-450 hover:text-[#3B73B9] "
-                        >
-                          إعلاناتي
-                        </Link>
-                      </li>
+                     
                     </li>
                     <li className="mb-4 text-xl hover:text-gray-800 ">
                       <Link
@@ -144,10 +170,10 @@ export default function SideBar({ sidebarOpen, toggleSidebar }: SideBarProps) {
                 {" "}
                 تحتاج اي مساعدة او عندك استفسار؟
               </p>
-              <button className="mt-4 bg-green-500 py-2 px-4 rounded-lg text-white flex flex-row gap-2 items-center ">
+              <Link className="mt-4 bg-green-500 py-2 px-4 rounded-lg text-white flex flex-row gap-2 items-center " href={`whatsapp://send?phone=+9660000130244`}>
                 تواصل معنا
                 <Whatsapp />
-              </button>
+              </Link>
             </div>
           </div>
         </div>

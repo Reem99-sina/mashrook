@@ -1,25 +1,21 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { BackButtonOutline } from "../assets/svg";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState,useEffect } from "react";
 import Image from "next/image";
+import Cookie from 'js-cookie';
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import EditUser from "./component/edituser";
 import { CiEdit } from "react-icons/ci";
-const ProfilePage = () => {
+const Page = () => {
   const router = useRouter();
   let refImage = useRef<HTMLInputElement>(null);
   let [saveImage, setImage] = useState<File>();
   let [url, setUrl] = useState<string | ArrayBuffer>("");
-
-  let { dataUser, data } = useSelector<RootState>((state) => state.login) as {
-    dataUser: any;
-    data: any;
-  };
+  const [user, setUser] = useState<any | null>(null);
   function readAndPreview(file: any) {
     // Make sure `file.name` matches our extensions criteria
-
     if (file instanceof File == true) {
       if (/\.(jpe?g|png|gif)$/i.test(file.name)) {
         const reader = new FileReader();
@@ -36,13 +32,22 @@ const ProfilePage = () => {
         reader.readAsDataURL(file);
       }
     }
+  }
     const handleBack = (e: React.MouseEvent<HTMLButtonElement>) => {
       e.preventDefault();
       router.push("/my-account");
     };
-    return (
-      <>
-        <div className="flex items-center justify-center m-2">
+    useEffect(() => {
+   
+      const storedToken = Cookie.get("user");
+      if(storedToken&&storedToken!="undefined" ){
+        const makeObject=JSON.parse(storedToken)
+        setUser(makeObject);
+      }
+    
+  }, []);
+    return (<>
+        <div className="flex items-center justify-center ">
           <div>
             <button onClick={handleBack}>
               <BackButtonOutline />
@@ -91,17 +96,16 @@ const ProfilePage = () => {
         </div>
         <EditUser
           title={"اسم المستخدم"}
-          name={dataUser?.user?.username}
-          href={`/profile/editName/${dataUser?.user?.id}`}
+          name={user?.username}
+          href={`/profile/editName/${user?.id}`}
         />
         <hr className="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700" />
         <EditUser
           title={"الايميل"}
-          name={dataUser?.user?.email}
-          href={`/profile/editEmail/${dataUser?.user?.id}`}
+          name={user?.email}
+          href={`/profile/editEmail/${user?.id}`}
         />
       </>
     );
   }
-};
-export default ProfilePage;
+export default Page;

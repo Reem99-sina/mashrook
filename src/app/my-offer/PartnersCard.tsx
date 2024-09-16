@@ -11,7 +11,6 @@ import { Button } from "../components/shared/button.component";
 import Cookie from "js-cookie"
 import Stepper from "../components/shared/Stepper";
 import {
-
   IoMdCloseCircleOutline,
 } from "react-icons/io";
 import Link from "next/link"
@@ -151,19 +150,19 @@ export const PartnersCard: React.FC<PartnersCardProps> = ({
           </span>
         </div>
 
-        <div className=" flex items-center justify-between bg-[#F3F4F6] rounded-lg p-2">
+        {/* <div className=" flex items-center justify-between bg-[#F3F4F6] rounded-lg p-2">
           <p className="font-normal text-[#6B7280] text-sm">رقم طلب الشراكة </p>
           <p className="font-semibold text-sm text-[#374151]">
             {PartnershipNumber}
           </p>
-        </div>
+        </div> */}
 
-        <div className=" flex items-center justify-between bg-[#F3F4F6] rounded-lg p-2">
+        {/* <div className=" flex items-center justify-between bg-[#F3F4F6] rounded-lg p-2">
           <p className="font-normal text-[#6B7280] text-sm"> رقم طلب العرض </p>
           <p className="font-semibold text-sm text-[#374151]">
             {bidRequestNumber}
           </p>
-        </div>
+        </div> */}
       </div>
       {inProgress ? (
         <>

@@ -38,11 +38,11 @@ export default function JoiningSuccess() {
                   عرض المحادثات
                 </Link>
                 <Link
-                  href={`/my-offer?title=طلباتي`}
+                  href={`/my-offer?title=شراكاتي`}
                   className=" text-blue-450 border-2 border-blue-600 font-medium rounded-lg text-sm px-5 py-2.5 mx-4 my-4 flex justify-center"
                   
                 >
-                  الذهاب الى طلباتي
+                  الذهاب الى شراكاتي
                 </Link>
               </div>
 

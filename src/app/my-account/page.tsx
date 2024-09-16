@@ -1,8 +1,9 @@
 "use client"
+import {useState,useEffect} from "react"
 import { useRouter } from "next/navigation";
 import { BackButtonOutline,IconNoData } from "../assets/svg";
 import { AppDispatch, RootState } from "@/redux/store";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { BsKey } from "react-icons/bs";
 import { IoIosNotificationsOutline } from "react-icons/io";
 import { FaAddressCard } from "react-icons/fa";
@@ -15,12 +16,17 @@ import {removeLogin} from "@/redux/features/loginSlice"
 import MainOtion  from "./component/mainOption"
 const MyAccountPage=()=>{
     const router = useRouter();
-    let {dataUser ,data} =
-    useSelector<RootState>((state) => state.login) as {
-     
-      dataUser: any;
-      data:any
-    };
+    const [user, setUser] = useState<any | null>(null);
+    
+    useEffect(() => {
+   
+      const storedToken = Cookie.get("user");
+      if(storedToken&&storedToken!="undefined" ){
+        const makeObject=JSON.parse(storedToken)
+        setUser(makeObject);
+      }
+    
+  }, []);
     const dispatch = useDispatch<AppDispatch>();
     const handleBack = (e:React.MouseEvent<HTMLButtonElement>) => {
       e.preventDefault()
@@ -40,12 +46,12 @@ const MyAccountPage=()=>{
                 </p>
               </div>
             </div>
-            <MainOtion title={dataUser?.user?.username} subTitle={"عرض الملف الشخصية"} dataUser={dataUser}onClick={()=>router.push("/profile")}/>
-            <MainOtion title={"كلمة السر"} subTitle={""} dataUser={dataUser} Icon={BsKey} onClick={()=>router.push("/password")}/>
-            <MainOtion title={"الاشعارات"} subTitle={""} dataUser={dataUser} Icon={IoIosNotificationsOutline}onClick={()=>router.push("/")}/>
-            <MainOtion title={"رخصة فال"} subTitle={""} dataUser={dataUser} Icon={FaAddressCard}onClick={()=>router.push("/lisence_number")}/>
-            <MainOtion title={"محفوظاتي"} subTitle={""} dataUser={dataUser} Icon={BsSave}onClick={()=>router.push("/mySave")}/>
-            <MainOtion title={"اعلاناتي"} subTitle={""} dataUser={dataUser} Icon={FaAd} onClick={()=>router.push("/")}/>
+            <MainOtion title={user?.username} subTitle={"عرض الملف الشخصية"} dataUser={user}onClick={()=>router.push("/profile")}/>
+            <MainOtion title={"كلمة السر"} subTitle={""} dataUser={user} Icon={BsKey} onClick={()=>router.push("/password")}/>
+            <MainOtion title={"الاشعارات"} subTitle={""} dataUser={user} Icon={IoIosNotificationsOutline}onClick={()=>router.push("/")}/>
+            <MainOtion title={"رخصة فال"} subTitle={""} dataUser={user} Icon={FaAddressCard}onClick={()=>router.push("/lisence_number")}/>
+            <MainOtion title={"محفوظاتي"} subTitle={""} dataUser={user} Icon={BsSave}onClick={()=>router.push("/mySave")}/>
+            <MainOtion title={"اعلاناتي"} subTitle={""} dataUser={user} Icon={FaAd} onClick={()=>router.push("/")}/>
             <div className="mx-2">
                 <div className="flex flex-row gap-x-2 items-center py-4 cursor-pointer" onClick={()=>{
                       Cookie.remove("token");

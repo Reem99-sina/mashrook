@@ -147,14 +147,14 @@ const AddYourRealEstate: React.FC = () => {
     halls_number: 0, // في حالة الفيلا عدد الصالات
     bathrooms_number: 0, // في حالة الفيلا عدد دورات المياه
     kitchens_number: 0, // في حالة الفيلا عدد المطابخ
-    pool: true, // مزايا اضافية مسبح
-    garden: true, // مزايا اضافية
-    servants_room: true, // مزايا اضافية غرفة خدم
-    ac: true, // مزايا اضافية مكيفة
-    furnished: true, // مزايا اضافية مؤثثة
-    kitchen: true, // مزايا اضافية مطبخ راكب
-    garage: true,
-    car_entrance: true,
+    pool: false, // مزايا اضافية مسبح
+    garden: false, // مزايا اضافية
+    servants_room: false, // مزايا اضافية غرفة خدم
+    ac: false, // مزايا اضافية مكيفة
+    furnished: false, // مزايا اضافية مؤثثة
+    kitchen: false, // مزايا اضافية مطبخ راكب
+    garage: false,
+    car_entrance: false,
     stage: "",
     available_percentage: 0,
     available_price: 0,
@@ -187,6 +187,14 @@ const AddYourRealEstate: React.FC = () => {
     halls_number: 0,
     bathrooms_number: 0,
     kitchens_number: 0,
+    pool: false, 
+    garden: false, 
+    servants_room: false, 
+    ac: false, 
+    furnished: false,
+    kitchen: false,
+    garage: false,
+    car_entrance: false,
   });
   const [additionalData, setAdditional] = useState({
     pool: false,
@@ -876,7 +884,7 @@ const AddYourRealEstate: React.FC = () => {
                       </div>
                       <InputAreaPrice
                         title="المساحة"
-                        value={ele?.area}
+                        value={ele?.area>0?ele?.area:""}
                         onChange={(event) =>
                           setlandDetails((prevs) =>
                             prevs.map((ele, i) =>
@@ -894,7 +902,7 @@ const AddYourRealEstate: React.FC = () => {
                       />
                       <InputAreaPrice
                         title="السعر"
-                        value={ele?.price}
+                        value={ele?.price>0?ele?.price:""}
                         onChange={(event) =>
                           setlandDetails((prevs) =>
                             prevs.map((ele, i) =>
@@ -966,7 +974,7 @@ const AddYourRealEstate: React.FC = () => {
                     onChange={handlePercentageChange}
                     name="age"
                     title={"العمر"}
-                    firstNumber={"جديد"}
+                    firstNumber={"سنة"}
                     secondNumber={"+10 سنين"}
                     max={10}
                   />
@@ -1020,7 +1028,7 @@ const AddYourRealEstate: React.FC = () => {
                       onChange={handlePercentageChange}
                       name="age"
                       title={"العمر"}
-                      firstNumber={"جديد"}
+                      firstNumber={"سنة"}
                       secondNumber={"+10 سنين"}
                       max={10}
                     />
@@ -1135,6 +1143,57 @@ const AddYourRealEstate: React.FC = () => {
                           max={3}
                         />
                         <hr className="border-gray-200 dark:border-white my-2" />
+                        <div className="mt-2">
+                  <div
+                    className="flex justify-between text-sm mt-2"
+                    style={{ direction: "rtl" }}
+                  >
+                    <p className="font-medium text-base text-[#4B5563]">
+                      مزايا إضافية:
+                    </p>
+                  </div>
+                  <div
+                    className=" flex flex-row flex-wrap gap-8"
+                    style={{ direction: "rtl" }}
+                  >
+                    <CheckFeature
+                      title="مسبح"
+                      onChange={(event) =>
+                        setAdditional({
+                          ...additionalData,
+                          pool: event?.target?.checked,
+                        })
+                      }
+                    />
+                    <CheckFeature
+                      title="كراج للسيارات"
+                      onChange={(event) =>
+                        setAdditional({
+                          ...additionalData,
+                          garage: event?.target?.checked,
+                        })
+                      }
+                    />
+                    <CheckFeature
+                      title="غرفة خدم"
+                      onChange={(event) =>
+                        setAdditional({
+                          ...additionalData,
+                          servants_room: event?.target?.checked,
+                        })
+                      }
+                    />
+                    <CheckFeature
+                      title="مؤثثة"
+                      onChange={(event) =>
+                        setAdditional({
+                          ...additionalData,
+                          furnished: event?.target?.checked,
+                        })
+                      }
+                    />
+                  </div>
+                </div>
                       </div>
                       <div
                         className="flex justify-between text-sm mt-2"
@@ -1212,13 +1271,7 @@ const AddYourRealEstate: React.FC = () => {
                           max={3}
                         />
                         <hr className="border-gray-200 dark:border-white my-2" />
-                      </div>
-                    </div>
-                  </>
-                )}
-              {selectedPropertyType?.title === "فيلا" &&
-              departmentArch?.property_type_details_id == 3 ? (
-                <div className="mt-2">
+                        <div className="mt-2">
                   <div
                     className="flex justify-between text-sm mt-2"
                     style={{ direction: "rtl" }}
@@ -1234,8 +1287,8 @@ const AddYourRealEstate: React.FC = () => {
                     <CheckFeature
                       title="مسبح"
                       onChange={(event) =>
-                        setAdditional({
-                          ...additionalData,
+                        setDepartmentvilla({
+                          ...departmentvilla,
                           pool: event?.target?.checked,
                         })
                       }
@@ -1243,8 +1296,8 @@ const AddYourRealEstate: React.FC = () => {
                     <CheckFeature
                       title="كراج للسيارات"
                       onChange={(event) =>
-                        setAdditional({
-                          ...additionalData,
+                        setDepartmentvilla({
+                          ...departmentvilla,
                           garage: event?.target?.checked,
                         })
                       }
@@ -1252,8 +1305,8 @@ const AddYourRealEstate: React.FC = () => {
                     <CheckFeature
                       title="غرفة خدم"
                       onChange={(event) =>
-                        setAdditional({
-                          ...additionalData,
+                        setDepartmentvilla({
+                          ...departmentvilla,
                           servants_room: event?.target?.checked,
                         })
                       }
@@ -1261,14 +1314,21 @@ const AddYourRealEstate: React.FC = () => {
                     <CheckFeature
                       title="مؤثثة"
                       onChange={(event) =>
-                        setAdditional({
-                          ...additionalData,
+                        setDepartmentvilla({
+                          ...departmentvilla,
                           furnished: event?.target?.checked,
                         })
                       }
                     />
                   </div>
                 </div>
+                      </div>
+                    </div>
+                  </>
+                )}
+              {selectedPropertyType?.title === "فيلا" &&
+              departmentArch?.property_type_details_id == 3 ? (
+                <></>
               ) : (
                 (selectedPropertyType?.title === "شقة" ||
                   selectedPropertyType?.title === "دور") && (
