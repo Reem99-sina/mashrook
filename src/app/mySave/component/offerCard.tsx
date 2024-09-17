@@ -1,5 +1,5 @@
 "use client";
-import React,{useState} from "react";
+import React,{useState,useEffect} from "react";
 import {
   Accreditation,
   Dots,
@@ -10,7 +10,7 @@ import {
   Rebuild,
   ChatIconSmall,
 } from "@/app/assets/svg";
-import {postSave,deleteSave,deleteSaves} from "@/redux/features/mySave"
+import {postSave,deleteSave,deleteSaves,deleteSaveId} from "@/redux/features/mySave"
 import {
   FaRegCalendarAlt,
   FaBookmark,
@@ -44,6 +44,9 @@ offer
   let dispatch = useDispatch<AppDispatch>();
   const [notificationMessage, setNotificationMessage] = useState("");
   const [saved, setSaved] = useState(false);
+  let { loading:loadingSave, message:messageSave, data:dataSave } = useSelector<RootState>(
+    (state) => state.save
+  ) as { loading: boolean; message: string; data: any };
   let router = useRouter();
   const handleSaveClick = (id:number) => {
  
@@ -53,8 +56,22 @@ offer
       
     }
   };
+  useEffect(()=>{
+    if (messageSave=="Properties removed successfully"){
+      
+      setNotificationMessage("تم الغاء الحفظ");
+      setShowNotification(true);
+      dispatch(deleteSaveId({data:dataSave?.filter((ele:any)=>ele?.property?.id!=offer?.requestNumber)}))
+      setTimeout(() => {
+        setShowNotification(false);
+      }, 5000);
+    }
+    return ()=>{
+      dispatch(deleteSave())
+    }
+  },[messageSave,dataSave,dispatch,offer?.requestNumber])
   return (
-    <div className="mt-4 w-full border-2 border-[#E5E7EB] rounded-lg mb-4 flex flex-col p-4">
+    <div className="mt-4 w-full border-2 border-[#E5E7EB] rounded-lg mb-4 flex flex-col p-4" key={offer?.requestNumber}>
       <div className="items-center justify-between  flex-row flex relative">
         <p className="text-xl font-bold text-[#374151]">{offer?.title} </p>
 
@@ -166,7 +183,7 @@ offer
               
               <hr className="border-gray-200 dark:border-white my-2" />
         
-              <button
+              {/* <button
                 type="button"
                 className={`${
                   detail?.stage === "finished"
@@ -185,7 +202,7 @@ offer
                       : "text-white"
                   }`}
                 />
-              </button>
+              </button> */}
             </div>
           </>
         ))}
@@ -193,7 +210,7 @@ offer
 
       <div className="flex justify-around items-center mt-4">
               <div className="flex flex-row  py-1 items-center justify-center">
-                <Link href={`/showproperty/${offer?.id}`} onClick={() => {}}>
+                <Link href={`/showproperty/${offer?.requestNumber}`} onClick={() => {}}>
                   <button className="text-blue-500 mx-4 align-middle">
                     عرض التفاصيل
                   </button>

@@ -4,17 +4,21 @@ import { TextInput } from "../components/shared/text-input.component";
 import { Block, MessageIcon, Search } from "@/app/assets/svg";
 import { ChatCard } from "./ChatCard";
 import { useRouter } from "next/navigation";
-import { RootState } from "@/redux/store";
-import { useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/redux/store";
+import { useDispatch, useSelector } from "react-redux";
 import { format } from "date-fns";
 import Cookie from "js-cookie";
+import {fetchToken}from "@/redux/features/userSlice"
 import {chatInfo} from "@/type/chatinterface"
 import { Note } from "../assets/svg";
 import { FaRegUserCircle } from "react-icons/fa";
 
 export const MyPartnerships = () => {
   const router = useRouter();
-  const [token, setToken] = useState<string | null>(null);
+  const dispatch = useDispatch<AppDispatch>();
+  const {  token } = useSelector<RootState>(
+    (state) => state.register
+  ) as {  token:string };
   const messageFile=useMemo(()=>{
     return(messageFrom:chatInfo)=>{
       return messageFrom?.lastMessage?.type=="file"?"تم ارسال ملف":messageFrom?.lastMessage?.message
@@ -37,11 +41,8 @@ export const MyPartnerships = () => {
     data: any;
   };
   useEffect(() => {
-    const storedToken = Cookie.get("token");
-    if (storedToken) {
-      setToken(storedToken);
-    }
-  }, []);
+    dispatch(fetchToken())
+  }, [dispatch])
   return (
     <div className="p-4 bg-white">
       <div>

@@ -57,7 +57,9 @@ const saveSlice=createSlice({
         deleteSave:(state)=>{
             state.loading=false
             state.message=""
-            state.data=null
+        },
+        deleteSaveId:(state,action)=>{
+            state.data=action.payload.data
         }
     },extraReducers:(builder)=>{
         builder.addCase(postSave.fulfilled,(state,action)=>{
@@ -107,5 +109,5 @@ const saveSlice=createSlice({
         })
     }
 })
-export const { deleteSave } = saveSlice.actions;
+export const { deleteSave,deleteSaveId } = saveSlice.actions;
 export default saveSlice.reducer

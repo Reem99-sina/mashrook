@@ -1,5 +1,5 @@
 "use client";
-import React,{useRef,useState,useEffect} from "react";
+import React,{useRef,useState,useEffect,useMemo} from "react";
 import {
   Accreditation,
   Dots,
@@ -25,7 +25,7 @@ import { FinishedShares } from "@/app/assets/svg";
 import { GoLocation } from "react-icons/go";
 import { LuTag } from "react-icons/lu";
 import { BiArea } from "react-icons/bi";
-import {deleteOfferDetailOrLand,deleteOfferDetail} from "@/redux/features/getOffers"
+import {deleteOfferDetailOrLand,deleteOfferDetail,deleteMessage} from "@/redux/features/getOffers"
 import { useRouter } from "next/navigation";
 import {detailOneInfo} from "@/type/addrealestate"
 interface ChatCardProps {
@@ -47,6 +47,7 @@ interface ChatCardProps {
   purpose: string;
   lisNumber: string;
   house?: boolean;
+  propertyOwnerType:string;
   details: {
     piece_number: string;
     price: string;
@@ -85,6 +86,7 @@ export const OfferCard: React.FC<ChatCardProps> = ({
   purpose,
   lisNumber,
   details,
+  propertyOwnerType,
   house,
 }) => {
   const steps = ["الانتهاء", "السعي", "دفع الرسوم", "انضمام الشركاء"];
@@ -102,6 +104,21 @@ export const OfferCard: React.FC<ChatCardProps> = ({
     message: string;
     data: any;
   };
+  const userCard=useMemo(()=>{
+    if(dataOffer?.length>0&&requestNumber&&idDelete){
+      return dataOffer?.map((ele:RealEstateTypeInter)=>{
+        if(ele?.id==String(requestNumber)){
+          if(idDelete?.detail_id){
+            return ({...ele,details:ele?.details?.filter((element:earthInter)=>element?.id!=idDelete?.detail_id)})
+          }else{
+            return ({...ele,landDetails:ele?.landDetails?.filter((element)=>element?.id!=idDelete?.land_detail_id)})
+          }
+        }
+          return ele
+      })
+    }
+    
+  },[requestNumber,idDelete,dataOffer])
   const onDeleteDetail=()=>{
     if(idDelete){
       dispatch(deleteOfferDetailOrLand(idDelete))
@@ -111,23 +128,16 @@ export const OfferCard: React.FC<ChatCardProps> = ({
   useEffect(()=>{
     if(message=="تم حذف العقار بنجاح"){
       toast?.success(message)
-      if(idDelete?.detail_id||idDelete?.land_detail_id){
-        dispatch(deleteOfferDetail({data:dataOffer?.map((ele:RealEstateTypeInter)=>{
-          if(ele?.id==String(requestNumber)){
-            if(idDelete?.detail_id){
-              return ({...ele,details:ele?.details?.filter((element:earthInter)=>element?.id!=idDelete?.detail_id)})
-            }else{
-              return ({...ele,landDetails:ele?.landDetails?.filter((element)=>element?.id!=idDelete?.land_detail_id)})
-            }
-          }
-            return ele
-        })
-      }))
+      if((idDelete?.detail_id||idDelete?.land_detail_id&&userCard?.length>0)){
+        dispatch(deleteOfferDetail({data:userCard}))
       }
     }else if(message=="لايمكن حذف الطلب لوجود مشتركين فيه!"){
       toast?.error(message)
     }
-  },[message,requestNumber,dataOffer,dispatch,idDelete])
+    return ()=>{
+      dispatch(deleteMessage())
+    }
+  },[message,dispatch,userCard,idDelete])
   return (
     <div className="mt-4 w-full border-2 border-[#E5E7EB] rounded-lg mb-4 flex flex-col p-4">
       <div className="items-center justify-between  flex-row flex relative">
@@ -147,7 +157,12 @@ export const OfferCard: React.FC<ChatCardProps> = ({
           >
             {purpose === "بيع" ? purpose : "تطوير"}
           </span>
-         
+          <span
+            className={`text-black text-right px-4 py-1 rounded-2xl bg-gray-200`}
+          >
+            {propertyOwnerType}
+          </span>
+         {/* propertyOwnerType */}
           <span
             className={`text-black text-right px-4 py-1 rounded-2xl ${"bg-gray-200"}`}
           >
@@ -239,6 +254,12 @@ export const OfferCard: React.FC<ChatCardProps> = ({
                           `قطعة رقم  ${detail?.plan_number}`}
                     </p>
                   </div>
+                  <div className="flex items-center  justify-start">
+          <GoLocation />
+          <p className="px-2">
+            مدينة {city}، {district}
+          </p>
+        </div>
                   <div className="flex flex-col gap-y-2 my-2 flex-wrap items-start">
                     <div className="bg-gray-200 rounded-xl px-2 flex items-center">
                       <LuTag />

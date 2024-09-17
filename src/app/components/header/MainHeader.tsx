@@ -7,12 +7,13 @@ import {
   User,
 } from "@/app/assets/svg";
 import Cookie from "js-cookie";
-
+import {fetchToken}from "@/redux/features/userSlice"
 import Image from "next/image";
 import Link from "next/link";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserRequest } from "@/redux/features/loginSlice";
+import {userInfo} from "@/type/addrealestate"
 export default function MainHeader() {
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
   const dispatch = useDispatch<AppDispatch>();
@@ -20,19 +21,17 @@ export default function MainHeader() {
     e.preventDefault();
     setSidebarOpen(!sidebarOpen);
   };
+  const {  token,user:userProfile,message } = useSelector<RootState>(
+    (state) => state.register
+  ) as {  token:string,user:userInfo,message:string };
   const { dataUser } = useSelector<RootState>((state) => state.login) as {
     dataUser: any;
     data: any;
   };
-  const [token, setToken] = useState<string | null>(null);
 
   useEffect(() => {
-    const storedToken = Cookie.get("token");
-
-    if (storedToken) {
-      setToken(storedToken);
-    }
-  }, []);
+    dispatch(fetchToken())
+  }, [dispatch])
   useEffect(() => {
     if (token) {
       dispatch(getUserRequest());
@@ -43,13 +42,13 @@ export default function MainHeader() {
       <div className="flex items-center justify-between">
         <div className="w-full self-center p-4">
           <button onClick={toggleSidebar}>
-            {!dataUser ? (
+            {(!dataUser) ? (
               <Mainnavigationmenu />
             ) : (
               <div className="flex items-center flex-row-reverse gap-x-2 border-2 border-gray-200 p-2 rounded-full">
                 <div className="relative inline-flex items-center justify-center flex-row-reverse w-5 h-5 overflow-hidden bg-gray-200 rounded-full dark:bg-gray-600">
                   <span className="font-medium text-gray-600 dark:text-gray-300 p-2">
-                    {dataUser?.username[0].toUpperCase()}
+                    {(userProfile?.username&&userProfile?.username[0]?.toUpperCase())?userProfile?.username[0]?.toUpperCase():dataUser?.username[0].toUpperCase()}
                   </span>
                 </div>
                 <User />

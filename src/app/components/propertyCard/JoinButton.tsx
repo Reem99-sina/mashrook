@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import Cookie from "js-cookie";
+import {fetchToken}from "@/redux/features/userSlice"
 import { validateForm } from "@/app/hooks/validate";
 import { dataReturn, addUnqiue, typePay } from "@/redux/features/getRequest";
 import { amountSchema } from "@/typeSchema/schema";
@@ -22,7 +23,9 @@ const JoinStatusButtons: React.FC<JoinStatusButtonsProps> = ({
   dataMain,
 }) => {
   const [showDialog, setShowDialog] = useState(false);
-  const [token, setToken] = useState<string | null>(null);
+  const {  token } = useSelector<RootState>(
+    (state) => state.register
+  ) as {  token:string };
   const [user, setUser] = useState<any>();
   const [partnershipPercentage, setPartnershipPercentage] = useState(0);
   const router = useRouter();
@@ -90,11 +93,8 @@ const JoinStatusButtons: React.FC<JoinStatusButtonsProps> = ({
     }
   }, [partnershipPercentage]);
   useEffect(() => {
-    const storedToken = Cookie.get("token");
-    if (storedToken) {
-      setToken(storedToken);
-    }
-  }, []);
+    dispatch(fetchToken())
+  }, [dispatch])
   useEffect(() => {
     if (typeof window != "undefined") {
       const userItem = Cookie?.get("user");

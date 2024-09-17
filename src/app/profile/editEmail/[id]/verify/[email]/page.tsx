@@ -1,17 +1,20 @@
 "use client"
 import { BackButtonOutline } from "@/app/assets/svg";
 import { useRouter,useParams } from "next/navigation";
-import {useState,useRef} from "react"
+import {useState,useRef,useEffect} from "react"
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
-import { resendCodeRequest } from "@/redux/features/vierfySlice";
+import { verifyRequest,resendCodeRequest,deleteMessage } from "@/redux/features/vierfySlice";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { Button } from "@/app/components/shared/button.component";
+import toast from "react-hot-toast";
 const VerifyEmail=()=>{
     const router = useRouter();
     const params=useParams()
     const inputRefs = useRef<(HTMLInputElement|null)[]>([]); 
     let dispatch = useDispatch<AppDispatch>();
+    const [time, settime] = useState(60);
+    const [canResend, setCanResend] = useState(false);
     const [code, setCode] = useState(Array(4).fill(""));
     let {email}=params
     let {dataUser ,data} =
@@ -19,6 +22,9 @@ const VerifyEmail=()=>{
       dataUser: any;
       data:any
     };
+    let { loading, message, data:dataVerify } = useSelector<RootState>(
+      (state) => state.verify
+    ) as { loading: boolean; message: string; data: any };
     let [user,setUser]=useState(dataUser?.user?.email)
     const handleChange = (value: string, index: number) => { 
 
@@ -38,10 +44,48 @@ setCode(newCode);
 const onResend=()=>{
     dispatch(resendCodeRequest({email:String(email)?.replace("%40", "@")}))
   }
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (email) {
+      dispatch(
+        verifyRequest({
+          email: String(email)?.replace("%40", "@"),
+          code: code.join(""),
+        })
+      );
+    } else {
+      toast.error("you need email and code");
+    }
+  };
     const handleBack = (e:React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault()
         router.push(`/profile/editEmail/${dataUser?.user?.id}`);
       };
+      useEffect(() => {
+        if (message && Boolean(dataVerify) == false&&message!="تم إرسال الكود اللي الايميل.") {
+          toast.error(message);
+        } else if (Boolean(dataVerify) == true) {
+          toast.success(message);
+          router.push(`/my-account`);
+        }else if(message=="تم إرسال الكود اللي الايميل." && Boolean(dataVerify) == false){
+          settime(60)
+          toast.success(message)
+        }
+        return ()=>{
+          dispatch(deleteMessage())
+        }
+      }, [message,router, dataVerify,dispatch]);
+      useEffect(() => {
+        let interval:NodeJS.Timeout;
+        if (time > 0) {
+          interval = setInterval(() => {
+            settime((prevTimer) => prevTimer - 1);
+          }, 1000);
+        } else if (time === 0) {
+          setCanResend(true); // Re-enable the button after 60 seconds
+        }
+        return () => clearInterval(interval);
+      }, [time]);
     return(
         <>
          <div className="flex items-center justify-center m-2">
@@ -68,6 +112,7 @@ const onResend=()=>{
             <h3 className="font-semibold ">
                     رمز التحقق
                 </h3> 
+                <div style={{direction:"ltr"}} className="text-end">
                 {code.map((digit, index) => (
                 <input
                   key={index}
@@ -80,10 +125,11 @@ const onResend=()=>{
                   onChange={(e) => handleChange(e.target.value, index)}
                 />
               ))}
+              </div>
               <p className=" text-sm text-gray-500 mb-4">
               لم يصلك الرمز؟{" "}
-              <button className="text-[#98CC5D]" onClick={onResend} type="button">
-                إعادة إرسال الرمز خلال 60 ثانية
+              <button className={`${time!=0?"text-gray-500":"text-[#98CC5D]"}`} onClick={onResend} type="button" disabled={time!=0}>
+                إعادة إرسال الرمز خلال {time} ثانية
               </button>
             </p>
             <div>
@@ -99,7 +145,7 @@ const onResend=()=>{
               text="تحقق"
               className="relative flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-[#3B73B9] border border-transparent rounded-md group  focus:outline-none focus:ring-2 focus:ring-offset-2 "
               type="submit"
-            //   onClick={onSubmit}
+              onClick={onSubmit}
             />
             {/* } */}
            

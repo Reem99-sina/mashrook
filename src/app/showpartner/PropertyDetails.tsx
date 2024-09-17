@@ -28,7 +28,8 @@ import { useDispatch,useSelector } from "react-redux";
 import {dataReturn} from "@/redux/features/getRequest"
 import {useRouter} from "next/navigation"
 import {Vector,Money,Diagram,Dance,Shower,Kitchen,CheckOut} from "@/app/assets/svg"
-import {realEstatePartner,landInfo} from "@/type/addrealestate"
+import {realEstatePartner,landInfo,userInfo} from "@/type/addrealestate"
+import {fetchuser} from "@/redux/features/userSlice"
 import dynamic from "next/dynamic"
 const Map = dynamic(() => import("@/app/components/shared/map"), { ssr:false })
 const PropertyDetails: React.FC<{id:any}> = ({id}:{id:any}) => {
@@ -44,7 +45,9 @@ const PropertyDetails: React.FC<{id:any}> = ({id}:{id:any}) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
   const [reportText, setReportText] = useState("");
-  const [user, setUser] = useState<any | null>(null);
+  const {  user } = useSelector<RootState>(
+    (state) => state.register
+  ) as { user:userInfo,message:string };
   const [showReportNotification, setShowReportNotification] = useState(false);
   const [reportNotificationMessage, setReportNotificationMessage] =
     useState("");
@@ -80,14 +83,8 @@ const PropertyDetails: React.FC<{id:any}> = ({id}:{id:any}) => {
     }, 3000);
   };
   useEffect(() => {
-   
-    const storedToken = Cookie.get("user");
-    if(storedToken&&storedToken!="undefined" ){
-      const makeObject=JSON.parse(storedToken)
-      setUser(makeObject);
-    }
-  
-}, []);
+    dispatch(fetchuser())
+}, [dispatch]);
   useEffect(()=>{
     if(messageReport&&status){
       setReportNotificationMessage(messageReport);

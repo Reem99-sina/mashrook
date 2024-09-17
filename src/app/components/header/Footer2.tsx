@@ -23,15 +23,18 @@ import {
           style={{ objectFit: "cover" }}
           className="rounded-xl mt-4"
         />
-  
+   <h2 className="text-xl font-bold mt-8 mb-4 text-center">للاتصال</h2>
+         <p>9665533332368</p>
+         <p>info@Mashrook.sa</p>
         <Link href={`whatsapp://send?phone=+9660000130244`}><Butwhatsapp className="rounded-xl mt-4 mb-4" /></Link>
-        <Image
-          src={Badge1}
-          alt="image"
-          style={{ objectFit: "cover" }}
-          className="rounded-xl mt-4"
-        />
+        <h2 className="text-xl font-bold mb-4 text-center">العنوان</h2>
+         <p className="text-center">الرياض ,حي الحمراء,طريق الامام عبد الله بن سعود بن عبد العزيزص.ب 13241</p>
         
+        <div className="flex items-center gap-x-2 flex-row-reverse bg-[#ecf0f7] rounded-lg p-3">
+            <p>مرخص من قبل</p>
+            <Image src={"/logopremission.jpg"} width={50} height={50}alt="premission"/>
+            <p>مركز الوطني</p>
+        </div>
         <div className="bg-[#f5faee] rounded-lg p-3 color-gray-500 text-xs my-5">
             <span className="color-gray-500">رقم الترخيص</span>
             <span className="color-gray-500">  0000130244 </span>

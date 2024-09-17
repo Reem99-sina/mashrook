@@ -70,8 +70,10 @@ const getOfferSlice=createSlice({
             state.data=action.payload.data
         },
         deleteOfferDetail:(state,action)=>{
-            console.log(action.payload.data,"action.payload.data")
             state.data=action.payload.data
+        },
+        deleteMessage:(state)=>{
+            state.message=""
         }
     },extraReducers:(builder)=>{
         builder.addCase(getOffer.fulfilled,(state,action)=>{
@@ -106,5 +108,5 @@ const getOfferSlice=createSlice({
         })
     }
 })
-export const { deleteOffer,deleteOfferDetail } = getOfferSlice.actions;
+export const { deleteOffer,deleteOfferDetail,deleteMessage } = getOfferSlice.actions;
 export default getOfferSlice.reducer

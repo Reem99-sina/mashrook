@@ -103,6 +103,7 @@ export interface RealEstateTypeInter {
     id?:number,
     title?:string
   }
+  propertyOwnerType?:detailsType
 }
 export interface RealEstateErrrorTypeInter {
   property_owner_type_id?: number; // وسيط عقاري, مطور عقاري, وسيط

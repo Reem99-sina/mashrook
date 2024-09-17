@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import Cookie from "js-cookie";
 interface verifyEmail {
   email: string;
   code: string;
@@ -40,7 +41,11 @@ interface responseData {
 const verifySlice = createSlice({
   name: "verify",
   initialState: initialstate,
-  reducers: {},
+  reducers: {
+    deleteMessage:(state)=>{
+      state.message=""
+    }
+  },
   extraReducers: (builder) => {
     builder.addCase(verifyRequest.fulfilled, (state, action) => {
       state.loading = false;
@@ -49,6 +54,8 @@ const verifySlice = createSlice({
         ? action.payload.message
         : "success";
       state.data = action.payload.data;
+      Cookie.set("user",JSON.stringify(action?.payload?.data?.user))
+      // Cookie.set("token",JSON.stringify(action?.payload?.data?.token))
     }),
       builder.addCase(verifyRequest.pending, (state, action) => {
         state.loading = true;
@@ -73,5 +80,5 @@ const verifySlice = createSlice({
       });
   },
 });
-
+export const { deleteMessage } = verifySlice.actions;
 export default verifySlice.reducer;

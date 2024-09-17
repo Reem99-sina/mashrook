@@ -8,6 +8,7 @@ import { Modal, ModalRef } from "../components/shared/modal.component";
 import ImageAppear from "../components/shared/ImageAppear";
 import AccordionComponent from "../components/shared/Accordion.component";
 import Image from "next/image";
+import {fetchToken}from "@/redux/features/userSlice"
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { RiSubtractFill } from "react-icons/ri";
 import NumberRoom from "./components/NumberRoom";
@@ -131,7 +132,9 @@ const AddYourRealEstate: React.FC = () => {
     }
     setDataSend((prev) => ({ ...prev, city: "تبوك" }));
   };
-  const [token, setToken] = useState<string | null>(null);
+  const {  token } = useSelector<RootState>(
+    (state) => state.register
+  ) as {  token:string };
   const [haveNumber, setHaveNumber] = useState(false);
   const [deal, setdeal] = useState(false);
 
@@ -505,11 +508,8 @@ const AddYourRealEstate: React.FC = () => {
     );
   }, [dataSend?.property_type_id, dispatch]);
   useEffect(() => {
-    const storedToken = Cookie.get("token");
-    if (storedToken) {
-      setToken(storedToken);
-    }
-  }, []);
+    dispatch(fetchToken())
+  }, [dispatch])
 
   useEffect(() => {
     if (messagerealEstateRequest && Boolean(datarealEstateRequest) == true) {

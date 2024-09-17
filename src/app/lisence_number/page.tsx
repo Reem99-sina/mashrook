@@ -5,14 +5,47 @@ import { TextInput } from "@/app/components/shared/text-input.component";
 import { Button } from "@/app/components/shared/button.component";
 import {useState} from "react"
 import { FaCheckCircle } from "react-icons/fa";
+import {updateUser,removeUser}from "@/redux/features/userSlice"
+import {userInfo} from "@/type/addrealestate"
+import { AppDispatch, RootState } from "@/redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import toast from "react-hot-toast";
+import {useEffect} from "react"
+import {ValNumberSchema} from "@/typeSchema/schema"
+import { validateForm } from "@/app/hooks/validate";
+interface errorInter{
+  val_license:string
+}
 const LisenceNumberPage=()=>{
     const router = useRouter();
+    const dispatch = useDispatch<AppDispatch>();
+    const {  user:userProfile,message } = useSelector<RootState>(
+      (state) => state.register
+    ) as { user:string,message:string };
     let [user,setUser]=useState("")
     let [send,setSend]=useState(false)
+    const [errors, setErrors] = useState<errorInter>();
     const handleBack = (e:React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault()
         router.push("/my-account");
       };
+      const onSubmit=async()=>{
+        const status=await validateForm({val_license:user},ValNumberSchema,setErrors)
+        if(status==true){
+          dispatch(updateUser({val_license:user}))
+        }
+      }
+      useEffect(()=>{
+        if(Boolean(userProfile)==true&&message){
+          toast.success(message)
+          router.push("/my-account")
+        }else if(Boolean(userProfile)==false&&message){
+          toast.error(message)
+        }
+        return ()=>{
+          dispatch(removeUser())
+        }
+      },[message,userProfile,dispatch,router])
     return (
         send==false?  <>
             <div className="flex items-center justify-center m-2">
@@ -35,12 +68,17 @@ const LisenceNumberPage=()=>{
                      onChange={(event) =>setUser( event.target.value )}
                    //   disabled={loading}
                    />
+                    {errors?.val_license && (
+                            <p className="text-xs text-red-600 dark:text-red-500 text-right">
+                              {String(errors?.val_license)}
+                            </p>
+                  )}
                </div>
                <div className="flex flex-row gap-x-3 mx-5 my-8">
                <Button
                  text="حفظ"
                  className="relative flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-[#3B73B9] border border-transparent rounded-md group  focus:outline-none focus:ring-2 focus:ring-offset-2 "
-                 onClick={() => {}}
+                 onClick={onSubmit}
                  type="button"
                />
                </div>

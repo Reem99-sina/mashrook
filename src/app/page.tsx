@@ -12,6 +12,7 @@ import { AppDispatch, RootState } from "@/redux/store";
 import Cookie from "js-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import { removeToken } from "@/redux/features/loginSlice";
+import {fetchToken}from "@/redux/features/userSlice"
 import PropertyCard from "./components/propertyCard/PropertyCard";
 import { MdKeyboardArrowLeft } from "react-icons/md";
 import { useRouter } from "next/navigation";
@@ -40,19 +41,19 @@ const slicedData = {
 };
 
 export default function Home() {
-  const [token, setToken] = useState<string | null>(null);
+  // const [token, setToken] = useState<string | null>(null);
   const router = useRouter();
   const { loading, message, data } = useSelector<RootState>(
     (state) => state.getRequest
   ) as { loading: boolean; message: string; data: dataReturn[] };
+  const {  token } = useSelector<RootState>(
+    (state) => state.register
+  ) as {  token:string };
+  // register
   const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
-    const storedToken = Cookie.get("token");
-    if (storedToken) {
-      setToken(storedToken);
-    }
-    // 24 * 60 * 60 * 1000
-  }, []);
+    dispatch(fetchToken())
+  }, [dispatch]);
   useEffect(() => {
     const checkAndRemoveCookie = () => {
       const now = new Date();
@@ -62,7 +63,8 @@ export default function Home() {
         // Remove the token from cookies
         dispatch(removeToken());
         Cookie.remove("user");
-        setToken("");
+        Cookie.remove("token");
+
       }
     };
     // Run every minute to check if it's 12 AM

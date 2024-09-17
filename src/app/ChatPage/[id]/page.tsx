@@ -11,6 +11,7 @@ import {
   Search,
 } from "@/app/assets/svg";
 import { IoAttach } from "react-icons/io5";
+import {fetchuser} from "@/redux/features/userSlice"
 import { useRouter, useParams } from "next/navigation";
 import { getMessageByid,postMessage,postFileMessage } from "@/redux/features/getMessage";
 import { AppDispatch, RootState } from "@/redux/store";
@@ -22,7 +23,9 @@ import {chatdetailinfo,messagePusher} from "@/type/chatinterface"
 const ChatPage = () => {
   const params = useParams();
   let refImage = useRef<HTMLInputElement>(null);
-  const [user, setUser] = useState<userInfo>();
+  const {  user } = useSelector<RootState>(
+    (state) => state.register
+  ) as { user:userInfo,message:string };
   const [title, setTitle] = useState<string>();
   const { loading, message, data } = useSelector<RootState>(
     (state) => state.messageByID
@@ -63,15 +66,15 @@ const ChatPage = () => {
     }
   },[data])
   useEffect(() => {
-    const storedToken = Cookie.get("user");
+
+      dispatch(fetchuser())
+
     const title=Cookie.get("title")
-    if (storedToken) {
-      setUser(JSON.parse(storedToken));
-    }
+   
     if(title){
       setTitle(title)
     }
-  }, []);
+  }, [dispatch]);
   useEffect(() => {
     const pusher = new Pusher("eac8985b87012d5f5753", {
       cluster: "mt1",

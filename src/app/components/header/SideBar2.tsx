@@ -6,24 +6,27 @@ import { useEffect, useState } from "react";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { removeLogin } from "@/redux/features/loginSlice";
+import {removeTokenUser} from "@/redux/features/userSlice"
 import Cookie from "js-cookie";
-
+import { useRouter } from "next/navigation";
+import {fetchToken}from "@/redux/features/userSlice"
 interface SideBarProps {
   sidebarOpen: boolean;
-  toggleSidebar: () => void;
+  toggleSidebar: (e:any) => void;
 }
 
 export default function SideBar({ sidebarOpen, toggleSidebar }: SideBarProps) {
-  const [token, setToken] = useState<string | null>(null);
+  let router = useRouter();
+  const {  token } = useSelector<RootState>(
+    (state) => state.register
+  ) as {  token:string };
   const [open, setOpen] = useState(false);
 
   const dispatch = useDispatch<AppDispatch>();
+
   useEffect(() => {
-    const storedToken = Cookie.get("token");
-    if (storedToken) {
-      setToken(storedToken);
-    }
-  }, []);
+    dispatch(fetchToken())
+  }, [dispatch])
 
   return (
     <div>
@@ -151,11 +154,13 @@ export default function SideBar({ sidebarOpen, toggleSidebar }: SideBarProps) {
                       <Link
                         href="/"
                         className=" text-black hover:text-[#3B73B9] "
-                        onClick={() => {
+                        onClick={(e) => {
                           Cookie.remove("token");
-                          setToken("");
                           Cookie.remove("user");
+                          toggleSidebar(e)
+                          router.push("/")
                           dispatch(removeLogin());
+                          dispatch(removeTokenUser());
                         }}
                       >
                         تسجيل خروج

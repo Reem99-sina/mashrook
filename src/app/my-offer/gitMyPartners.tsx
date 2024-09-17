@@ -3,6 +3,7 @@ import React, { useRef, useState, useEffect, useMemo } from "react";
 import { TextInput } from "../components/shared/text-input.component";
 import { FaRegUserCircle } from "react-icons/fa";
 import { format } from "date-fns";
+import {fetchToken}from "@/redux/features/userSlice"
 import {
   CloseIconSmall,
   Filter,
@@ -88,7 +89,9 @@ export const GitMyPartners = () => {
     requestNumber: 0,
   });
   const router = useRouter();
-  const [token, setToken] = useState<string | null>(null);
+  const {  token } = useSelector<RootState>(
+    (state) => state.register
+  ) as {  token:string };
   const onWithDraw = () => {
     modalRef.current?.close();
     dispatch(
@@ -190,11 +193,8 @@ export const GitMyPartners = () => {
     return newData?.slice((currentPage - 1) * 3, currentPage * 3);
   }, [newData, currentPage]);
   useEffect(() => {
-    const storedToken = Cookie.get("token");
-    if (storedToken) {
-      setToken(storedToken);
-    }
-  }, []);
+    dispatch(fetchToken())
+  }, [dispatch])
   useEffect(() => {
     if (messageWithDraw == "تم الإنسحاب من الطلب بنجاح.") {
       toast.success(messageWithDraw);

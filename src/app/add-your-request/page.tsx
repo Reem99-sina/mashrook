@@ -43,6 +43,7 @@ import {
   earthSchema,
   villaOwnSchema,
 } from "@/typeSchema/schema";
+import {fetchToken}from "@/redux/features/userSlice"
 import { validateForm } from "../hooks/validate";
 import AccordionComponent from "../components/shared/Accordion.component";
 import Cookie from "js-cookie";
@@ -69,7 +70,6 @@ const AddYourRequest: React.FC = () => {
   const [selectedPropertyType, setSelectedPropertyType] =
     useState<typeSelect>();
   const router = useRouter();
-  const [token, setToken] = useState<string | null>(null);
   const [selectedCites, setSelectedCites] = useState<
     { id?: number; name: string }[]
   >([]);
@@ -77,6 +77,9 @@ const AddYourRequest: React.FC = () => {
   const modalRefRules = useRef<ModalRef>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [deal, setdeal] = useState(false);
+  const {  token } = useSelector<RootState>(
+    (state) => state.register
+  ) as {  token:string };
   const [detailsVilla, setDetails] = useState([
     {
       type: "",
@@ -118,7 +121,6 @@ const AddYourRequest: React.FC = () => {
     titleSection: string;
     detailsSection: detailsMoreType[];
   };
- 
   const {
     loading: loadingRequest,
     message: messageRequest,
@@ -257,7 +259,9 @@ const AddYourRequest: React.FC = () => {
       toast.error(" يجب الموافقه علي شروط الاستخدام وسياسية الخصوصية");
     }
   };
-
+  useEffect(() => {
+    dispatch(fetchToken())
+  }, [dispatch])
   useEffect(() => {
     dispatch(getproperityType({ num: 1 }));
     dispatch(getCity());
@@ -280,11 +284,8 @@ const AddYourRequest: React.FC = () => {
     }
   }, [dataRequest, messageRequest]);
   useEffect(() => {
-    const storedToken = Cookie.get("token");
-    if (storedToken) {
-      setToken(storedToken);
-    }
-  }, []);
+    dispatch(fetchToken())
+  }, [dispatch])
 
   useEffect(() => {
     if (criteria?.city) {

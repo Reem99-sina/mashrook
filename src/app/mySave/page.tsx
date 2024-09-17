@@ -32,43 +32,45 @@ const MySavePage=()=>{
     return data?.map((dataSave: any) => ({
       id:dataSave?.id,
       title:
-        dataSave?.propertyTypeDetails?.title ||
-        dataSave?.propertyType?.title,
+        dataSave?.property?.propertyTypeDetails?.title ||
+        dataSave?.property?.propertyType?.title,
       inProgress: true,
       date: dataSave?.createdAt
         ? format(new Date(dataSave?.createdAt), "yyyy-MM-dd")
         : "",
-      requestNumber: dataSave?.id,
+      requestNumber: dataSave?.property_id,
       count: 8,
-      city: dataSave?.propertyLocation?.city,
+      city: dataSave?.property?.propertyLocation?.city,
 
-      district: dataSave?.propertyLocation?.district?.replace(/[\[\]\\"]/g, ''),
+      district: dataSave?.property?.propertyLocation?.district?.replace(/[\[\]\\"]/g, ''),
       house: true,
       budget:
-        dataSave?.details && dataSave?.details?.length > 0
-          ? `${dataSave?.details[0]?.min_price} ريال -${dataSave?.details[0]?.price} ريال`
-          : dataSave?.landDetails &&
-            dataSave?.landDetails?.length > 0 &&
-            `${dataSave?.landDetails[0]?.min_price} ريال -${dataSave?.landDetails[0]?.price} ريال`,
+        dataSave?.property?.details && dataSave?.property?.details?.length > 0
+          ? `${dataSave?.property?.details[0]?.min_price} ريال -${dataSave?.property?.details[0]?.price} ريال`
+          : dataSave?.property?.landDetails &&
+            dataSave?.property?.landDetails?.length > 0 &&
+            `${dataSave?.property?.landDetails[0]?.min_price} ريال -${dataSave?.property?.landDetails[0]?.price} ريال`,
       type:
-        dataSave?.details && dataSave?.details?.length > 0
-          ? `${dataSave?.details[0]?.status}`
-          : dataSave?.landDetails &&
-            dataSave?.landDetails?.length > 0 &&
-            `${dataSave?.landDetails[0]?.status}`,
-      lisNumber: dataSave?.license_number,
+        dataSave?.property?.details && dataSave?.property?.details?.length > 0
+          ? `${dataSave?.property?.details[0]?.status}`
+          : dataSave?.property?.landDetails &&
+            dataSave?.property?.landDetails?.length > 0 &&
+            `${dataSave?.property?.landDetails[0]?.status}`,
+      lisNumber: dataSave?.property?.license_number,
       details:
-        dataSave?.details && dataSave?.details?.length > 0
-          ? dataSave?.details
-          : dataSave?.landDetails &&
-            dataSave?.landDetails?.length > 0 &&
-            dataSave?.landDetails,
+        dataSave?.property?.details && dataSave?.property?.details?.length > 0
+          ? dataSave?.property?.details
+          : dataSave?.property?.landDetails &&
+            dataSave?.property?.landDetails?.length > 0 &&
+            dataSave?.property?.landDetails,
+            property_id:dataSave?.property_id
     }));
   }, [data]);
   
       useEffect(()=>{
         dispatch(getSaves())
       },[dispatch])
+
       // getSaves
     return (
          <>
@@ -88,7 +90,7 @@ const MySavePage=()=>{
                   <FilterPart/>
                </div>
               {dataSaves?.length>0?dataSaves?.map((offer:any,index:number)=> <OfferCard
-              key={offer?.id}
+              key={offer?.requestNumber}
                  offer={offer}
                 />): (
                   <div className="flex flex-col items-center justify-center p-9 w-full">

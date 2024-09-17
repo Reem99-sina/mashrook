@@ -63,6 +63,7 @@ export const reset = createAsyncThunk<returnType, resetLogin>(
     return response;
   }
 );
+
 export const getUserRequest = createAsyncThunk(
   "putUser",
   async (_, { rejectWithValue }) => {
@@ -141,15 +142,13 @@ const loginSlice = createSlice({
       builder.addCase(getUserRequest.fulfilled, (state, action) => {
         if(action?.payload?.data){
           Cookie.set("user", JSON.stringify(action?.payload?.data));
-        }else{
-          Cookie.remove("token");
-          Cookie.remove("user")
         }
         state.dataUser = action?.payload?.data;
       }),
       builder.addCase(getUserRequest.rejected, (state, action) => {
         state.dataUser = null;
         Cookie.remove("token");
+        Cookie.remove("user");
       }),
       builder.addCase(getUserRequest.pending, (state, action) => {
         state.dataUser = null;

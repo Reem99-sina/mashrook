@@ -3,6 +3,7 @@ import React, { useState, useRef, useEffect, useMemo } from "react";
 import { TextInput } from "../components/shared/text-input.component";
 import { FaRegUserCircle } from "react-icons/fa";
 import { format } from "date-fns";
+import {fetchToken}from "@/redux/features/userSlice"
 import {
   CloseIconSmall,
   Filter,
@@ -84,7 +85,9 @@ export const GitMyOrders = () => {
     priceRange: [500000, 20000000],
 
   });
-  const [token, setToken] = useState<string | null>(null);
+  const {  token } = useSelector<RootState>(
+    (state) => state.register
+  ) as {  token:string };
   const dispatch = useDispatch<AppDispatch>();
   const [idDelete, setId] = useState<number>();
   const [currentPage, setCurrentPage] = useState(1);
@@ -106,11 +109,8 @@ export const GitMyOrders = () => {
     messsageExpiredDate: string;
   };
   useEffect(() => {
-    const storedToken = Cookie.get("token");
-    if (storedToken) {
-      setToken(storedToken);
-    }
-  }, []);
+    dispatch(fetchToken())
+  }, [dispatch])
   // propertyTypeDetails  propertyType  propertyLocation city district  details price min_price landDetails
   const handleSelect = (option: string) => {
     setOption(option);

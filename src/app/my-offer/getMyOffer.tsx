@@ -11,7 +11,7 @@ import {
   Search,
 } from "../assets/svg";
 import Cookie from 'js-cookie';
-
+import {fetchToken}from "@/redux/features/userSlice"
 import { useRouter } from "next/navigation";
 import Pagination from "../components/shared/pagination";
 import FilterDropdown from "../components/shared/FilterDropdown";
@@ -44,7 +44,6 @@ export const GitMyOffers = () => {
   const router = useRouter();
   const modalRef = useRef<ModalRef>(null);
   const modalRefDetail = useRef<ModalRef>(null);
-
   const modalRefUpdate = useRef<ModalRef>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [isFilterModalOpen, setIsFilterModalOpen] = useState<boolean>(false);
@@ -82,7 +81,9 @@ export const GitMyOffers = () => {
   const handleSelect = (option: string) => {
     setOption(option);
   };
-  const [token, setToken] = useState<string | null>(null);
+  const {  token } = useSelector<RootState>(
+    (state) => state.register
+  ) as {  token:string };
   let dataOffers = useMemo(() => {
     return dataOffer?.map((dataOrderOne: RealEstateTypeInter) => ({
       id:dataOrderOne?.id,
@@ -112,6 +113,7 @@ export const GitMyOffers = () => {
             dataOrderOne?.landDetails?.length > 0 &&
             `${dataOrderOne?.landDetails[0]?.status}`,
       lisNumber: dataOrderOne?.license_number,
+      propertyOwnerType:dataOrderOne?.propertyOwnerType?.title,
       details:
         dataOrderOne?.details && dataOrderOne?.details?.length > 0
           ? dataOrderOne?.details
@@ -152,13 +154,8 @@ export const GitMyOffers = () => {
     }
   }
   useEffect(() => {
- 
-      const storedToken = Cookie.get("token");
-      if(storedToken){
-        setToken(storedToken);
-      }
-    
-  }, [ ]);
+    dispatch(fetchToken())
+  }, [dispatch])
  
   useEffect(()=>{
     if(messageDelete=="تم حذف العقار بنجاح"){
@@ -290,6 +287,7 @@ export const GitMyOffers = () => {
                   active={offer.active}
                   expired={offer.expired}
                   purpose={offer.purpose}
+                  propertyOwnerType={offer.propertyOwnerType}
                   lisNumber={offer.lisNumber}
                   details={offer.details}
                   onDelete={() => {modalRef.current?.open();setId(offer?.id)}}

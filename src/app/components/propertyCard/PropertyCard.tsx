@@ -30,6 +30,7 @@ import Cookie from 'js-cookie';
 import {userInfo,saveElement} from "@/type/addrealestate"
 import ModalMapComponent from "@/app/components/shared/ModalMap"
 import {  ModalRef } from "@/app/components/shared/modal.component";
+import {fetchuser} from "@/redux/features/userSlice"
 type PropertyCardProps = {
   page?: number;
   limit?: number;
@@ -41,7 +42,9 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ page, limit }) => {
   let dispatch = useDispatch<AppDispatch>();
   const [showNotification, setShowNotification] = useState(false);
   const [show, setShow] = useState(false);
-  const [user, setUser] = useState<userInfo | null>(null);
+  const {  user } = useSelector<RootState>(
+    (state) => state.register
+  ) as { user:userInfo,message:string };
   const [notificationMessage, setNotificationMessage] = useState("");
   let save=useMemo(()=>{
       return (ele:dataReturn)=>{
@@ -59,6 +62,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ page, limit }) => {
   let { loading:loadingSave, message:messageSave, data:dataSave } = useSelector<RootState>(
     (state) => state.save
   ) as { loading: boolean; message: string; data: any };
+
   const handleSaveClick = (ele:any) => {
     setSaved(ele)
     if(ele?.id){
@@ -69,7 +73,6 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ page, limit }) => {
       }
     }
   };
-
   const renderCards = (ele: dataReturn, offerIndex: number) => {
     const cards = [];
     // landDetails
@@ -233,12 +236,9 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ page, limit }) => {
     return page && limit ? data?.slice((page - 1) * limit, page * limit) : data;
   }, [data, page, limit]);
   useEffect(() => {
-    const storedToken = Cookie.get("user");
-    if(storedToken&&storedToken!="undefined" ){
-      const makeObject=JSON.parse(storedToken)
-      setUser(makeObject);
-    }
-}, []);
+
+    dispatch(fetchuser())
+}, [dispatch]);
   useEffect(()=>{
     if(messageSave&&Boolean(dataSave)==true){
         setNotificationMessage("تم الحفظ");
@@ -369,12 +369,12 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ page, limit }) => {
               <div className="flex flex-row py-1 items-center justify-center">
                 <button
                   onClick={()=>handleSaveClick(ele)}
-                  className={`${ele?.user_id==user?.id?"text-gray-500":"text-blue-500"} mx-2 align-middle`}
-                  disabled={ele?.user_id==user?.id}
+                  className={`${(ele?.user_id==user?.id||!user)?"text-gray-500":"text-blue-500"} mx-2 align-middle`}
+                  disabled={(ele?.user_id==user?.id||!user)}
                 >
                   {save(ele) ? "إلغاء الحفظ" : "حفظ"}
                 </button>
-                <FaBookmark className={`${ele?.user_id==user?.id?"text-gray-500":"text-blue-500"} mx-2 text-xl align-middle`} />
+                <FaBookmark className={`${(ele?.user_id==user?.id||!user)?"text-gray-500":"text-blue-500"} mx-2 text-xl align-middle`} />
               </div>
 
               {showNotification && (

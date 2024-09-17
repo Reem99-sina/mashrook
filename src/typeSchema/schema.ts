@@ -200,6 +200,16 @@ export let ForgetSchema=object().shape({
   email:string().email("يجب ادخال البريد الالكتروني صحيح").matches(/^(?!.*@[^,]*,)/,"يجب ادخال البريد الالكتروني صحيح").required("يجب ادخال البريد الالكتروني صحيح"),
   
 })
+export let UserSchema=object().shape({
+  
+  username:string().notOneOf([""], "ادخال اسم المستخدم").required(" ادخال اسم المستخدم"),
+  
+})
+export let ValNumberSchema=object().shape({
+  
+  val_license:string().notOneOf([""], "ادخال رقم رخصة فال").required(" ادخال رقم رخصة فال"),
+  
+})
 export let ResetSchema=object().shape({
   new_password:string().min(8,"يجب ادخال 8 حروف او ارقام").required("يجب ادخال 8 حروف او ارقام"),
   repeate_new_password:string().oneOf([ref('new_password')], 'لا يوجد تشابة بينه وبين كلمة السر').min(8,"يجب ادخال 8 حروف او ارقام").required("لا يوجد تشابة بينه وبين كلمة السر")

@@ -31,6 +31,7 @@ import {dataReturn} from "@/redux/features/getRequest"
 import {useRouter} from "next/navigation"
 import Cookie from 'js-cookie';
 import {Vector,Money,Diagram,Dance,Shower,Kitchen,CheckOut} from "@/app/assets/svg"
+import {fetchuser} from "@/redux/features/userSlice"
 import dynamic from "next/dynamic"
 const Map = dynamic(() => import("@/app/components/shared/map"), { ssr:false })
 const PropertyDetails: React.FC<{id:number}> = ({id}:{id:number}) => {
@@ -49,7 +50,9 @@ const PropertyDetails: React.FC<{id:number}> = ({id}:{id:number}) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
   const [reportText, setReportText] = useState("");
-  const [user, setUser] = useState<any | null>(null);
+  const {  user } = useSelector<RootState>(
+    (state) => state.register
+  ) as { user:userInfo,message:string };
   const [showReportNotification, setShowReportNotification] = useState(false);
   const [reportNotificationMessage, setReportNotificationMessage] =
     useState("");
@@ -138,14 +141,8 @@ const PropertyDetails: React.FC<{id:number}> = ({id}:{id:number}) => {
     // }, 3000);
   };
   useEffect(() => {
-   
-    const storedToken = Cookie.get("user");
-    if(storedToken&&storedToken!="undefined" ){
-      const makeObject=JSON.parse(storedToken)
-      setUser(makeObject);
-    }
-  
-}, []);
+    dispatch(fetchuser())
+}, [dispatch]);
 useEffect(()=>{
   if(messageSave&&Boolean(dataSave)==true){
     setNotificationMessage("تم الحفظ");
@@ -573,12 +570,12 @@ useEffect(()=>{
         <div className="flex flex-row py-1 items-center justify-center">
                 <button
                   onClick={()=>handleSaveClick(selectData)}
-                  className={`${selectData?.user_id==user?.id?"text-gray-500":"text-blue-500"} mx-2 align-middle`}
-                  disabled={selectData?.user_id==user?.id}
+                  className={`${(selectData?.user_id==user?.id||!user)?"text-gray-500":"text-blue-500"} mx-2 align-middle`}
+                  disabled={selectData?.user_id==user?.id||!user}
                 >
                   {save(selectData) ? "إلغاء الحفظ" : "حفظ"}
                 </button>
-                <FaBookmark className={`${selectData?.user_id==user?.id?"text-gray-500":"text-blue-500"} mx-2 text-xl align-middle`} />
+                <FaBookmark className={`${(selectData?.user_id==user?.id||!user)?"text-gray-500":"text-blue-500"} mx-2 text-xl align-middle`} />
               </div>
 
         <div className="bg-gray-300 inline-block h-10 w-0.5 align-bottom"></div>
