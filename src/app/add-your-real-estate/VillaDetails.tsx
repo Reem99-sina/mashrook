@@ -30,7 +30,7 @@ const VillaDetails: React.FC<VillaDetailsProps> = ({
             )
           )
         }
-        
+        value={villa[index]?.area>0?villa[index]?.area:""}
         errors={errors && errors[`details[${index}].area`]}
         measurement="متر"
       />
@@ -43,6 +43,7 @@ const VillaDetails: React.FC<VillaDetailsProps> = ({
             )
           )
         }
+        value={villa[index]?.price>0?villa[index]?.price:""}
         errors={errors && errors[`details[${index}].price`]}
         measurement="ريال"
         desc="(بدون القيمة المضافة والسعي)"

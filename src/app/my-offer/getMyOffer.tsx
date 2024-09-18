@@ -138,11 +138,10 @@ export const GitMyOffers = () => {
       dispatch(deleteProperty({id:idDelete})).then((res:any)=>{
         if(res.payload.message&&!res.payload.status){
           toast.success(res.payload.message);
-          
+        dispatch(deleteOffer({data:dataOffer?.filter((dataOrderOne:RealEstateTypeInter)=>Number(dataOrderOne?.id)!==idDelete)}))
         }else if(res.payload.status){
           toast.error(res.payload.message);
         }
-        dispatch(deleteOffer({data:dataOffer?.filter((dataOrderOne:RealEstateTypeInter)=>Number(dataOrderOne?.id)!==idDelete)}))
       })
       modalRef.current?.close()
     }

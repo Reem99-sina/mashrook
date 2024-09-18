@@ -958,6 +958,7 @@ const AddYourRealEstate: React.FC = () => {
                           price: Number(event?.target?.value),
                         })
                       }
+                      value={dataSend?.price>0?dataSend?.price:""}
                       errors={errors?.price}
                       measurement="ريال"
                       desc="(بدون القيمة المضافة والسعي)"
@@ -975,7 +976,7 @@ const AddYourRealEstate: React.FC = () => {
                     onChange={handlePercentageChange}
                     name="age"
                     title={"العمر"}
-                    firstNumber={"سنة"}
+                    firstNumber={Number(departmentArch?.age)>1?"سنين":"سنة"}
                     secondNumber={"+10 سنين"}
                     max={10}
                   />
@@ -1029,7 +1030,7 @@ const AddYourRealEstate: React.FC = () => {
                       onChange={handlePercentageChange}
                       name="age"
                       title={"العمر"}
-                      firstNumber={"سنة"}
+                      firstNumber={Number(departmentArch?.age)>1?"سنين":"سنة"}
                       secondNumber={"+10 سنين"}
                       max={10}
                     />
@@ -1100,6 +1101,7 @@ const AddYourRealEstate: React.FC = () => {
                               price: Number(event?.target?.value),
                             })
                           }
+                          value={dataSend?.price>0?dataSend?.price:""}
                           errors={errors?.price}
                           measurement="ريال"
                           desc="(بدون القيمة المضافة والسعي)"
@@ -1227,6 +1229,8 @@ const AddYourRealEstate: React.FC = () => {
                               price: Number(event?.target?.value),
                             })
                           }
+                          value={departmentvilla?.price>0?departmentvilla?.price:""}
+
                           errors={errors && errors["apartment.price"]}
                           measurement="ريال"
                           desc="(بدون القيمة المضافة والسعي)"

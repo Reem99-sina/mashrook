@@ -636,7 +636,7 @@ const EditOffer = () => {
                   </div>
                   <InputAreaPrice
                     title="المساحة"
-                    value={ele?.area}
+                    value={ele?.area?ele?.area:""}
                     onChange={(event) =>
                       setData({
                         ...dataCom,
@@ -654,7 +654,7 @@ const EditOffer = () => {
                   />
                   <InputAreaPrice
                     title="السعر"
-                    value={ele?.price}
+                    value={ele?.price?ele?.price:""}
                     onChange={(event) =>
                       setData({
                         ...dataCom,
@@ -685,7 +685,7 @@ const EditOffer = () => {
                       area: Number(event?.target?.value),
                     })
                   }
-                  value={Number(dataCom?.area)}
+                  value={dataCom?.area?Number(dataCom?.area):""}
                   measurement="متر"
                 />
               </>
@@ -710,7 +710,7 @@ const EditOffer = () => {
                         ),
                       })
                     }
-                    value={Number(detail?.price)}
+                    value={detail?.price?Number(detail?.price):""}
                     measurement="ريال"
                     desc="(بدون القيمة المضافة والسعي)"
                   />
@@ -724,7 +724,7 @@ const EditOffer = () => {
                     }}
                     name="age"
                     title={"العمر"}
-                    firstNumber={"سنة"}
+                    firstNumber={Number(dataCom?.age)>1?"سنين":"سنة"}
                     secondNumber={"+10 سنين"}
                     max={10}
                   />
@@ -827,7 +827,7 @@ const EditOffer = () => {
                     }}
                     name="age"
                     title={"العمر"}
-                    firstNumber={Number(dataCom?.age)>1?"سنة":"سنين"}
+                    firstNumber={Number(dataCom?.age)>1?"سنين":"سنة"}
                     secondNumber={"+10 سنين"}
                     max={10}
                   />
@@ -872,7 +872,7 @@ const EditOffer = () => {
                             ),
                           })
                         }
-                        value={floor?.area}
+                        value={floor?.area?floor?.area:""}
                         measurement="متر"
                       />
                       <InputAreaPrice
@@ -890,7 +890,7 @@ const EditOffer = () => {
                             ),
                           })
                         }
-                        value={floor?.price}
+                        value={floor?.price?floor?.price:""}
                         measurement="ريال"
                         desc="(بدون القيمة المضافة والسعي)"
                       />
@@ -1110,7 +1110,7 @@ const EditOffer = () => {
                           ),
                         })
                       }
-                      value={detail?.area}
+                      value={detail?.area?detail?.area:""}
                       measurement="متر"
                     />
                     <InputAreaPrice
@@ -1128,7 +1128,7 @@ const EditOffer = () => {
                           ),
                         })
                       }
-                      value={detail?.price}
+                      value={detail?.price?detail?.price:""}
                       measurement="ريال"
                       desc="(بدون القيمة المضافة والسعي)"
                     />

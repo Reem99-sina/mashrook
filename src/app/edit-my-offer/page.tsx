@@ -171,7 +171,7 @@ const EditMyOffer = () => {
             }))
           }
           measurement="متر"
-          value={offer?.area}
+          value={offer?.area?offer?.area:""}
         />
 
         <InputAreaPrice
@@ -183,7 +183,7 @@ const EditMyOffer = () => {
             }))
           }
           measurement="ريال"
-          value={offer?.price}
+          value={offer?.price?offer?.price:""}
           desc="(بدون القيمة المضافة والسعي)"
         />
         {offer?.type ? (
