@@ -211,7 +211,7 @@ const EditOffer = () => {
             kitchen: detail?.amenities?.kitchen,
             details_id: detail?.id,
           })
-        ).then((res)=>{
+        ).then((res:any)=>{
           if(res.payload.data){
             toast.success(res.payload.message);
             router.push(`/my-offer?title=عروضي`);
@@ -232,7 +232,7 @@ const EditOffer = () => {
             // status: dataCom?.status, /// مشاع او حر
             land_details_id: detail?.id,
           })
-        ).then((res)=>{
+        ).then((res:any)=>{
           if(res.payload.data){
             toast.success(res.payload.message);
             router.push(`/my-offer?title=عروضي`);

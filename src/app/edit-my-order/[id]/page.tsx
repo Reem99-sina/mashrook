@@ -500,7 +500,7 @@ const EditMyOrderBadge = () => {
           status: criteria?.status, /// مشاع او حر
           land_details_id: selectData?.landDetails[0]?.id,
         })
-      ).then((res)=>{
+      ).then((res:any)=>{
         if(res.payload.data){
           toast.success(res.payload.message);
           router.push(`/my-offer?title=طلباتي`);
@@ -533,7 +533,7 @@ const EditMyOrderBadge = () => {
                     finance: criteria?.finance == "false" ? false : true,
                   }
             )
-          ).then((res)=>{
+          ).then((res:any)=>{
             if(res.payload.data){
               toast.success(res.payload.message);
               router.push(`/my-offer?title=طلباتي`);
@@ -553,7 +553,7 @@ const EditMyOrderBadge = () => {
               min_price: ele?.min_price,
               // details: detailsVilla,
             })
-          ).then((res)=>{
+          ).then((res:any)=>{
             if(res.payload.data){
               toast.success(res.payload.message);
               router.push(`/my-offer?title=طلباتي`);
