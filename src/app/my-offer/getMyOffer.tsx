@@ -70,14 +70,6 @@ export const GitMyOffers = () => {
     message: string;
     data: RealEstateTypeInter[];
   };
-  let {
-    messageDelete,
-    messsageExpiredDate
-  } = useSelector<RootState>((state) => state.partners) as {
-   
-    messageDelete: string;
-    messsageExpiredDate:string
-  };
   const handleSelect = (option: string) => {
     setOption(option);
   };
@@ -143,13 +135,28 @@ export const GitMyOffers = () => {
   }, [dataOffers, currentPage]);
   const onDelete=()=>{
     if(idDelete){
-      dispatch(deleteProperty({id:idDelete}))
+      dispatch(deleteProperty({id:idDelete})).then((res:any)=>{
+        if(res.payload.message&&!res.payload.status){
+          toast.success(res.payload.message);
+          
+        }else if(res.payload.status){
+          toast.error(res.payload.message);
+        }
+        dispatch(deleteOffer({data:dataOffer?.filter((dataOrderOne:RealEstateTypeInter)=>Number(dataOrderOne?.id)!==idDelete)}))
+      })
       modalRef.current?.close()
     }
   }
   const onExpiredDate=()=>{
     if(idDelete){
-      dispatch(UpdataExpiredDateProperty({id:idDelete}))
+      dispatch(UpdataExpiredDateProperty({id:idDelete})).then((res:any)=>{
+        if(res.payload.data){
+          toast.success(res.payload.message);
+         
+        }else if(res.payload.status){
+          toast.error(res.payload.message);
+        }
+      })
       modalRefUpdate.current?.close()
     }
   }
@@ -158,21 +165,11 @@ export const GitMyOffers = () => {
   }, [dispatch])
  
   useEffect(()=>{
-    if(messageDelete=="تم حذف العقار بنجاح"){
-      toast.success(messageDelete)
-      dispatch(deleteOffer({data:dataOffer?.filter((dataOrderOne:RealEstateTypeInter)=>dataOrderOne?.id!==idDelete)}))
-    }else if(messageDelete){
-      toast.error(messageDelete)
-    }
-    if(messsageExpiredDate=="تم تحديث العقار بنجاح"){
-      toast.success(messsageExpiredDate)
-    }else if(messsageExpiredDate){
-      toast.error(messsageExpiredDate)
-    }
+   
     return ()=>{
       dispatch(removeDelete())
     }
-  },[messageDelete,dataOffer,idDelete,dispatch,messsageExpiredDate])
+  },[dispatch])
   useEffect(() => {
     if (token) {
       dispatch(getOffer({}));

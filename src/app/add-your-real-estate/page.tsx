@@ -946,6 +946,7 @@ const AddYourRealEstate: React.FC = () => {
                           area: Number(event?.target?.value),
                         })
                       }
+                      value={dataSend?.area>0?dataSend?.area:""}
                       errors={errors?.area}
                       measurement="متر"
                     />
@@ -1087,6 +1088,7 @@ const AddYourRealEstate: React.FC = () => {
                               area: Number(event?.target?.value),
                             })
                           }
+                          value={dataSend?.area>0?dataSend?.area:""}
                           errors={errors?.area}
                           measurement="متر"
                         />
@@ -1213,6 +1215,7 @@ const AddYourRealEstate: React.FC = () => {
                               area: Number(event?.target?.value),
                             })
                           }
+                          value={departmentvilla?.area>0?departmentvilla?.area:""}
                           errors={errors && errors["apartment.area"]}
                           measurement="متر"
                         />

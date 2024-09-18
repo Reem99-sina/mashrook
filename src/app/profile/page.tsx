@@ -103,6 +103,7 @@ const Page = () => {
           onClick={() => {
             if (saveImage) {
               dispatch(updateUserImage({ image: saveImage }))
+              setUrl("")
             }
           }}
         >

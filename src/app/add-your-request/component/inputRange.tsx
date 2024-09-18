@@ -15,7 +15,7 @@ const InputRange=({price,onChange}:InputInfo)=>{
                           <TextInput
                             inputProps={{ placeholder: "-- الرجاء الادخال --" }}
                             onChange={(event)=>onChange([price[0],Number(event.target.value)])}
-                            value={price[1]}
+                            value={price[1]?price[1]:""}
                             type="number"
                           />
                           </div>
@@ -26,7 +26,7 @@ const InputRange=({price,onChange}:InputInfo)=>{
                           <TextInput
                             inputProps={{ placeholder: "-- الرجاء الادخال --" }}
                             onChange={(event)=>onChange([Number(event.target.value),price[1]])}
-                            value={price[0]}
+                             value={price[0]?price[0]:""}
                             type="number"
                           />
                           </div>

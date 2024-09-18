@@ -30,6 +30,7 @@ const VillaDetails: React.FC<VillaDetailsProps> = ({
             )
           )
         }
+        
         errors={errors && errors[`details[${index}].area`]}
         measurement="متر"
       />

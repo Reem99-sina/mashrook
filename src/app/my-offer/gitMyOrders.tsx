@@ -100,14 +100,6 @@ export const GitMyOrders = () => {
     message: string;
     data: any;
   };
-  let {
-    messageDelete,
-    messsageExpiredDate
-  } = useSelector<RootState>((state) => state.partners) as {
-
-    messageDelete: string;
-    messsageExpiredDate: string;
-  };
   useEffect(() => {
     dispatch(fetchToken())
   }, [dispatch])
@@ -167,13 +159,28 @@ export const GitMyOrders = () => {
   }, [dataOrders, currentPage]);
   const onDelete = () => {
     if (idDelete) {
-      dispatch(deleteProperty({ id: idDelete }))
+      dispatch(deleteProperty({ id: idDelete })).then((res:any)=>{
+        if(res.payload.message&&!res.payload.status){
+          toast.success(res.payload.message);
+          
+        }else if(res.payload.status){
+          toast.error(res.payload.message);
+        }
+        dispatch(deleteOrder({ data: dataOrder?.filter((dataOrderOne: any) => dataOrderOne?.id !== idDelete) }))
+      })
       modalRef.current?.close()
     }
   }
   const onExpiredDate = () => {
     if (idDelete) {
-      dispatch(UpdataExpiredDateProperty({ id: idDelete }))
+      dispatch(UpdataExpiredDateProperty({ id: idDelete })).then((res:any)=>{
+        if(res.payload.data){
+          toast.success(res.payload.message);
+         
+        }else if(res.payload.status){
+          toast.error(res.payload.message);
+        }
+      })
       modalRefUpdate.current?.close()
     }
   }
@@ -183,21 +190,11 @@ export const GitMyOrders = () => {
     }
   }, [token, dispatch]);
   useEffect(() => {
-    if (messageDelete == "تم حذف العقار بنجاح") {
-      toast.success(messageDelete)
-      dispatch(deleteOrder({ data: dataOrder?.filter((dataOrderOne: any) => dataOrderOne?.id !== idDelete) }))
-    } else if (messageDelete) {
-      toast.error(messageDelete)
-    }
-    if (messsageExpiredDate == "تم تحديث العقار بنجاح") {
-      toast.success(messsageExpiredDate)
-    } else if (messsageExpiredDate) {
-      toast.error(messsageExpiredDate)
-    }
+  
     return () => {
       dispatch(removeDelete())
     }
-  }, [messageDelete, dataOrder, idDelete, dispatch, messsageExpiredDate])
+  }, [dispatch])
   useEffect(() => {
     dispatch(getRequest({
       sort: optionFilter == "الأحدث الى الأقدم" ? "created_desc" : optionFilter == "الأقدم الى الأحدث" ? "created_asc" : optionFilter == "الميزانية ( الأدنى الى الأعلى)" ? "price_asc" : optionFilter == "الميزانية ( الأعلى الى الأدنى)"?"price_decs":""

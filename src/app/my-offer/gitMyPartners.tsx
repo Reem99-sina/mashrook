@@ -104,18 +104,33 @@ export const GitMyPartners = () => {
               land_details_id: idDelete?.land_details_id,
             }
       )
-    );
+    ).then((res:any)=>{
+      if(res.payload.message&&!res.payload.status){
+        toast.success(res.payload.message);
+      dispatch(
+        withdrawData({
+          data: dataPartner?.map((dataPartnerOne: any) => ({
+            ...dataPartnerOne,
+            propertyDetailsOwnership:
+              dataPartnerOne?.propertyDetailsOwnership?.filter(
+                (ele: realEstatePartner) => ele?.id != idDelete?.requestNumber
+              ),
+          })),
+        })
+      );
+      }else if(res.payload.status){
+        toast.error(res.payload.message);
+      }
+    })
   };
   let {
     loading,
     message,
-    data: dataPartner,
-    messageWithDraw,
+    data: dataPartner
   } = useSelector<RootState>((state) => state.partners) as {
     loading: boolean;
     message: string;
     data: any;
-    messageWithDraw: string;
   };
   const newDataMemo=useMemo(()=>{
    return dataPartner?.flatMap((dataPartnerOne: RealEstateTypeInter) =>dataPartnerOne?.propertyDetailsOwnership)
@@ -153,6 +168,7 @@ export const GitMyPartners = () => {
         purpose:  ele?.property?.propertyPurpose?.title,
         finance:  ele?.property?.finance,
         details_id: ele?.details_id,
+        propertyOwnerType:ele?.property?.propertyOwnerType?.title,
         land_details_id: ele?.land_details_id,
         room_id:ele?.details?.room[0]?.id||ele?.landDetails?.room[0]?.id
     }))
@@ -196,26 +212,11 @@ export const GitMyPartners = () => {
     dispatch(fetchToken())
   }, [dispatch])
   useEffect(() => {
-    if (messageWithDraw == "تم الإنسحاب من الطلب بنجاح.") {
-      toast.success(messageWithDraw);
-      dispatch(
-        withdrawData({
-          data: dataPartner?.map((dataPartnerOne: any) => ({
-            ...dataPartnerOne,
-            propertyDetailsOwnership:
-              dataPartnerOne?.propertyDetailsOwnership?.filter(
-                (ele: realEstatePartner) => ele?.id != idDelete?.requestNumber
-              ),
-          })),
-        })
-      );
-    } else if (messageWithDraw) {
-      toast.error(messageWithDraw);
-    }
+   
     return () => {
       dispatch(removeMessageWithDraw());
     };
-  }, [messageWithDraw, dataPartner, dispatch, idDelete]);
+  }, [ dispatch]);
 
   useEffect(() => {
     if (token) {
@@ -349,6 +350,7 @@ export const GitMyPartners = () => {
                   budget={offer.budget}
                   purpose={offer.purpose}
                   finance={offer.finance}
+                  propertyOwnerType={offer.propertyOwnerType}
                   PartnershipNumber={offer.PartnershipNumber}
                   details_id={offer?.details_id}
                   land_details_id={offer?.land_details_id}
@@ -390,7 +392,7 @@ export const GitMyPartners = () => {
                   <span>
                     <p className="text-base font-normal text-[#4B5563]">
                       هل أنت متأكد من رغبتك في تنفيذ الانسحاب من الطلب رقم (
-                      {idDelete?.id})؟
+                      {idDelete?.requestNumber})؟
                     </p>
                   </span>
                   <div className="bg-[#FDE8E8] rounded-md mt-5 mb-5 flex items-center justify-start p-1 flex-row gap-1 ">

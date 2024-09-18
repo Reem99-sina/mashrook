@@ -26,6 +26,7 @@ interface PartnersCardProps {
   requestNumber: number;
   city: string;
   district: string;
+  propertyOwnerType:string;
   budget: string;
   PartnershipNumber: number;
   realEstate: string;
@@ -50,6 +51,7 @@ export const PartnersCard: React.FC<PartnersCardProps> = ({
   count,
   city,
   district,
+  propertyOwnerType,
   budget,
   PartnershipNumber,
   realEstate,
@@ -84,20 +86,23 @@ export const PartnersCard: React.FC<PartnersCardProps> = ({
       </div>
 
       <div className="flex gap-2 mt-2">
-        <span className="rounded-xl bg-[#98CC5D] pl-2 pr-2 pt-[2px] pb-[2px] text-xs font-normal text-white">
+        <span className="rounded-xl bg-[#98CC5D] px-2 py-2 text-xs font-normal text-white">
           {purpose}
         </span>
+        <span className="rounded-xl bg-[#F3F4F6] px-2 py-2 text-xs font-normaltext-[#6B7280]">
+        {propertyOwnerType}
+        </span>
 
-        <span className="rounded-xl bg-[#F3F4F6] pl-2 pr-2 pt-[2px] pb-[2px] text-xs font-normal text-[#6B7280]">
+        <span className="rounded-xl bg-[#F3F4F6] px-2 py-2 text-xs font-normal text-[#6B7280]">
           {date}
         </span>
 
         {partnershipRatio!=100 ? (
-          <span className="rounded-xl bg-[#F3F4F6] pl-2 pr-2 pt-[2px] pb-[2px] text-xs font-normal text-[#6B7280]">
+          <span className="rounded-xl bg-[#F3F4F6] px-2 py-2 text-xs font-normal text-[#6B7280]">
             تحت التقدم{" "}
           </span>
         ) : (
-          <span className="rounded-xl bg-[#EAFDE8] pl-2 pr-2 pt-[2px] pb-[2px] text-xs font-normal text-[#5CB053]">
+          <span className="rounded-xl bg-[#EAFDE8] px-2 py-2 text-xs font-normal text-[#5CB053]">
             مكتمل
           </span>
         )}
