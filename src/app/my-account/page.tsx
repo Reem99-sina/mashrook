@@ -1,53 +1,53 @@
 "use client"
-import {useState,useEffect} from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation";
-import { BackButtonOutline,IconNoData } from "../assets/svg";
+import { BackButtonOutline, IconNoData } from "../assets/svg";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { BsKey } from "react-icons/bs";
-import {fetchuser} from "@/redux/features/userSlice"
+import { fetchuser } from "@/redux/features/userSlice"
 import { IoIosNotificationsOutline } from "react-icons/io";
 import { FaAddressCard } from "react-icons/fa";
 import { BsSave } from "react-icons/bs";
 import toast from "react-hot-toast";
 import { FaAd } from "react-icons/fa";
 import { CiLogout } from "react-icons/ci";
-import {removeTokenUser,deleteUser,removeMessage} from "@/redux/features/userSlice"
+import { removeTokenUser, deleteUser, removeMessage } from "@/redux/features/userSlice"
 import { RiDeleteBinLine } from "react-icons/ri";
 import Cookie from 'js-cookie';
-import {removeLogin} from "@/redux/features/loginSlice"
-import MainOtion  from "./component/mainOption"
-import {userInfo} from "@/type/addrealestate"
-const MyAccountPage=()=>{
-    const router = useRouter();
-    const {  user,message } = useSelector<RootState>(
-      (state) => state.register
-    ) as { user:userInfo,message:string };
-    
-    
-    const dispatch = useDispatch<AppDispatch>();
-    const handleBack = (e:React.MouseEvent<HTMLButtonElement>) => {
-      e.preventDefault()
-      router.push("/");
-    };
-    const onDeleteAccount=()=>{
-      Cookie.remove("token");
-      Cookie.remove("user");
-      router.push("/")
-      dispatch(removeLogin());
-      dispatch(removeTokenUser());
-    }
-    useEffect(() => {
-      dispatch(fetchuser())
+import { removeLogin } from "@/redux/features/loginSlice"
+import MainOtion from "./component/mainOption"
+import { userInfo } from "@/type/addrealestate"
+const MyAccountPage = () => {
+  const router = useRouter();
+  const { user, message } = useSelector<RootState>(
+    (state) => state.register
+  ) as { user: userInfo, message: string };
+
+
+  const dispatch = useDispatch<AppDispatch>();
+  const handleBack = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+    router.push("/");
+  };
+  const onDeleteAccount = () => {
+    Cookie.remove("token");
+    Cookie.remove("user");
+    router.push("/")
+    dispatch(removeLogin());
+    dispatch(removeTokenUser());
+  }
+  useEffect(() => {
+    dispatch(fetchuser())
   }, [dispatch]);
-  useEffect(()=>{
-    if(message){
+  useEffect(() => {
+    if (message) {
       toast(message)
     }
-    return ()=>{
+    return () => {
       dispatch(removeMessage())
     }
-  },[message,dispatch])
+  }, [message, dispatch])
     return (
         <>
         <div className="flex items-center justify-center m-2">

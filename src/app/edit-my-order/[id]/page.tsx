@@ -116,19 +116,9 @@ const EditMyOrderBadge = () => {
     data: any;
   };
   let {
-    dataPut,
-    messagePut,
-    dataPutLocat,
-    messagePutLocat,
-    dataPutDetail,
-    messagePutDetail,
+    message
   } = useSelector<RootState>((state) => state.realEstateRequest) as {
-    dataPut: any;
-    messagePut: string;
-    dataPutLocat: any;
-    messagePutLocat: string;
-    dataPutDetail: any;
-    messagePutDetail: string;
+    message: string;
   };
   let { city, district } = useSelector<RootState>((state) => state.city) as {
     district: any;
@@ -236,33 +226,7 @@ const EditMyOrderBadge = () => {
       );
     }
   }, [criteria?.unitType, selectData]);
-  useEffect(() => {
-    if (messagePut && Boolean(dataPut) == true) {
-      toast.success(messagePut);
-      router.push(`/my-offer?title=طلباتي`)
-    }else if(messagePut && Boolean(dataPut) == false){
-      toast.error(messagePut);
-    }
-    if (messagePutLocat && Boolean(dataPutLocat) == true) {
-      toast.success(messagePutLocat);
-    }else if(messagePutLocat && Boolean(dataPutLocat) == false){
-      toast.error(messagePutLocat);
-    }
-    if (messagePutDetail && Boolean(dataPutDetail) == true) {
-      toast.success(messagePutDetail);
-      router.push(`/my-offer?title=طلباتي`)
-    }else if(messagePutDetail && Boolean(dataPutDetail) == false){
-      toast.error(messagePutDetail);
-    }
-  }, [
-    dataPut,
-    messagePut,
-    dataPutLocat,
-    messagePutLocat,
-    dataPutDetail,
-    messagePutDetail,
-    router,
-  ]);
+  
   useEffect(() => {
     return () => {
       setCriteria({
@@ -526,18 +490,25 @@ const EditMyOrderBadge = () => {
       putLocation({
         ...datasend,
       })
-    );
+    )
     if (criteria?.property_type_id == 1 || criteria?.property_type_id == 2) {
       dispatch(
         putLandDetailsType({
           price: criteria?.shareRange[1],
           min_price: criteria?.shareRange[0],
           finance: criteria?.finance == "false" ? false : true,
-
           status: criteria?.status, /// مشاع او حر
           land_details_id: selectData?.landDetails[0]?.id,
         })
-      );
+      ).then((res)=>{
+        if(res.payload.data){
+          toast.success(res.payload.message);
+          router.push(`/my-offer?title=طلباتي`);
+        }else if(res.payload.status){
+          toast.error(res.payload.message);
+          router.push(`/my-offer?title=طلباتي`);
+        }
+      })
     } else {
       if (selectData?.details?.length == 1) {
         selectData?.details.map((ele: any) =>
@@ -546,7 +517,6 @@ const EditMyOrderBadge = () => {
               ele?.min_apartment_floor && ele?.apartment_floor
                 ? {
                     finance: criteria?.finance == "false" ? false : true,
-
                     status: criteria?.status,
                     details_id: ele?.id,
                     price: criteria?.shareRange[1],
@@ -563,7 +533,15 @@ const EditMyOrderBadge = () => {
                     finance: criteria?.finance == "false" ? false : true,
                   }
             )
-          )
+          ).then((res)=>{
+            if(res.payload.data){
+              toast.success(res.payload.message);
+              router.push(`/my-offer?title=طلباتي`);
+            }else if(res.payload.status){
+              toast.error(res.payload.message);
+              router.push(`/my-offer?title=طلباتي`);
+            }
+          })
         );
       } else if (selectData?.details?.length > 1) {
         detailsVilla?.map((ele: any) => {
@@ -575,7 +553,15 @@ const EditMyOrderBadge = () => {
               min_price: ele?.min_price,
               // details: detailsVilla,
             })
-          );
+          ).then((res)=>{
+            if(res.payload.data){
+              toast.success(res.payload.message);
+              router.push(`/my-offer?title=طلباتي`);
+            }else if(res.payload.status){
+              toast.error(res.payload.message);
+              router.push(`/my-offer?title=طلباتي`);
+            }
+          })
         });
       }
     }
@@ -732,7 +718,7 @@ const EditMyOrderBadge = () => {
           <div>
             <span>
               <p className="text-base font-normal text-[#4B5563]">
-                هل أنت متأكد من رغبتك في تنفيذ اجراء تعديل الطلب رقم (2022) ؟
+                هل أنت متأكد من رغبتك في تنفيذ اجراء تعديل الطلب رقم ({id}) ؟
               </p>
             </span>
             <div className="bg-[#FDE8E8] rounded-md mt-5 mb-5 flex items-center justify-start p-1 flex-row gap-1 ">

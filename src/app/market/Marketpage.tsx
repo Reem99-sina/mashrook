@@ -81,8 +81,8 @@ const MarketPage: React.FC = () => {
           : sortOption == "oldest"
           ? "created_decs"
           : sortOption == "priceLowToHigh"
-          ? "price_decs"
-          : "price_asc",
+          ? "price_asc"
+          : "price_desc",
     };
   }, [criteria, status, sortOption]);
   const { data: dataPurpose } = useSelector<RootState>(

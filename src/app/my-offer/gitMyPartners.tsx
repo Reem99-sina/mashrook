@@ -154,7 +154,7 @@ export const GitMyPartners = () => {
         finance:  ele?.property?.finance,
         details_id: ele?.details_id,
         land_details_id: ele?.land_details_id,
-        room_id:ele?.details?.room[0]?.id
+        room_id:ele?.details?.room[0]?.id||ele?.landDetails?.room[0]?.id
     }))
   },[newDataMemo,title])
   let fiterData = useMemo(() => {

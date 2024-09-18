@@ -25,17 +25,9 @@ const EditMyOffer = () => {
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
   let {
-    dataPut,
-    messagePut,
-
-    dataPutDetail,
-    messagePutDetail,
+    message,
   } = useSelector<RootState>((state) => state.realEstateRequest) as {
-    dataPut: any;
-    messagePut: string;
-
-    dataPutDetail: any;
-    messagePutDetail: string;
+    message:string;
   };
   const handleBack = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -50,18 +42,7 @@ const EditMyOffer = () => {
       }
     }
   }, []);
-  useEffect(() => {
-    if (messagePut && Boolean(dataPut) == true) {
-      toast.success(messagePut);
-      router.push(`/my-offer?title=عروضي`);
-      // setSentYourRequest(true);
-    }
-    if (messagePutDetail && Boolean(dataPutDetail) == true) {
-      toast.success(messagePutDetail);
-      router.push(`/my-offer?title=عروضي`);
-      // setSentYourRequest(true);
-    }
-  }, [dataPut, messagePut, dataPutDetail, messagePutDetail, router]);
+ 
   useEffect(() => {
     return () => {
       dispatch(removeStateEdit());
@@ -88,7 +69,15 @@ const EditMyOffer = () => {
           kitchen: offer?.amenities?.kitchen,
           details_id: offer?.id,
         })
-      );
+      ).then((res)=>{
+        if(res.payload.data){
+          toast.success(res.payload.message);
+          router.push(`/my-offer?title=عروضي`);
+        }else if(res.payload.status){
+          toast.error(res.payload.message);
+          router.push(`/my-offer?title=عروضي`);
+        }
+      })
     } else {
       dispatch(
         putLandDetailsType({
@@ -99,7 +88,15 @@ const EditMyOffer = () => {
           // status: dataCom?.status, /// مشاع او حر
           land_details_id: offer?.id,
         })
-      );
+      ).then((res)=>{
+        if(res.payload.data){
+          toast.success(res.payload.message);
+          router.push(`/my-offer?title=عروضي`);
+        }else if(res.payload.status){
+          toast.error(res.payload.message);
+          router.push(`/my-offer?title=عروضي`);
+        }
+      })
     }
   };
   return (

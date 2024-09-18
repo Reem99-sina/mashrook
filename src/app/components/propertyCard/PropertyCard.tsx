@@ -92,6 +92,16 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ page, limit }) => {
                     : ele?.propertyType?.title}
                 </p>
               </div>
+              <div className="flex items-center  justify-start">
+                    <GoLocation />
+                    <p className="px-2">
+                      مدينة {ele?.propertyLocation?.city}،{" "}
+                      {ele?.propertyLocation?.district?.replace(
+                        /[\[\]\\"]/g,
+                        ""
+                      )}
+                    </p>
+                  </div>
               <div className="flex flex-col gap-y-2 my-2 flex-wrap items-start">
                 <div className="bg-gray-200 rounded-xl  flex items-center p-2">
                   <LuTag />
@@ -171,6 +181,16 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ page, limit }) => {
                       `قطعة رقم  ${ele?.landDetails[i]?.plan_number}`}
                   </p>
                 </div>
+                <div className="flex items-center  justify-start">
+                    <GoLocation />
+                    <p className="px-2">
+                      مدينة {ele?.propertyLocation?.city}،{" "}
+                      {ele?.propertyLocation?.district?.replace(
+                        /[\[\]\\"]/g,
+                        ""
+                      )}
+                    </p>
+                  </div>
                 <div className="flex flex-col gap-y-2  my-2  items-start flex-wrap ">
                   <div className="bg-gray-200 rounded-xl px-2 flex items-center">
                     <LuTag />

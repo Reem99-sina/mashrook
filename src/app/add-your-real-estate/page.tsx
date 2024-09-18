@@ -109,7 +109,7 @@ const AddYourRealEstate: React.FC = () => {
     property_type_id: 0,
     partner_type_id: 0,
     city: "تبوك",
-    district: "",
+    district: "other",
     address: "",
     area: 0,
     price: 0,

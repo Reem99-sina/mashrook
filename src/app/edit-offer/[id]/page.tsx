@@ -23,7 +23,7 @@ import {
   removeStateEdit,
   RealEstateTypeInter,
   imageDeleteRequest,
-  imageUpdateRequest,
+  imageUpdateRequest
 } from "@/redux/features/postRealEstate";
 import Image from "next/image";
 import { getCity, getDistrict } from "@/redux/features/getCity";
@@ -62,19 +62,9 @@ const EditOffer = () => {
     selectData: any;
   };
   let {
-    dataPut,
-    messagePut,
-    dataPutDetail,
-    messagePutLocat,
-    dataPutLocat,
-    messagePutDetail,
+    message
   } = useSelector<RootState>((state) => state.realEstateRequest) as {
-    dataPut: any;
-    messagePut: string;
-    messagePutLocat: string;
-    dataPutLocat: any;
-    dataPutDetail: any;
-    messagePutDetail: string;
+    message:string
   };
   let { city, district } = useSelector<RootState>((state) => state.city) as {
     district: any;
@@ -193,7 +183,7 @@ const EditOffer = () => {
       putLocation({
         ...datasend,
       })
-    );
+    )
     if (images && images?.length > 0 && Array.isArray(images)) {
       let newImages = images.filter((item) => item instanceof File);
       newImages.map((image: File) =>
@@ -221,7 +211,15 @@ const EditOffer = () => {
             kitchen: detail?.amenities?.kitchen,
             details_id: detail?.id,
           })
-        );
+        ).then((res)=>{
+          if(res.payload.data){
+            toast.success(res.payload.message);
+            router.push(`/my-offer?title=عروضي`);
+          }else if(res.payload.status){
+            toast.error(res.payload.message);
+            router.push(`/my-offer?title=عروضي`);
+          }
+        })
       });
     } else {
       dataCom?.landDetails?.map((detail: any) =>
@@ -234,11 +232,18 @@ const EditOffer = () => {
             // status: dataCom?.status, /// مشاع او حر
             land_details_id: detail?.id,
           })
-        )
+        ).then((res)=>{
+          if(res.payload.data){
+            toast.success(res.payload.message);
+            router.push(`/my-offer?title=عروضي`);
+          }else if(res.payload.status){
+            toast.error(res.payload.message);
+            router.push(`/my-offer?title=عروضي`);
+          }
+        })
       );
     }
   };
-
   useEffect(() => {
     setData({ ...selectData });
     if (selectData?.propertyMedia?.length > 0) {
@@ -263,31 +268,7 @@ const EditOffer = () => {
       }
     }
   }, [title, details, dataCom?.property_purpose_id, dispatch]);
-  useEffect(() => {
-    if (messagePut && Boolean(dataPut) == true) {
-      toast.success(messagePut);
-      router.push(`/my-offer?title=عروضي`);
-      // setSentYourRequest(true);
-    }
-    if (messagePutLocat && Boolean(dataPutLocat) == true) {
-      toast.success(messagePutLocat);
-
-      // setSentYourRequest(true);
-    }
-    if (messagePutDetail && Boolean(dataPutDetail) == true) {
-      toast.success(messagePutDetail);
-      router.push(`/my-offer?title=عروضي`);
-      // setSentYourRequest(true);
-    }
-  }, [
-    dataPut,
-    messagePut,
-    dataPutLocat,
-    messagePutLocat,
-    dataPutDetail,
-    messagePutDetail,
-    router,
-  ]);
+  
   useEffect(() => {
     dispatch(getCity());
   }, [dispatch]);
@@ -296,11 +277,7 @@ const EditOffer = () => {
       dispatch(getDistrict({ name: dataCom?.propertyLocation?.city }));
     }
   }, [dataCom?.propertyLocation?.city, dispatch]);
-  useEffect(() => {
-    return () => {
-      dispatch(removeStateEdit());
-    };
-  }, [dispatch]);
+ 
   return (
     <form className="bg-white flex w-full h-full min-h-screen  flex-col p-5">
       <MainHeader />
@@ -747,7 +724,7 @@ const EditOffer = () => {
                     }}
                     name="age"
                     title={"العمر"}
-                    firstNumber={"جديد"}
+                    firstNumber={"سنة"}
                     secondNumber={"+10 سنين"}
                     max={10}
                   />
@@ -850,7 +827,7 @@ const EditOffer = () => {
                     }}
                     name="age"
                     title={"العمر"}
-                    firstNumber={"جديد"}
+                    firstNumber={Number(dataCom?.age)>1?"سنة":"سنين"}
                     secondNumber={"+10 سنين"}
                     max={10}
                   />
@@ -862,7 +839,7 @@ const EditOffer = () => {
                 {dataCom?.details?.map((floor, index) => (
                   <AccordionComponent
                     title={floor?.type}
-                    key={index}
+                    key={floor?.type}
                     floors={floorsVilla}
                     onChange={(e) =>
                       setData({
@@ -1032,7 +1009,7 @@ const EditOffer = () => {
                                 ),
                               })
                             }
-                            checked={floor?.pool}
+                            checked={floor?.amenities?.ac}
                           />
                           <CheckFeature
                             title="مدخل سيارة"
@@ -1052,7 +1029,7 @@ const EditOffer = () => {
                                 ),
                               })
                             }
-                            checked={floor?.car_entrance}
+                            checked={floor?.amenities?.car_entrance}
                           />
                           <CheckFeature
                             title="مطبخ راكب"
@@ -1072,7 +1049,7 @@ const EditOffer = () => {
                                 ),
                               })
                             }
-                            checked={floor?.kitchen}
+                            checked={floor?.amenities?.kitchen}
                           />
                           <CheckFeature
                             title="مؤثثة"
@@ -1092,7 +1069,7 @@ const EditOffer = () => {
                                 ),
                               })
                             }
-                            checked={floor?.furnished}
+                            checked={floor?.amenities?.furnished}
                           />
                         </div>
                       </div>
@@ -1553,7 +1530,7 @@ const EditOffer = () => {
           <div>
             <span>
               <p className="text-base font-normal text-[#4B5563]">
-                هل أنت متأكد من رغبتك في تنفيذ اجراء تعديل الطلب رقم (2022) ؟
+                هل أنت متأكد من رغبتك في تنفيذ اجراء تعديل الطلب رقم ({id}) ؟
               </p>
             </span>
             <div className="bg-[#FDE8E8] rounded-md mt-5 mb-5 flex items-center justify-start p-1 flex-row gap-1 ">
@@ -1572,7 +1549,7 @@ const EditOffer = () => {
               text=" تعديل"
               onClick={() => {
                 checkRef.current?.close();
-                onSubmit();
+                onSubmit().then((res)=>console.log(res,"message")).catch((error)=>console.log(error,"message"))
               }}
               className="!text-xs !font-medium"
             />

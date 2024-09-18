@@ -378,12 +378,7 @@ const realEstateTypeSlice = createSlice({
       state.data=  null
     },
     removeStateEdit:(state)=>{
-      state.dataPut=null
-      state.messagePut=""
-      state.dataPutLocat=null
-      state.messagePutLocat=""
-      state.dataPutDetail=null
-      state.messagePutDetail=""
+      state.message=""
     }
   },
   extraReducers: (builder) => {
@@ -404,30 +399,21 @@ const realEstateTypeSlice = createSlice({
         state.message = action.error.message ? action.error.message : "error";
         state.data = null;
       }),builder.addCase(putLandDetailsType.fulfilled, (state, action) => {
-        state.dataPut=action?.payload?.data
-        state.messagePut=action?.payload?.message
+        state.message=action?.payload?.message
         ? action.payload.message
         : "success"
       }),builder.addCase(putLandDetailsType.rejected, (state, action) => {
-        state.loading = false;
         state.message = action.error.message ? action.error.message : "error";
-        state.dataPut = null;
       }),builder.addCase(putLocation.fulfilled,(state, action)=>{
-        state.dataPutLocat=action?.payload?.data
-        state.messagePutLocat=action?.payload?.message
-        ? action.payload.message
-        : "success"
+        state.message=""
       }),builder.addCase(putLocation.rejected, (state, action) => {
-        state.dataPutLocat=null
-        state.messagePutLocat=action.error.message ? action.error.message : "error";
+        state.message = action.error.message ? action.error.message : "error";
       }),builder.addCase(putDetailsType.fulfilled,(state,action)=>{
-        state.dataPutDetail=action?.payload?.data
-        state.messagePutDetail=action?.payload?.message
+        state.message=action?.payload?.message
         ? action.payload.message
         : "success"
       }),builder.addCase(putDetailsType.rejected,(state,action)=>{
-        state.dataPutDetail=null
-        state.messagePutDetail=action.error.message ? action.error.message : "error";
+        state.message = action.error.message ? action.error.message : "error";
       }),builder.addCase(imageDeleteRequest.fulfilled,(state, action)=>{
         state.messageDeleteImage=action?.payload?.message
         ? action.payload.message

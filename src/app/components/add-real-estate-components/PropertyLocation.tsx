@@ -25,7 +25,7 @@ const PropertyLocation: React.FC<PropertyLocationProps> = ({
   errors,
   modalRef,
 }) => {
-  let [open,setOpen]=useState<boolean>(false)
+  let [open,setOpen]=useState<boolean>(dataSend?.district=="other")
   return (
     <div className="bg-white rounded-lg border border-[#E5E7EB] w-full mb-4 items-start justify-start p-4">
       <div className="flex items-center justify-end">
@@ -74,7 +74,7 @@ const PropertyLocation: React.FC<PropertyLocationProps> = ({
           <select
             className="border w-full text-right  border-[#D1D5DB] rounded-lg"
             onChange={(event) =>
-              setDataSend({ ...dataSend, city: event?.target?.value })
+              setDataSend({ ...dataSend, city: event?.target?.value,district:"other" })
             }
             value={dataSend?.city}
           >
@@ -102,7 +102,7 @@ const PropertyLocation: React.FC<PropertyLocationProps> = ({
               })
             }
             className={`${open==false?"hidden":"block"} p-2 border border-gray-300 rounded-r-lg w-full`}
-            value={dataSend?.district}
+            value={dataSend?.district=="other"?"":dataSend?.district}
             disabled={open==false}
             />
         </div>
