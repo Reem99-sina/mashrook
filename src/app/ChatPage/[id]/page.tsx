@@ -27,6 +27,8 @@ const ChatPage = () => {
     (state) => state.register
   ) as { user:userInfo,message:string };
   const [title, setTitle] = useState<string>();
+  const [senderId, setsenderId] = useState<number>();
+
   const { loading, message, data } = useSelector<RootState>(
     (state) => state.messageByID
   ) as {
@@ -70,7 +72,10 @@ const ChatPage = () => {
       dispatch(fetchuser())
 
     const title=Cookie.get("title")
-   
+    const sender_id=Cookie.get("senderId")
+   if(sender_id){
+    setsenderId(Number(sender_id))
+   }
     if(title){
       setTitle(title)
     }
@@ -79,7 +84,7 @@ const ChatPage = () => {
     const pusher = new Pusher("eac8985b87012d5f5753", {
       cluster: "mt1",
     });
-    const channel = pusher.subscribe(`chats-${2}`);
+    const channel = pusher.subscribe(`chats-${senderId||2}`);
     channel.bind(`newMessage`, function (message:messagePusher) {
       console.log(message,"message")
       const urlPattern = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i;
@@ -97,9 +102,9 @@ createdAt:String(new Date())
       setNewMessage("")
     });
     return () => {
-      pusher.unsubscribe(`chats-${2}`);
+      pusher.unsubscribe(`chats-${senderId||2}`);
     };
-  }, [id]);
+  }, [id,senderId]);
 
   useEffect(() => {
     if (id) {

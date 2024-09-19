@@ -29,6 +29,7 @@ export const MyOffer = () => {
     Cookie.set("title",  message?.details?.type
       ? `${message?.details?.type} ${message?.property?.propertyType?.title}`
       : `${message?.property?.propertyType?.title} قطعة رقم ${message?.landDetails?.plan_number}`)
+      Cookie.set("senderId",String(message?.sender_id))
     router.push(`/ChatPage/${message?.id}`);
 
   };

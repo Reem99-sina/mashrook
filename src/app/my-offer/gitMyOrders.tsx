@@ -397,7 +397,7 @@ export const GitMyOrders = () => {
                   <span>
                     <p className="text-base font-normal text-[#4B5563]">
                       هل أنت متأكد من رغبتك في تنفيذ الانسحاب من الطلب رقم
-                      (2022) ؟
+                      ({idDelete}) ؟
                     </p>
                   </span>
                   <div className="bg-[#FDE8E8] rounded-md mt-5 mb-5 flex items-center justify-start p-1 flex-row gap-1 ">

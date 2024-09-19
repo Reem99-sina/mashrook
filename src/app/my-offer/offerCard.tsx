@@ -362,6 +362,7 @@ export const OfferCard: React.FC<ChatCardProps> = ({
                     Cookie.set("title",  detail?.type
                       ? `${title} ${ detail?.type}`
                       : `${title} قطعة رقم ${detail?.plan_number}`)
+                      Cookie.set("senderId",String(detail?.room[0]?.sender_id))
                   }}
               >
                 عرض المحادثات

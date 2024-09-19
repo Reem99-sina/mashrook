@@ -25,6 +25,7 @@ import {
   imageDeleteRequest,
   imageUpdateRequest
 } from "@/redux/features/postRealEstate";
+import {detailOneInfo,landInfo} from "@/type/addrealestate"
 import Image from "next/image";
 import { getCity, getDistrict } from "@/redux/features/getCity";
 import { FaEdit } from "react-icons/fa";
@@ -36,6 +37,7 @@ import {
   getproperityType,
   getproperityTypeMore,
 } from "@/redux/features/getProperity";
+
 import { getproperityPurposeType } from "@/redux/features/getproperityPurpose";
 import { getproperityOwnerType } from "@/redux/features/getProperityOwnerType";
 import { useMemo, useEffect, useState, useRef } from "react";
@@ -191,38 +193,43 @@ const EditOffer = () => {
       );
     }
     if (dataCom?.details && dataCom?.details?.length > 0) {
-      dataCom?.details?.map((detail: any) => {
-        dispatch(
-          putDetailsType({
-            age: dataCom?.age,
-            area: detail?.area,
-            price: detail?.price,
-            rooms_number: detail?.rooms_number,
-            halls_number: detail?.halls_number,
-            bathrooms_number: detail?.bathrooms_number,
-            kitchens_number: detail?.kitchens_number,
-            pool: detail?.amenities?.pool,
-            garden: detail?.amenities?.garden,
-            servants_room: detail?.amenities?.servants_room,
-            ac: detail?.amenities?.ac,
-            furnished: detail?.amenities?.furnished,
-            car_entrance: detail?.amenities?.car_entrance,
-            garage: detail?.amenities?.garage,
-            kitchen: detail?.amenities?.kitchen,
-            details_id: detail?.id,
+      const ids=compare(dataCom?.details,selectData?.details)
+      dataCom?.details?.map((detail: detailOneInfo) => {
+        if(detail?.id&&ids.includes(detail?.id)){
+          dispatch(
+            putDetailsType({
+              age: dataCom?.age,
+              area: detail?.area,
+              price: detail?.price,
+              rooms_number: detail?.rooms_number,
+              halls_number: detail?.halls_number,
+              bathrooms_number: detail?.bathrooms_number,
+              kitchens_number: detail?.kitchens_number,
+              pool: detail?.amenities?.pool,
+              garden: detail?.amenities?.garden,
+              servants_room: detail?.amenities?.servants_room,
+              ac: detail?.amenities?.ac,
+              furnished: detail?.amenities?.furnished,
+              car_entrance: detail?.amenities?.car_entrance,
+              garage: detail?.amenities?.garage,
+              kitchen: detail?.amenities?.kitchen,
+              details_id: detail?.id,
+            })
+          ).then((res:any)=>{
+            if(res.payload.data){
+              toast.success(res.payload.message);
+              router.push(`/my-offer?title=عروضي`);
+            }else if(res.payload.status){
+              toast.error(res.payload.message);
+              router.push(`/my-offer?title=عروضي`);
+            }
           })
-        ).then((res:any)=>{
-          if(res.payload.data){
-            toast.success(res.payload.message);
-            router.push(`/my-offer?title=عروضي`);
-          }else if(res.payload.status){
-            toast.error(res.payload.message);
-            router.push(`/my-offer?title=عروضي`);
-          }
-        })
+        }
       });
     } else {
-      dataCom?.landDetails?.map((detail: any) =>
+      const ids=compare(dataCom?.details,selectData?.details)
+      dataCom?.landDetails?.map((detail: landInfo) =>{
+        if(detail?.id&&ids.includes(detail?.id)){
         dispatch(
           putLandDetailsType({
             area: detail?.area,
@@ -241,6 +248,8 @@ const EditOffer = () => {
             router.push(`/my-offer?title=عروضي`);
           }
         })
+      }
+      }
       );
     }
   };
@@ -277,7 +286,7 @@ const EditOffer = () => {
       dispatch(getDistrict({ name: dataCom?.propertyLocation?.city }));
     }
   }, [dataCom?.propertyLocation?.city, dispatch]);
- 
+
   return (
     <form className="bg-white flex w-full h-full min-h-screen  flex-col p-5">
       <MainHeader />
@@ -719,6 +728,13 @@ const EditOffer = () => {
                     onChange={(e) => {
                       setData({
                         ...dataCom,
+                        details: dataCom?.details?.map((ele,index) => (
+                          index==0?
+                          {
+                                ...ele,
+                                age: Number(e?.target?.value),
+                              }:ele)
+                        ),
                         age: Number(e?.target?.value),
                       });
                     }}
@@ -821,7 +837,13 @@ const EditOffer = () => {
                     onChange={(e) => {
                       setData({
                         ...dataCom,
-
+                        details: dataCom?.details?.map((ele,index) => (
+                          index==0?
+                          {
+                                ...ele,
+                                age: Number(e?.target?.value),
+                              }:ele)
+                        ),
                         age: Number(e?.target?.value),
                       });
                     }}

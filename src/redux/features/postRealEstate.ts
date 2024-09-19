@@ -191,6 +191,9 @@ export interface earthInter {
   car_entrance: boolean;
  status?:string;
   min_price?:number;
+  createdAt?:string,
+  updatedAt?:string,
+  property_id?:number,
   amenities?:{
     pool?: boolean; // مزايا اضافية مسبح
     garden?: boolean; // مزايا اضافية
