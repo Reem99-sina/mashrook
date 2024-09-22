@@ -40,25 +40,38 @@ const Login: React.FC = () => {
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const status = await validateForm(user, loginSchema, setErrors);
-
     let { email, password } = user;
     if (status == true) {
-      dispatch(login(user));
+      dispatch(login(user)).then((res:any)=>{
+        if(res.payload.message&&!res.payload.status){
+          toast.success(res.payload.message);
+          router.push(`/`);
+        }else if(res.payload.status){
+          toast.error(res.payload.message);
+        }
+      })
+      if(remember==true){
+        const oneWeekInMillis = 7 * 24 * 60 * 60 * 1000; // 7 days in a week
+  const currentTime = new Date().getTime();
+  const timeForWeek = currentTime + oneWeekInMillis;
+        Cookie.set("tokenTime",String(timeForWeek))
+      }else{
+        Cookie.remove("tokenTime")
+      }
       setErrors({ email: "", password: "" });
     }
   };
-  useEffect(() => {
-    const currentTime = new Date().getTime(); 
-     if (Boolean(data) == true) {
-      toast.success(message);
-      // sessionStorage.setItem("token", data?.token);
-      Cookie.set('tokenTime', String(currentTime));  
-      Cookie.set("user", JSON.stringify(data?.user));
-      router.push(`/`);
-    }else if(message&&Boolean(data) == false){
-      toast.error(message);
-    }
-  }, [data, message, router]);
+  // useEffect(() => {
+  //   const currentTime = new Date().getTime(); 
+  //    if (Boolean(data) == true) {
+  //     toast.success(message);
+  //     // sessionStorage.setItem("token", data?.token);
+  //     Cookie.set("user", JSON.stringify(data?.user));
+      
+  //   }else if(message&&Boolean(data) == false){
+  //     toast.error(message);
+  //   }
+  // }, [data, message, router]);
   useEffect(()=>{
     return ()=>{
     dispatch(removeLogin())

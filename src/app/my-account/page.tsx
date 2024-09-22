@@ -33,6 +33,7 @@ const MyAccountPage = () => {
   const onDeleteAccount = () => {
     Cookie.remove("token");
     Cookie.remove("user");
+    Cookie.remove("tokenTime");
     router.push("/")
     dispatch(removeLogin());
     dispatch(removeTokenUser());

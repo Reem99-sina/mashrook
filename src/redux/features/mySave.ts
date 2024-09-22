@@ -5,7 +5,8 @@ import Cookie from 'js-cookie';
 export interface returnType{
     loading:boolean,
     message:string | undefined,
-    data:any
+    data:any,
+    status?:number
 }
 interface comeType{
     property_id:number

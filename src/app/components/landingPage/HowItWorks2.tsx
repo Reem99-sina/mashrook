@@ -19,7 +19,7 @@ export default function HowItWorks2() {
           </div>
           <div className="flex flex-col">
             <Step number={1} title="سجل طلبك" icon={<Onlinebooking9471687 />} showLine={true} />
-            <Step number={2} title="اطلع على اخر العروض" icon={<Mobileapp />} showLine={true} />
+            <Step number={2} title=" اطلع على العروض البديلة" icon={<Mobileapp />} showLine={true} />
             <Step number={3} title="إنضم كشريك إذا ناسبك" icon={<Realestatagent />} showLine={true} />
             <Step number={4} title="خلي الباقي علينا" icon={<Truckicon />} showLine={false} />
           </div>

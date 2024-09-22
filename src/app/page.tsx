@@ -12,7 +12,7 @@ import { AppDispatch, RootState } from "@/redux/store";
 import Cookie from "js-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import { removeToken } from "@/redux/features/loginSlice";
-import {fetchToken}from "@/redux/features/userSlice"
+import {fetchToken,removeTokenUser}from "@/redux/features/userSlice"
 import PropertyCard from "./components/propertyCard/PropertyCard";
 import { MdKeyboardArrowLeft } from "react-icons/md";
 import { useRouter } from "next/navigation";
@@ -46,6 +46,7 @@ export default function Home() {
   const { loading, message, data } = useSelector<RootState>(
     (state) => state.getRequest
   ) as { loading: boolean; message: string; data: dataReturn[] };
+  const timesForWeek=Cookie.get("tokenTime")
   const {  token } = useSelector<RootState>(
     (state) => state.register
   ) as {  token:string };
@@ -57,21 +58,28 @@ export default function Home() {
   useEffect(() => {
     const checkAndRemoveCookie = () => {
       const now = new Date();
+      const currentTime = new Date().getTime();
       const hours = now.getHours();
       // Check if it's 12 AM
-      if (hours === 0) {
+      if (hours === 0&&!timesForWeek) {
         // Remove the token from cookies
         dispatch(removeToken());
         Cookie.remove("user");
         Cookie.remove("token");
+        dispatch(removeTokenUser());
 
+      }else if(currentTime>Number(timesForWeek)){
+        dispatch(removeToken());
+        Cookie.remove("user");
+        Cookie.remove("token");
+        dispatch(removeTokenUser());
       }
     };
     // Run every minute to check if it's 12 AM
-    const interval = setInterval(checkAndRemoveCookie, 60 * 1000);
+    const interval = setInterval(checkAndRemoveCookie, 60*1000);
     // Cleanup the interval when the component unmounts
     return () => clearInterval(interval);
-  }, [dispatch]);
+  }, [dispatch,timesForWeek]);
   useEffect(() => {
     dispatch(getRequest({}));
   }, [dispatch]);

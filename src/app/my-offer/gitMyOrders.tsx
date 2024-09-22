@@ -26,6 +26,7 @@ import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { RealEstateTypeInter } from "@/redux/features/postRealEstate";
 import { deleteProperty, removeDelete, UpdataExpiredDateProperty } from "@/redux/features/getPartners"
+import {FormatNumber} from "@/app/hooks/formatNumber"
 interface criteriaInfo {
   dealStatus: string,
   city: string,
@@ -127,10 +128,10 @@ export const GitMyOrders = () => {
       district: dataOrderOne?.propertyLocation?.district?.replace(/[\[\]\\"]/g, ''),
       budget:
         dataOrderOne?.details && dataOrderOne?.details?.length > 0
-          ? `${dataOrderOne?.details[0]?.min_price} ريال -${dataOrderOne?.details[0]?.price} ريال`
+          ? `${FormatNumber(dataOrderOne?.details[0]?.min_price)} ريال -${FormatNumber(dataOrderOne?.details[0]?.price)} ريال`
           : dataOrderOne?.landDetails &&
           dataOrderOne?.landDetails?.length > 0 &&
-          `${dataOrderOne?.landDetails[0]?.min_price} ريال -${dataOrderOne?.landDetails[0]?.price} ريال`,
+          `${FormatNumber(dataOrderOne?.landDetails[0]?.min_price)} ريال -${FormatNumber(dataOrderOne?.landDetails[0]?.price)} ريال`,
       type:
         dataOrderOne?.details && dataOrderOne?.details?.length > 0
           ? `${dataOrderOne?.details[0]?.status}`

@@ -58,7 +58,7 @@ export const MyOrdersCard: React.FC<ChatCardProps> = ({
   const currentStep = 1;
 
   return (
-    <div className="mt-4 w-full border-2 border-[#E5E7EB] rounded-lg mb-4 flex flex-col p-4">
+    <div className="mt-4 w-full border-2 border-[#3b73b9] rounded-lg mb-4 flex flex-col p-4">
       <div className="items-center justify-between  flex-row flex relative">
         <p className="text-xl font-bold text-[#374151]">{title} </p>
 

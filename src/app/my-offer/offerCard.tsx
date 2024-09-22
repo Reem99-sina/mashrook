@@ -27,6 +27,7 @@ import { LuTag } from "react-icons/lu";
 import { BiArea } from "react-icons/bi";
 import {deleteOfferDetailOrLand,deleteOfferDetail,deleteMessage} from "@/redux/features/getOffers"
 import { useRouter } from "next/navigation";
+import {FormatNumber} from "@/app/hooks/formatNumber"
 import {detailOneInfo} from "@/type/addrealestate"
 interface ChatCardProps {
   title: string;
@@ -121,25 +122,21 @@ export const OfferCard: React.FC<ChatCardProps> = ({
   },[requestNumber,idDelete,dataOffer])
   const onDeleteDetail=()=>{
     if(idDelete){
-      dispatch(deleteOfferDetailOrLand(idDelete))
+      dispatch(deleteOfferDetailOrLand(idDelete)).then((res:any)=>{
+        if(res.payload.message&&!res.payload.status){
+          toast.success(res.payload.message);
+          if((idDelete?.detail_id||idDelete?.land_detail_id&&userCard?.length>0)){
+            dispatch(deleteOfferDetail({data:userCard}))
+          }
+        }else if(res.payload.status){
+          toast.error(res.payload.message);
+        }
+      })
       modalRef.current?.close()
     }
   }
-  useEffect(()=>{
-    if(message=="تم حذف العقار بنجاح"){
-      toast?.success(message)
-      if((idDelete?.detail_id||idDelete?.land_detail_id&&userCard?.length>0)){
-        dispatch(deleteOfferDetail({data:userCard}))
-      }
-    }else if(message=="لايمكن حذف الطلب لوجود مشتركين فيه!"){
-      toast?.error(message)
-    }
-    return ()=>{
-      dispatch(deleteMessage())
-    }
-  },[message,dispatch,userCard,idDelete])
   return (
-    <div className="mt-4 w-full border-2 border-[#E5E7EB] rounded-lg mb-4 flex flex-col p-4">
+    <div className="mt-4 w-full border-2 border-[#3b73b9] rounded-lg mb-4 flex flex-col p-4">
       <div className="items-center justify-between  flex-row flex relative">
         <p className="text-xl font-bold text-[#374151]">{title} </p>
 
@@ -242,7 +239,7 @@ export const OfferCard: React.FC<ChatCardProps> = ({
           <div  key={`detail-${index}`}>
             <div
              
-              className="bg-white shadow-lg rounded-lg p-2 mb-4"
+              className="bg-white shadow-lg rounded-lg p-2 mb-4 border-2 border-[#3b73b9]"
             >
               <div className="flex flex-row flex-no-wrap items-center justify-center md:flex-row sm:flex-col ">
                 <div className="ml-auto text-right py-1 ">
@@ -264,7 +261,7 @@ export const OfferCard: React.FC<ChatCardProps> = ({
                     <div className="bg-gray-200 rounded-xl px-2 flex items-center">
                       <LuTag />
                       <p className="text-base  md:text-xs lg:text-sm mx-2">
-                        {detail?.price} {"ريال"}
+                        {FormatNumber(detail?.price)} {"ريال"}
                         <span className="text-[#3B73B9]">
                           {" "}
                           (بدون القيمة المضافة أو السعي)
@@ -301,7 +298,7 @@ export const OfferCard: React.FC<ChatCardProps> = ({
                       <div className="">
                         <p className="text-xs text-gray-500">متاح</p>
                         <p className="text-xs text-gray-500">
-                          {detail?.available_price}ريال
+                          {FormatNumber(detail?.available_price)}ريال
                         </p>
                       </div>
                     </>

@@ -11,6 +11,8 @@ import {fetchToken}from "@/redux/features/userSlice"
 import { validateForm } from "@/app/hooks/validate";
 import { dataReturn, addUnqiue, typePay } from "@/redux/features/getRequest";
 import { amountSchema } from "@/typeSchema/schema";
+import {FormatNumber} from "@/app/hooks/formatNumber"
+import toast from "react-hot-toast"
 type JoinStatusButtonsProps = {
   currentDealStatus: boolean;
   data: typePay;
@@ -45,6 +47,7 @@ const JoinStatusButtons: React.FC<JoinStatusButtonsProps> = ({
   }>();
 
   const handleDialogToggle = () => {
+    
     setShowDialog(!showDialog);
   };
   const handleSubmit = async () => {
@@ -71,8 +74,17 @@ const JoinStatusButtons: React.FC<JoinStatusButtonsProps> = ({
   };
 
   const handlePercentageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPartnershipPercentage(Number(e.target.value));
+    const value=Number(e.target.value)
+    if(value<=data?.available_percentage){
+      setErrors((prev)=>({...prev,amount:``}))
+      setPartnershipPercentage(Number(e.target.value));
+    }else{
+      setErrors((prev)=>({...prev,amount:`نسبة متاحة لا ينفع ان تتجاوز ${data?.available_percentage}%`}))
+      setPartnershipPercentage(data?.available_percentage);
+    }
+
   };
+
   useEffect(() => {
     const inputElement = document.querySelector('input[type="range"]');
     const tooltipElement = tooltipRef.current;
@@ -106,9 +118,8 @@ const JoinStatusButtons: React.FC<JoinStatusButtonsProps> = ({
   }, []);
 
   const partnershipAmount = useMemo(() => {
-    return (data?.available_price * partnershipPercentage) / 100;
-  }, [data?.available_price, partnershipPercentage]);
-
+    return data?.price&&data?.area?(data?.price * partnershipPercentage *data?.area) / 100:100;
+  }, [data?.price, partnershipPercentage,data?.area]);
   useEffect(() => {
     if (typeof window !== "undefined") {
       sessionStorage.setItem("amount", String(partnershipAmount));
@@ -133,22 +144,29 @@ const JoinStatusButtons: React.FC<JoinStatusButtonsProps> = ({
           type="button"
           className={`${
             data?.stage === "finished" ||
-            Boolean(token) == false ||
+          
             user?.id == dataMain?.user_id
               ? "bg-gray-300 text-gray-800"
               : "bg-blue-450 text-white hover:bg-blue-800 border-2 border-blue-500"
           } w-3/4 font-medium rounded-lg text-sm px-5 py-2.5 flex justify-center rtl:flex-row-reverse dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
           disabled={
             data?.stage === "finished" ||
-            Boolean(token) == false ||
+          
             user?.id == dataMain?.user_id
           }
-          onClick={handleDialogToggle}
+          onClick={()=>{
+              if (!token) {
+                toast.error("انت تحتاج الي تسجيل دخول");
+                router.push("/login");
+              } else {
+                handleDialogToggle()
+              }
+          }}
         >
           <RxArrowLeft
             className={`mr-4 text-xl ${
               data?.stage === "finished" ||
-              Boolean(token) == false ||
+            
               user?.id == dataMain?.user_id
                 ? "text-gray-600"
                 : "text-white"
@@ -178,10 +196,18 @@ const JoinStatusButtons: React.FC<JoinStatusButtonsProps> = ({
               <p></p>
             </div>
             <div className="mb-4">
+              <p className="text-sm font-medium">
+                المبلغ الكلي
+                <span className="text-blue-450 font-bold mx-4">
+                  {data?.price&&data?.area?FormatNumber(data?.price *data?.area):""} ريال
+                </span>
+              </p>
+            </div>
+            <div className="mb-4">
               <p className="text-lg font-medium">
                 المبلغ المتاح
                 <span className="text-blue-450 font-bold mx-4">
-                  {data?.available_price} ريال
+                  {FormatNumber(data?.available_price)} ريال
                 </span>
               </p>
             </div>

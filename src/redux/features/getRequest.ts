@@ -279,6 +279,16 @@ const requestGetSlice = createSlice({
           return ele
         }
       }) 
+    },
+    addSelectSave:(state, action)=>{
+      if(state.selectData){
+        state.selectData = {...state.selectData,propertySaved:state.selectData?.propertySaved?[...state.selectData?.propertySaved,action.payload.data]:[action.payload.data]} 
+      }
+    },
+    removeSelectSave:(state, action)=>{
+      if(state.selectData){
+      state.selectData = {...state.selectData,propertySaved:state.selectData?.propertySaved?.filter((removeSave:saveElement)=>removeSave?.property_id!=action?.payload?.id)} 
+      }
     }
   },
   extraReducers: (builder) => {
@@ -316,5 +326,5 @@ const requestGetSlice = createSlice({
   },
 });
 
-export const { addUnqiue,addSave ,removeSave} = requestGetSlice.actions;
+export const { addUnqiue,addSave ,removeSave,addSelectSave,removeSelectSave} = requestGetSlice.actions;
 export default requestGetSlice.reducer;

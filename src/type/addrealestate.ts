@@ -265,3 +265,8 @@ export interface partnerInterface{
     details: null|detailOneInfo
     // property:
 }
+export interface RequestInfo{
+    message?:string,
+    data?:any,
+    status?:number
+}

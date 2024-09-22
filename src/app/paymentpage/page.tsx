@@ -234,13 +234,14 @@ let [url,setUrl]=useState<any>()
                     <div className="flex gap-2  flex-row-reverse mt-5">
               <div
                 onClick={() => refImage.current?.click()}
-                className="cursor-pointer bg-[#3B73B9]"
+                className="cursor-pointer flex flex-row-reverse gap-x-2"
               >
                 <Image src={Add} width={21} height={21} alt={"add"} />
-              </div>
+              
               <p className="text-sm text-[#3B73B9] font-bold">
                 أضف صورة / ملف
               </p>
+              </div>
               {errors?.receipt?<p className="text-xs text-red-600 dark:text-red-500 text-right">
                   {String(errors?.receipt)}
                 </p>:<></>}

@@ -14,6 +14,7 @@ import {
 } from "../assets/svg";
 import toast from "react-hot-toast";
 import Cookie from "js-cookie";
+import {FormatNumber} from "@/app/hooks/formatNumber"
 import Pagination from "../components/shared/pagination";
 import {
   getPartner,
@@ -137,7 +138,7 @@ export const GitMyPartners = () => {
   },[dataPartner])
   const title=useMemo(()=>{
     return (partner:realEstatePartner)=>{
-      return partner?.details_id?`${partner?.property?.propertyType?.title} ${partner?.details?.type}`:`${partner?.property?.propertyType?.title} 
+      return partner?.details_id?`${partner?.property?.propertyType?.title} (${partner?.details?.type})`:`${partner?.property?.propertyType?.title} 
      القطعة رقم ${partner?.landDetails?.plan_number}
       `
     }
@@ -156,7 +157,7 @@ export const GitMyPartners = () => {
           /[\[\]\\"]/g,
           ""
         ),
-        budget: `${ele?.amount} ريال`,
+        budget: `${FormatNumber(ele?.amount)} ريال`,
         PartnershipNumber: ele?.id,
         realEstate:
           ele?.details?.type ||

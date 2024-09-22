@@ -9,9 +9,10 @@ import { CarouselDefault } from "./Carousel3";
 import { GoLocation } from "react-icons/go";
 import { BsPerson } from "react-icons/bs";
 import { format } from "date-fns";
+import {addSelectSave,removeSelectSave} from "@/redux/features/getRequest"
 import { FaBookmark, FaChevronRight, FaRegCalendarAlt } from "react-icons/fa";
 import { CgSmartphoneShake } from "react-icons/cg";
-import {userInfo,saveElement} from "@/type/addrealestate"
+import {userInfo,saveElement,RequestInfo} from "@/type/addrealestate"
 import {
   IoIosCheckmarkCircleOutline,
   IoMdCloseCircleOutline,
@@ -120,51 +121,49 @@ const PropertyDetails: React.FC<{id:number}> = ({id}:{id:number}) => {
       setShowReportNotification(false);
     }, 3000);
   };
-
+  const showNotificationSaveMessage = () => {
+    setShowNotification(true);
+            setTimeout(() => {
+              setShowNotification(false);
+            }, 3000);
+  };
   const handleSaveClick = (ele:dataReturn) => {
+    // setSaved(ele)
     if(ele?.id){
       if(save(ele)==false){
-        dispatch(postSave({property_id:ele?.id}))
+        dispatch(postSave({property_id:ele?.id})).then((res:any)=>{
+          if(res?.payload?.message&&!res?.payload?.status){
+            setNotificationMessage(res?.payload?.message);
+            dispatch(addSelectSave({id:ele?.id,data:res?.payload?.data}))
+            showNotificationSaveMessage()
+          }else{
+            setNotificationMessage(res?.payload?.message);
+            showNotificationSaveMessage()
+          }          
+        })
       }else{
-        dispatch(deleteSaves({id:ele?.id}))
+        dispatch(deleteSaves({id:ele?.id})).then((res:any)=>{
+          if(res?.payload?.message&&!res?.payload?.status){
+            setNotificationMessage(res?.payload?.message);
+            console.log(ele?.id,"ele?.id")
+            dispatch(removeSelectSave({id:ele?.id}))
+            showNotificationSaveMessage()
+              }else{
+                setNotificationMessage(res?.payload?.message);
+                showNotificationSaveMessage()
+              }
+          })
       }
     }
-    // if (!saved) {
-    //   setNotificationMessage("تم الحفظ");
-    // } else {
-    //   setNotificationMessage("تم الغاء الحفظ");
-    // }
-    // setSaved(!saved);
-    // setShowNotification(true);
-    // setTimeout(() => {
-    //   setShowNotification(false);
-    // }, 3000);
   };
   useEffect(() => {
     dispatch(fetchuser())
 }, [dispatch]);
 useEffect(()=>{
-  if(messageSave&&Boolean(dataSave)==true){
-    setNotificationMessage("تم الحفظ");
-    setSaved(!saved);
-    setShowNotification(true);
-    setTimeout(() => {
-      setShowNotification(false);
-    }, 5000);
-
-  }else if (messageSave=="Properties removed successfully"&&Boolean(dataSave)==false){
-    
-    setNotificationMessage("تم الغاء الحفظ");
-    setSaved(!saved);
-    setShowNotification(true);
-    setTimeout(() => {
-      setShowNotification(false);
-    }, 5000);
-  }
   return ()=>{
     dispatch(deleteSave())
   }
-},[messageSave,dataSave,dispatch,saved])
+},[dispatch])
 
   useEffect(()=>{
     if(messageReport&&status){

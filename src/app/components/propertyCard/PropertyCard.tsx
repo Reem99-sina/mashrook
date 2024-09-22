@@ -9,6 +9,7 @@ import {
 } from "react-icons/fa";
 import { BsPerson } from "react-icons/bs";
 import toast from "react-hot-toast";
+import {FormatNumber} from "@/app/hooks/formatNumber"
 import { format } from "date-fns";
 import CircularProgressBar from "./RadialProgressBar";
 import { GoLocation } from "react-icons/go";
@@ -62,14 +63,37 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ page, limit }) => {
   let { loading:loadingSave, message:messageSave, data:dataSave } = useSelector<RootState>(
     (state) => state.save
   ) as { loading: boolean; message: string; data: any };
-
+  const showNotificationSaveMessage = () => {
+    setShowNotification(true);
+            setTimeout(() => {
+              setShowNotification(false);
+            }, 3000);
+  };
   const handleSaveClick = (ele:any) => {
     setSaved(ele)
     if(ele?.id){
       if(save(ele)==false){
-        dispatch(postSave({property_id:ele?.id}))
+        dispatch(postSave({property_id:ele?.id})).then((res:any)=>{
+          if(res?.payload?.message&&!res?.payload?.status){
+            setNotificationMessage(res?.payload?.message);
+            dispatch(addSave({id:ele?.id,data:res?.payload?.data}))
+            showNotificationSaveMessage()
+          }else{
+            setNotificationMessage(res?.payload?.message);
+            showNotificationSaveMessage()
+          }          
+        })
       }else{
-        dispatch(deleteSaves({id:ele?.id}))
+        dispatch(deleteSaves({id:ele?.id})).then((res:any)=>{
+          if(res?.payload?.message&&!res?.payload?.status){
+            setNotificationMessage(res?.payload?.message);
+            dispatch(removeSave({id:ele?.id}))
+            showNotificationSaveMessage()
+              }else{
+                setNotificationMessage(res?.payload?.message);
+                showNotificationSaveMessage()
+              }
+          })
       }
     }
   };
@@ -81,7 +105,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ page, limit }) => {
       cards.push(
         <div
           key={`${ele?.details[i]?.id}-0`}
-          className="bg-white shadow-lg rounded-lg p-2 mb-4"
+          className="bg-white shadow-lg rounded-lg p-2 mb-4 border-2 border-[#3b73b9]"
         >
           <div className="flex flex-row flex-no-wrap items-center justify-center md:flex-row sm:flex-col ">
             <div className="ml-auto text-right py-1 ">
@@ -106,7 +130,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ page, limit }) => {
                 <div className="bg-gray-200 rounded-xl  flex items-center p-2">
                   <LuTag />
                   <p className="text-base  md:text-xs lg:text-sm mx-2">
-                    {ele?.details[i]?.price || ele?.price} {"ريال"}
+                    {FormatNumber(ele?.details[i]?.price) || FormatNumber(ele?.price)} {"ريال"}
                     <span className="text-[#3B73B9]">
                       {" "}
                       (بدون القيمة المضافة أو السعي)
@@ -143,7 +167,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ page, limit }) => {
                   <div className="">
                     <p className="text-xs text-gray-500">متاح</p>
                     <p className="text-xs text-gray-500">
-                      {ele?.details[i]?.available_price}ريال
+                      {FormatNumber(ele?.details[i]?.available_price)}ريال
                     </p>
                   </div>
                 </>
@@ -171,7 +195,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ page, limit }) => {
         cards.push(
           <div
             key={`${ele?.landDetails[i]?.id}-`}
-            className="bg-white shadow-lg rounded-lg p-2 mb-4"
+            className="bg-white shadow-lg rounded-lg p-2 mb-4 border-2 border-[#3b73b9]"
           >
             <div className="flex flex-row flex-no-wrap items-center justify-center md:flex-row sm:flex-col ">
               <div className="ml-auto text-right py-1 ">
@@ -195,7 +219,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ page, limit }) => {
                   <div className="bg-gray-200 rounded-xl px-2 flex items-center">
                     <LuTag />
                     <p className="text-base md:text-xs lg:text-sm mx-2">
-                      {ele?.landDetails[i]?.price} {"ريال"}
+                      { FormatNumber(ele?.landDetails[i]?.price)} {"ريال"}
                       <span className="text-[#3B73B9]">
                         {" "}
                         (بدون القيمة المضافة أو السعي)
@@ -232,7 +256,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ page, limit }) => {
                     <div className="">
                       <p className="text-xs text-gray-500">متاح</p>
                       <p className="text-xs text-gray-500">
-                        {ele?.landDetails[i]?.available_price}ريال
+                        {FormatNumber(ele?.landDetails[i]?.available_price)}ريال
                       </p>
                     </div>
                   </>
@@ -256,35 +280,18 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ page, limit }) => {
     return page && limit ? data?.slice((page - 1) * limit, page * limit) : data;
   }, [data, page, limit]);
   useEffect(() => {
-
     dispatch(fetchuser())
 }, [dispatch]);
   useEffect(()=>{
-    if(messageSave&&Boolean(dataSave)==true){
-        setNotificationMessage("تم الحفظ");
-        dispatch(addSave({id:dataSave?.property_id,data:dataSave}))
-      setShowNotification(true);
-      setTimeout(() => {
-        setShowNotification(false);
-      }, 5000);
-  
-    }else if (messageSave=="Properties removed successfully"&&Boolean(dataSave)==false){
-      setNotificationMessage("تم الغاء الحفظ");
-      dispatch(removeSave({id:saved?.id}))
-      setShowNotification(true);
-      setTimeout(() => {
-        setShowNotification(false);
-      }, 5000);
-    }
     return ()=>{
       dispatch(deleteSave())
     }
-  },[messageSave,dataSave,dispatch,saved?.id])
+  },[dispatch])
   return (
     <div className="mb-4">
       {dataPage?.map((ele: dataReturn, offerIndex: number) => (
         <div key={ele?.id} id="offerCard" className="flex flex-col ">
-          <div className="flex flex-col mt-4 mx-2 border-2 rounded-lg p-4 bg-white">
+          <div className="flex flex-col mt-4 mx-2 border-2 rounded-lg p-4 bg-white border-[#3b73b9]">
             <div className="flex justify-between py-2 container items-start">
               <div className="flex flex-col justify-between h-full items-start">
                 <p className="text-2xl px-4 text-black mb-4 font-bold">
