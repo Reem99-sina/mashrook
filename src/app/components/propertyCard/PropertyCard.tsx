@@ -75,7 +75,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ page, limit }) => {
       if(save(ele)==false){
         dispatch(postSave({property_id:ele?.id})).then((res:any)=>{
           if(res?.payload?.message&&!res?.payload?.status){
-            setNotificationMessage(res?.payload?.message);
+            setNotificationMessage("تم الحفظ");
             dispatch(addSave({id:ele?.id,data:res?.payload?.data}))
             showNotificationSaveMessage()
           }else{
@@ -86,7 +86,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ page, limit }) => {
       }else{
         dispatch(deleteSaves({id:ele?.id})).then((res:any)=>{
           if(res?.payload?.message&&!res?.payload?.status){
-            setNotificationMessage(res?.payload?.message);
+            setNotificationMessage("تم الغاء الحفظ");
             dispatch(removeSave({id:ele?.id}))
             showNotificationSaveMessage()
               }else{

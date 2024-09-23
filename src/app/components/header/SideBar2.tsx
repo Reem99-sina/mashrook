@@ -62,17 +62,17 @@ export default function SideBar({ sidebarOpen, toggleSidebar }: SideBarProps) {
                 </li>
                 {token&&<>
                 
-                  <li className="mb-4 hover:bg-gray-200" >
+                  <li className="mb-4 hover:bg-gray-200"  onClick={toggleSidebar}>
                   <Link href="/my-offer?title=طلباتي" className="">
                  طلباتي
                   </Link>
                 </li>
-                <li className="mb-4 hover:bg-gray-200">
+                <li className="mb-4 hover:bg-gray-200"onClick={toggleSidebar}>
                   <Link href="/my-offer?title=شراكاتي" className=" ">
                   شراكاتي
                   </Link>
                 </li>
-                <li className="mb-4 hover:bg-gray-200">
+                <li className="mb-4 hover:bg-gray-200"onClick={toggleSidebar}>
                   <Link href="/my-offer?title=عروضي" className=" ">
                   عروضي
                   </Link>

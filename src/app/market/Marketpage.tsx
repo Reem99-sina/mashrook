@@ -77,9 +77,9 @@ const MarketPage: React.FC = () => {
           : "",
       sort:
         sortOption == "latest"
-          ? "created_asc"
-          : sortOption == "oldest"
           ? "created_decs"
+          : sortOption == "oldest"
+          ? "created_acs"
           : sortOption == "priceLowToHigh"
           ? "price_asc"
           : "price_desc",

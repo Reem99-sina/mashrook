@@ -662,7 +662,7 @@ const EditOffer = () => {
                     measurement="متر"
                   />
                   <InputAreaPrice
-                    title="السعر"
+                    title="السعر للمتر المربع"
                     value={ele?.price?ele?.price:""}
                     onChange={(event) =>
                       setData({
@@ -705,7 +705,7 @@ const EditOffer = () => {
             ? dataCom?.details?.map((detail) => (
                 <>
                   <InputAreaPrice
-                    title="السعر"
+                    title="السعر للمتر المربع"
                     onChange={(event) =>
                       setData({
                         ...dataCom,
@@ -898,7 +898,7 @@ const EditOffer = () => {
                         measurement="متر"
                       />
                       <InputAreaPrice
-                        title="السعر"
+                        title="السعر للمتر المربع"
                         onChange={(e) =>
                           setData({
                             ...dataCom,
@@ -1136,7 +1136,7 @@ const EditOffer = () => {
                       measurement="متر"
                     />
                     <InputAreaPrice
-                      title="السعر"
+                      title="السعر للمتر المربع"
                       onChange={(event) =>
                         setData({
                           ...dataCom,
