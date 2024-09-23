@@ -175,7 +175,7 @@ const EditMyOffer = () => {
         />
 
         <InputAreaPrice
-          title="السعر"
+          title="السعر للمتر المربع"
           onChange={(event) =>
             setOffer((prev: any) => ({
               ...prev,

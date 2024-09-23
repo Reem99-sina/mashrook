@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {getSaves} from "@/redux/features/mySave"
 import { OfferCard } from "./component/offerCard";
 import { format } from "date-fns";
+import {FormatNumber} from "@/app/hooks/formatNumber"
 import {
   Note
 } from "@/app/assets/svg";
@@ -29,43 +30,46 @@ const MySavePage=()=>{
         router.push("/my-account");
       };
       let dataSaves = useMemo(() => {
-    return data?.map((dataSave: any) => ({
-      id:dataSave?.id,
-      title:
-        dataSave?.property?.propertyTypeDetails?.title ||
-        dataSave?.property?.propertyType?.title,
-      inProgress: true,
-      date: dataSave?.createdAt
-        ? format(new Date(dataSave?.createdAt), "yyyy-MM-dd")
-        : "",
-      requestNumber: dataSave?.property_id,
-      count: 8,
-      city: dataSave?.property?.propertyLocation?.city,
-
-      district: dataSave?.property?.propertyLocation?.district?.replace(/[\[\]\\"]/g, ''),
-      house: true,
-      budget:
-        dataSave?.property?.details && dataSave?.property?.details?.length > 0
-          ? `${dataSave?.property?.details[0]?.min_price} ريال -${dataSave?.property?.details[0]?.price} ريال`
-          : dataSave?.property?.landDetails &&
-            dataSave?.property?.landDetails?.length > 0 &&
-            `${dataSave?.property?.landDetails[0]?.min_price} ريال -${dataSave?.property?.landDetails[0]?.price} ريال`,
-      type:
-        dataSave?.property?.details && dataSave?.property?.details?.length > 0
-          ? `${dataSave?.property?.details[0]?.status}`
-          : dataSave?.property?.landDetails &&
-            dataSave?.property?.landDetails?.length > 0 &&
-            `${dataSave?.property?.landDetails[0]?.status}`,
-      lisNumber: dataSave?.property?.license_number,
-      details:
-        dataSave?.property?.details && dataSave?.property?.details?.length > 0
-          ? dataSave?.property?.details
-          : dataSave?.property?.landDetails &&
-            dataSave?.property?.landDetails?.length > 0 &&
-            dataSave?.property?.landDetails,
-            property_id:dataSave?.property_id
-    }));
-  }, [data]);
+        if(data?.length>0){
+          return data?.map((dataSave: any) => ({
+            id:dataSave?.id,
+            title:
+              dataSave?.property?.propertyTypeDetails?.title ||
+              dataSave?.property?.propertyType?.title,
+            inProgress: true,
+            date: dataSave?.createdAt
+              ? format(new Date(dataSave?.createdAt), "yyyy-MM-dd")
+              : "",
+            requestNumber: dataSave?.property_id,
+            count: 8,
+            city: dataSave?.property?.propertyLocation?.city,
+            purpose:dataSave?.property?.propertyPurpose?.title,
+            propertyOwnerType:dataSave?.property?.propertyOwnerType?.title,
+            district: dataSave?.property?.propertyLocation?.district?.replace(/[\[\]\\"]/g, ''),
+            house: true,
+            budget:
+              dataSave?.property?.details && dataSave?.property?.details?.length > 0
+                ? `${FormatNumber(dataSave?.property?.details[0]?.min_price)} ريال -${FormatNumber(dataSave?.property?.details[0]?.price)} ريال`
+                : dataSave?.property?.landDetails &&
+                  dataSave?.property?.landDetails?.length > 0 &&
+                  `${FormatNumber(dataSave?.property?.landDetails[0]?.min_price)} ريال -${FormatNumber(dataSave?.property?.landDetails[0]?.price)} ريال`,
+            type:
+              dataSave?.property?.details && dataSave?.property?.details?.length > 0
+                ? `${dataSave?.property?.details[0]?.status}`
+                : dataSave?.property?.landDetails &&
+                  dataSave?.property?.landDetails?.length > 0 &&
+                  `${dataSave?.property?.landDetails[0]?.status}`,
+            lisNumber: dataSave?.property?.license_number,
+            details:
+              dataSave?.property?.details && dataSave?.property?.details?.length > 0
+                ? dataSave?.property?.details
+                : dataSave?.property?.landDetails &&
+                  dataSave?.property?.landDetails?.length > 0 &&
+                  dataSave?.property?.landDetails,
+                  property_id:dataSave?.property_id
+          }));      
+        }
+      }, [data]);
   
       useEffect(()=>{
         dispatch(getSaves())
@@ -89,6 +93,7 @@ const MySavePage=()=>{
                <div style={{direction:"ltr"}} className="m-5">
                   <FilterPart/>
                </div>
+               <div className="mx-2">
               {dataSaves?.length>0?dataSaves?.map((offer:any,index:number)=> <OfferCard
               key={offer?.requestNumber}
                  offer={offer}
@@ -103,6 +108,7 @@ const MySavePage=()=>{
                     </p>
                   </div>
                 )}
+                </div>
            </>
       
     )

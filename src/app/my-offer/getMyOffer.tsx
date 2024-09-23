@@ -267,7 +267,7 @@ export const GitMyOffers = () => {
 
         ) : dataPagination?.length > 0 ? (
           <div>
-            <div>
+            <div className="mx-2">
               {dataPagination?.map((offer: any, index: number) => (
 
                 <OfferCard

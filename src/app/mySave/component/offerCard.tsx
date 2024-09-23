@@ -10,6 +10,8 @@ import {
   Rebuild,
   ChatIconSmall,
 } from "@/app/assets/svg";
+import {FormatNumber} from "@/app/hooks/formatNumber"
+
 import {postSave,deleteSave,deleteSaves,deleteSaveId} from "@/redux/features/mySave"
 import {
   FaRegCalendarAlt,
@@ -71,7 +73,7 @@ offer
     }
   },[messageSave,dataSave,dispatch,offer?.requestNumber])
   return (
-    <div className="mt-4 w-full border-2 border-[#E5E7EB] rounded-lg mb-4 flex flex-col p-4" key={offer?.requestNumber}>
+    <div className="mt-4 w-full border-2 border-[#E5E7EB] rounded-lg mb-4  flex flex-col p-2" key={offer?.requestNumber}>
       <div className="items-center justify-between  flex-row flex relative">
         <p className="text-xl font-bold text-[#374151]">{offer?.title} </p>
 
@@ -84,12 +86,16 @@ offer
         <div className="flex flex-row gap-x-2 text-xs">
           <span
             className={`text-white text-right px-4 py-1 rounded-2xl ${
-              offer?.purpose === "للبيع" ? "bg-green-450" : "bg-orange-450"
+              offer?.purpose === "بيع" ? "bg-green-450" : "bg-orange-450"
             }`}
           >
-            {offer?.purpose === "للبيع" ? offer?.purpose : "تطوير"}
+            {offer?.purpose === "بيع" ? offer?.purpose : "تطوير"}
           </span>
-         
+          <span
+            className={`text-black text-right px-4 py-1 rounded-2xl bg-gray-200`}
+          >
+            {offer?.propertyOwnerType}
+          </span>
           <span
             className={`text-black text-right px-4 py-1 rounded-2xl ${"bg-gray-200"}`}
           >
@@ -104,10 +110,10 @@ offer
         </p>
       </div>
       <div className="pt-1 mr-4 text-sm text-gray-700 mt-2">
-        <div className="flex items-center justify-start">
+       {offer?.lisNumber&& <div className="flex items-center justify-start">
           <CgSmartphoneShake className="w-[16px]" />
           <p className="px-2">ترخيص رقم: {offer?.lisNumber}</p>
-        </div>
+        </div>}
         <div className="flex items-center  justify-start">
           <GoLocation />
           <p className="px-2">
@@ -120,7 +126,7 @@ offer
           <>
             <div
               key={`detail-${index}`}
-              className="bg-white shadow-lg rounded-lg p-2 mb-4"
+              className="bg-white shadow-lg rounded-lg p-2 mb-4 border-2"
             >
               <div className="flex flex-row flex-no-wrap items-center justify-center md:flex-row sm:flex-col ">
                 <div className="ml-auto text-right py-1 ">
@@ -132,11 +138,17 @@ offer
                           `قطعة رقم  ${detail?.piece_number}`}
                     </p>
                   </div>
+                  <div className="flex items-center  justify-start">
+          <GoLocation />
+          <p className="px-2">
+            مدينة {offer?.city}، {offer?.district}
+          </p>
+        </div>
                   <div className="flex flex-col gap-y-2 my-2 flex-wrap items-start">
                     <div className="bg-gray-200 rounded-xl px-2 flex items-center">
                       <LuTag />
                       <p className="text-base  md:text-xs lg:text-sm mx-2">
-                        {detail?.price} {"ريال"}
+                        {detail?.price&&FormatNumber(detail?.price)} {"ريال"}
                         <span className="text-[#3B73B9]">
                           {" "}
                           (بدون القيمة المضافة أو السعي)
@@ -173,7 +185,7 @@ offer
                       <div className="">
                         <p className="text-xs text-gray-500">متاح</p>
                         <p className="text-xs text-gray-500">
-                          {detail?.available_price}ريال
+                          {detail?.available_price&&FormatNumber(detail?.available_price)}ريال
                         </p>
                       </div>
                     </>
