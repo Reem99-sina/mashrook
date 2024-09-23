@@ -136,7 +136,7 @@ export const OfferCard: React.FC<ChatCardProps> = ({
     }
   }
   return (
-    <div className="mt-4 w-full border-2 border-[#3b73b9] rounded-lg mb-4 flex flex-col p-4">
+    <div className="mt-4 w-full border-2  rounded-lg mb-4 flex flex-col p-4">
       <div className="items-center justify-between  flex-row flex relative">
         <p className="text-xl font-bold text-[#374151]">{title} </p>
 
@@ -239,7 +239,7 @@ export const OfferCard: React.FC<ChatCardProps> = ({
           <div  key={`detail-${index}`}>
             <div
              
-              className="bg-white shadow-lg rounded-lg p-2 mb-4 border-2 border-[#3b73b9]"
+              className="bg-white shadow-lg rounded-lg p-2 mb-4 border-2"
             >
               <div className="flex flex-row flex-no-wrap items-center justify-center md:flex-row sm:flex-col ">
                 <div className="ml-auto text-right py-1 ">

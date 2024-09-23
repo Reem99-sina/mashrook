@@ -105,7 +105,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ page, limit }) => {
       cards.push(
         <div
           key={`${ele?.details[i]?.id}-0`}
-          className="bg-white shadow-lg rounded-lg p-2 mb-4 border-2 border-[#3b73b9]"
+          className="bg-white shadow-lg rounded-lg p-2 mb-4 border-2 "
         >
           <div className="flex flex-row flex-no-wrap items-center justify-center md:flex-row sm:flex-col ">
             <div className="ml-auto text-right py-1 ">
@@ -195,7 +195,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ page, limit }) => {
         cards.push(
           <div
             key={`${ele?.landDetails[i]?.id}-`}
-            className="bg-white shadow-lg rounded-lg p-2 mb-4 border-2 border-[#3b73b9]"
+            className="bg-white shadow-lg rounded-lg p-2 mb-4 border-2"
           >
             <div className="flex flex-row flex-no-wrap items-center justify-center md:flex-row sm:flex-col ">
               <div className="ml-auto text-right py-1 ">
@@ -291,7 +291,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ page, limit }) => {
     <div className="mb-4">
       {dataPage?.map((ele: dataReturn, offerIndex: number) => (
         <div key={ele?.id} id="offerCard" className="flex flex-col ">
-          <div className="flex flex-col mt-4 mx-2 border-2 rounded-lg p-4 bg-white border-[#3b73b9]">
+          <div className="flex flex-col mt-4 mx-2 border-2 rounded-lg p-4 bg-white">
             <div className="flex justify-between py-2 container items-start">
               <div className="flex flex-col justify-between h-full items-start">
                 <p className="text-2xl px-4 text-black mb-4 font-bold">
