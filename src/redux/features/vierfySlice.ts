@@ -4,6 +4,7 @@ import Cookie from "js-cookie";
 interface verifyEmail {
   email: string;
   code: string;
+  device_token?:string;
 }
 interface verifyCodeEmail {
   email: string;

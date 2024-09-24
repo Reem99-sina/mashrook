@@ -13,12 +13,14 @@ import toast from "react-hot-toast";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import Cookie from "js-cookie"
 import { useRouter } from "next/navigation";
+import useFcmToken from '@/utils/hooks/useFcmToken';
 const Verify: React.FC = () => {
   const router = useParams();
   const links = useRouter();
   const inputRefs = useRef<(HTMLInputElement|null)[]>([]);  
   const { email } = router;
   const [code, setCode] = useState(Array(4).fill(""));
+  const { fcmToken,notificationPermissionStatus } = useFcmToken();
   const [time, settime] = useState(60);
   const [canResend, setCanResend] = useState(false);
   let dispatch = useDispatch<AppDispatch>();
@@ -47,27 +49,31 @@ const Verify: React.FC = () => {
         verifyRequest({
           email: String(email)?.replace("%40", "@"),
           code: code.join(""),
+          device_token:fcmToken
         })
-      );
+      ).then((res:any)=>{
+        if(res.payload.message&&!res.payload.status){
+          toast.success(res.payload.message);
+          Cookie.set("token", data?.token);
+          links.push(`/`);
+        }else if(res.payload.status){
+          toast.error(res.payload.message);
+        }
+      })
     } else {
       toast.error("you need email and code");
     }
   };
   const onResend=()=>{
-    dispatch(resendCodeRequest({email:String(email)?.replace("%40", "@")}))
+    dispatch(resendCodeRequest({email:String(email)?.replace("%40", "@")})).then((res:any)=>{
+      if(res.payload.message&&!res.payload.status){
+        toast.success(res.payload.message);
+      }else if(res.payload.status){
+        toast.error(res.payload.message);
+      }
+    })
   }
-  useEffect(() => {
-    if (message && Boolean(data) == false&&message!="تم إرسال الكود اللي الايميل.") {
-      toast.error(message);
-    } else if (Boolean(data) == true) {
-      toast.success(message);
-      Cookie.set("token", data?.token);
-      links.push(`/`);
-    }else if(message=="تم إرسال الكود اللي الايميل." && Boolean(data) == false){
-      settime(60)
-      toast.success(message)
-    }
-  }, [message, links, data]);
+ 
   useEffect(() => {
     let interval:NodeJS.Timeout;
     if (time > 0) {

@@ -10,31 +10,26 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import Cookie from 'js-cookie';
 import { login,removeLogin } from "@/redux/features/loginSlice";
+import { resendCodeRequest } from "@/redux/features/vierfySlice";
 import toast from "react-hot-toast";
-import { loginSchema } from "@/typeSchema/schema";
+import { ForgetSchema } from "@/typeSchema/schema";
 import { validateForm } from "@/app/hooks/validate";
 import Link from "next/link"
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import useFcmToken from '@/utils/hooks/useFcmToken';
 export interface userLogin {
   email: string;
-  password: string;
 }
 
-const Login: React.FC = () => {
+const LoginOtp: React.FC = () => {
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
   const [remember,setRemember]=useState(false)
-  const { fcmToken,notificationPermissionStatus } = useFcmToken();
-  // Use the token as needed
   const [user, setUser] = useState<userLogin>({
     email: "",
-    password: "",
   });
   const [errors, setErrors] = useState<
     | {
       email: string;
-      password: string;
     }
     | undefined
   >();
@@ -43,13 +38,13 @@ const Login: React.FC = () => {
   ) as { loading: boolean; message: string; data: any };
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const status = await validateForm(user, loginSchema, setErrors);
-    let { email, password } = user;
+    const status = await validateForm(user, ForgetSchema, setErrors);
+    let { email } = user;
     if (status == true) {
-      dispatch(login({...user,device_token:fcmToken})).then((res:any)=>{
+        dispatch(resendCodeRequest({email:String(user?.email)})).then((res:any)=>{
         if(res.payload.message&&!res.payload.status){
           toast.success(res.payload.message);
-          router.push(`/`);
+          router.push(`/verify/${user?.email}`);
         }else if(res.payload.status){
           toast.error(res.payload.message);
         }
@@ -62,7 +57,7 @@ const Login: React.FC = () => {
       }else{
         Cookie.remove("tokenTime")
       }
-      setErrors({ email: "", password: "" });
+      setErrors({ email: "" });
     }
   };
   // useEffect(() => {
@@ -82,7 +77,7 @@ const Login: React.FC = () => {
     }
   },[dispatch])
   return (
-    <div className="flex items-center justify-center min-h-screen h-full min-w-screen lg:w-full bg-white  w-screen flex-col">
+    <div className="flex items-center justify-start min-h-screen h-full min-w-screen lg:w-full bg-white  w-screen flex-col">
       {/* <div className="flex items-end justify-start p-4 w-full h-full lg:hidden bg-white ">
         <CloseButton
           onClick={() => {
@@ -104,7 +99,7 @@ const Login: React.FC = () => {
           <MashrookLogo />
           <p className="mt-6 text-2xl font-bold text-[#374151]">تسجيل الدخول</p>
         </div>
-       
+      
         <form className="mt-8 space-y-6 p-8 " onSubmit={onSubmit} autoComplete={remember?"on":"off"}>
           <div className="rounded-md shadow-sm">
             <div className="mb-4 gap-4">
@@ -126,51 +121,9 @@ const Login: React.FC = () => {
                   </p>
                 )}
               </div>
-              <div>
-                <TextInput
-                  label="كلمة المرور"
-                  type="password"
-                  inputProps={{ placeholder: "ادخل كلمة المرور" }}
-                  value={user.password}
-                  onChange={(event) =>
-                    setUser({ ...user, password: event.target.value })
-                  }
-                  disabled={loading}
-                  autoComplete={"password"}
-                />
-                {errors?.password && (
-                  <p className="text-xs text-red-600 dark:text-red-500 text-right">
-                    {errors?.password}
-                  </p>
-                )}
-              </div>
+             
             </div>
           </div>
-
-          <div className="flex items-center justify-between">
-            <div className="text-sm">
-              <a href="forget-password" className=" text-sm text-[#3B73B9]">
-                نسيت كلمة المرور؟
-              </a>
-            </div>
-            <div className="flex items-center">
-              <input
-                id="remember-me"
-                name="remember-me"
-                type="checkbox"
-                className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
-                 onChange={(event :React.ChangeEvent<HTMLInputElement>)=>setRemember(event?.target?.checked)}
-                 checked={remember}
-              />
-              <label
-                htmlFor="remember-me"
-                className="block ml-2 text-sm text-gray-900"
-              >
-                تذكرني
-              </label>
-            </div>
-          </div>
-
           <div>
             {loading?<button
               className="relative flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-[#3B73B9] border border-transparent rounded-md group  focus:outline-none focus:ring-2 focus:ring-offset-2 "
@@ -179,7 +132,7 @@ const Login: React.FC = () => {
             </button>:<>
             <Button
               type="submit"
-              text="تسجيل الدخول"
+              text="أرسال رمز الدخول"
               disabled={loading}
               className="relative flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-[#3B73B9] border border-transparent rounded-md group  focus:outline-none focus:ring-2 focus:ring-offset-2 "
             ></Button>
@@ -187,10 +140,10 @@ const Login: React.FC = () => {
            
           </div>
           <div className="text-right">
-          <Link href="/login-otp"  className="text-blue-450 text-right">
-        عن طريق OTP تسجيل الدخول 
+          <Link href="/login" className="text-blue-450">
+        عن طريق كلمة السر تسجيل الدخول 
         </Link>
-        </div>
+          </div>
         </form>
         <div className="mt-auto bg-[#3B73B9] text-center w-full h-[271px] mb-0 lg:h-[40px] flex items-center  lg:gap-2 justify-center flex-col lg:flex-row-reverse">
           <p className="lg:text-base text-3xl font-medium text-white">
@@ -216,4 +169,4 @@ const Login: React.FC = () => {
   );
 };
 
-export default Login;
+export default LoginOtp;

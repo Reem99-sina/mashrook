@@ -17,6 +17,7 @@ import PropertyCard from "./components/propertyCard/PropertyCard";
 import { MdKeyboardArrowLeft } from "react-icons/md";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import useFcmToken from '@/utils/hooks/useFcmToken';
 import toast from "react-hot-toast";
 import { getRequest,dataReturn } from "@/redux/features/getRequest";
 const limit = 5;
@@ -43,6 +44,8 @@ const slicedData = {
 export default function Home() {
   // const [token, setToken] = useState<string | null>(null);
   const router = useRouter();
+  const { fcmToken,notificationPermissionStatus } = useFcmToken();
+  // Use the token as needed
   const { loading, message, data } = useSelector<RootState>(
     (state) => state.getRequest
   ) as { loading: boolean; message: string; data: dataReturn[] };

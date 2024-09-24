@@ -12,6 +12,7 @@ export interface returnType {
 export interface userLogin {
   email: string;
   password: string;
+  device_token:string;
 }
 export interface forgetLogin {
   email: string;
