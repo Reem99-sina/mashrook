@@ -214,4 +214,8 @@ export let ResetSchema=object().shape({
   new_password:string().min(8,"يجب ادخال 8 حروف او ارقام").required("يجب ادخال 8 حروف او ارقام"),
   repeate_new_password:string().oneOf([ref('new_password')], 'لا يوجد تشابة بينه وبين كلمة السر').min(8,"يجب ادخال 8 حروف او ارقام").required("لا يوجد تشابة بينه وبين كلمة السر")
 })
-
+export let ResetOldNewSchema=object().shape({
+  old_password:string().min(8,"يجب ادخال 8 حروف او ارقام").required("يجب ادخال 8 حروف او ارقام"),
+  new_password:string().min(8,"يجب ادخال 8 حروف او ارقام").required("يجب ادخال 8 حروف او ارقام"),
+  repeate_new_password:string().oneOf([ref('new_password')], 'لا يوجد تشابة بينه وبين كلمة السر').min(8,"يجب ادخال 8 حروف او ارقام").required("لا يوجد تشابة بينه وبين كلمة السر")
+})

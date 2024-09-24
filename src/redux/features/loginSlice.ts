@@ -22,6 +22,11 @@ export interface resetLogin {
   repeate_new_password: string;
   token: string;
 }
+export interface resetPasswordFromOld {
+  new_password: string;
+  repeate_new_password: string;
+  old_password:string
+}
 export const login = createAsyncThunk<returnType, userLogin>(
   "login",
   async (data: userLogin, { rejectWithValue }) => {
@@ -64,7 +69,25 @@ export const reset = createAsyncThunk<returnType, resetLogin>(
     return response;
   }
 );
-
+export const resetNewFromOld=async(data:resetPasswordFromOld)=>{
+  const response = await axios
+      .put(
+        "https://server.mashrook.sa/auth/update-password",
+        {
+          new_password: data?.new_password,
+          repeate_new_password: data?.repeate_new_password,
+          old_password:data?.old_password
+        },
+        {
+          headers: {
+            Authorization: Cookie.get("token"),
+          },
+        }
+      )
+      .then((response) => response.data)
+      .catch((error) => error?.response?.data);
+    return response;
+}
 export const getUserRequest = createAsyncThunk(
   "putUser",
   async (_, { rejectWithValue }) => {
@@ -123,7 +146,9 @@ const loginSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(login.fulfilled, (state, action) => {
-      Cookie.set("token", action?.payload?.data?.token);
+      if(action?.payload?.data?.token){
+        Cookie.set("token", action?.payload?.data?.token);
+      }
       state.loading = false;
       state.message = action.payload.message
         ? action.payload.message
@@ -145,6 +170,7 @@ const loginSlice = createSlice({
           Cookie.set("user", JSON.stringify(action?.payload?.data));
         }
         state.dataUser = action?.payload?.data;
+        // Unauthorized, jwt malformed
       }),
       builder.addCase(getUserRequest.rejected, (state, action) => {
         state.dataUser = null;

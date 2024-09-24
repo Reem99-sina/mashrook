@@ -1,13 +1,19 @@
 "use client";
 
-import React from "react";
+import React,{useRef,useEffect} from "react";
 import { Plus, Posts } from "../assets/svg";
 import { Button } from "../components/shared/button.component";
 import PostsCard from "../components/shared/PostsCard";
 import Pagination from "../components/shared/pagination";
 import FilterPart from "../mySave/component/filterPart";
 import SharedHeaderComponent from "../components/shared/SharedHeaderComponent";
-
+import { getRequest } from "@/redux/features/getOrders";
+import {  ModalRef } from "@/app/components/shared/modal.component";
+import { AppDispatch, RootState } from "@/redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import ModalAddAdvertising  from "./components/ModalAddAdvertise"
+import {fetchToken}from "@/redux/features/userSlice"
+import {getMyAdvertise} from "@/redux/features/getMyAdvertise"
 const posts = [
   {
     type: "شقة (داخل فيلا)",
@@ -58,25 +64,46 @@ const posts = [
 
 const MyPosts: React.FC = () => {
   const handleRenew = () => {};
-
+  const dispatch = useDispatch<AppDispatch>();
+  let {
+    loading,
+    message,
+    data: dataOrder,
+  } = useSelector<RootState>((state) => state.requests) as {
+    loading: boolean;
+    message: string;
+    data: any;
+  };
+  let {
+    data: dataAdvertise,
+  } = useSelector<RootState>((state) => state.myAdvertise) as {
+    loading: boolean;
+    message: string;
+    data: any;
+  };
+  const modalRef = useRef<ModalRef>(null);
   const handleViewProperty = () => {};
-
+  useEffect(()=>{
+    dispatch(getMyAdvertise())
+  },[dispatch])
+  console.log(dataAdvertise,"dataAdvertise")
   return (
     <div className="container bg-white mx-auto">
       <SharedHeaderComponent text="إعلاناتي" />
-
       <div className="p-4">
         <Button
           text="إضافة إعلان جديد"
           startIcon={<Plus />}
           className="!flex !flex-row-reverse items-center justify-center gap-2"
+          onClick={()=>modalRef?.current?.open()}
         />
       </div>
       <div className="p-4">
         <FilterPart />
       </div>
+      <ModalAddAdvertising refModel={modalRef}/>
       <div className="p-4 flex flex-col">
-        {posts.length > 0 ? (
+        {dataAdvertise?.length > 0 ? (
           <>
             {posts.map((post, index) => (
               <PostsCard

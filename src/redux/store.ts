@@ -23,6 +23,7 @@ import getMessageByid from "./features/getMessage"
 import getMessageByDetailById from "./features/getMessageBydetailsId"
 import uploadReciptSlice from "./features/uploadRecipt"
 import getMessageByLandId from "./features/getMessageBylandId"
+import getAdvertiseSlice from "./features/getMyAdvertise"
 const store = configureStore({
   reducer: {
     register:userReducer,
@@ -45,7 +46,8 @@ const store = configureStore({
     save:saveSlice,
     messageByID:getMessageByid,
     messageByDetailsId:getMessageByDetailById,
-    messageByLandId:getMessageByLandId
+    messageByLandId:getMessageByLandId,
+    myAdvertise:getAdvertiseSlice
   }
 });
 export default store;

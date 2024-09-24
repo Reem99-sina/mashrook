@@ -198,9 +198,6 @@ export const OtherOfferCard: React.FC<ChatCardProps> = ({
                   )}
                 </div>
               </div>
-            
-              
-            
               <button
                 type="button"
                 className={`${

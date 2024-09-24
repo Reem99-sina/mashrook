@@ -75,14 +75,13 @@ const JoinStatusButtons: React.FC<JoinStatusButtonsProps> = ({
 
   const handlePercentageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value=Number(e.target.value)
-    if(value<=data?.available_percentage){
+    if(value<data?.available_percentage){
       setErrors((prev)=>({...prev,amount:``}))
       setPartnershipPercentage(Number(e.target.value));
     }else{
-      setErrors((prev)=>({...prev,amount:`نسبة متاحة لا ينفع ان تتجاوز ${data?.available_percentage}%`}))
+      setErrors((prev)=>({...prev,amount:`النسبة المتاحة  ${data?.available_percentage}%`}))
       setPartnershipPercentage(data?.available_percentage);
     }
-
   };
 
   useEffect(() => {

@@ -12,8 +12,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
-import { getUserRequest } from "@/redux/features/loginSlice";
+import { getUserRequest,removeLogin } from "@/redux/features/loginSlice";
 import {userInfo} from "@/type/addrealestate"
+
 export default function MainHeader() {
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
   const dispatch = useDispatch<AppDispatch>();
@@ -28,13 +29,15 @@ export default function MainHeader() {
     dataUser: any;
     data: any;
   };
-
+  
   useEffect(() => {
     dispatch(fetchToken())
   }, [dispatch])
   useEffect(() => {
-    if (token) {
+    if (token&&token!="") {
       dispatch(getUserRequest());
+    }else if(!token||token==""){
+      dispatch(removeLogin())
     }
   }, [token, dispatch]);
   return (
