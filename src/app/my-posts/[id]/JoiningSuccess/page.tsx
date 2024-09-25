@@ -8,7 +8,7 @@ export default function JoiningSuccess() {
   return (
     <div className="flex justify-center w-dvh h-max  ">
       <div className="w-full bg-white rounded text-black shadow ">
-       
+
         <div className="flex">
           <main className="container mx-auto ">
             <section className=" rounded text-center">
@@ -31,13 +31,13 @@ export default function JoiningSuccess() {
                   href="/chat"
                   className="bg-blue-450 text-white border-blue-500  font-medium rounded-lg text-sm px-5 py-2.5 mx-4 flex justify-center"
 
-                 >
+                >
                   عرض المحادثات
                 </Link>
                 <Link
                   href={`/my-offer?title=شراكاتي`}
                   className=" text-blue-450 border-2 border-blue-600 font-medium rounded-lg text-sm px-5 py-2.5 mx-4 my-4 flex justify-center"
-                  
+
                 >
                   الذهاب الى شراكاتي
                 </Link>

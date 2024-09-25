@@ -2,13 +2,15 @@ import Image from "next/image";
 import { useState } from "react";
 import { BankT, Mada, Visa } from "@/app/assets/svg";
 
-function ImageRadioButtons({setData,data}:{setData:(prev: any) => any,data:{
-  method:string,
-  name:string,
-  numCard:number,
-  endDate:string,
- cvv:string
- }}) {
+function ImageRadioButtons({ setData, data }: {
+  setData: (prev: any) => any, data: {
+    method: string,
+    name: string,
+    numCard: number,
+    endDate: string,
+    cvv: string
+  }
+}) {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
 
   const options = [
@@ -25,22 +27,23 @@ function ImageRadioButtons({setData,data}:{setData:(prev: any) => any,data:{
           className={`flex flex-col items-center cursor-pointer shadow-md  rounded-md 
           `}
         >
-          <div dir="rtl" className={`flex items-center gap-2 p-3 border-2 rounded ${
-                selectedOption === option.id
-                  ? "border-[#3B73B9]"
-                  : "border-transparent"
-              }`}>
+          <div dir="rtl" className={`flex items-center gap-2 p-3 border-2 rounded ${selectedOption === option.id
+              ? "border-[#3B73B9]"
+              : "border-transparent"
+            }`}>
             <input
               type="radio"
               value={option.id}
               checked={selectedOption === option.id}
-              onChange={(e) =>{ setSelectedOption(e.target.value);setData((prev:{
-                method:string,
-                name:string,
-                numCard:number,
-                endDate:string,
-               cvv:string
-               })=>({...prev,method:e.target.value}))}}
+              onChange={(e) => {
+                setSelectedOption(e.target.value); setData((prev: {
+                  method: string,
+                  name: string,
+                  numCard: number,
+                  endDate: string,
+                  cvv: string
+                }) => ({ ...prev, method: e.target.value }))
+              }}
               className="cursor-pointer"
             />
             <Image

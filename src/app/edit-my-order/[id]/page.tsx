@@ -76,9 +76,9 @@ const EditMyOrderBadge = () => {
   ]);
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
-  let [open,setOpen]=useState<boolean>(false)
+  let [open, setOpen] = useState<boolean>(false)
   const [deal, setDeal] = useState(false);
-  let [districtInput,setDistrict]=useState<string>("")
+  let [districtInput, setDistrict] = useState<string>("")
   const params = useParams();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCites, setSelectedCites] = useState<
@@ -137,7 +137,7 @@ const EditMyOrderBadge = () => {
         selectData?.details[0]?.status || selectData?.landDetails[0]?.status,
       shareRange: [
         selectData?.details[0]?.min_price ||
-          selectData?.landDetails[0]?.min_price,
+        selectData?.landDetails[0]?.min_price,
         selectData?.details[0]?.price || selectData?.landDetails[0]?.price,
       ],
       finance: selectData?.finance,
@@ -163,7 +163,7 @@ const EditMyOrderBadge = () => {
     }));
     // setCriteria({ ...criteria,  })
   };
-  const handleCiteInputChange=(name:string)=>{
+  const handleCiteInputChange = (name: string) => {
     setCriteria((prev: any) => ({
       ...prev,
       district: criteria?.district?.some((c: any) => c == name)
@@ -226,7 +226,7 @@ const EditMyOrderBadge = () => {
       );
     }
   }, [criteria?.unitType, selectData]);
-  
+
   useEffect(() => {
     return () => {
       setCriteria({
@@ -296,7 +296,7 @@ const EditMyOrderBadge = () => {
             <div className="flex flex-row gap-1 mt-4 cursor-pointer" onClick={() => citiesRef.current?.open()}>
               <AddButton
                 fill="#3B73B9"
-               
+
               />
               <p className="text-[#3B73B9] font-bold text-sm">
                 إضافة حي/ أحياء
@@ -324,24 +324,24 @@ const EditMyOrderBadge = () => {
       id: 4,
       title:
         criteria?.property_type_id == 3 ||
-        criteria?.property_type_id == 4 ||
-        criteria?.property_type_id == 5
+          criteria?.property_type_id == 4 ||
+          criteria?.property_type_id == 5
           ? "حالة العقار "
           : "حدد نوع التملك",
       english: "status",
       option:
         criteria?.property_type_id == 3 ||
-        criteria?.property_type_id == 4 ||
-        criteria?.property_type_id == 5
+          criteria?.property_type_id == 4 ||
+          criteria?.property_type_id == 5
           ? [
-              { id: "جديد", title: "جديد" },
-              { id: "مستخدم", title: "مستخدم" },
-              { id: "أي", title: "أي" },
-            ]
+            { id: "جديد", title: "جديد" },
+            { id: "مستخدم", title: "مستخدم" },
+            { id: "أي", title: "أي" },
+          ]
           : [
-              { id: "مشاع", title: "مشاع" },
-              { id: "حر", title: "حر" },
-            ],
+            { id: "مشاع", title: "مشاع" },
+            { id: "حر", title: "حر" },
+          ],
     },
     {
       id: 5,
@@ -381,33 +381,33 @@ const EditMyOrderBadge = () => {
                         prev?.map((ele, i) =>
                           i == ind
                             ? {
-                                ...ele,
-                                min_price: values[0],
-                                price: values[1],
-                              }
+                              ...ele,
+                              min_price: values[0],
+                              price: values[1],
+                            }
                             : ele
                         )
                       )
                     }
                     unit="ريال"
                   />
-                   <InputRange onChange={(values: number[]) => {
-                            setDetails((prev) =>
-                              prev?.map((ele, i) =>
-                                i == ind
-                                  ? {
-                                      ...ele,
-                                      min_price: values[0],
-                                      price: values[1],
-                                    }
-                                  : ele
-                              )
-                            )
-                          }} price={[
-                            detailsVilla[ind]?.min_price,
-                            detailsVilla[ind]?.price,
-                          ]}/>
-                  </>
+                  <InputRange onChange={(values: number[]) => {
+                    setDetails((prev) =>
+                      prev?.map((ele, i) =>
+                        i == ind
+                          ? {
+                            ...ele,
+                            min_price: values[0],
+                            price: values[1],
+                          }
+                          : ele
+                      )
+                    )
+                  }} price={[
+                    detailsVilla[ind]?.min_price,
+                    detailsVilla[ind]?.price,
+                  ]} />
+                </>
                 )}
               </>
             </AccordionComponent>
@@ -440,9 +440,9 @@ const EditMyOrderBadge = () => {
               }}
               unit="ريال"
             />
-             <InputRange onChange={(values: number[]) => {
-                      setCriteria({ ...criteria, shareRange: values });
-                    }} price={criteria?.shareRange}/>
+            <InputRange onChange={(values: number[]) => {
+              setCriteria({ ...criteria, shareRange: values });
+            }} price={criteria?.shareRange} />
           </>
         ) : (
           <>
@@ -459,9 +459,9 @@ const EditMyOrderBadge = () => {
               }}
               unit="ريال"
             />
-             <InputRange onChange={(values: number[]) => {
-                      setCriteria({ ...criteria, shareRange: values });
-                    }} price={criteria?.shareRange}/>
+            <InputRange onChange={(values: number[]) => {
+              setCriteria({ ...criteria, shareRange: values });
+            }} price={criteria?.shareRange} />
           </>
         ),
     },
@@ -500,11 +500,11 @@ const EditMyOrderBadge = () => {
           status: criteria?.status, /// مشاع او حر
           land_details_id: selectData?.landDetails[0]?.id,
         })
-      ).then((res:any)=>{
-        if(res.payload.data){
+      ).then((res: any) => {
+        if (res.payload.data) {
           toast.success(res.payload.message);
           router.push(`/my-offer?title=طلباتي`);
-        }else if(res.payload.status){
+        } else if (res.payload.status) {
           toast.error(res.payload.message);
           router.push(`/my-offer?title=طلباتي`);
         }
@@ -516,28 +516,28 @@ const EditMyOrderBadge = () => {
             putDetailsType(
               ele?.min_apartment_floor && ele?.apartment_floor
                 ? {
-                    finance: criteria?.finance == "false" ? false : true,
-                    status: criteria?.status,
-                    details_id: ele?.id,
-                    price: criteria?.shareRange[1],
-                    min_price: criteria?.shareRange[0],
-                    min_apartment_floor: criteria?.desiredRow[0],
-                    apartment_floor: String(criteria?.desiredRow[1]),
-                    // details: detailsVilla,
-                  }
+                  finance: criteria?.finance == "false" ? false : true,
+                  status: criteria?.status,
+                  details_id: ele?.id,
+                  price: criteria?.shareRange[1],
+                  min_price: criteria?.shareRange[0],
+                  min_apartment_floor: criteria?.desiredRow[0],
+                  apartment_floor: String(criteria?.desiredRow[1]),
+                  // details: detailsVilla,
+                }
                 : {
-                    status: criteria?.status,
-                    details_id: ele?.id,
-                    price: criteria?.shareRange[1],
-                    min_price: criteria?.shareRange[0],
-                    finance: criteria?.finance == "false" ? false : true,
-                  }
+                  status: criteria?.status,
+                  details_id: ele?.id,
+                  price: criteria?.shareRange[1],
+                  min_price: criteria?.shareRange[0],
+                  finance: criteria?.finance == "false" ? false : true,
+                }
             )
-          ).then((res:any)=>{
-            if(res.payload.data){
+          ).then((res: any) => {
+            if (res.payload.data) {
               toast.success(res.payload.message);
               router.push(`/my-offer?title=طلباتي`);
-            }else if(res.payload.status){
+            } else if (res.payload.status) {
               toast.error(res.payload.message);
               router.push(`/my-offer?title=طلباتي`);
             }
@@ -553,11 +553,11 @@ const EditMyOrderBadge = () => {
               min_price: ele?.min_price,
               // details: detailsVilla,
             })
-          ).then((res:any)=>{
-            if(res.payload.data){
+          ).then((res: any) => {
+            if (res.payload.data) {
               toast.success(res.payload.message);
               router.push(`/my-offer?title=طلباتي`);
-            }else if(res.payload.status){
+            } else if (res.payload.status) {
               toast.error(res.payload.message);
               router.push(`/my-offer?title=طلباتي`);
             }
@@ -670,18 +670,18 @@ const EditMyOrderBadge = () => {
 
       <div className="bg-white rounded-lg border border-[#E5E7EB] w-full mb-4 items-start justify-start p-4 mt-6">
         <div className="flex items-center justify-end gap-2">
-        <p className="text-xs text-[#6B7280] font-bold">
-                  أوافق على <button className="text-[#98CC5D]" onClick={(e:React.MouseEvent<HTMLButtonElement>)=>{
-                    e.preventDefault()
-                    modalRefRules?.current?.open()
-                    }}>الشروط</button> و
-                  <button className="text-[#98CC5D]"
-                  onClick={(e:React.MouseEvent<HTMLButtonElement>)=>{
-                    e.preventDefault()
-                    modalRefRules?.current?.open()
-                    }}
-                  >الأحكام</button> الخاصة بمشروك
-                </p>
+          <p className="text-xs text-[#6B7280] font-bold">
+            أوافق على <button className="text-[#98CC5D]" onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+              e.preventDefault()
+              modalRefRules?.current?.open()
+            }}>الشروط</button> و
+            <button className="text-[#98CC5D]"
+              onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                e.preventDefault()
+                modalRefRules?.current?.open()
+              }}
+            >الأحكام</button> الخاصة بمشروك
+          </p>
           <input
             type="checkbox"
             className="h-4 w-4 rounded-2xl accent-[#3B73B9]"
@@ -695,7 +695,7 @@ const EditMyOrderBadge = () => {
           />
         </div>
       </div>
-      <ModelRules refModel={modalRefRules}  onChange={(e:React.ChangeEvent<HTMLInputElement>) => setDeal(e.target.checked)} deal={deal}/>
+      <ModelRules refModel={modalRefRules} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDeal(e.target.checked)} deal={deal} />
       <Modal ref={modalRef} size="xs">
         <div
           className="items-start flex justify-center flex-col p-4 "
@@ -774,30 +774,30 @@ const EditMyOrderBadge = () => {
             />
           </div>
           <div className="flex flex-col items-end h-[500px] overflow-scroll  w-full">
-          <div
-                      key={"other"}
-                      className="flex justify-end items-center w-full py-2"
-                    >
-                       <span className="mr-2">أخرى</span>
-                      <input
-                        type="checkbox"
-                        onClick={()=>setOpen(!open)}
-                        checked={open==true}
-                        className="checked:accent-[#3B73B9] w-[16px] h-[16px]"
-                      />
-                    </div>
-                
-              
-                <input
-            onBlur={(event) =>{
-              if(event?.target?.value){
-                setDistrict(event?.target?.value)
+            <div
+              key={"other"}
+              className="flex justify-end items-center w-full py-2"
+            >
+              <span className="mr-2">أخرى</span>
+              <input
+                type="checkbox"
+                onClick={() => setOpen(!open)}
+                checked={open == true}
+                className="checked:accent-[#3B73B9] w-[16px] h-[16px]"
+              />
+            </div>
+
+
+            <input
+              onBlur={(event) => {
+                if (event?.target?.value) {
+                  setDistrict(event?.target?.value)
+                }
               }
-            }
-            }
-            className={`${open==false?"hidden":"block"} p-2 border border-gray-300 rounded-r-lg w-full`}
-           
-            disabled={open==false}
+              }
+              className={`${open == false ? "hidden" : "block"} p-2 border border-gray-300 rounded-r-lg w-full`}
+
+              disabled={open == false}
             />
             {district?.map((cite: any) => (
               <div
@@ -824,11 +824,11 @@ const EditMyOrderBadge = () => {
             />
             <Button text="حفظ" onClick={() => {
               // console.log(open,"open")
-              if(open==true){
+              if (open == true) {
                 handleCiteInputChange(districtInput)
               }
               citiesRef.current?.close()
-              }} />
+            }} />
           </div>
         </div>
       </Modal>

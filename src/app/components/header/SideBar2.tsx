@@ -102,6 +102,11 @@ export default function SideBar({ sidebarOpen, toggleSidebar }: SideBarProps) {
                   </Link>
                 </li>
                 <li className="mb-4">
+                <Link href="/complaints-suggestions" className="">
+                الشكاوى والاقتراحات
+                  </Link>
+                </li>
+                <li className="mb-4">
                   <div className="cursor-pointer" onClick={()=>setOpen(!open)}>
                    السياسات والاحكام
                   </div>

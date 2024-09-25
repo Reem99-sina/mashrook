@@ -11,13 +11,13 @@ import { useDispatch } from "react-redux";
 import { getMessageOrders } from "@/redux/features/getMessages";
 import { getMessagePartners } from "@/redux/features/getMessagePartner";
 import { BackButtonOutline } from "@/app/assets/svg";
-import { useRouter,useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 const Chat: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
-  const params=useSearchParams()
-  const title=params.get('title')
-  const handleBack = (e:React.MouseEvent<HTMLButtonElement>) => {
+  const params = useSearchParams()
+  const title = params.get('title')
+  const handleBack = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
     router.push("/");
   };
@@ -32,8 +32,8 @@ const Chat: React.FC = () => {
         <div style={{ direction: "rtl" }} className=" w-full">
           <div>
             {/* elpo */}
-           
-            <div className="flex items-center justify-center w-full"style={{direction:"rtl"}}>
+
+            <div className="flex items-center justify-center w-full" style={{ direction: "rtl" }}>
               <div className="justify-start">
                 <button onClick={handleBack}>
                   <BackButtonOutline />
@@ -41,7 +41,7 @@ const Chat: React.FC = () => {
               </div>
               <div className="flex flex-1  items-center justify-center">
                 <p className="flex items-center justify-center text-[#36343B] font-bold text-xl">
-                محادثاتي </p>
+                  محادثاتي </p>
               </div>
             </div>
 
@@ -51,13 +51,13 @@ const Chat: React.FC = () => {
                   {
                     Component: <MyOffer />,
                     title: "عروضي",
-                    active:(Boolean(title)?title=="عروضي":true)
+                    active: (Boolean(title) ? title == "عروضي" : true)
                   },
 
                   {
                     Component: <MyPartnerships />,
                     title: "شراكاتي",
-                    active:(Boolean(title)?title=="شراكاتي":false)
+                    active: (Boolean(title) ? title == "شراكاتي" : false)
                   },
                 ]}
               />
@@ -69,7 +69,7 @@ const Chat: React.FC = () => {
           <Footer />
         </footer>
       </form>
-      
+
     </>
   );
 };

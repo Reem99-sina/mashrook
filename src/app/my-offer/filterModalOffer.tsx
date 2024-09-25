@@ -143,11 +143,10 @@ const FilterModalOffer: React.FC<FilterModalProps> = ({
               {dealStatuses.map((status) => (
                 <button
                   key={status}
-                  className={`px-4 py-2 m-1 rounded-md border text-sm ${
-                    criteria.dealStatus === status
+                  className={`px-4 py-2 m-1 rounded-md border text-sm ${criteria.dealStatus === status
                       ? "bg-blue-450 text-white"
                       : "bg-white text-gray-900"
-                  }`}
+                    }`}
                   onClick={() =>
                     setCriteria({ ...criteria, dealStatus: status })
                   }
@@ -165,11 +164,10 @@ const FilterModalOffer: React.FC<FilterModalProps> = ({
               {statusOfReal.map((status) => (
                 <button
                   key={status}
-                  className={`px-4 py-2 m-1 rounded-md border text-sm ${
-                    criteria?.realEstateStatus === status
+                  className={`px-4 py-2 m-1 rounded-md border text-sm ${criteria?.realEstateStatus === status
                       ? "bg-blue-450 text-white"
                       : "bg-white text-gray-900"
-                  }`}
+                    }`}
                   onClick={() =>
                     setCriteria({ ...criteria, realEstateStatus: status })
                   }
@@ -233,11 +231,10 @@ const FilterModalOffer: React.FC<FilterModalProps> = ({
               {dataDetails?.map((type: any) => (
                 <button
                   key={type?.id}
-                  className={`px-4 py-2 m-1 text-sm rounded-md border ${
-                    criteria?.unitType === type?.id
+                  className={`px-4 py-2 m-1 text-sm rounded-md border ${criteria?.unitType === type?.id
                       ? "bg-blue-450 text-white"
                       : "bg-white text-gray-900"
-                  }`}
+                    }`}
                   onClick={() =>
                     setCriteria({ ...criteria, unitType: type?.id })
                   }
@@ -253,11 +250,10 @@ const FilterModalOffer: React.FC<FilterModalProps> = ({
               {dataPurpose?.map((status: any) => (
                 <button
                   key={status?.id}
-                  className={`px-4 py-2 m-1 rounded-md border text-sm ${
-                    criteria.purposeStatus === status?.id
+                  className={`px-4 py-2 m-1 rounded-md border text-sm ${criteria.purposeStatus === status?.id
                       ? "bg-blue-450 text-white"
                       : "bg-white text-gray-900"
-                  }`}
+                    }`}
                   onClick={() =>
                     setCriteria({ ...criteria, purposeStatus: status?.id })
                   }
@@ -440,22 +436,20 @@ const FilterModalOffer: React.FC<FilterModalProps> = ({
             <div>
               <button
                 key={"yes"}
-                className={`px-4 py-2 m-1 rounded-md border text-sm ${
-                  criteria?.unitStatus == true
+                className={`px-4 py-2 m-1 rounded-md border text-sm ${criteria?.unitStatus == true
                     ? "bg-blue-450 text-white"
                     : "bg-white text-gray-900"
-                }`}
+                  }`}
                 onClick={() => setCriteria({ ...criteria, unitStatus: true })}
               >
                 نعم
               </button>
               <button
                 key={"no"}
-                className={`px-4 py-2 m-1 rounded-md border text-sm ${
-                  criteria?.unitStatus == false
+                className={`px-4 py-2 m-1 rounded-md border text-sm ${criteria?.unitStatus == false
                     ? "bg-blue-450 text-white"
                     : "bg-white text-gray-900"
-                }`}
+                  }`}
                 onClick={() => setCriteria({ ...criteria, unitStatus: false })}
               >
                 لا

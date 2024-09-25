@@ -11,7 +11,7 @@ import {
   Search,
 } from "../assets/svg";
 import Cookie from 'js-cookie';
-import {fetchToken}from "@/redux/features/userSlice"
+import { fetchToken } from "@/redux/features/userSlice"
 import { useRouter } from "next/navigation";
 import Pagination from "../components/shared/pagination";
 import FilterDropdown from "../components/shared/FilterDropdown";
@@ -22,25 +22,25 @@ import FilterModalOffer from "./filterModalOffer";
 import { FaRegUserCircle } from "react-icons/fa";
 import { Modal, ModalRef } from "../components/shared/modal.component";
 import { Button } from "../components/shared/button.component";
-import { getOffer,deleteOffer } from "@/redux/features/getOffers";
+import { getOffer, deleteOffer } from "@/redux/features/getOffers";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { RealEstateTypeInter } from "@/redux/features/postRealEstate";
-import {deleteProperty,removeDelete,UpdataExpiredDateProperty} from "@/redux/features/getPartners"
-import {FormatNumber} from "@/app/hooks/formatNumber"
+import { deleteProperty, removeDelete, UpdataExpiredDateProperty } from "@/redux/features/getPartners"
+import { FormatNumber } from "@/app/hooks/formatNumber"
 interface criteriaInfo {
   dealStatus: string,
   city: string,
   district: string,
   unitType: string | number,
   unitStatus: boolean,
-  realEstateStatus:string,
-  purposeStatus:string,
+  realEstateStatus: string,
+  purposeStatus: string,
   priceRange: number[],
   shareRange: number[],
 }
 
-let statuses=[{title:"متاح"},{title:"محجوز"},{title:"تحت الشراكة"}]
+let statuses = [{ title: "متاح" }, { title: "محجوز" }, { title: "تحت الشراكة" }]
 export const GitMyOffers = () => {
   const router = useRouter();
   const modalRef = useRef<ModalRef>(null);
@@ -55,7 +55,7 @@ export const GitMyOffers = () => {
     district: "",
     unitType: "",
     realEstateStatus: "",
-    purposeStatus:"",
+    purposeStatus: "",
     priceRange: [500000, 20000000],
     shareRange: [10, 90],
     unitStatus: false,
@@ -74,12 +74,12 @@ export const GitMyOffers = () => {
   const handleSelect = (option: string) => {
     setOption(option);
   };
-  const {  token } = useSelector<RootState>(
+  const { token } = useSelector<RootState>(
     (state) => state.register
-  ) as {  token:string };
+  ) as { token: string };
   let dataOffers = useMemo(() => {
     return dataOffer?.map((dataOrderOne: RealEstateTypeInter) => ({
-      id:dataOrderOne?.id,
+      id: dataOrderOne?.id,
       title:
         dataOrderOne?.propertyTypeDetails?.title ||
         dataOrderOne?.propertyType?.title,
@@ -90,70 +90,70 @@ export const GitMyOffers = () => {
       requestNumber: dataOrderOne?.id,
       count: 8,
       city: dataOrderOne?.propertyLocation?.city,
-      purpose:dataOrderOne?.propertyPurpose?.title,
+      purpose: dataOrderOne?.propertyPurpose?.title,
       district: dataOrderOne?.propertyLocation?.district?.replace(/[\[\]\\"]/g, ''),
       house: true,
       budget:
         dataOrderOne?.details && dataOrderOne?.details?.length > 0
           ? `${FormatNumber(dataOrderOne?.details[0]?.min_price)} ريال -${FormatNumber(dataOrderOne?.details[0]?.price)} ريال`
           : dataOrderOne?.landDetails &&
-            dataOrderOne?.landDetails?.length > 0 &&
-            `${FormatNumber(dataOrderOne?.landDetails[0]?.min_price)} ريال -${FormatNumber(dataOrderOne?.landDetails[0]?.price)} ريال`,
+          dataOrderOne?.landDetails?.length > 0 &&
+          `${FormatNumber(dataOrderOne?.landDetails[0]?.min_price)} ريال -${FormatNumber(dataOrderOne?.landDetails[0]?.price)} ريال`,
       type:
         dataOrderOne?.details && dataOrderOne?.details?.length > 0
           ? `${dataOrderOne?.details[0]?.status}`
           : dataOrderOne?.landDetails &&
-            dataOrderOne?.landDetails?.length > 0 &&
-            `${dataOrderOne?.landDetails[0]?.status}`,
+          dataOrderOne?.landDetails?.length > 0 &&
+          `${dataOrderOne?.landDetails[0]?.status}`,
       lisNumber: dataOrderOne?.license_number,
-      propertyOwnerType:dataOrderOne?.propertyOwnerType?.title,
+      propertyOwnerType: dataOrderOne?.propertyOwnerType?.title,
       details:
         dataOrderOne?.details && dataOrderOne?.details?.length > 0
           ? dataOrderOne?.details
           : dataOrderOne?.landDetails &&
-            dataOrderOne?.landDetails?.length > 0 &&
-            dataOrderOne?.landDetails,
+          dataOrderOne?.landDetails?.length > 0 &&
+          dataOrderOne?.landDetails,
     }));
   }, [dataOffer]);
   let fiterData = useMemo(() => {
     return {
       min_price: criteria?.priceRange[0] != 500000 ? criteria?.priceRange[0] : null,
       max_price: criteria?.priceRange[1] != 20000000 ? criteria?.priceRange[1] : null,
-      min_percentage:criteria?.shareRange[0]!=10?criteria?.shareRange[0]:null,
-      max_percentage:criteria?.shareRange[1]!=90?criteria?.shareRange[1]:null,
-      city:criteria?.city,
-      district:criteria?.district,
-      property_type_details_id: criteria?.unitType!=0?criteria?.unitType:null
-      ,property_purpose_id:criteria?.purposeStatus!=0?criteria?.purposeStatus:null
-      ,status: (criteria?.dealStatus=="متكامل")?"complete":"available" ,
-      sort: optionFilter == "الأحدث الى الأقدم" ? "created_desc" : optionFilter == "الأقدم الى الأحدث" ? "created_asc" : optionFilter == "الميزانية ( الأدنى الى الأعلى)" ? "price_asc" : optionFilter == "الميزانية ( الأعلى الى الأدنى)"?"price_decs":""
-      ,finance:criteria?.unitStatus
+      min_percentage: criteria?.shareRange[0] != 10 ? criteria?.shareRange[0] : null,
+      max_percentage: criteria?.shareRange[1] != 90 ? criteria?.shareRange[1] : null,
+      city: criteria?.city,
+      district: criteria?.district,
+      property_type_details_id: criteria?.unitType != 0 ? criteria?.unitType : null
+      , property_purpose_id: criteria?.purposeStatus != 0 ? criteria?.purposeStatus : null
+      , status: (criteria?.dealStatus == "متكامل") ? "complete" : "available",
+      sort: optionFilter == "الأحدث الى الأقدم" ? "created_desc" : optionFilter == "الأقدم الى الأحدث" ? "created_asc" : optionFilter == "الميزانية ( الأدنى الى الأعلى)" ? "price_asc" : optionFilter == "الميزانية ( الأعلى الى الأدنى)" ? "price_decs" : ""
+      , finance: criteria?.unitStatus
       // option=="الأحدث إلى الأقدم"?handleSelect("latest"):option=="الأقدم الى الأحدث"?handleSelect("oldest"):option=="الميزانية ( الأدنى الى الأعلى)"?handleSelect("priceLowToHigh"):handleSelect("priceHighToLow")
     }
-  }, [criteria,optionFilter])
+  }, [criteria, optionFilter])
   let dataPagination = useMemo(() => {
     return dataOffers?.slice((currentPage - 1) * 3, currentPage * 3);
   }, [dataOffers, currentPage]);
-  const onDelete=()=>{
-    if(idDelete){
-      dispatch(deleteProperty({id:idDelete})).then((res:any)=>{
-        if(res.payload.message&&!res.payload.status){
+  const onDelete = () => {
+    if (idDelete) {
+      dispatch(deleteProperty({ id: idDelete })).then((res: any) => {
+        if (res.payload.message && !res.payload.status) {
           toast.success(res.payload.message);
-        dispatch(deleteOffer({data:dataOffer?.filter((dataOrderOne:RealEstateTypeInter)=>Number(dataOrderOne?.id)!==idDelete)}))
-        }else if(res.payload.status){
+          dispatch(deleteOffer({ data: dataOffer?.filter((dataOrderOne: RealEstateTypeInter) => Number(dataOrderOne?.id) !== idDelete) }))
+        } else if (res.payload.status) {
           toast.error(res.payload.message);
         }
       })
       modalRef.current?.close()
     }
   }
-  const onExpiredDate=()=>{
-    if(idDelete){
-      dispatch(UpdataExpiredDateProperty({id:idDelete})).then((res:any)=>{
-        if(res.payload.data){
+  const onExpiredDate = () => {
+    if (idDelete) {
+      dispatch(UpdataExpiredDateProperty({ id: idDelete })).then((res: any) => {
+        if (res.payload.data) {
           toast.success(res.payload.message);
-         
-        }else if(res.payload.status){
+
+        } else if (res.payload.status) {
           toast.error(res.payload.message);
         }
       })
@@ -163,13 +163,13 @@ export const GitMyOffers = () => {
   useEffect(() => {
     dispatch(fetchToken())
   }, [dispatch])
- 
-  useEffect(()=>{
-   
-    return ()=>{
+
+  useEffect(() => {
+
+    return () => {
       dispatch(removeDelete())
     }
-  },[dispatch])
+  }, [dispatch])
   useEffect(() => {
     if (token) {
       dispatch(getOffer({}));
@@ -177,9 +177,9 @@ export const GitMyOffers = () => {
   }, [token, dispatch]);
   useEffect(() => {
     dispatch(getOffer({
-      sort: optionFilter == "الأحدث الى الأقدم" ? "created_desc" : optionFilter == "الأقدم الى الأحدث" ? "created_asc" : optionFilter == "الميزانية ( الأدنى الى الأعلى)" ? "price_asc" : optionFilter == "الميزانية ( الأعلى الى الأدنى)"?"price_decs":""
+      sort: optionFilter == "الأحدث الى الأقدم" ? "created_desc" : optionFilter == "الأقدم الى الأحدث" ? "created_asc" : optionFilter == "الميزانية ( الأدنى الى الأعلى)" ? "price_asc" : optionFilter == "الميزانية ( الأعلى الى الأدنى)" ? "price_decs" : ""
     }))
-  }, [ optionFilter, dispatch])
+  }, [optionFilter, dispatch])
   return (
     <div className="p-4 bg-white">
       {isFilterModalOpen && (
@@ -190,7 +190,7 @@ export const GitMyOffers = () => {
             dispatch(getOffer(fiterData))
             setIsFilterModalOpen(false);
           }}
-          onCloseRequest={()=>dispatch(getOffer({}))}
+          onCloseRequest={() => dispatch(getOffer({}))}
           open={isFilterModalOpen}
           setCriteria={setCriteria}
           criteria={criteria}
@@ -206,9 +206,8 @@ export const GitMyOffers = () => {
           className="flex items-center"
         >
           <div
-            className={`py-1 rounded-md border-2 border-blue-500 ${
-              isFilterModalOpen ? "bg-blue-450" : "bg-white"
-            }`}
+            className={`py-1 rounded-md border-2 border-blue-500 ${isFilterModalOpen ? "bg-blue-450" : "bg-white"
+              }`}
           >
             {isFilterModalOpen ? (
               <MenuWhite className={`text-xl mx-2 my-1`} />
@@ -232,14 +231,13 @@ export const GitMyOffers = () => {
       </div>
 
       <div className="mt-5 mb-5 flex flex-row gap-2">
-      {statuses?.map((status:any)=><span key={status?.title} className={`rounded-md border border-[#E5E7EB] text-sm font-normal text-[#6B7280] pl-3 pr-3 pt-1 pb-1 cursor-pointer 
-            ${
-                  criteria.realEstateStatus === status?.title ? "bg-blue-450 text-white" : "bg-white text-gray-900"
-                }
-            `}onClick={()=>setCriteria({...criteria,realEstateStatus:status?.title})}>
-            {status?.title}
-          </span>)}  
-      
+        {statuses?.map((status: any) => <span key={status?.title} className={`rounded-md border border-[#E5E7EB] text-sm font-normal text-[#6B7280] pl-3 pr-3 pt-1 pb-1 cursor-pointer 
+            ${criteria.realEstateStatus === status?.title ? "bg-blue-450 text-white" : "bg-white text-gray-900"
+          }
+            `} onClick={() => setCriteria({ ...criteria, realEstateStatus: status?.title })}>
+          {status?.title}
+        </span>)}
+
       </div>
 
       <div>
@@ -271,7 +269,7 @@ export const GitMyOffers = () => {
               {dataPagination?.map((offer: any, index: number) => (
 
                 <OfferCard
-                  key={offer.title+index}
+                  key={offer.title + index}
                   title={offer.title}
                   count={offer.count}
                   date={offer.date}
@@ -287,17 +285,17 @@ export const GitMyOffers = () => {
                   propertyOwnerType={offer.propertyOwnerType}
                   lisNumber={offer.lisNumber}
                   details={offer.details}
-                  onDelete={() => {modalRef.current?.open();setId(offer?.id)}}
-                  onUpdate={() => {modalRefUpdate.current?.open();setId(offer?.id)}}
+                  onDelete={() => { modalRef.current?.open(); setId(offer?.id) }}
+                  onUpdate={() => { modalRefUpdate.current?.open(); setId(offer?.id) }}
                   house={offer.house}
                   id={offer.id}
-                  // room_id={offer.details?.room[0]?.id}
+                // room_id={offer.details?.room[0]?.id}
                 />
               ))}
             </div>
             <div>
-              <Pagination   pageCount={Math.ceil(dataOffers?.length / 3)}
-                  onPageChange={(p) => setCurrentPage(p)}/>
+              <Pagination pageCount={Math.ceil(dataOffers?.length / 3)}
+                onPageChange={(p) => setCurrentPage(p)} />
             </div>
           </div>
         ) : (
@@ -363,50 +361,50 @@ export const GitMyOffers = () => {
         </div>
       </Modal>
       <Modal ref={modalRefUpdate} size="xs">
-                <div
-                  className="items-start flex justify-center flex-col p-4 "
-                  style={{ direction: "rtl" }}
-                >
-                  <div className="flex flex-row items-center justify-center mb-3  w-full">
-                    <div
-                      className="flex flex-1 cursor-pointer"
-                      onClick={() => modalRefUpdate.current?.close()}
-                    >
-                      <CloseIconSmall />
-                    </div>
-                    <div className="flex  w-full items-center justify-center">
-                      <p className="font-bold text-base text-[#374151]">
-                        تنويه
-                      </p>
-                    </div>
-                  </div>
+        <div
+          className="items-start flex justify-center flex-col p-4 "
+          style={{ direction: "rtl" }}
+        >
+          <div className="flex flex-row items-center justify-center mb-3  w-full">
+            <div
+              className="flex flex-1 cursor-pointer"
+              onClick={() => modalRefUpdate.current?.close()}
+            >
+              <CloseIconSmall />
+            </div>
+            <div className="flex  w-full items-center justify-center">
+              <p className="font-bold text-base text-[#374151]">
+                تنويه
+              </p>
+            </div>
+          </div>
 
-                  <div className="border border-[#E5E7EB] w-full mb-4" />
+          <div className="border border-[#E5E7EB] w-full mb-4" />
 
-                  <div>
-                    <span>
-                      <p className="text-base font-normal text-[#4B5563] mb-2">
-                        سيتم تحديث الطلب رقم ({idDelete}) لمدة 30 يوم من الان
-                      </p>
-                    </span>
-                  </div>
+          <div>
+            <span>
+              <p className="text-base font-normal text-[#4B5563] mb-2">
+                سيتم تحديث الطلب رقم ({idDelete}) لمدة 30 يوم من الان
+              </p>
+            </span>
+          </div>
 
-                  <div className="border border-[#E5E7EB] w-full mb-4" />
+          <div className="border border-[#E5E7EB] w-full mb-4" />
 
-                  <div className="flex flex-row items-center justify-center gap-3  w-full">
-                    <Button
-                      text="تحديث"
-                      onClick={onExpiredDate}
-                      className="!text-xs !font-medium"
-                    />
-                    <Button
-                      text="الغاء"
-                      onClick={() => modalRefUpdate.current?.close()}
-                      className="!bg-white !text-[#1F2A37] !border !border-[#E5E7EB] !rounded-lg !text-xs !font-medium"
-                    />
-                  </div>
-                </div>
-              </Modal>
+          <div className="flex flex-row items-center justify-center gap-3  w-full">
+            <Button
+              text="تحديث"
+              onClick={onExpiredDate}
+              className="!text-xs !font-medium"
+            />
+            <Button
+              text="الغاء"
+              onClick={() => modalRefUpdate.current?.close()}
+              className="!bg-white !text-[#1F2A37] !border !border-[#E5E7EB] !rounded-lg !text-xs !font-medium"
+            />
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };

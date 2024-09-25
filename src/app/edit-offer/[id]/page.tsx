@@ -25,7 +25,7 @@ import {
   imageDeleteRequest,
   imageUpdateRequest
 } from "@/redux/features/postRealEstate";
-import {detailOneInfo,landInfo} from "@/type/addrealestate"
+import { detailOneInfo, landInfo } from "@/type/addrealestate"
 import Image from "next/image";
 import { getCity, getDistrict } from "@/redux/features/getCity";
 import { FaEdit } from "react-icons/fa";
@@ -66,7 +66,7 @@ const EditOffer = () => {
   let {
     message
   } = useSelector<RootState>((state) => state.realEstateRequest) as {
-    message:string
+    message: string
   };
   let { city, district } = useSelector<RootState>((state) => state.city) as {
     district: any;
@@ -193,9 +193,9 @@ const EditOffer = () => {
       );
     }
     if (dataCom?.details && dataCom?.details?.length > 0) {
-      const ids=compare(dataCom?.details,selectData?.details)
+      const ids = compare(dataCom?.details, selectData?.details)
       dataCom?.details?.map((detail: detailOneInfo) => {
-        if(detail?.id&&ids.includes(detail?.id)){
+        if (detail?.id && ids.includes(detail?.id)) {
           dispatch(
             putDetailsType({
               age: dataCom?.age,
@@ -215,11 +215,11 @@ const EditOffer = () => {
               kitchen: detail?.amenities?.kitchen,
               details_id: detail?.id,
             })
-          ).then((res:any)=>{
-            if(res.payload.data){
+          ).then((res: any) => {
+            if (res.payload.data) {
               toast.success(res.payload.message);
               router.push(`/my-offer?title=عروضي`);
-            }else if(res.payload.status){
+            } else if (res.payload.status) {
               toast.error(res.payload.message);
               router.push(`/my-offer?title=عروضي`);
             }
@@ -227,28 +227,28 @@ const EditOffer = () => {
         }
       });
     } else {
-      const ids=compare(dataCom?.details,selectData?.details)
-      dataCom?.landDetails?.map((detail: landInfo) =>{
-        if(detail?.id&&ids.includes(detail?.id)){
-        dispatch(
-          putLandDetailsType({
-            area: detail?.area,
-            price: detail?.price,
-            piece_number: detail?.piece_number,
-            plan_number: detail?.plan_number,
-            // status: dataCom?.status, /// مشاع او حر
-            land_details_id: detail?.id,
+      const ids = compare(dataCom?.details, selectData?.details)
+      dataCom?.landDetails?.map((detail: landInfo) => {
+        if (detail?.id && ids.includes(detail?.id)) {
+          dispatch(
+            putLandDetailsType({
+              area: detail?.area,
+              price: detail?.price,
+              piece_number: detail?.piece_number,
+              plan_number: detail?.plan_number,
+              // status: dataCom?.status, /// مشاع او حر
+              land_details_id: detail?.id,
+            })
+          ).then((res: any) => {
+            if (res.payload.data) {
+              toast.success(res.payload.message);
+              router.push(`/my-offer?title=عروضي`);
+            } else if (res.payload.status) {
+              toast.error(res.payload.message);
+              router.push(`/my-offer?title=عروضي`);
+            }
           })
-        ).then((res:any)=>{
-          if(res.payload.data){
-            toast.success(res.payload.message);
-            router.push(`/my-offer?title=عروضي`);
-          }else if(res.payload.status){
-            toast.error(res.payload.message);
-            router.push(`/my-offer?title=عروضي`);
-          }
-        })
-      }
+        }
       }
       );
     }
@@ -277,7 +277,7 @@ const EditOffer = () => {
       }
     }
   }, [title, details, dataCom?.property_purpose_id, dispatch]);
-  
+
   useEffect(() => {
     dispatch(getCity());
   }, [dispatch]);
@@ -333,7 +333,7 @@ const EditOffer = () => {
                         checked={
                           dataCom
                             ? ele?.id ==
-                              dataCom[item?.english as keyof typeof dataCom]
+                            dataCom[item?.english as keyof typeof dataCom]
                             : false
                         }
                         key={ele?.id}
@@ -556,9 +556,9 @@ const EditOffer = () => {
                           details: dataCom?.details?.map((ele: any) =>
                             ele?.id == detail?.id
                               ? {
-                                  ...ele,
-                                  apartment_number: String(num),
-                                }
+                                ...ele,
+                                apartment_number: String(num),
+                              }
                               : ele
                           ),
                         })
@@ -575,9 +575,9 @@ const EditOffer = () => {
                           details: dataCom?.details?.map((ele: any) =>
                             ele?.id == detail?.id
                               ? {
-                                  ...ele,
-                                  apartment_number: String(num),
-                                }
+                                ...ele,
+                                apartment_number: String(num),
+                              }
                               : ele
                           ),
                         })
@@ -607,9 +607,9 @@ const EditOffer = () => {
                             (landDetail: any) =>
                               landDetail?.id == ele?.id
                                 ? {
-                                    ...landDetail,
-                                    piece_number: event?.target?.value,
-                                  }
+                                  ...landDetail,
+                                  piece_number: event?.target?.value,
+                                }
                                 : landDetail
                           ),
                         })
@@ -633,9 +633,9 @@ const EditOffer = () => {
                               (landDetail) =>
                                 landDetail?.id == ele?.id
                                   ? {
-                                      ...landDetail,
-                                      plan_number: event?.target?.value,
-                                    }
+                                    ...landDetail,
+                                    plan_number: event?.target?.value,
+                                  }
                                   : landDetail
                             ),
                           })
@@ -645,16 +645,16 @@ const EditOffer = () => {
                   </div>
                   <InputAreaPrice
                     title="المساحة"
-                    value={ele?.area?ele?.area:""}
+                    value={ele?.area ? ele?.area : ""}
                     onChange={(event) =>
                       setData({
                         ...dataCom,
                         landDetails: dataCom?.landDetails?.map((landDetail) =>
                           landDetail?.id == ele?.id
                             ? {
-                                ...landDetail,
-                                area: Number(event?.target?.value),
-                              }
+                              ...landDetail,
+                              area: Number(event?.target?.value),
+                            }
                             : landDetail
                         ),
                       })
@@ -663,16 +663,16 @@ const EditOffer = () => {
                   />
                   <InputAreaPrice
                     title="السعر للمتر المربع"
-                    value={ele?.price?ele?.price:""}
+                    value={ele?.price ? ele?.price : ""}
                     onChange={(event) =>
                       setData({
                         ...dataCom,
                         landDetails: dataCom?.landDetails?.map((landDetail) =>
                           landDetail?.id == ele?.id
                             ? {
-                                ...landDetail,
-                                price: Number(event?.target?.value),
-                              }
+                              ...landDetail,
+                              price: Number(event?.target?.value),
+                            }
                             : landDetail
                         ),
                       })
@@ -685,176 +685,176 @@ const EditOffer = () => {
 
             {(dataCom?.property_type_id == 4 ||
               dataCom?.property_type_id == 5) && (
-              <>
-                <InputAreaPrice
-                  title="المساحة"
-                  onChange={(event) =>
-                    setData({
-                      ...dataCom,
-                      area: Number(event?.target?.value),
-                    })
-                  }
-                  value={dataCom?.area?Number(dataCom?.area):""}
-                  measurement="متر"
-                />
-              </>
-            )}
+                <>
+                  <InputAreaPrice
+                    title="المساحة"
+                    onChange={(event) =>
+                      setData({
+                        ...dataCom,
+                        area: Number(event?.target?.value),
+                      })
+                    }
+                    value={dataCom?.area ? Number(dataCom?.area) : ""}
+                    measurement="متر"
+                  />
+                </>
+              )}
           </div>
 
           {dataCom?.property_type_id == 4 || dataCom?.property_type_id == 5
             ? dataCom?.details?.map((detail) => (
-                <>
-                  <InputAreaPrice
-                    title="السعر للمتر المربع"
-                    onChange={(event) =>
-                      setData({
-                        ...dataCom,
-                        details: dataCom?.details?.map((ele) =>
-                          ele?.id == detail?.id
-                            ? {
-                                ...ele,
-                                price: Number(event?.target?.value),
-                              }
-                            : ele
-                        ),
-                      })
-                    }
-                    value={detail?.price?Number(detail?.price):""}
-                    measurement="ريال"
-                    desc="(بدون القيمة المضافة والسعي)"
-                  />
-                  <NumberRoom
-                    value={Number(dataCom?.age)}
-                    onChange={(e) => {
-                      setData({
-                        ...dataCom,
-                        details: dataCom?.details?.map((ele,index) => (
-                          index==0?
+              <>
+                <InputAreaPrice
+                  title="السعر للمتر المربع"
+                  onChange={(event) =>
+                    setData({
+                      ...dataCom,
+                      details: dataCom?.details?.map((ele) =>
+                        ele?.id == detail?.id
+                          ? {
+                            ...ele,
+                            price: Number(event?.target?.value),
+                          }
+                          : ele
+                      ),
+                    })
+                  }
+                  value={detail?.price ? Number(detail?.price) : ""}
+                  measurement="ريال"
+                  desc="(بدون القيمة المضافة والسعي)"
+                />
+                <NumberRoom
+                  value={Number(dataCom?.age)}
+                  onChange={(e) => {
+                    setData({
+                      ...dataCom,
+                      details: dataCom?.details?.map((ele, index) => (
+                        index == 0 ?
                           {
-                                ...ele,
-                                age: Number(e?.target?.value),
-                              }:ele)
-                        ),
-                        age: Number(e?.target?.value),
-                      });
-                    }}
-                    name="age"
-                    title={"العمر"}
-                    firstNumber={Number(dataCom?.age)>1?"سنين":"سنة"}
-                    secondNumber={"+10 سنين"}
-                    max={10}
-                  />
-                  <NumberRoom
-                    value={detail?.rooms_number}
-                    onChange={(e) => {
-                      setData({
-                        ...dataCom,
-                        details: dataCom?.details?.map((ele) =>
-                          ele?.id == detail?.id
-                            ? {
-                                ...ele,
-                                rooms_number: Number(e?.target?.value),
-                              }
-                            : ele
-                        ),
-                      });
-                    }}
-                    name="rooms_number"
-                    title={"عدد الغرف"}
-                    firstNumber={"غرفة"}
-                    secondNumber={"+10 غرف"}
-                    max={10}
-                  />
-                  <NumberRoom
-                    value={detail?.halls_number}
-                    onChange={(e) => {
-                      setData({
-                        ...dataCom,
-                        details: dataCom?.details?.map((ele) =>
-                          ele?.id == detail?.id
-                            ? {
-                                ...ele,
-                                halls_number: Number(e?.target?.value),
-                              }
-                            : ele
-                        ),
-                      });
-                    }}
-                    name="halls_number"
-                    title={"عدد الصالات"}
-                    firstNumber={"صالة"}
-                    secondNumber={"3+ صالات "}
-                    max={3}
-                  />
-                  <NumberRoom
-                    value={detail?.bathrooms_number}
-                    onChange={(e) => {
-                      setData({
-                        ...dataCom,
-                        details: dataCom?.details?.map((ele) =>
-                          ele?.id == detail?.id
-                            ? {
-                                ...ele,
-                                bathrooms_number: Number(e?.target?.value),
-                              }
-                            : ele
-                        ),
-                      });
-                    }}
-                    name="bathrooms_number"
-                    title={"عدد دورات المياه"}
-                    firstNumber={"دورة مياه"}
-                    secondNumber={"3+ دورة مياه "}
-                    max={3}
-                  />
-                  <NumberRoom
-                    value={detail?.kitchens_number}
-                    onChange={(e) => {
-                      setData({
-                        ...dataCom,
-                        details: dataCom?.details?.map((ele) =>
-                          ele?.id == detail?.id
-                            ? {
-                                ...ele,
-                                kitchens_number: Number(e?.target?.value),
-                              }
-                            : ele
-                        ),
-                      });
-                    }}
-                    name="kitchens_number"
-                    title={" عدد المطابخ"}
-                    firstNumber={"مطبخ"}
-                    secondNumber={"3+ مطابخ"}
-                    max={3}
-                  />
-                </>
-              ))
+                            ...ele,
+                            age: Number(e?.target?.value),
+                          } : ele)
+                      ),
+                      age: Number(e?.target?.value),
+                    });
+                  }}
+                  name="age"
+                  title={"العمر"}
+                  firstNumber={Number(dataCom?.age) > 1 ? "سنين" : "سنة"}
+                  secondNumber={"+10 سنين"}
+                  max={10}
+                />
+                <NumberRoom
+                  value={detail?.rooms_number}
+                  onChange={(e) => {
+                    setData({
+                      ...dataCom,
+                      details: dataCom?.details?.map((ele) =>
+                        ele?.id == detail?.id
+                          ? {
+                            ...ele,
+                            rooms_number: Number(e?.target?.value),
+                          }
+                          : ele
+                      ),
+                    });
+                  }}
+                  name="rooms_number"
+                  title={"عدد الغرف"}
+                  firstNumber={"غرفة"}
+                  secondNumber={"+10 غرف"}
+                  max={10}
+                />
+                <NumberRoom
+                  value={detail?.halls_number}
+                  onChange={(e) => {
+                    setData({
+                      ...dataCom,
+                      details: dataCom?.details?.map((ele) =>
+                        ele?.id == detail?.id
+                          ? {
+                            ...ele,
+                            halls_number: Number(e?.target?.value),
+                          }
+                          : ele
+                      ),
+                    });
+                  }}
+                  name="halls_number"
+                  title={"عدد الصالات"}
+                  firstNumber={"صالة"}
+                  secondNumber={"3+ صالات "}
+                  max={3}
+                />
+                <NumberRoom
+                  value={detail?.bathrooms_number}
+                  onChange={(e) => {
+                    setData({
+                      ...dataCom,
+                      details: dataCom?.details?.map((ele) =>
+                        ele?.id == detail?.id
+                          ? {
+                            ...ele,
+                            bathrooms_number: Number(e?.target?.value),
+                          }
+                          : ele
+                      ),
+                    });
+                  }}
+                  name="bathrooms_number"
+                  title={"عدد دورات المياه"}
+                  firstNumber={"دورة مياه"}
+                  secondNumber={"3+ دورة مياه "}
+                  max={3}
+                />
+                <NumberRoom
+                  value={detail?.kitchens_number}
+                  onChange={(e) => {
+                    setData({
+                      ...dataCom,
+                      details: dataCom?.details?.map((ele) =>
+                        ele?.id == detail?.id
+                          ? {
+                            ...ele,
+                            kitchens_number: Number(e?.target?.value),
+                          }
+                          : ele
+                      ),
+                    });
+                  }}
+                  name="kitchens_number"
+                  title={" عدد المطابخ"}
+                  firstNumber={"مطبخ"}
+                  secondNumber={"3+ مطابخ"}
+                  max={3}
+                />
+              </>
+            ))
             : dataCom?.property_type_id == 3 && (
-                <>
-                  <NumberRoom
-                    value={Number(dataCom?.age)}
-                    onChange={(e) => {
-                      setData({
-                        ...dataCom,
-                        details: dataCom?.details?.map((ele,index) => (
-                          index==0?
+              <>
+                <NumberRoom
+                  value={Number(dataCom?.age)}
+                  onChange={(e) => {
+                    setData({
+                      ...dataCom,
+                      details: dataCom?.details?.map((ele, index) => (
+                        index == 0 ?
                           {
-                                ...ele,
-                                age: Number(e?.target?.value),
-                              }:ele)
-                        ),
-                        age: Number(e?.target?.value),
-                      });
-                    }}
-                    name="age"
-                    title={"العمر"}
-                    firstNumber={Number(dataCom?.age)>1?"سنين":"سنة"}
-                    secondNumber={"+10 سنين"}
-                    max={10}
-                  />
-                </>
-              )}
+                            ...ele,
+                            age: Number(e?.target?.value),
+                          } : ele)
+                      ),
+                      age: Number(e?.target?.value),
+                    });
+                  }}
+                  name="age"
+                  title={"العمر"}
+                  firstNumber={Number(dataCom?.age) > 1 ? "سنين" : "سنة"}
+                  secondNumber={"+10 سنين"}
+                  max={10}
+                />
+              </>
+            )}
           {dataCom?.property_type_id == 3 &&
             dataCom?.property_type_details_id == 4 && (
               <>
@@ -869,9 +869,9 @@ const EditOffer = () => {
                         details: dataCom?.details?.map((ele) =>
                           ele?.id == floor?.id
                             ? {
-                                ...ele,
-                                type: e.target.value,
-                              }
+                              ...ele,
+                              type: e.target.value,
+                            }
                             : ele
                         ),
                       })
@@ -887,14 +887,14 @@ const EditOffer = () => {
                             details: dataCom?.details?.map((ele) =>
                               ele?.id == floor?.id
                                 ? {
-                                    ...ele,
-                                    area: Number(e.target.value),
-                                  }
+                                  ...ele,
+                                  area: Number(e.target.value),
+                                }
                                 : ele
                             ),
                           })
                         }
-                        value={floor?.area?floor?.area:""}
+                        value={floor?.area ? floor?.area : ""}
                         measurement="متر"
                       />
                       <InputAreaPrice
@@ -905,14 +905,14 @@ const EditOffer = () => {
                             details: dataCom?.details?.map((ele) =>
                               ele?.id == floor?.id
                                 ? {
-                                    ...ele,
-                                    price: Number(e.target.value),
-                                  }
+                                  ...ele,
+                                  price: Number(e.target.value),
+                                }
                                 : ele
                             ),
                           })
                         }
-                        value={floor?.price?floor?.price:""}
+                        value={floor?.price ? floor?.price : ""}
                         measurement="ريال"
                         desc="(بدون القيمة المضافة والسعي)"
                       />
@@ -924,9 +924,9 @@ const EditOffer = () => {
                             details: dataCom?.details?.map((ele) =>
                               ele?.id == floor?.id
                                 ? {
-                                    ...ele,
-                                    rooms_number: Number(e.target.value),
-                                  }
+                                  ...ele,
+                                  rooms_number: Number(e.target.value),
+                                }
                                 : ele
                             ),
                           })
@@ -945,9 +945,9 @@ const EditOffer = () => {
                             details: dataCom?.details?.map((ele) =>
                               ele?.id == floor?.id
                                 ? {
-                                    ...ele,
-                                    halls_number: Number(e.target.value),
-                                  }
+                                  ...ele,
+                                  halls_number: Number(e.target.value),
+                                }
                                 : ele
                             ),
                           })
@@ -966,9 +966,9 @@ const EditOffer = () => {
                             details: dataCom?.details?.map((ele) =>
                               ele?.id == floor?.id
                                 ? {
-                                    ...ele,
-                                    bathrooms_number: Number(e.target.value),
-                                  }
+                                  ...ele,
+                                  bathrooms_number: Number(e.target.value),
+                                }
                                 : ele
                             ),
                           })
@@ -987,9 +987,9 @@ const EditOffer = () => {
                             details: dataCom?.details?.map((ele) =>
                               ele?.id == floor?.id
                                 ? {
-                                    ...ele,
-                                    kitchens_number: Number(e.target.value),
-                                  }
+                                  ...ele,
+                                  kitchens_number: Number(e.target.value),
+                                }
                                 : ele
                             ),
                           })
@@ -1021,12 +1021,12 @@ const EditOffer = () => {
                                 details: dataCom?.details?.map((ele) =>
                                   ele?.id == floor?.id
                                     ? {
-                                        ...ele,
-                                        amenities: {
-                                          ...ele?.amenities,
-                                          ac: event?.target?.checked,
-                                        },
-                                      }
+                                      ...ele,
+                                      amenities: {
+                                        ...ele?.amenities,
+                                        ac: event?.target?.checked,
+                                      },
+                                    }
                                     : ele
                                 ),
                               })
@@ -1041,12 +1041,12 @@ const EditOffer = () => {
                                 details: dataCom?.details?.map((ele) =>
                                   ele?.id == floor?.id
                                     ? {
-                                        ...ele,
-                                        amenities: {
-                                          ...ele?.amenities,
-                                          car_entrance: event?.target?.checked,
-                                        },
-                                      }
+                                      ...ele,
+                                      amenities: {
+                                        ...ele?.amenities,
+                                        car_entrance: event?.target?.checked,
+                                      },
+                                    }
                                     : ele
                                 ),
                               })
@@ -1061,12 +1061,12 @@ const EditOffer = () => {
                                 details: dataCom?.details?.map((ele) =>
                                   ele?.id == floor?.id
                                     ? {
-                                        ...ele,
-                                        amenities: {
-                                          ...ele?.amenities,
-                                          kitchen: event?.target?.checked,
-                                        },
-                                      }
+                                      ...ele,
+                                      amenities: {
+                                        ...ele?.amenities,
+                                        kitchen: event?.target?.checked,
+                                      },
+                                    }
                                     : ele
                                 ),
                               })
@@ -1081,12 +1081,12 @@ const EditOffer = () => {
                                 details: dataCom?.details?.map((ele) =>
                                   ele?.id == floor?.id
                                     ? {
-                                        ...ele,
-                                        amenities: {
-                                          ...ele?.amenities,
-                                          furnished: event?.target?.checked,
-                                        },
-                                      }
+                                      ...ele,
+                                      amenities: {
+                                        ...ele?.amenities,
+                                        furnished: event?.target?.checked,
+                                      },
+                                    }
                                     : ele
                                 ),
                               })
@@ -1125,14 +1125,14 @@ const EditOffer = () => {
                           details: dataCom?.details?.map((ele) =>
                             ele?.id == detail?.id
                               ? {
-                                  ...ele,
-                                  area: Number(event?.target?.value),
-                                }
+                                ...ele,
+                                area: Number(event?.target?.value),
+                              }
                               : ele
                           ),
                         })
                       }
-                      value={detail?.area?detail?.area:""}
+                      value={detail?.area ? detail?.area : ""}
                       measurement="متر"
                     />
                     <InputAreaPrice
@@ -1143,14 +1143,14 @@ const EditOffer = () => {
                           details: dataCom?.details?.map((ele) =>
                             ele?.id == detail?.id
                               ? {
-                                  ...ele,
-                                  price: Number(event?.target?.value),
-                                }
+                                ...ele,
+                                price: Number(event?.target?.value),
+                              }
                               : ele
                           ),
                         })
                       }
-                      value={detail?.price?detail?.price:""}
+                      value={detail?.price ? detail?.price : ""}
                       measurement="ريال"
                       desc="(بدون القيمة المضافة والسعي)"
                     />
@@ -1162,9 +1162,9 @@ const EditOffer = () => {
                           details: dataCom?.details?.map((ele) =>
                             ele?.id == detail?.id
                               ? {
-                                  ...ele,
-                                  rooms_number: Number(e?.target?.value),
-                                }
+                                ...ele,
+                                rooms_number: Number(e?.target?.value),
+                              }
                               : ele
                           ),
                         })
@@ -1183,9 +1183,9 @@ const EditOffer = () => {
                           details: dataCom?.details?.map((ele) =>
                             ele?.id == detail?.id
                               ? {
-                                  ...ele,
-                                  halls_number: Number(e?.target?.value),
-                                }
+                                ...ele,
+                                halls_number: Number(e?.target?.value),
+                              }
                               : ele
                           ),
                         })
@@ -1204,9 +1204,9 @@ const EditOffer = () => {
                           details: dataCom?.details?.map((ele) =>
                             ele?.id == detail?.id
                               ? {
-                                  ...ele,
-                                  bathrooms_number: Number(e?.target?.value),
-                                }
+                                ...ele,
+                                bathrooms_number: Number(e?.target?.value),
+                              }
                               : ele
                           ),
                         })
@@ -1225,9 +1225,9 @@ const EditOffer = () => {
                           details: dataCom?.details?.map((ele) =>
                             ele?.id == detail?.id
                               ? {
-                                  ...ele,
-                                  kitchens_number: Number(e?.target?.value),
-                                }
+                                ...ele,
+                                kitchens_number: Number(e?.target?.value),
+                              }
                               : ele
                           ),
                         })
@@ -1261,12 +1261,12 @@ const EditOffer = () => {
                             details: dataCom?.details?.map((ele) =>
                               ele?.id == detail?.id
                                 ? {
-                                    ...ele,
-                                    amenities: {
-                                      ...ele?.amenities,
-                                      pool: event?.target?.checked,
-                                    },
-                                  }
+                                  ...ele,
+                                  amenities: {
+                                    ...ele?.amenities,
+                                    pool: event?.target?.checked,
+                                  },
+                                }
                                 : ele
                             ),
                           })
@@ -1281,12 +1281,12 @@ const EditOffer = () => {
                             details: dataCom?.details?.map((ele) =>
                               ele?.id == detail?.id
                                 ? {
-                                    ...ele,
-                                    amenities: {
-                                      ...ele?.amenities,
-                                      garage: event?.target?.checked,
-                                    },
-                                  }
+                                  ...ele,
+                                  amenities: {
+                                    ...ele?.amenities,
+                                    garage: event?.target?.checked,
+                                  },
+                                }
                                 : ele
                             ),
                           })
@@ -1301,12 +1301,12 @@ const EditOffer = () => {
                             details: dataCom?.details?.map((ele) =>
                               ele?.id == detail?.id
                                 ? {
-                                    ...ele,
-                                    amenities: {
-                                      ...ele?.amenities,
-                                      servants_room: event?.target?.checked,
-                                    },
-                                  }
+                                  ...ele,
+                                  amenities: {
+                                    ...ele?.amenities,
+                                    servants_room: event?.target?.checked,
+                                  },
+                                }
                                 : ele
                             ),
                           })
@@ -1321,12 +1321,12 @@ const EditOffer = () => {
                             details: dataCom?.details?.map((ele) =>
                               ele?.id == detail?.id
                                 ? {
-                                    ...ele,
-                                    amenities: {
-                                      ...ele?.amenities,
-                                      furnished: event?.target?.checked,
-                                    },
-                                  }
+                                  ...ele,
+                                  amenities: {
+                                    ...ele?.amenities,
+                                    furnished: event?.target?.checked,
+                                  },
+                                }
                                 : ele
                             ),
                           })
@@ -1339,7 +1339,7 @@ const EditOffer = () => {
               </>
             ))}
           {dataCom?.property_type_id == 3 &&
-          dataCom?.property_type_details_id == 3 ? (
+            dataCom?.property_type_details_id == 3 ? (
             <></>
           ) : (
             (dataCom?.property_type_id == 4 ||
@@ -1366,12 +1366,12 @@ const EditOffer = () => {
                         details: dataCom?.details?.map((ele) =>
                           ele?.id == detail?.id
                             ? {
-                                ...ele,
-                                amenities: {
-                                  ...ele?.amenities,
-                                  ac: event?.target?.checked,
-                                },
-                              }
+                              ...ele,
+                              amenities: {
+                                ...ele?.amenities,
+                                ac: event?.target?.checked,
+                              },
+                            }
                             : ele
                         ),
                       })
@@ -1386,12 +1386,12 @@ const EditOffer = () => {
                         details: dataCom?.details?.map((ele) =>
                           ele?.id == detail?.id
                             ? {
-                                ...ele,
-                                amenities: {
-                                  ...ele?.amenities,
-                                  car_entrance: event?.target?.checked,
-                                },
-                              }
+                              ...ele,
+                              amenities: {
+                                ...ele?.amenities,
+                                car_entrance: event?.target?.checked,
+                              },
+                            }
                             : ele
                         ),
                       })
@@ -1406,12 +1406,12 @@ const EditOffer = () => {
                         details: dataCom?.details?.map((ele) =>
                           ele?.id == detail?.id
                             ? {
-                                ...ele,
-                                amenities: {
-                                  ...ele?.amenities,
-                                  kitchen: event?.target?.checked,
-                                },
-                              }
+                              ...ele,
+                              amenities: {
+                                ...ele?.amenities,
+                                kitchen: event?.target?.checked,
+                              },
+                            }
                             : ele
                         ),
                       })
@@ -1426,12 +1426,12 @@ const EditOffer = () => {
                         details: dataCom?.details?.map((ele) =>
                           ele?.id == detail?.id
                             ? {
-                                ...ele,
-                                amenities: {
-                                  ...ele?.amenities,
-                                  furnished: event?.target?.checked,
-                                },
-                              }
+                              ...ele,
+                              amenities: {
+                                ...ele?.amenities,
+                                furnished: event?.target?.checked,
+                              },
+                            }
                             : ele
                         ),
                       })
@@ -1503,18 +1503,18 @@ const EditOffer = () => {
         </div>
         <div className="bg-white rounded-lg border border-[#E5E7EB] w-full mb-4 items-start justify-start p-4">
           <div className="flex items-center justify-end gap-2">
-          <p className="text-xs text-[#6B7280] font-bold">
-                  أوافق على <button className="text-[#98CC5D]" onClick={(e:React.MouseEvent<HTMLButtonElement>)=>{
-                    e.preventDefault()
-                    modalRefRules?.current?.open()
-                    }}>الشروط</button> و
-                  <button className="text-[#98CC5D]"
-                  onClick={(e:React.MouseEvent<HTMLButtonElement>)=>{
-                    e.preventDefault()
-                    modalRefRules?.current?.open()
-                    }}
-                  >الأحكام</button> الخاصة بمشروك
-                </p>
+            <p className="text-xs text-[#6B7280] font-bold">
+              أوافق على <button className="text-[#98CC5D]" onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                e.preventDefault()
+                modalRefRules?.current?.open()
+              }}>الشروط</button> و
+              <button className="text-[#98CC5D]"
+                onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                  e.preventDefault()
+                  modalRefRules?.current?.open()
+                }}
+              >الأحكام</button> الخاصة بمشروك
+            </p>
             <input
               type="checkbox"
               className="h-4 w-4 rounded-2xl accent-[#3B73B9]"
@@ -1529,7 +1529,7 @@ const EditOffer = () => {
           </div>
         </div>
       </div>
-      <ModelRules refModel={modalRefRules}  onChange={(e:React.ChangeEvent<HTMLInputElement>) => setDeal(e.target.checked)} deal={deal}/>
+      <ModelRules refModel={modalRefRules} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDeal(e.target.checked)} deal={deal} />
       <Modal ref={checkRef} size="xs">
         <div
           className="items-start flex justify-center flex-col p-4 "
@@ -1571,7 +1571,7 @@ const EditOffer = () => {
               text=" تعديل"
               onClick={() => {
                 checkRef.current?.close();
-                onSubmit().then((res)=>console.log(res,"message")).catch((error)=>console.log(error,"message"))
+                onSubmit().then((res) => console.log(res, "message")).catch((error) => console.log(error, "message"))
               }}
               className="!text-xs !font-medium"
             />

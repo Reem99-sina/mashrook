@@ -19,29 +19,14 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { getRequest,dataReturn } from "@/redux/features/getRequest";
-const limit = 5;
-
-const slicedData = {
-  offersCount: sampleData5.offersCount.slice(0, limit),
-  date: sampleData5.date.slice(0, limit),
-  seller: sampleData5.seller.slice(0, limit),
-  unitStatus: sampleData5.unitStatus.slice(0, limit),
-  requestId: sampleData5.requestId.slice(0, limit),
-  licenseNumber: sampleData5.licenseNumber.slice(0, limit),
-  city: sampleData5.city.slice(0, limit),
-  district: sampleData5.district.slice(0, limit),
-  offeredShare: sampleData5.offeredShare.slice(0, limit),
-  area: sampleData5.area.slice(0, limit),
-  price: sampleData5.price.slice(0, limit),
-  currency: sampleData5.currency.slice(0, limit),
-  unitCategory: sampleData5.unitCategory.slice(0, limit),
-  unitType: sampleData5.unitType.slice(0, limit),
-  dealStatus: sampleData5.dealStatus.slice(0, limit),
-  offerId: sampleData5.offerId.slice(0, limit),
-};
+import useFcmToken ,{useMessage,requestPermission}from '@/utils/hooks/useFcmToken';
+import FcmTokenComp from "@/utils/firebase/firebaseForeground"
+// import { FcmTokenComp, onMessage } from "firebase/messaging";
+const limit = 5
 
 export default function Home() {
   const router = useRouter();
+  const { fcmToken,notificationPermissionStatus } = useFcmToken();
   const { loading, message, data } = useSelector<RootState>(
     (state) => state.getRequest
   ) as { loading: boolean; message: string; data: dataReturn[] };
@@ -83,8 +68,10 @@ export default function Home() {
   useEffect(() => {
     dispatch(getRequest({}));
   }, [dispatch]);
+
   return (
     <div className="flex justify-center w-dvh h-max ">
+      <FcmTokenComp/>
       <div className="w-full bg-white rounded text-black shadow ">
         <div className="w-full z-50">
           <MainHeader />

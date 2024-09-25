@@ -3,7 +3,7 @@ import React, { useState, useRef, useEffect, useMemo } from "react";
 import { TextInput } from "../components/shared/text-input.component";
 import { FaRegUserCircle } from "react-icons/fa";
 import { format } from "date-fns";
-import {fetchToken}from "@/redux/features/userSlice"
+import { fetchToken } from "@/redux/features/userSlice"
 import {
   CloseIconSmall,
   Filter,
@@ -26,7 +26,7 @@ import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { RealEstateTypeInter } from "@/redux/features/postRealEstate";
 import { deleteProperty, removeDelete, UpdataExpiredDateProperty } from "@/redux/features/getPartners"
-import {FormatNumber} from "@/app/hooks/formatNumber"
+import { FormatNumber } from "@/app/hooks/formatNumber"
 interface criteriaInfo {
   dealStatus: string,
   city: string,
@@ -86,9 +86,9 @@ export const GitMyOrders = () => {
     priceRange: [500000, 20000000],
 
   });
-  const {  token } = useSelector<RootState>(
+  const { token } = useSelector<RootState>(
     (state) => state.register
-  ) as {  token:string };
+  ) as { token: string };
   const dispatch = useDispatch<AppDispatch>();
   const [idDelete, setId] = useState<number>();
   const [currentPage, setCurrentPage] = useState(1);
@@ -151,7 +151,7 @@ export const GitMyOrders = () => {
       property_type_details_id: criteria?.unitType != 0 ? criteria?.unitType : null
       , status: (criteria?.dealStatus == "متكامل" || criteria?.dealStatus == "منتهي") ? "complete" : "available",
       sort: optionFilter == "الأحدث الى الأقدم" ? "created_desc" : optionFilter == "الأقدم الى الأحدث" ? "created_asc" : optionFilter == "الميزانية ( الأدنى الى الأعلى)" ? "price_asc" : optionFilter == "الميزانية ( الأعلى الى الأدنى)" ? "price_decs" : "",
-      finance:criteria?.unitStatus
+      finance: criteria?.unitStatus
       // option=="الأحدث إلى الأقدم"?handleSelect("latest"):option=="الأقدم الى الأحدث"?handleSelect("oldest"):option=="الميزانية ( الأدنى الى الأعلى)"?handleSelect("priceLowToHigh"):handleSelect("priceHighToLow")
     }
   }, [criteria, optionFilter])
@@ -160,11 +160,11 @@ export const GitMyOrders = () => {
   }, [dataOrders, currentPage]);
   const onDelete = () => {
     if (idDelete) {
-      dispatch(deleteProperty({ id: idDelete })).then((res:any)=>{
-        if(res.payload.message&&!res.payload.status){
+      dispatch(deleteProperty({ id: idDelete })).then((res: any) => {
+        if (res.payload.message && !res.payload.status) {
           toast.success(res.payload.message);
-          
-        }else if(res.payload.status){
+
+        } else if (res.payload.status) {
           toast.error(res.payload.message);
         }
         dispatch(deleteOrder({ data: dataOrder?.filter((dataOrderOne: any) => dataOrderOne?.id !== idDelete) }))
@@ -174,11 +174,11 @@ export const GitMyOrders = () => {
   }
   const onExpiredDate = () => {
     if (idDelete) {
-      dispatch(UpdataExpiredDateProperty({ id: idDelete })).then((res:any)=>{
-        if(res.payload.data){
+      dispatch(UpdataExpiredDateProperty({ id: idDelete })).then((res: any) => {
+        if (res.payload.data) {
           toast.success(res.payload.message);
-         
-        }else if(res.payload.status){
+
+        } else if (res.payload.status) {
           toast.error(res.payload.message);
         }
       })
@@ -191,17 +191,17 @@ export const GitMyOrders = () => {
     }
   }, [token, dispatch]);
   useEffect(() => {
-  
+
     return () => {
       dispatch(removeDelete())
     }
   }, [dispatch])
   useEffect(() => {
     dispatch(getRequest({
-      sort: optionFilter == "الأحدث الى الأقدم" ? "created_desc" : optionFilter == "الأقدم الى الأحدث" ? "created_asc" : optionFilter == "الميزانية ( الأدنى الى الأعلى)" ? "price_asc" : optionFilter == "الميزانية ( الأعلى الى الأدنى)"?"price_decs":""
-   ,status: (criteria?.dealStatus=="متكامل")||(criteria?.dealStatus=="منتهي")?"complete":"available"
+      sort: optionFilter == "الأحدث الى الأقدم" ? "created_desc" : optionFilter == "الأقدم الى الأحدث" ? "created_asc" : optionFilter == "الميزانية ( الأدنى الى الأعلى)" ? "price_asc" : optionFilter == "الميزانية ( الأعلى الى الأدنى)" ? "price_decs" : ""
+      , status: (criteria?.dealStatus == "متكامل") || (criteria?.dealStatus == "منتهي") ? "complete" : "available"
     }))
-  }, [ optionFilter, dispatch,criteria?.dealStatus])
+  }, [optionFilter, dispatch, criteria?.dealStatus])
   return (
     <div className="p-4 bg-white">
       {isFilterModalOpen && (

@@ -31,8 +31,8 @@ interface ChatCardProps {
   district: string;
   budget: string;
   type: string;
-  finance:boolean;
-  alternativeCount:number
+  finance: boolean;
+  alternativeCount: number
 }
 
 export const MyOrdersCard: React.FC<ChatCardProps> = ({
@@ -62,15 +62,15 @@ export const MyOrdersCard: React.FC<ChatCardProps> = ({
       <div className="items-center justify-between  flex-row flex relative">
         <p className="text-xl font-bold text-[#374151]">{title} </p>
 
-        
-          <Link className="items-center justify-center flex border border-[#E5E7EB] p-2 rounded-md gap-1 " href={`/my-offer/otherOffer/${requestNumber}`}>
-            <p className="font-medium text-sm text-[#3B73B9]">عروض بديله</p>
-            <OtherOffer />
-            <span className=" flex items-center justify-center p-1 w-4 h-4 absolute left-[-9px] top-[-2px] text-[11px] text-white bg-[#F05252] rounded-full">
-              {alternativeCount}
-            </span>
-          </Link>
-        
+
+        <Link className="items-center justify-center flex border border-[#E5E7EB] p-2 rounded-md gap-1 " href={`/my-offer/otherOffer/${requestNumber}`}>
+          <p className="font-medium text-sm text-[#3B73B9]">عروض بديله</p>
+          <OtherOffer />
+          <span className=" flex items-center justify-center p-1 w-4 h-4 absolute left-[-9px] top-[-2px] text-[11px] text-white bg-[#F05252] rounded-full">
+            {alternativeCount}
+          </span>
+        </Link>
+
       </div>
       <div className="flex gap-2 mt-2">
         <span className="rounded-xl bg-[#F3F4F6] pl-2 pr-2 pt-[2px] pb-[2px] text-xs font-normal text-[#6B7280]">
@@ -123,10 +123,10 @@ export const MyOrdersCard: React.FC<ChatCardProps> = ({
           <p className="font-normal text-[#6B7280] text-sm">
             أرغب في تمويل عقاري
           </p>
-          {finance?<Accreditation />:<IoMdCloseCircleOutline color="red"/>}
+          {finance ? <Accreditation /> : <IoMdCloseCircleOutline color="red" />}
         </div>
       </div>
-      
+
 
       <div className="flex flex-row items-center justify-center border-t-2 mt-5 border-[#E5E7EB]">
         <Button
@@ -136,14 +136,14 @@ export const MyOrdersCard: React.FC<ChatCardProps> = ({
           onClick={onEdit}
         />
         <span className="text-[#D1D5DB]">|</span>
-       
-          <Button
-            startIcon={<UpdateIcon />}
-            text="تحديث"
-            className="!bg-white !flex !flex-row-reverse !text-[#3B73B9] !text-sm !font-medium !gap-1 "
-            onClick={onUpdate}
-          />
-        
+
+        <Button
+          startIcon={<UpdateIcon />}
+          text="تحديث"
+          className="!bg-white !flex !flex-row-reverse !text-[#3B73B9] !text-sm !font-medium !gap-1 "
+          onClick={onUpdate}
+        />
+
 
         <span className="text-[#D1D5DB]">|</span>
 

@@ -17,7 +17,8 @@ export let earthSchema = object().shape({
   is_divisible: boolean().required("هل العقار قابل للتجزئة؟"),
   advertisement_number: string(),
   license_number: string(),
-  landDetails: array().min(1, "معلومات الارض مطلوبة")
+  landDetails: array()
+    .min(1, "معلومات الارض مطلوبة")
     .of(
       object().shape({
         plan_number: string().required("ما رقم المخطط ؟"),
@@ -25,8 +26,7 @@ export let earthSchema = object().shape({
         area: number().required("مساحة مطلوبة"),
         price: number().notOneOf([0], "سعر مطلوب").required("سعر مطلوب"),
       })
-    )
-   ,
+    ),
 });
 export let earthDevSchema = object().shape({
   advertisement_number: string().required("ما رقم الاعلان؟"),

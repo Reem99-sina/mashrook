@@ -71,3 +71,9 @@ body {
 *{
   font-family:"Cairo"
 }
+.PhoneInputCountrySelectArrow{
+  display: none !important;
+}
+.PhoneInputCountryIcon{
+  margin:0px 3px;
+}

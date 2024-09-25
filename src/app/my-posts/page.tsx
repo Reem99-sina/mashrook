@@ -1,79 +1,35 @@
 "use client";
 
-import React,{useRef,useEffect} from "react";
+import React, { useRef, useEffect , useMemo,useState} from "react";
 import { Plus, Posts } from "../assets/svg";
 import { Button } from "../components/shared/button.component";
 import PostsCard from "../components/shared/PostsCard";
 import Pagination from "../components/shared/pagination";
-import FilterPart from "../mySave/component/filterPart";
+import FilterPart from "./components/filterPart";
+import { format } from "date-fns";
+import { useRouter } from "next/navigation";
 import SharedHeaderComponent from "../components/shared/SharedHeaderComponent";
 import { getRequest } from "@/redux/features/getOrders";
-import {  ModalRef } from "@/app/components/shared/modal.component";
+import { ModalRef } from "@/app/components/shared/modal.component";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
-import ModalAddAdvertising  from "./components/ModalAddAdvertise"
-import {fetchToken}from "@/redux/features/userSlice"
-import {getMyAdvertise} from "@/redux/features/getMyAdvertise"
-const posts = [
-  {
-    type: "شقة (داخل فيلا)",
-    status: "للبيع",
-    active: "تمت الشراكة",
-    id: 12345,
-    requestNumber: 2022,
-    announcementDate: "2024-4-23",
-    announcementStatus: "سند دفع غير مقبول",
-  },
-  {
-    type: "شقة (داخل فيلا)",
-    status: "للبيع",
-    active: "متاح",
-    id: 12346,
-    requestNumber: 2023,
-    announcementDate: "2024-4-24",
-    announcementStatus: "منتهي",
-  },
-  {
-    type: "شقة (داخل فيلا)",
-    status: "للبيع",
-    active: "تمت الشراكة",
-    id: 12347,
-    requestNumber: 2024,
-    announcementDate: "2024-4-25",
-    announcementStatus: "التحقق من سند الدفع",
-  },
-  {
-    type: "شقة (داخل فيلا)",
-    status: "للبيع",
-    active: "متاح",
-    id: 12348,
-    requestNumber: 2025,
-    announcementDate: "2024-4-26",
-    announcementStatus: "سند دفع غير مقبول",
-  },
-  {
-    type: "شقة (داخل فيلا)",
-    status: "للبيع",
-    active: "متاح",
-    id: 12349,
-    requestNumber: 2026,
-    announcementDate: "2024-4-27",
-    announcementStatus: "سند دفع غير مقبول",
-  },
-];
-
+import ModalAddAdvertising from "./components/ModalAddAdvertise"
+import { fetchToken } from "@/redux/features/userSlice"
+import { getAllAdvertise } from "@/redux/features/getMyAdvertise"
+import {dataReturn} from "@/redux/features/getRequest"
+interface PostInterface{
+  id:number|null,
+  type:string,
+  status:string,
+  requestNumber:number,
+  announcementDate: string,
+  announcementStatus:string,
+  active:string
+}
 const MyPosts: React.FC = () => {
-  const handleRenew = () => {};
+  const [currentPage, setCurrentPage] = useState(1);
+  const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
-  let {
-    loading,
-    message,
-    data: dataOrder,
-  } = useSelector<RootState>((state) => state.requests) as {
-    loading: boolean;
-    message: string;
-    data: any;
-  };
   let {
     data: dataAdvertise,
   } = useSelector<RootState>((state) => state.myAdvertise) as {
@@ -82,11 +38,28 @@ const MyPosts: React.FC = () => {
     data: any;
   };
   const modalRef = useRef<ModalRef>(null);
-  const handleViewProperty = () => {};
-  useEffect(()=>{
-    dispatch(getMyAdvertise())
-  },[dispatch])
-  console.log(dataAdvertise,"dataAdvertise")
+  const dataAdvertiseMemo=useMemo(()=>{
+   return dataAdvertise?.map((ele:dataReturn)=>({
+      type:ele?.propertyTypeDetails?.title,
+      status:ele?.propertyPurpose?.title,
+      id:ele?.propertyAdvertising?ele?.propertyAdvertising[0]?.id:null,
+      requestNumber:ele?.id,
+      announcementDate: ele?.propertyAdvertising?format(new Date(ele?.propertyAdvertising[0]?.createdAt), "yyyy-MM-dd"):"",
+      announcementStatus:(ele?.propertyAdvertising&&ele?.propertyAdvertising[0]?.status=="active")?"متاح":"",
+      active:"تمت الشراكة"
+    }))
+  },[dataAdvertise])
+  
+  let dataPagination = useMemo(() => {
+    return dataAdvertiseMemo?.slice((currentPage - 1) * 3, currentPage * 3);
+  }, [dataAdvertiseMemo, currentPage]);
+  const handleViewProperty = () => { };
+  const handleRenew = (id:number) => { 
+    router.push(`/showproperty/${id}`)
+  };
+  useEffect(() => {
+    dispatch(getAllAdvertise({}))
+  }, [dispatch])
   return (
     <div className="container bg-white mx-auto">
       <SharedHeaderComponent text="إعلاناتي" />
@@ -95,23 +68,23 @@ const MyPosts: React.FC = () => {
           text="إضافة إعلان جديد"
           startIcon={<Plus />}
           className="!flex !flex-row-reverse items-center justify-center gap-2"
-          onClick={()=>modalRef?.current?.open()}
+          onClick={() => modalRef?.current?.open()}
         />
       </div>
       <div className="p-4">
         <FilterPart />
       </div>
-      <ModalAddAdvertising refModel={modalRef}/>
+      <ModalAddAdvertising refModel={modalRef} />
       <div className="p-4 flex flex-col">
-        {dataAdvertise?.length > 0 ? (
+        {dataPagination?.length > 0 ? (
           <>
-            {posts.map((post, index) => (
+            {dataPagination.map((post:PostInterface, index:number) => (
               <PostsCard
                 key={post.id}
                 type={post.type}
                 status={post.status}
                 active={post.active}
-                id={post.id}
+                id={post?.id}
                 requestNumber={post.requestNumber}
                 announcementDate={post.announcementDate}
                 announcementStatus={post.announcementStatus}
@@ -120,7 +93,8 @@ const MyPosts: React.FC = () => {
               />
             ))}
             <div className="mt-auto">
-              <Pagination pageCount={4} onPageChange={() => {}} />
+              <Pagination pageCount={Math.ceil(dataAdvertiseMemo?.length / 3)}
+                onPageChange={(p) => setCurrentPage(p)}  />
             </div>
           </>
         ) : (

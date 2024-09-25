@@ -1,12 +1,18 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import React from "react";
-import Cookie from 'js-cookie';
-import {returnRealState,landDetailPutINfo,locationInfo,realEstatePartner,detailsType} from "@/type/addrealestate"
+import Cookie from "js-cookie";
+import {
+  returnRealState,
+  landDetailPutINfo,
+  locationInfo,
+  realEstatePartner,
+  detailsType,
+} from "@/type/addrealestate";
 export interface returnType {
   loading: boolean;
   message: string | undefined;
-  data: returnRealState|null;
+  data: returnRealState | null;
 }
 export interface typeInput {
   property_owner_type_id?: number; // وسيط عقاري, مطور عقاري, وسيط
@@ -43,7 +49,7 @@ export interface RealEstateTypeInter {
   partner_type_id?: number; /// في حالة الفيلا (فيلا ( درج داخلي + شقة)او فيلا (وحدات تمليك)) :::::: في حالة الدور (دور أرضي و دور علوي) :::::  في حالة شقة (شقة (داخل عمارة سكنية)و شقة (داخل فيلا))
   age?: number; //  في حالة الفيلا العمر
   location?: string; // في حالة الفيلا دور أرضي, دور علوي ,شقة
-  apartment_number?: string|number | undefined; // في حالة الشقة رقم الشقة
+  apartment_number?: string | number | undefined; // في حالة الشقة رقم الشقة
   apartment_floor?: string; // في حالة الشقة رقم الدور
   rooms_number?: number; // في حالة الفيلا عدد الغرف
   halls_number?: number; // في حالة الفيلا عدد الصالات
@@ -58,7 +64,7 @@ export interface RealEstateTypeInter {
   kitchen?: boolean; // مزايا اضافية مطبخ راكب
   partnership_amount?: number; // في حالة الاستثمار
   images?: File[];
-  status?:string;
+  status?: string;
   apartment?: {
     area?: number | string;
     price?: number | string;
@@ -67,43 +73,43 @@ export interface RealEstateTypeInter {
     bathrooms_number?: number; // في حالة الفيلا عدد دورات المياه
     kitchens_number?: number;
   };
-  propertyDetailsOwnership?:realEstatePartner[];
-  propertyPurpose?:detailsType;
-  finance?:boolean;
-  alternativeCount?:number;
-  landDetails?:{
-    id?: number,
-    area?: number,
-    price?: number,
-    min_price?: null|number,
-    is_divisible?: boolean,
-    piece_number?: string,
-    plan_number?: string,
-    type?: null|string,
-    createdAt?: string,
-    updatedAt?: string,
-    property_id?: number,
-    status?:string
-}[];
-  createdAt?:string;
-  id?:string;
+  propertyDetailsOwnership?: realEstatePartner[];
+  propertyPurpose?: detailsType;
+  finance?: boolean;
+  alternativeCount?: number;
+  landDetails?: {
+    id?: number;
+    area?: number;
+    price?: number;
+    min_price?: null | number;
+    is_divisible?: boolean;
+    piece_number?: string;
+    plan_number?: string;
+    type?: null | string;
+    createdAt?: string;
+    updatedAt?: string;
+    property_id?: number;
+    status?: string;
+  }[];
+  createdAt?: string;
+  id?: string;
   details?: earthInter[];
-  propertyTypeDetails?:{
-    id?:number,
-    title?:string
-  },
-  propertyLocation?:{
-    city?:string,
-    district?:string,
-    address?:string,
-    lat?:number,
-    long?:number
-  }
-  propertyType?:{
-    id?:number,
-    title?:string
-  }
-  propertyOwnerType?:detailsType
+  propertyTypeDetails?: {
+    id?: number;
+    title?: string;
+  };
+  propertyLocation?: {
+    city?: string;
+    district?: string;
+    address?: string;
+    lat?: number;
+    long?: number;
+  };
+  propertyType?: {
+    id?: number;
+    title?: string;
+  };
+  propertyOwnerType?: detailsType;
 }
 export interface RealEstateErrrorTypeInter {
   property_owner_type_id?: number; // وسيط عقاري, مطور عقاري, وسيط
@@ -141,7 +147,7 @@ export interface RealEstateErrrorTypeInter {
   kitchen?: boolean; // مزايا اضافية مطبخ راكب
   partnership_amount?: number; // في حالة الاستثمار
   images?: string;
-  status?:string;
+  status?: string;
   "apartment.area"?: string;
   "apartment.price"?: string;
   "apartment.rooms_number"?: string;
@@ -162,21 +168,21 @@ export interface RealEstateErrrorTypeInter {
     price?: number | string;
     piece_number?: string;
     plan_number?: string;
-    stage:string;
-    available_percentage:number;
-    available_price:number;
+    stage: string;
+    available_percentage: number;
+    available_price: number;
   }[];
   [key: string]: any;
 }
 export interface earthInter {
-  id?:number;
+  id?: number;
   type: string;
   area: number;
   price: number;
-  stage:string;
-  available_percentage:number;
-  available_price:number;
-  apartment_number?:string|number | undefined;
+  stage: string;
+  available_percentage: number;
+  available_price: number;
+  apartment_number?: string | number | undefined;
   rooms_number: number; // في حالة الفيلا عدد الغرف
   halls_number: number; // في حالة الفيلا عدد الصالات
   bathrooms_number: number; // في حالة الفيلا عدد دورات المياه
@@ -189,12 +195,12 @@ export interface earthInter {
   kitchen: boolean; // مزايا اضافية مطبخ راكب
   garage: boolean;
   car_entrance: boolean;
- status?:string;
-  min_price?:number;
-  createdAt?:string,
-  updatedAt?:string,
-  property_id?:number,
-  amenities?:{
+  status?: string;
+  min_price?: number;
+  createdAt?: string;
+  updatedAt?: string;
+  property_id?: number;
+  amenities?: {
     pool?: boolean; // مزايا اضافية مسبح
     garden?: boolean; // مزايا اضافية
     servants_room?: boolean; // مزايا اضافية غرفة خدم
@@ -202,8 +208,8 @@ export interface earthInter {
     furnished?: boolean; // مزايا اضافية مؤثثة
     kitchen?: boolean; // مزايا اضافية مطبخ راكب
     garage?: boolean;
-    car_entrance?: boolean; 
-  }
+    car_entrance?: boolean;
+  };
 }
 interface imageInter {
   id: number;
@@ -225,78 +231,76 @@ export const postrealEstateType = createAsyncThunk<
     })
     .then(async (response) => {
       // postImageRealEstate(response.data)
-      if(images&&images?.length>0){
+      if (images && images?.length > 0) {
         const res = await imageRequest({
           id: response?.data?.data?.id,
           images: images,
         });
       }
-     
+
       return response.data;
     })
     .catch((error) => error?.response?.data);
 
   return response;
 });
-export const putLandDetailsType = createAsyncThunk<
-  returnType,
-  any
->("land-details/put", async (data: any, { rejectWithValue }) => {
- 
-  const response = await axios
-    .put("https://server.mashrook.sa/property/land-details", data, {
-      headers: {
-        Authorization: Cookie.get("token"),
-      },
-    })
-    .then(async (response) => {
-      // postImageRealEstate(response.data)
-     
-      return response.data;
-    })
-    .catch((error) => error?.response?.data);
+export const putLandDetailsType = createAsyncThunk<returnType, any>(
+  "land-details/put",
+  async (data: any, { rejectWithValue }) => {
+    const response = await axios
+      .put("https://server.mashrook.sa/property/land-details", data, {
+        headers: {
+          Authorization: Cookie.get("token"),
+        },
+      })
+      .then(async (response) => {
+        // postImageRealEstate(response.data)
 
-  return response;
-});
-export const putDetailsType = createAsyncThunk<
-  returnType,
-  any
->("details/put", async (data: any, { rejectWithValue }) => {
- 
-  const response = await axios
-    .put("https://server.mashrook.sa/property/details", data, {
-      headers: {
-        Authorization: Cookie.get("token"),
-      },
-    })
-    .then(async (response) => {
-      // postImageRealEstate(response.data)
-     
-      return response.data;
-    })
-    .catch((error) => error?.response?.data);
+        return response.data;
+      })
+      .catch((error) => error?.response?.data);
 
-  return response;
-});
-export const putLocation = createAsyncThunk<
-  returnType,
-  any
->("location/put", async (data: any, { rejectWithValue }) => {
-  const response = await axios
-    .put("https://server.mashrook.sa/property/location", data, {
-      headers: {
-        Authorization: Cookie.get("token"),
-      },
-    })
-    .then(async (response) => {
-      // postImageRealEstate(response.data)
-      
-      return response.data;
-    })
-    .catch((error) => error?.response?.data);
+    return response;
+  }
+);
+export const putDetailsType = createAsyncThunk<returnType, any>(
+  "details/put",
+  async (data: any, { rejectWithValue }) => {
+    const response = await axios
+      .put("https://server.mashrook.sa/property/details", data, {
+        headers: {
+          Authorization: Cookie.get("token"),
+        },
+      })
+      .then(async (response) => {
+        // postImageRealEstate(response.data)
 
-  return response;
-});
+        return response.data;
+      })
+      .catch((error) => error?.response?.data);
+
+    return response;
+  }
+);
+export const putLocation = createAsyncThunk<returnType, any>(
+  "location/put",
+  async (data: any, { rejectWithValue }) => {
+    const response = await axios
+      .put("https://server.mashrook.sa/property/location", data, {
+        headers: {
+          Authorization: Cookie.get("token"),
+        },
+      })
+      .then(async (response) => {
+        // postImageRealEstate(response.data)
+
+        return response.data;
+      })
+      .catch((error) => error?.response?.data);
+
+    return response;
+  }
+);
 export const imageRequest = async (data: imageInter) => {
   const formData = new FormData();
   data?.images?.forEach((image) => formData.append("images", image));
@@ -311,64 +315,66 @@ export const imageRequest = async (data: imageInter) => {
     .catch((error) => error?.response?.data);
   return response;
 };
-export const imageDeleteRequest = createAsyncThunk<
-returnType,
-any
->("image/delete",  async (data: imageInter) => {
+export const imageDeleteRequest = createAsyncThunk<returnType, any>(
+  "image/delete",
+  async (data: imageInter) => {
+    const response = await axios
+      .delete(`https://server.mashrook.sa/property-media/${data?.id}`, {
+        headers: {
+          Authorization: Cookie.get("token"),
+        },
+      })
+      .then((response) => response.data)
+      .catch((error) => error?.response?.data);
+    return response;
+  }
+);
+export const imageUpdateRequest = createAsyncThunk<returnType, any>(
+  "image/update",
+  async (data: any) => {
+    const formData = new FormData();
+    formData.append("image", data?.images);
 
-  const response = await axios
-    .delete(`https://server.mashrook.sa/property-media/${data?.id}`, {
-      headers: {
-        Authorization: Cookie.get("token")
-      },
-    })
-    .then((response) => response.data)
-    .catch((error) => error?.response?.data);
-  return response;
-})
-export const imageUpdateRequest = createAsyncThunk<
-returnType,
-any
->("image/update",  async (data: any) => {
-  const formData = new FormData();
-  formData.append("image", data?.images)
-
-  const response = await axios
-    .post(`https://server.mashrook.sa/property-media/upload-single/${data?.id}`,formData, {
-      headers: {
-        Authorization: Cookie.get("token")
-      },
-    })
-    .then((response) => response.data)
-    .catch((error) => error?.response?.data);
-  return response;
-})
-interface IntitalState{
-  loading: boolean,
-  message: string|undefined ,
-  data:  returnRealState|null,
-  dataPut:landDetailPutINfo|null,
-  messagePut:string|undefined ,
-  dataPutLocat:locationInfo|null,
-  messagePutLocat:string|undefined ,
-  dataPutDetail:any|null,
-  messagePutDetail:string|undefined ,
-  messageDeleteImage:string|undefined ,
-  messageUpdateImage:string|undefined 
+    const response = await axios
+      .post(
+        `https://server.mashrook.sa/property-media/upload-single/${data?.id}`,
+        formData,
+        {
+          headers: {
+            Authorization: Cookie.get("token"),
+          },
+        }
+      )
+      .then((response) => response.data)
+      .catch((error) => error?.response?.data);
+    return response;
+  }
+);
+interface IntitalState {
+  loading: boolean;
+  message: string | undefined;
+  data: returnRealState | null;
+  dataPut: landDetailPutINfo | null;
+  messagePut: string | undefined;
+  dataPutLocat: locationInfo | null;
+  messagePutLocat: string | undefined;
+  dataPutDetail: any | null;
+  messagePutDetail: string | undefined;
+  messageDeleteImage: string | undefined;
+  messageUpdateImage: string | undefined;
 }
-const initialstate:IntitalState = {
+const initialstate: IntitalState = {
   loading: false,
   message: "",
   data: null,
-  dataPut:null,
-  messagePut:"",
-  dataPutLocat:null,
-  messagePutLocat:"",
-  dataPutDetail:null,
-  messagePutDetail:"",
-  messageDeleteImage:"",
-  messageUpdateImage:""
-
+  dataPut: null,
+  messagePut: "",
+  dataPutLocat: null,
+  messagePutLocat: "",
+  dataPutDetail: null,
+  messagePutDetail: "",
+  messageDeleteImage: "",
+  messageUpdateImage: "",
 };
 
 const realEstateTypeSlice = createSlice({
@@ -376,13 +382,11 @@ const realEstateTypeSlice = createSlice({
   initialState: initialstate,
   reducers: {
     removeState: (state) => {
-      state.loading=false,
-      state.message= "",
-      state.data=  null
+      (state.loading = false), (state.message = ""), (state.data = null);
     },
-    removeStateEdit:(state)=>{
-      state.message=""
-    }
+    removeStateEdit: (state) => {
+      state.message = "";
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(postrealEstateType.fulfilled, (state, action) => {
@@ -401,34 +405,45 @@ const realEstateTypeSlice = createSlice({
         state.loading = false;
         state.message = action.error.message ? action.error.message : "error";
         state.data = null;
-      }),builder.addCase(putLandDetailsType.fulfilled, (state, action) => {
-        state.message=action?.payload?.message
-        ? action.payload.message
-        : "success"
-      }),builder.addCase(putLandDetailsType.rejected, (state, action) => {
+      }),
+      builder.addCase(putLandDetailsType.fulfilled, (state, action) => {
+        state.message = action?.payload?.message
+          ? action.payload.message
+          : "success";
+      }),
+      builder.addCase(putLandDetailsType.rejected, (state, action) => {
         state.message = action.error.message ? action.error.message : "error";
-      }),builder.addCase(putLocation.fulfilled,(state, action)=>{
-        state.message=""
-      }),builder.addCase(putLocation.rejected, (state, action) => {
+      }),
+      builder.addCase(putLocation.fulfilled, (state, action) => {
+        state.message = "";
+      }),
+      builder.addCase(putLocation.rejected, (state, action) => {
         state.message = action.error.message ? action.error.message : "error";
-      }),builder.addCase(putDetailsType.fulfilled,(state,action)=>{
-        state.message=action?.payload?.message
-        ? action.payload.message
-        : "success"
-      }),builder.addCase(putDetailsType.rejected,(state,action)=>{
+      }),
+      builder.addCase(putDetailsType.fulfilled, (state, action) => {
+        state.message = action?.payload?.message
+          ? action.payload.message
+          : "success";
+      }),
+      builder.addCase(putDetailsType.rejected, (state, action) => {
         state.message = action.error.message ? action.error.message : "error";
-      }),builder.addCase(imageDeleteRequest.fulfilled,(state, action)=>{
-        state.messageDeleteImage=action?.payload?.message
-        ? action.payload.message
-        : "success"
-      }),builder.addCase(imageDeleteRequest.rejected,(state, action)=>{
-        state.messageDeleteImage=action?.error?.message ? action.error.message : "error";
-      }),builder.addCase(imageUpdateRequest?.fulfilled,(state,action)=>{
-        state.messageUpdateImage=action?.payload?.message
-        ? action.payload.message
-        : "success"
-      })
+      }),
+      builder.addCase(imageDeleteRequest.fulfilled, (state, action) => {
+        state.messageDeleteImage = action?.payload?.message
+          ? action.payload.message
+          : "success";
+      }),
+      builder.addCase(imageDeleteRequest.rejected, (state, action) => {
+        state.messageDeleteImage = action?.error?.message
+          ? action.error.message
+          : "error";
+      }),
+      builder.addCase(imageUpdateRequest?.fulfilled, (state, action) => {
+        state.messageUpdateImage = action?.payload?.message
+          ? action.payload.message
+          : "success";
+      });
   },
 });
-export const { removeState,removeStateEdit } = realEstateTypeSlice.actions;
+export const { removeState, removeStateEdit } = realEstateTypeSlice.actions;
 export default realEstateTypeSlice.reducer;

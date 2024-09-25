@@ -7,11 +7,11 @@ import { useRouter } from "next/navigation";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import Cookie from "js-cookie";
-import {fetchToken}from "@/redux/features/userSlice"
+import { fetchToken } from "@/redux/features/userSlice"
 import { validateForm } from "@/app/hooks/validate";
 import { dataReturn, addUnqiue, typePay } from "@/redux/features/getRequest";
 import { amountSchema } from "@/typeSchema/schema";
-import {FormatNumber} from "@/app/hooks/formatNumber"
+import { FormatNumber } from "@/app/hooks/formatNumber"
 import toast from "react-hot-toast"
 type JoinStatusButtonsProps = {
   currentDealStatus: boolean;
@@ -25,9 +25,9 @@ const JoinStatusButtons: React.FC<JoinStatusButtonsProps> = ({
   dataMain,
 }) => {
   const [showDialog, setShowDialog] = useState(false);
-  const {  token } = useSelector<RootState>(
+  const { token } = useSelector<RootState>(
     (state) => state.register
-  ) as {  token:string };
+  ) as { token: string };
   const [user, setUser] = useState<any>();
   const [partnershipPercentage, setPartnershipPercentage] = useState(0);
   const router = useRouter();
@@ -47,7 +47,7 @@ const JoinStatusButtons: React.FC<JoinStatusButtonsProps> = ({
   }>();
 
   const handleDialogToggle = () => {
-    
+
     setShowDialog(!showDialog);
   };
   const handleSubmit = async () => {
@@ -74,12 +74,12 @@ const JoinStatusButtons: React.FC<JoinStatusButtonsProps> = ({
   };
 
   const handlePercentageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value=Number(e.target.value)
-    if(value<data?.available_percentage){
-      setErrors((prev)=>({...prev,amount:``}))
+    const value = Number(e.target.value)
+    if (value < data?.available_percentage) {
+      setErrors((prev) => ({ ...prev, amount: `` }))
       setPartnershipPercentage(Number(e.target.value));
-    }else{
-      setErrors((prev)=>({...prev,amount:`النسبة المتاحة  ${data?.available_percentage}%`}))
+    } else {
+      setErrors((prev) => ({ ...prev, amount: `النسبة المتاحة  ${data?.available_percentage}%` }))
       setPartnershipPercentage(data?.available_percentage);
     }
   };
@@ -109,16 +109,16 @@ const JoinStatusButtons: React.FC<JoinStatusButtonsProps> = ({
   useEffect(() => {
     if (typeof window != "undefined") {
       const userItem = Cookie?.get("user");
-      if(userItem&&userItem!="undefined"){
-        const makeObject=JSON.parse(userItem)
+      if (userItem && userItem != "undefined") {
+        const makeObject = JSON.parse(userItem)
         setUser(makeObject);
       }
     }
   }, []);
 
   const partnershipAmount = useMemo(() => {
-    return data?.price&&data?.area?(data?.price * partnershipPercentage *data?.area) / 100:100;
-  }, [data?.price, partnershipPercentage,data?.area]);
+    return data?.price && data?.area ? (data?.price * partnershipPercentage * data?.area) / 100 : 100;
+  }, [data?.price, partnershipPercentage, data?.area]);
   useEffect(() => {
     if (typeof window !== "undefined") {
       sessionStorage.setItem("amount", String(partnershipAmount));
@@ -141,35 +141,33 @@ const JoinStatusButtons: React.FC<JoinStatusButtonsProps> = ({
       <div className="flex justify-center">
         <button
           type="button"
-          className={`${
-            data?.stage === "finished" ||
-          
-            user?.id == dataMain?.user_id
+          className={`${data?.stage === "finished" ||
+
+              user?.id == dataMain?.user_id
               ? "bg-gray-300 text-gray-800"
               : "bg-blue-450 text-white hover:bg-blue-800 border-2 border-blue-500"
-          } w-3/4 font-medium rounded-lg text-sm px-5 py-2.5 flex justify-center rtl:flex-row-reverse dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
+            } w-3/4 font-medium rounded-lg text-sm px-5 py-2.5 flex justify-center rtl:flex-row-reverse dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
           disabled={
             data?.stage === "finished" ||
-          
+
             user?.id == dataMain?.user_id
           }
-          onClick={()=>{
-              if (!token) {
-                toast.error("انت تحتاج الي تسجيل دخول");
-                router.push("/login");
-              } else {
-                handleDialogToggle()
-              }
+          onClick={() => {
+            if (!token) {
+              toast.error("انت تحتاج الي تسجيل دخول");
+              router.push("/login");
+            } else {
+              handleDialogToggle()
+            }
           }}
         >
           <RxArrowLeft
-            className={`mr-4 text-xl ${
-              data?.stage === "finished" ||
-            
-              user?.id == dataMain?.user_id
+            className={`mr-4 text-xl ${data?.stage === "finished" ||
+
+                user?.id == dataMain?.user_id
                 ? "text-gray-600"
                 : "text-white"
-            }`}
+              }`}
           />
           انضم كشريك
         </button>
@@ -198,7 +196,7 @@ const JoinStatusButtons: React.FC<JoinStatusButtonsProps> = ({
               <p className="text-sm font-medium">
                 المبلغ الكلي
                 <span className="text-blue-450 font-bold mx-4">
-                  {data?.price&&data?.area?FormatNumber(data?.price *data?.area):""} ريال
+                  {data?.price && data?.area ? FormatNumber(data?.price * data?.area) : ""} ريال
                 </span>
               </p>
             </div>

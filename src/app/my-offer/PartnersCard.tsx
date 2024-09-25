@@ -26,18 +26,18 @@ interface PartnersCardProps {
   requestNumber: number;
   city: string;
   district: string;
-  propertyOwnerType:string;
+  propertyOwnerType: string;
   budget: string;
   PartnershipNumber: number;
   realEstate: string;
   bidRequestNumber: number;
   partnershipRatio: number;
-  purpose:string,
-  finance:boolean,
-  details_id:number,
-  land_details_id:number,
-  room_id:number,
-  sender_id:number
+  purpose: string,
+  finance: boolean,
+  details_id: number,
+  land_details_id: number,
+  room_id: number,
+  sender_id: number
 }
 
 export const PartnersCard: React.FC<PartnersCardProps> = ({
@@ -58,7 +58,7 @@ export const PartnersCard: React.FC<PartnersCardProps> = ({
   realEstate,
   bidRequestNumber,
   partnershipRatio,
-  purpose,finance,
+  purpose, finance,
   details_id,
   land_details_id,
   room_id,
@@ -72,14 +72,14 @@ export const PartnersCard: React.FC<PartnersCardProps> = ({
       <div className="items-center justify-between  flex-row flex relative ">
         <p className="text-xl font-bold text-[#374151] flex-1">{title} </p>
 
-        <Link className="items-center justify-center flex border border-[#E5E7EB] p-2 rounded-md gap-1 " href={`/ChatPage/${room_id}`} 
-          onClick={()=>{
-            if(title){
-              Cookie.set("title",  title)
-              Cookie.set("senderId",String(sender_id))
+        <Link className="items-center justify-center flex border border-[#E5E7EB] p-2 rounded-md gap-1 " href={`/ChatPage/${room_id}`}
+          onClick={() => {
+            if (title) {
+              Cookie.set("title", title)
+              Cookie.set("senderId", String(sender_id))
             }
           }}
-          >
+        >
           <p className="font-medium text-sm text-[#3B73B9]">عرض المحادثات </p>
           <ChatIconSmall />
           {/* <span className=" flex items-center justify-center p-1 w-4 h-4 absolute left-[-9px] top-[-2px] text-[11px] text-white bg-[#F05252] rounded-full">
@@ -93,14 +93,14 @@ export const PartnersCard: React.FC<PartnersCardProps> = ({
           {purpose}
         </span>
         <span className="rounded-xl bg-[#F3F4F6] px-2 py-2 text-xs font-normaltext-[#6B7280]">
-        {propertyOwnerType}
+          {propertyOwnerType}
         </span>
 
         <span className="rounded-xl bg-[#F3F4F6] px-2 py-2 text-xs font-normal text-[#6B7280]">
           {date}
         </span>
 
-        {partnershipRatio!=100 ? (
+        {partnershipRatio != 100 ? (
           <span className="rounded-xl bg-[#F3F4F6] px-2 py-2 text-xs font-normal text-[#6B7280]">
             تحت التقدم{" "}
           </span>
@@ -147,7 +147,7 @@ export const PartnersCard: React.FC<PartnersCardProps> = ({
           <p className="font-normal text-[#6B7280] text-sm">
             أرغب في تمويل عقاري
           </p>
-          {finance?<Accreditation />:<IoMdCloseCircleOutline color="red"/>}
+          {finance ? <Accreditation /> : <IoMdCloseCircleOutline color="red" />}
         </div>
 
         <div className=" flex items-center justify-between bg-[#F3F4F6] rounded-lg p-2">

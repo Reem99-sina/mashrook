@@ -27,7 +27,7 @@ const EditMyOffer = () => {
   let {
     message,
   } = useSelector<RootState>((state) => state.realEstateRequest) as {
-    message:string;
+    message: string;
   };
   const handleBack = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -42,7 +42,7 @@ const EditMyOffer = () => {
       }
     }
   }, []);
- 
+
   useEffect(() => {
     return () => {
       dispatch(removeStateEdit());
@@ -69,11 +69,11 @@ const EditMyOffer = () => {
           kitchen: offer?.amenities?.kitchen,
           details_id: offer?.id,
         })
-      ).then((res:any)=>{
-        if(res.payload.data){
+      ).then((res: any) => {
+        if (res.payload.data) {
           toast.success(res.payload.message);
           router.push(`/my-offer?title=عروضي`);
-        }else if(res.payload.status){
+        } else if (res.payload.status) {
           toast.error(res.payload.message);
           router.push(`/my-offer?title=عروضي`);
         }
@@ -88,11 +88,11 @@ const EditMyOffer = () => {
           // status: dataCom?.status, /// مشاع او حر
           land_details_id: offer?.id,
         })
-      ).then((res:any)=>{
-        if(res.payload.data){
+      ).then((res: any) => {
+        if (res.payload.data) {
           toast.success(res.payload.message);
           router.push(`/my-offer?title=عروضي`);
-        }else if(res.payload.status){
+        } else if (res.payload.status) {
           toast.error(res.payload.message);
           router.push(`/my-offer?title=عروضي`);
         }
@@ -171,7 +171,7 @@ const EditMyOffer = () => {
             }))
           }
           measurement="متر"
-          value={offer?.area?offer?.area:""}
+          value={offer?.area ? offer?.area : ""}
         />
 
         <InputAreaPrice
@@ -183,7 +183,7 @@ const EditMyOffer = () => {
             }))
           }
           measurement="ريال"
-          value={offer?.price?offer?.price:""}
+          value={offer?.price ? offer?.price : ""}
           desc="(بدون القيمة المضافة والسعي)"
         />
         {offer?.type ? (

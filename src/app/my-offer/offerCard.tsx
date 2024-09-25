@@ -1,5 +1,5 @@
 "use client";
-import React,{useRef,useState,useEffect,useMemo} from "react";
+import React, { useRef, useState, useEffect, useMemo } from "react";
 import {
   Accreditation,
   Dots,
@@ -11,7 +11,7 @@ import {
   CloseIconSmall,
 } from "../assets/svg";
 import toast from "react-hot-toast"
-import { RealEstateTypeInter ,earthInter} from "@/redux/features/postRealEstate";
+import { RealEstateTypeInter, earthInter } from "@/redux/features/postRealEstate";
 import { Modal, ModalRef } from "../components/shared/modal.component";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
@@ -25,10 +25,10 @@ import { FinishedShares } from "@/app/assets/svg";
 import { GoLocation } from "react-icons/go";
 import { LuTag } from "react-icons/lu";
 import { BiArea } from "react-icons/bi";
-import {deleteOfferDetailOrLand,deleteOfferDetail,deleteMessage} from "@/redux/features/getOffers"
+import { deleteOfferDetailOrLand, deleteOfferDetail, deleteMessage } from "@/redux/features/getOffers"
 import { useRouter } from "next/navigation";
-import {FormatNumber} from "@/app/hooks/formatNumber"
-import {detailOneInfo} from "@/type/addrealestate"
+import { FormatNumber } from "@/app/hooks/formatNumber"
+import { detailOneInfo } from "@/type/addrealestate"
 interface ChatCardProps {
   title: string;
   date: string;
@@ -41,20 +41,20 @@ interface ChatCardProps {
   expired?: boolean;
   requestNumber: number;
   city: string;
-  id:number;
+  id: number;
   district: string;
   budget: string;
   type: string;
   purpose: string;
   lisNumber: string;
   house?: boolean;
-  propertyOwnerType:string;
+  propertyOwnerType: string;
   details: {
     piece_number: string;
     price: string;
     area: string;
     stage: string;
-    room:any;
+    room: any;
     available_price: string;
     available_percentage: string;
     type?: string;
@@ -64,9 +64,9 @@ interface ChatCardProps {
     currentStep: number;
   }[];
 }
-interface detailType{
-  detail_id?:number,
-  land_detail_id?:number
+interface detailType {
+  detail_id?: number,
+  land_detail_id?: number
 }
 export const OfferCard: React.FC<ChatCardProps> = ({
   onEdit,
@@ -105,30 +105,30 @@ export const OfferCard: React.FC<ChatCardProps> = ({
     message: string;
     data: any;
   };
-  const userCard=useMemo(()=>{
-    if(dataOffer?.length>0&&requestNumber&&idDelete){
-      return dataOffer?.map((ele:RealEstateTypeInter)=>{
-        if(ele?.id==String(requestNumber)){
-          if(idDelete?.detail_id){
-            return ({...ele,details:ele?.details?.filter((element:earthInter)=>element?.id!=idDelete?.detail_id)})
-          }else{
-            return ({...ele,landDetails:ele?.landDetails?.filter((element)=>element?.id!=idDelete?.land_detail_id)})
+  const userCard = useMemo(() => {
+    if (dataOffer?.length > 0 && requestNumber && idDelete) {
+      return dataOffer?.map((ele: RealEstateTypeInter) => {
+        if (ele?.id == String(requestNumber)) {
+          if (idDelete?.detail_id) {
+            return ({ ...ele, details: ele?.details?.filter((element: earthInter) => element?.id != idDelete?.detail_id) })
+          } else {
+            return ({ ...ele, landDetails: ele?.landDetails?.filter((element) => element?.id != idDelete?.land_detail_id) })
           }
         }
-          return ele
+        return ele
       })
     }
-    
-  },[requestNumber,idDelete,dataOffer])
-  const onDeleteDetail=()=>{
-    if(idDelete){
-      dispatch(deleteOfferDetailOrLand(idDelete)).then((res:any)=>{
-        if(res.payload.message&&!res.payload.status){
+
+  }, [requestNumber, idDelete, dataOffer])
+  const onDeleteDetail = () => {
+    if (idDelete) {
+      dispatch(deleteOfferDetailOrLand(idDelete)).then((res: any) => {
+        if (res.payload.message && !res.payload.status) {
           toast.success(res.payload.message);
-          if((idDelete?.detail_id||idDelete?.land_detail_id&&userCard?.length>0)){
-            dispatch(deleteOfferDetail({data:userCard}))
+          if ((idDelete?.detail_id || idDelete?.land_detail_id && userCard?.length > 0)) {
+            dispatch(deleteOfferDetail({ data: userCard }))
           }
-        }else if(res.payload.status){
+        } else if (res.payload.status) {
           toast.error(res.payload.message);
         }
       })
@@ -148,9 +148,8 @@ export const OfferCard: React.FC<ChatCardProps> = ({
       <div className="flex gap-2 mt-2">
         <div className="flex flex-row gap-x-2 text-xs">
           <span
-            className={`text-white text-right px-4 py-1 rounded-2xl ${
-              purpose === "بيع" ? "bg-green-450" : "bg-orange-450"
-            }`}
+            className={`text-white text-right px-4 py-1 rounded-2xl ${purpose === "بيع" ? "bg-green-450" : "bg-orange-450"
+              }`}
           >
             {purpose === "بيع" ? purpose : "تطوير"}
           </span>
@@ -159,7 +158,7 @@ export const OfferCard: React.FC<ChatCardProps> = ({
           >
             {propertyOwnerType}
           </span>
-         {/* propertyOwnerType */}
+          {/* propertyOwnerType */}
           <span
             className={`text-black text-right px-4 py-1 rounded-2xl ${"bg-gray-200"}`}
           >
@@ -173,7 +172,7 @@ export const OfferCard: React.FC<ChatCardProps> = ({
         </p>
       </div>
       <div className="pt-1 mr-4 text-sm text-gray-700 mt-2">
-        { lisNumber &&<div className="flex items-center justify-start">
+        {lisNumber && <div className="flex items-center justify-start">
           <CgSmartphoneShake className="w-[16px]" />
           <p className="px-2">ترخيص رقم: {lisNumber}</p>
         </div>}
@@ -206,7 +205,7 @@ export const OfferCard: React.FC<ChatCardProps> = ({
           <div>
             <span>
               <p className="text-base font-normal text-[#4B5563]">
-                هل أنت متأكد من رغبتك في تنفيذ اجراء حذف العرض رقم ({idDelete?.land_detail_id?idDelete?.land_detail_id:idDelete?.detail_id}) ؟
+                هل أنت متأكد من رغبتك في تنفيذ اجراء حذف العرض رقم ({idDelete?.land_detail_id ? idDelete?.land_detail_id : idDelete?.detail_id}) ؟
               </p>
             </span>
             <div className="bg-[#FDE8E8] rounded-md mt-5 mb-5 flex items-center justify-start p-1 flex-row gap-1 ">
@@ -235,10 +234,10 @@ export const OfferCard: React.FC<ChatCardProps> = ({
         </div>
       </Modal>
       <div className="gap-1 mt-2 flex flex-col">
-        {details&&details?.length>0&&details?.map((detail:any, index:number) => (
-          <div  key={`detail-${index}`}>
+        {details && details?.length > 0 && details?.map((detail: any, index: number) => (
+          <div key={`detail-${index}`}>
             <div
-             
+
               className="bg-white shadow-lg rounded-lg p-2 mb-4 border-2"
             >
               <div className="flex flex-row flex-no-wrap items-center justify-center md:flex-row sm:flex-col ">
@@ -248,15 +247,15 @@ export const OfferCard: React.FC<ChatCardProps> = ({
                       {detail?.type
                         ? detail?.type
                         : detail?.plan_number &&
-                          `قطعة رقم  ${detail?.plan_number}`}
+                        `قطعة رقم  ${detail?.plan_number}`}
                     </p>
                   </div>
                   <div className="flex items-center  justify-start">
-          <GoLocation />
-          <p className="px-2">
-            مدينة {city}، {district}
-          </p>
-        </div>
+                    <GoLocation />
+                    <p className="px-2">
+                      مدينة {city}، {district}
+                    </p>
+                  </div>
                   <div className="flex flex-col gap-y-2 my-2 flex-wrap items-start">
                     <div className="bg-gray-200 rounded-xl px-2 flex items-center">
                       <LuTag />
@@ -324,8 +323,9 @@ export const OfferCard: React.FC<ChatCardProps> = ({
                     startIcon={<EditIcon />}
                     text="تعديل"
                     className="!bg-white disabled:!bg-gray-200 flex flex-row-reverse !text-[#3B73B9] disabled:!text-gray-500 !text-sm !font-medium !gap-1  !border-[#3B73B9] disabled:!border-gray-500 border-solid rounded-md border-2"
-                    onClick={() => {router.push("/edit-my-offer");
-                      sessionStorage.setItem("offer",JSON.stringify({...detail,title:title}))
+                    onClick={() => {
+                      router.push("/edit-my-offer");
+                      sessionStorage.setItem("offer", JSON.stringify({ ...detail, title: title }))
                     }}
                     disabled={detail?.currentStep > 1}
                   />
@@ -345,30 +345,28 @@ export const OfferCard: React.FC<ChatCardProps> = ({
                   }
                   text="حذف"
                   className="!bg-white disabled:!bg-gray-200 flex flex-row-reverse !text-[#F05252] disabled:!text-gray-500 !text-sm !font-medium !gap-1  !border-red-500 disabled:!border-gray-500 border-solid rounded-md border-2"
-                  onClick={()=>{modalRef.current?.open();setId(detail?.type?{detail_id:detail?.id}:{land_detail_id:detail?.id})}}
+                  onClick={() => { modalRef.current?.open(); setId(detail?.type ? { detail_id: detail?.id } : { land_detail_id: detail?.id }) }}
                   disabled={detail?.currentStep > 1}
                 />
               </div>
               <Link
-                href={`/ChatPage/${detail?.room[0]?.id}`} 
-                className={`${
-                  "bg-blue-450 text-white hover:bg-blue-800 border-2 border-blue-500"
-                }  font-medium rounded-lg text-sm px-5 py-2.5 flex justify-center w-full rtl:flex-row-reverse dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
-                
-                  onClick={()=>{
-                    Cookie.set("title",  detail?.type
-                      ? `${title} ${ detail?.type}`
-                      : `${title} قطعة رقم ${detail?.plan_number}`)
-                      Cookie.set("senderId",String(detail?.room[0]?.sender_id))
-                  }}
+                href={`/ChatPage/${detail?.room[0]?.id}`}
+                className={`${"bg-blue-450 text-white hover:bg-blue-800 border-2 border-blue-500"
+                  }  font-medium rounded-lg text-sm px-5 py-2.5 flex justify-center w-full rtl:flex-row-reverse dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
+
+                onClick={() => {
+                  Cookie.set("title", detail?.type
+                    ? `${title} ${detail?.type}`
+                    : `${title} قطعة رقم ${detail?.plan_number}`)
+                  Cookie.set("senderId", String(detail?.room[0]?.sender_id))
+                }}
               >
                 عرض المحادثات
                 <BsChatSquareText
-                  className={`mr-4 text-xl ${
-                    detail?.stage === "finished"
+                  className={`mr-4 text-xl ${detail?.stage === "finished"
                       ? "text-gray-600"
                       : "text-white"
-                  }`}
+                    }`}
                 />
               </Link>
             </div>
@@ -384,14 +382,14 @@ export const OfferCard: React.FC<ChatCardProps> = ({
           onClick={() => router.push(`/edit-offer/${id}`)}
         />
         <span className="text-[#D1D5DB]">|</span>
-        
-          <Button
-            startIcon={<UpdateIcon />}
-            text="تحديث"
-            className="!bg-white !flex !flex-row-reverse !text-[#3B73B9] !text-sm !font-medium !gap-1 "
-            onClick={onUpdate}
-          />
-        
+
+        <Button
+          startIcon={<UpdateIcon />}
+          text="تحديث"
+          className="!bg-white !flex !flex-row-reverse !text-[#3B73B9] !text-sm !font-medium !gap-1 "
+          onClick={onUpdate}
+        />
+
 
         <span className="text-[#D1D5DB]">|</span>
 
@@ -402,6 +400,6 @@ export const OfferCard: React.FC<ChatCardProps> = ({
           onClick={onDelete}
         />
       </div>
-      </div>
+    </div>
   );
 };

@@ -2,7 +2,12 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import React from "react";
 import Cookie from "js-cookie";
-import {saveElement,initialOffer,realEstatePartner} from "@/type/addrealestate"
+import {
+  saveElement,
+  initialOffer,
+  realEstatePartner,
+  propertyAdvertiseinterface
+} from "@/type/addrealestate";
 
 export interface returnType {
   loading: boolean;
@@ -133,7 +138,8 @@ export interface dataReturn {
     property_id: number;
   }[];
   propertySaved?: saveElement[];
-  propertyDetailsOwnership?:realEstatePartner[]
+  propertyDetailsOwnership?: realEstatePartner[];
+  propertyAdvertising?:propertyAdvertiseinterface[]
 }
 export interface typePay {
   id?: number;
@@ -174,57 +180,56 @@ interface paramsInput {
 export const getRequest = createAsyncThunk<returnType, paramsInput | null>(
   "requestGet",
   async (data: paramsInput | null, { rejectWithValue }) => {
-    if(Cookie.get("token")){
+    if (Cookie.get("token")) {
       const response = await axios
-      .get("https://server.mashrook.sa/property/offer-login", {
-        headers: {
-          Authorization: Cookie.get("token"),
-        },
-        params: data ? data : {},
-      })
-      .then((response) => response.data)
-      .catch((error) => error?.response?.data);
+        .get("https://server.mashrook.sa/property/offer-login", {
+          headers: {
+            Authorization: Cookie.get("token"),
+          },
+          params: data ? data : {},
+        })
+        .then((response) => response.data)
+        .catch((error) => error?.response?.data);
 
-    return response;
-    }else{
+      return response;
+    } else {
       const response = await axios
-      .get("https://server.mashrook.sa/property/offer", {
-        headers: {},
-        params: data ? data : {},
-      })
-      .then((response) => response.data)
-      .catch((error) => error?.response?.data);
+        .get("https://server.mashrook.sa/property/offer", {
+          headers: {},
+          params: data ? data : {},
+        })
+        .then((response) => response.data)
+        .catch((error) => error?.response?.data);
 
-    return response;
+      return response;
     }
   }
 );
 export const getRequestByid = createAsyncThunk<returnType, { id: number }>(
   "requestGet/id",
   async (data: { id: number }, { rejectWithValue }) => {
-    if(Cookie.get("token")){
-    const response = await axios
-      .get(`https://server.mashrook.sa/property/get-login/${data?.id}`, {
-        headers: {
-          Authorization: Cookie.get("token"),
-        },
-      })
-      .then((response) => response.data)
-      .catch((error) => error?.response?.data);
+    if (Cookie.get("token")) {
+      const response = await axios
+        .get(`https://server.mashrook.sa/property/get-login/${data?.id}`, {
+          headers: {
+            Authorization: Cookie.get("token"),
+          },
+        })
+        .then((response) => response.data)
+        .catch((error) => error?.response?.data);
 
-    return response;
+      return response;
+    } else {
+      const response = await axios
+        .get(`https://server.mashrook.sa/property/get/${data?.id}`, {
+          headers: {},
+        })
+        .then((response) => response.data)
+        .catch((error) => error?.response?.data);
+
+      return response;
+    }
   }
-else{
-  const response = await axios
-  .get(`https://server.mashrook.sa/property/get/${data?.id}`, {
-    headers: {},
-  })
-  .then((response) => response.data)
-  .catch((error) => error?.response?.data);
-
-return response;
-}
-}
 );
 export const postReport = createAsyncThunk<returnType, typeofReport>(
   "postReport",
@@ -246,7 +251,7 @@ export const postReport = createAsyncThunk<returnType, typeofReport>(
     return response;
   }
 );
-const initialstate:initialOffer = {
+const initialstate: initialOffer = {
   loading: false,
   message: "",
   data: null,
@@ -262,34 +267,60 @@ const requestGetSlice = createSlice({
     addUnqiue: (state, action) => {
       state.selectData = action.payload;
     },
-    addSave:(state, action)=>{
-      state.data = state.data&&state.data?.map((ele:dataReturn)=>{
-        if(ele?.id==action?.payload?.id){
-          return ({...ele,propertySaved:ele?.propertySaved?[...ele?.propertySaved,action.payload.data]:[action.payload.data]})
-        }else{
-          return ele
-        }
-      }) 
+    addSave: (state, action) => {
+      state.data =
+        state.data &&
+        state.data?.map((ele: dataReturn) => {
+          if (ele?.id == action?.payload?.id) {
+            return {
+              ...ele,
+              propertySaved: ele?.propertySaved
+                ? [...ele?.propertySaved, action.payload.data]
+                : [action.payload.data],
+            };
+          } else {
+            return ele;
+          }
+        });
     },
-    removeSave:(state, action)=>{
-      state.data = state.data&&state.data?.map((ele:dataReturn)=>{
-        if(ele?.id==action?.payload?.id){
-          return ({...ele,propertySaved:ele?.propertySaved?.filter((removeSave:saveElement)=>removeSave?.property_id!=action?.payload?.id)})
-        }else{
-          return ele
-        }
-      }) 
+    removeSave: (state, action) => {
+      state.data =
+        state.data &&
+        state.data?.map((ele: dataReturn) => {
+          if (ele?.id == action?.payload?.id) {
+            return {
+              ...ele,
+              propertySaved: ele?.propertySaved?.filter(
+                (removeSave: saveElement) =>
+                  removeSave?.property_id != action?.payload?.id
+              ),
+            };
+          } else {
+            return ele;
+          }
+        });
     },
-    addSelectSave:(state, action)=>{
-      if(state.selectData){
-        state.selectData = {...state.selectData,propertySaved:state.selectData?.propertySaved?[...state.selectData?.propertySaved,action.payload.data]:[action.payload.data]} 
+    addSelectSave: (state, action) => {
+      if (state.selectData) {
+        state.selectData = {
+          ...state.selectData,
+          propertySaved: state.selectData?.propertySaved
+            ? [...state.selectData?.propertySaved, action.payload.data]
+            : [action.payload.data],
+        };
       }
     },
-    removeSelectSave:(state, action)=>{
-      if(state.selectData){
-      state.selectData = {...state.selectData,propertySaved:state.selectData?.propertySaved?.filter((removeSave:saveElement)=>removeSave?.property_id!=action?.payload?.id)} 
+    removeSelectSave: (state, action) => {
+      if (state.selectData) {
+        state.selectData = {
+          ...state.selectData,
+          propertySaved: state.selectData?.propertySaved?.filter(
+            (removeSave: saveElement) =>
+              removeSave?.property_id != action?.payload?.id
+          ),
+        };
       }
-    }
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getRequest.fulfilled, (state, action) => {
@@ -326,5 +357,11 @@ const requestGetSlice = createSlice({
   },
 });
 
-export const { addUnqiue,addSave ,removeSave,addSelectSave,removeSelectSave} = requestGetSlice.actions;
+export const {
+  addUnqiue,
+  addSave,
+  removeSave,
+  addSelectSave,
+  removeSelectSave,
+} = requestGetSlice.actions;
 export default requestGetSlice.reducer;

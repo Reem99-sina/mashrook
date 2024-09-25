@@ -2,7 +2,15 @@
 importScripts('https://www.gstatic.com/firebasejs/8.8.0/firebase-app.js');
 // eslint-disable-next-line no-undef
 importScripts('https://www.gstatic.com/firebasejs/8.8.0/firebase-messaging.js');
-
+if ('serviceWorker' in navigator) {
+  console.log(navigator,"navigator")
+  navigator.serviceWorker.register('/firebase-messaging-sw.js')
+    .then(function(registration) {
+      console.log('Registration successful, scope is:', registration.scope);
+    }).catch(function(err) {
+      console.log('Service worker registration failed, error:', err);
+    });
+  }
 const firebaseConfig = {
   apiKey: 'your_keys',
   authDomain: 'your_keys',
@@ -22,10 +30,13 @@ messaging.onBackgroundMessage((payload) => {
     '[firebase-messaging-sw.js] Received background message ',
     payload
   );
-//   const notificationTitle = payload.notification.title;
-//   const notificationOptions = {
-//     body: payload.notification.body,
-//     icon: './logo.png',
-//   };
-//   self.registration.showNotification(notificationTitle, notificationOptions);
+  const notificationTitle = 'Background Message Title';
+  const notificationOptions = {
+    body: 'Background Message body.',
+    icon: '/firebase-logo.png'
+  };
+  console.log(registration,"registration")
+  return self.registration.showNotification(notificationTitle,
+    notificationOptions);
 });
+

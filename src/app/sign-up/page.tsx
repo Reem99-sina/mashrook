@@ -157,6 +157,7 @@ const SignUp: React.FC = () => {
       countries={["SA"]}
       labels={{"SA":"المملكة العربية السعودية"}}
       addInternationalOption={false}
+      international = {false}
       onChange={(value)=>setUser({ ...user, phone: value?String(value):"" })}/>
       {errors?.phone && (
                   <p className="text-xs text-red-600 dark:text-red-500 text-right">

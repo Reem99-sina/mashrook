@@ -183,39 +183,84 @@ export let paymentSchema = object().shape({
     .matches(/^\d{3,4}$/, "يجب ادخال 3 ارقام او  4 ارقام"),
 });
 
-
-export let registerSchema=object().shape({
-  username:string().required("ادخل اسم ؟"),
-  email:string().email().matches(/^(?!.*@[^,]*,)/,"يجب ادخال البريد الالكتروني صحيح").required("يجب ادخال البريد الالكتروني صحيح"),
-  phone:string().matches(/^(\+9665)?(5|0|3|6|4|9|1|8|7)([0-9]{7})$/,"ادخل رقم الجوال بشكل صحيح").required("ادخل رقم الجوال ؟"),
-  password:string().min(8,"يجب ادخال 8 حروف او ارقام").required("يجب ادخال 8 حروف او ارقام"),
-  repeate_password:string().oneOf([ref('password')], 'لا يوجد تشابة بينه وبين كلمة السر').min(8,"يجب ادخال 8 حروف او ارقام").required("لا يوجد تشابة بينه وبين كلمة السر")
-})
-export let loginSchema=object().shape({ 
-  email:string().email("يجب ادخال البريد الالكتروني صحيح").matches(/^(?!.*@[^,]*,)/,"يجب ادخال البريد الالكتروني صحيح").required("يجب ادخال البريد الالكتروني صحيح"),
-  password:string().min(8,"يجب ادخال 8 حروف او ارقام").required("يجب ادخال 8 حروف او ارقام"),
-})
-export let ForgetSchema=object().shape({
-  
-  email:string().email("يجب ادخال البريد الالكتروني صحيح").matches(/^(?!.*@[^,]*,)/,"يجب ادخال البريد الالكتروني صحيح").required("يجب ادخال البريد الالكتروني صحيح"),
-  
-})
-export let UserSchema=object().shape({
-  
-  username:string().notOneOf([""], "ادخال اسم المستخدم").required(" ادخال اسم المستخدم"),
-  
-})
-export let ValNumberSchema=object().shape({
-  
-  val_license:string().notOneOf([""], "ادخال رقم رخصة فال").required(" ادخال رقم رخصة فال"),
-  
-})
-export let ResetSchema=object().shape({
-  new_password:string().min(8,"يجب ادخال 8 حروف او ارقام").required("يجب ادخال 8 حروف او ارقام"),
-  repeate_new_password:string().oneOf([ref('new_password')], 'لا يوجد تشابة بينه وبين كلمة السر').min(8,"يجب ادخال 8 حروف او ارقام").required("لا يوجد تشابة بينه وبين كلمة السر")
-})
-export let ResetOldNewSchema=object().shape({
-  old_password:string().min(8,"يجب ادخال 8 حروف او ارقام").required("يجب ادخال 8 حروف او ارقام"),
-  new_password:string().min(8,"يجب ادخال 8 حروف او ارقام").required("يجب ادخال 8 حروف او ارقام"),
-  repeate_new_password:string().oneOf([ref('new_password')], 'لا يوجد تشابة بينه وبين كلمة السر').min(8,"يجب ادخال 8 حروف او ارقام").required("لا يوجد تشابة بينه وبين كلمة السر")
-})
+export let registerSchema = object().shape({
+  username: string().required("ادخل اسم ؟"),
+  email: string()
+    .email()
+    .matches(/^(?!.*@[^,]*,)/, "يجب ادخال البريد الالكتروني صحيح")
+    .required("يجب ادخال البريد الالكتروني صحيح"),
+  phone: string()
+    .matches(
+      /^(\+9665)?(5|0|3|6|4|9|1|8|7)([0-9]{7})$/,
+      "ادخل رقم الجوال بشكل صحيح"
+    )
+    .required("ادخل رقم الجوال ؟"),
+  password: string()
+    .min(8, "يجب ادخال 8 حروف او ارقام")
+    .required("يجب ادخال 8 حروف او ارقام"),
+  repeate_password: string()
+    .oneOf([ref("password")], "لا يوجد تشابة بينه وبين كلمة السر")
+    .min(8, "يجب ادخال 8 حروف او ارقام")
+    .required("لا يوجد تشابة بينه وبين كلمة السر"),
+});
+export let loginSchema = object().shape({
+  email: string()
+    .email("يجب ادخال البريد الالكتروني صحيح")
+    .matches(/^(?!.*@[^,]*,)/, "يجب ادخال البريد الالكتروني صحيح")
+    .required("يجب ادخال البريد الالكتروني صحيح"),
+  password: string()
+    .min(8, "يجب ادخال 8 حروف او ارقام")
+    .required("يجب ادخال 8 حروف او ارقام"),
+});
+export let ForgetSchema = object().shape({
+  email: string()
+    .email("يجب ادخال البريد الالكتروني صحيح")
+    .matches(/^(?!.*@[^,]*,)/, "يجب ادخال البريد الالكتروني صحيح")
+    .required("يجب ادخال البريد الالكتروني صحيح"),
+});
+export let UserSchema = object().shape({
+  username: string()
+    .notOneOf([""], "ادخال اسم المستخدم")
+    .required(" ادخال اسم المستخدم"),
+});
+export let ValNumberSchema = object().shape({
+  val_license: string()
+    .notOneOf([""], "ادخال رقم رخصة فال")
+    .required(" ادخال رقم رخصة فال"),
+});
+export let ResetSchema = object().shape({
+  new_password: string()
+    .min(8, "يجب ادخال 8 حروف او ارقام")
+    .required("يجب ادخال 8 حروف او ارقام"),
+  repeate_new_password: string()
+    .oneOf([ref("new_password")], "لا يوجد تشابة بينه وبين كلمة السر")
+    .min(8, "يجب ادخال 8 حروف او ارقام")
+    .required("لا يوجد تشابة بينه وبين كلمة السر"),
+});
+export let ResetOldNewSchema = object().shape({
+  old_password: string()
+    .min(8, "يجب ادخال 8 حروف او ارقام")
+    .required("يجب ادخال 8 حروف او ارقام"),
+  new_password: string()
+    .min(8, "يجب ادخال 8 حروف او ارقام")
+    .required("يجب ادخال 8 حروف او ارقام"),
+  repeate_new_password: string()
+    .oneOf([ref("new_password")], "لا يوجد تشابة بينه وبين كلمة السر")
+    .min(8, "يجب ادخال 8 حروف او ارقام")
+    .required("لا يوجد تشابة بينه وبين كلمة السر"),
+});
+export let ComplaintsSchema = object().shape({
+  name: string().required("ادخل اسم ؟"),
+  title: string()
+    .required("ادخل عنوان الرسالة؟"),
+    type: string()
+    .required("ادخل غرض المراسلة؟"),
+  phone: string()
+    .matches(
+      /^(\+9665)?(5|0|3|6|4|9|1|8|7)([0-9]{7})$/,
+      "ادخل رقم الجوال بشكل صحيح"
+    )
+    .required("ادخل رقم الجوال ؟"),
+  details: string()
+  .required("ادخل تفاصيل الرسالة؟")
+});

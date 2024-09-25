@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState, useEffect,useMemo } from "react";
+import React, { useRef, useState, useEffect, useMemo } from "react";
 import { Add, BackButtonOutline } from "@/app/assets/svg";
 import { RadioInput } from "../components/shared/radio.component";
 import { Button } from "../components/shared/button.component";
@@ -8,7 +8,7 @@ import { Modal, ModalRef } from "../components/shared/modal.component";
 import ImageAppear from "../components/shared/ImageAppear";
 import AccordionComponent from "../components/shared/Accordion.component";
 import Image from "next/image";
-import {fetchToken}from "@/redux/features/userSlice"
+import { fetchToken } from "@/redux/features/userSlice"
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { RiSubtractFill } from "react-icons/ri";
 import NumberRoom from "./components/NumberRoom";
@@ -118,7 +118,7 @@ const AddYourRealEstate: React.FC = () => {
     is_divisible: false,
   });
   const [errors, setErrors] = useState<RealEstateErrrorTypeInter>();
-  const [indexRemove, setIndex] = useState<number|null>();
+  const [indexRemove, setIndex] = useState<number | null>();
   const [selectedPropertyType, setSelectedPropertyType] =
     useState<typeSelectedProperty>();
   const handleOptionChange = (option: Option, title: string) => {
@@ -132,9 +132,9 @@ const AddYourRealEstate: React.FC = () => {
     }
     setDataSend((prev) => ({ ...prev, city: "تبوك" }));
   };
-  const {  token } = useSelector<RootState>(
+  const { token } = useSelector<RootState>(
     (state) => state.register
-  ) as {  token:string };
+  ) as { token: string };
   const [haveNumber, setHaveNumber] = useState(false);
   const [deal, setdeal] = useState(false);
 
@@ -190,10 +190,10 @@ const AddYourRealEstate: React.FC = () => {
     halls_number: 0,
     bathrooms_number: 0,
     kitchens_number: 0,
-    pool: false, 
-    garden: false, 
-    servants_room: false, 
-    ac: false, 
+    pool: false,
+    garden: false,
+    servants_room: false,
+    ac: false,
     furnished: false,
     kitchen: false,
     garage: false,
@@ -531,17 +531,17 @@ const AddYourRealEstate: React.FC = () => {
     setlandDetails((prev) =>
       prev.length < count.nums
         ? [
-            ...prev,
-            {
-              piece_number: "", // في حالة اختيار ارض (رقم القطعة)
-              plan_number: "",
-              area: 0,
-              price: 0,
-            },
-          ]
-        : prev.filter((ele, index) => index !=indexRemove)
+          ...prev,
+          {
+            piece_number: "", // في حالة اختيار ارض (رقم القطعة)
+            plan_number: "",
+            area: 0,
+            price: 0,
+          },
+        ]
+        : prev.filter((ele, index) => index != indexRemove)
     );
-  }, [count.nums,indexRemove]);
+  }, [count.nums, indexRemove]);
   return (
     <>
       {!sentYourRequest ? (
@@ -595,20 +595,20 @@ const AddYourRealEstate: React.FC = () => {
                   <div className="flex flex-row-reverse flex-wrap justify-start mt-6 gap-8">
                     {item.tattle == "نوع العقار"
                       ? data?.data?.map(
-                          (option: { id: number; title: string }) => (
-                            <RadioInput
-                              name={`realstateType`}
-                              onChange={() =>
-                                handleOptionChange(option, item.tattle)
-                              }
-                              value={option?.title}
-                              key={option?.id}
-                              label={option?.title}
-                            />
-                          )
+                        (option: { id: number; title: string }) => (
+                          <RadioInput
+                            name={`realstateType`}
+                            onChange={() =>
+                              handleOptionChange(option, item.tattle)
+                            }
+                            value={option?.title}
+                            key={option?.id}
+                            label={option?.title}
+                          />
                         )
+                      )
                       : item.tattle == "صفة مقدم العرض"
-                      ? dataOwnerType?.map(
+                        ? dataOwnerType?.map(
                           (option: { id: number; title: string }) => (
                             <RadioInput
                               name={item.tattle}
@@ -621,7 +621,7 @@ const AddYourRealEstate: React.FC = () => {
                             />
                           )
                         )
-                      : dataPurpose?.map(
+                        : dataPurpose?.map(
                           (option: { id: number; title: string }) => (
                             <RadioInput
                               key={option?.id}
@@ -834,9 +834,9 @@ const AddYourRealEstate: React.FC = () => {
                               prevs.map((ele, i) =>
                                 i == index
                                   ? {
-                                      ...ele,
-                                      piece_number: event?.target?.value,
-                                    }
+                                    ...ele,
+                                    piece_number: event?.target?.value,
+                                  }
                                   : ele
                               )
                             )
@@ -865,9 +865,9 @@ const AddYourRealEstate: React.FC = () => {
                                 prevs.map((ele, i) =>
                                   i == index
                                     ? {
-                                        ...ele,
-                                        plan_number: event?.target?.value,
-                                      }
+                                      ...ele,
+                                      plan_number: event?.target?.value,
+                                    }
                                     : ele
                                 )
                               )
@@ -884,15 +884,15 @@ const AddYourRealEstate: React.FC = () => {
                       </div>
                       <InputAreaPrice
                         title="المساحة"
-                        value={ele?.area>0?ele?.area:""}
+                        value={ele?.area > 0 ? ele?.area : ""}
                         onChange={(event) =>
                           setlandDetails((prevs) =>
                             prevs.map((ele, i) =>
                               i == index
                                 ? {
-                                    ...ele,
-                                    area: Number(event?.target?.value),
-                                  }
+                                  ...ele,
+                                  area: Number(event?.target?.value),
+                                }
                                 : ele
                             )
                           )
@@ -902,73 +902,73 @@ const AddYourRealEstate: React.FC = () => {
                       />
                       <InputAreaPrice
                         title=" السعر للمتر المربع"
-                        value={ele?.price>0?ele?.price:""}
+                        value={ele?.price > 0 ? ele?.price : ""}
                         onChange={(event) =>
                           setlandDetails((prevs) =>
                             prevs.map((ele, i) =>
                               i == index
                                 ? {
-                                    ...ele,
-                                    price: Number(event?.target?.value),
-                                  }
+                                  ...ele,
+                                  price: Number(event?.target?.value),
+                                }
                                 : ele
                             )
                           )
                         }
                         errors={errors && errors[`landDetails[${index}].price`]}
                         measurement="ريال"
-                         desc=" (بدون القيمة المضافة والسعي) "
+                        desc=" (بدون القيمة المضافة والسعي) "
                       />
                       {index > 0 && (
-                      <>
-                        <div
-                          onClick={() =>{
-                            setIndex(index);
-                            setCount((prev)=>({nums:prev?.nums-1}))
-                          }}
-                          className="cursor-pointer bg-[#3B73B9] p-1 flex justify-center"
-                        >
-                          <RiSubtractFill className="text-white" />
-                        </div>
-                      </>
-                    )}
+                        <>
+                          <div
+                            onClick={() => {
+                              setIndex(index);
+                              setCount((prev) => ({ nums: prev?.nums - 1 }))
+                            }}
+                            className="cursor-pointer bg-[#3B73B9] p-1 flex justify-center"
+                          >
+                            <RiSubtractFill className="text-white" />
+                          </div>
+                        </>
+                      )}
                     </div>
                   ))}
 
                 {(selectedPropertyType?.title == "شقة" ||
                   selectedPropertyType?.title == "دور") && (
-                  <>
-                    <InputAreaPrice
-                      title="المساحة"
-                      onChange={(event) =>
-                        setDataSend({
-                          ...dataSend,
-                          area: Number(event?.target?.value),
-                        })
-                      }
-                      value={dataSend?.area>0?dataSend?.area:""}
-                      errors={errors?.area}
-                      measurement="متر"
-                    />
-                    <InputAreaPrice
-                      title=" السعر للمتر المربع"
-                      onChange={(event) =>
-                        setDataSend({
-                          ...dataSend,
-                          price: Number(event?.target?.value),
-                        })
-                      }
-                      value={dataSend?.price>0?dataSend?.price:""}
-                      errors={errors?.price}
-                      measurement="ريال"
-                      desc=" (بدون القيمة المضافة والسعي) "
-                    />
-                  </>
-                )}
+                    <>
+                      <InputAreaPrice
+                        title="المساحة"
+                        onChange={(event) =>
+                          setDataSend({
+                            ...dataSend,
+                            area: Number(event?.target?.value),
+                          })
+                        }
+                        value={dataSend?.area > 0 ? dataSend?.area : ""}
+                        errors={errors?.area}
+                        measurement="متر"
+                      />
+                      <InputAreaPrice
+                        title=" السعر للمتر المربع"
+                        onChange={(event) =>
+                          setDataSend({
+                            ...dataSend,
+                            price: Number(event?.target?.value),
+                          })
+                        }
+                        value={dataSend?.price > 0 ? dataSend?.price : ""}
+                        errors={errors?.price}
+                        measurement="ريال"
+                        desc=" (بدون القيمة المضافة والسعي) "
+                      />
+                    </>
+                  )}
               </div>
 
               {selectedPropertyType?.title === "شقة" ||
-              selectedPropertyType?.title === "دور" ? (
+                selectedPropertyType?.title === "دور" ? (
                 <>
                   <NumberRoom
                     errors={String(errors?.age)}
@@ -976,7 +976,7 @@ const AddYourRealEstate: React.FC = () => {
                     onChange={handlePercentageChange}
                     name="age"
                     title={"العمر"}
-                    firstNumber={Number(departmentArch?.age)>1?"سنين":"سنة"}
+                    firstNumber={Number(departmentArch?.age) > 1 ? "سنين" : "سنة"}
                     secondNumber={"+10 سنين"}
                     max={10}
                   />
@@ -1030,7 +1030,7 @@ const AddYourRealEstate: React.FC = () => {
                       onChange={handlePercentageChange}
                       name="age"
                       title={"العمر"}
-                      firstNumber={Number(departmentArch?.age)>1?"سنين":"سنة"}
+                      firstNumber={Number(departmentArch?.age) > 1 ? "سنين" : "سنة"}
                       secondNumber={"+10 سنين"}
                       max={10}
                     />
@@ -1089,22 +1089,22 @@ const AddYourRealEstate: React.FC = () => {
                               area: Number(event?.target?.value),
                             })
                           }
-                          value={dataSend?.area>0?dataSend?.area:""}
+                          value={dataSend?.area > 0 ? dataSend?.area : ""}
                           errors={errors?.area}
                           measurement="متر"
                         />
                         <InputAreaPrice
-                         title=" السعر للمتر المربع"
+                          title=" السعر للمتر المربع"
                           onChange={(event) =>
                             setDataSend({
                               ...dataSend,
                               price: Number(event?.target?.value),
                             })
                           }
-                          value={dataSend?.price>0?dataSend?.price:""}
+                          value={dataSend?.price > 0 ? dataSend?.price : ""}
                           errors={errors?.price}
                           measurement="ريال"
-                           desc=" (بدون القيمة المضافة والسعي) "
+                          desc=" (بدون القيمة المضافة والسعي) "
                         />
                         <NumberRoom
                           errors={String(errors?.rooms_number)}
@@ -1148,56 +1148,56 @@ const AddYourRealEstate: React.FC = () => {
                         />
                         <hr className="border-gray-200 dark:border-white my-2" />
                         <div className="mt-2">
-                  <div
-                    className="flex justify-between text-sm mt-2"
-                    style={{ direction: "rtl" }}
-                  >
-                    <p className="font-medium text-base text-[#4B5563]">
-                      مزايا إضافية:
-                    </p>
-                  </div>
-                  <div
-                    className=" flex flex-row flex-wrap gap-8"
-                    style={{ direction: "rtl" }}
-                  >
-                    <CheckFeature
-                      title="مسبح"
-                      onChange={(event) =>
-                        setAdditional({
-                          ...additionalData,
-                          pool: event?.target?.checked,
-                        })
-                      }
-                    />
-                    <CheckFeature
-                      title="كراج للسيارات"
-                      onChange={(event) =>
-                        setAdditional({
-                          ...additionalData,
-                          garage: event?.target?.checked,
-                        })
-                      }
-                    />
-                    <CheckFeature
-                      title="غرفة خدم"
-                      onChange={(event) =>
-                        setAdditional({
-                          ...additionalData,
-                          servants_room: event?.target?.checked,
-                        })
-                      }
-                    />
-                    <CheckFeature
-                      title="مؤثثة"
-                      onChange={(event) =>
-                        setAdditional({
-                          ...additionalData,
-                          furnished: event?.target?.checked,
-                        })
-                      }
-                    />
-                  </div>
-                </div>
+                          <div
+                            className="flex justify-between text-sm mt-2"
+                            style={{ direction: "rtl" }}
+                          >
+                            <p className="font-medium text-base text-[#4B5563]">
+                              مزايا إضافية:
+                            </p>
+                          </div>
+                          <div
+                            className=" flex flex-row flex-wrap gap-8"
+                            style={{ direction: "rtl" }}
+                          >
+                            <CheckFeature
+                              title="مسبح"
+                              onChange={(event) =>
+                                setAdditional({
+                                  ...additionalData,
+                                  pool: event?.target?.checked,
+                                })
+                              }
+                            />
+                            <CheckFeature
+                              title="كراج للسيارات"
+                              onChange={(event) =>
+                                setAdditional({
+                                  ...additionalData,
+                                  garage: event?.target?.checked,
+                                })
+                              }
+                            />
+                            <CheckFeature
+                              title="غرفة خدم"
+                              onChange={(event) =>
+                                setAdditional({
+                                  ...additionalData,
+                                  servants_room: event?.target?.checked,
+                                })
+                              }
+                            />
+                            <CheckFeature
+                              title="مؤثثة"
+                              onChange={(event) =>
+                                setAdditional({
+                                  ...additionalData,
+                                  furnished: event?.target?.checked,
+                                })
+                              }
+                            />
+                          </div>
+                        </div>
                       </div>
                       <div
                         className="flex justify-between text-sm mt-2"
@@ -1217,7 +1217,7 @@ const AddYourRealEstate: React.FC = () => {
                               area: Number(event?.target?.value),
                             })
                           }
-                          value={departmentvilla?.area>0?departmentvilla?.area:""}
+                          value={departmentvilla?.area > 0 ? departmentvilla?.area : ""}
                           errors={errors && errors["apartment.area"]}
                           measurement="متر"
                         />
@@ -1229,11 +1229,11 @@ const AddYourRealEstate: React.FC = () => {
                               price: Number(event?.target?.value),
                             })
                           }
-                          value={departmentvilla?.price>0?departmentvilla?.price:""}
+                          value={departmentvilla?.price > 0 ? departmentvilla?.price : ""}
 
                           errors={errors && errors["apartment.price"]}
                           measurement="ريال"
-                           desc=" (بدون القيمة المضافة والسعي) "
+                          desc=" (بدون القيمة المضافة والسعي) "
                         />
                         <NumberRoom
                           errors={errors && errors["apartment.rooms_number"]}
@@ -1279,62 +1279,62 @@ const AddYourRealEstate: React.FC = () => {
                         />
                         <hr className="border-gray-200 dark:border-white my-2" />
                         <div className="mt-2">
-                  <div
-                    className="flex justify-between text-sm mt-2"
-                    style={{ direction: "rtl" }}
-                  >
-                    <p className="font-medium text-base text-[#4B5563]">
-                      مزايا إضافية:
-                    </p>
-                  </div>
-                  <div
-                    className=" flex flex-row flex-wrap gap-8"
-                    style={{ direction: "rtl" }}
-                  >
-                    <CheckFeature
-                      title="مسبح"
-                      onChange={(event) =>
-                        setDepartmentvilla({
-                          ...departmentvilla,
-                          pool: event?.target?.checked,
-                        })
-                      }
-                    />
-                    <CheckFeature
-                      title="كراج للسيارات"
-                      onChange={(event) =>
-                        setDepartmentvilla({
-                          ...departmentvilla,
-                          garage: event?.target?.checked,
-                        })
-                      }
-                    />
-                    <CheckFeature
-                      title="غرفة خدم"
-                      onChange={(event) =>
-                        setDepartmentvilla({
-                          ...departmentvilla,
-                          servants_room: event?.target?.checked,
-                        })
-                      }
-                    />
-                    <CheckFeature
-                      title="مؤثثة"
-                      onChange={(event) =>
-                        setDepartmentvilla({
-                          ...departmentvilla,
-                          furnished: event?.target?.checked,
-                        })
-                      }
-                    />
-                  </div>
-                </div>
+                          <div
+                            className="flex justify-between text-sm mt-2"
+                            style={{ direction: "rtl" }}
+                          >
+                            <p className="font-medium text-base text-[#4B5563]">
+                              مزايا إضافية:
+                            </p>
+                          </div>
+                          <div
+                            className=" flex flex-row flex-wrap gap-8"
+                            style={{ direction: "rtl" }}
+                          >
+                            <CheckFeature
+                              title="مسبح"
+                              onChange={(event) =>
+                                setDepartmentvilla({
+                                  ...departmentvilla,
+                                  pool: event?.target?.checked,
+                                })
+                              }
+                            />
+                            <CheckFeature
+                              title="كراج للسيارات"
+                              onChange={(event) =>
+                                setDepartmentvilla({
+                                  ...departmentvilla,
+                                  garage: event?.target?.checked,
+                                })
+                              }
+                            />
+                            <CheckFeature
+                              title="غرفة خدم"
+                              onChange={(event) =>
+                                setDepartmentvilla({
+                                  ...departmentvilla,
+                                  servants_room: event?.target?.checked,
+                                })
+                              }
+                            />
+                            <CheckFeature
+                              title="مؤثثة"
+                              onChange={(event) =>
+                                setDepartmentvilla({
+                                  ...departmentvilla,
+                                  furnished: event?.target?.checked,
+                                })
+                              }
+                            />
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </>
                 )}
               {selectedPropertyType?.title === "فيلا" &&
-              departmentArch?.property_type_details_id == 3 ? (
+                departmentArch?.property_type_details_id == 3 ? (
                 <></>
               ) : (
                 (selectedPropertyType?.title === "شقة" ||
@@ -1395,68 +1395,68 @@ const AddYourRealEstate: React.FC = () => {
               {(selectedPropertyType?.title == "أرض سكنية" ||
                 selectedPropertyType?.title == "أرض تجارية" ||
                 selectedPropertyType?.title == "أرض سكنية تجارية") && (
-                <div className="mb-4" style={{ direction: "rtl" }}>
-                  <div className="flex gap-2  flex-row mt-5">
-                    <div
-                      onClick={() =>{
-                        setCount((prev)=>({nums:prev?.nums+1}))
-                      }}
-                      className="cursor-pointer bg-[#3B73B9]"
-                    >
-                      <Image src={Add} width={21} height={21} alt={"add"} />
-                    </div>
+                  <div className="mb-4" style={{ direction: "rtl" }}>
+                    <div className="flex gap-2  flex-row mt-5">
+                      <div
+                        onClick={() => {
+                          setCount((prev) => ({ nums: prev?.nums + 1 }))
+                        }}
+                        className="cursor-pointer bg-[#3B73B9]"
+                      >
+                        <Image src={Add} width={21} height={21} alt={"add"} />
+                      </div>
 
-                    <p className="text-sm text-[#3B73B9] font-bold">
-                      إضافة عقار اخر
-                    </p>
+                      <p className="text-sm text-[#3B73B9] font-bold">
+                        إضافة عقار اخر
+                      </p>
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
             </div>
             {(selectedPropertyType?.title == "أرض سكنية" ||
               selectedPropertyType?.title == "أرض تجارية" ||
               selectedPropertyType?.title == "أرض سكنية تجارية") && (
-              <div className="bg-white rounded-lg border border-[#E5E7EB] w-full mb-4 items-start justify-start p-4">
-                <div className="flex items-center justify-end">
-                  <p className="text-base font-bold text-[#4B5563]">
-                    هل العقار قابل للتجزئة؟
-                  </p>
+                <div className="bg-white rounded-lg border border-[#E5E7EB] w-full mb-4 items-start justify-start p-4">
+                  <div className="flex items-center justify-end">
+                    <p className="text-base font-bold text-[#4B5563]">
+                      هل العقار قابل للتجزئة؟
+                    </p>
+                  </div>
+                  <div className="flex flex-row justify-end mt-6 gap-8">
+                    <RadioInput
+                      name="isDivisibleType"
+                      onChange={(event) =>
+                        setDataSend({
+                          ...dataSend,
+                          is_divisible:
+                            event?.target?.value == "نعم" ? true : false,
+                        })
+                      }
+                      checked={dataSend?.is_divisible == true}
+                      value="نعم"
+                      label="نعم"
+                    />
+                    <RadioInput
+                      name="isDivisibleType"
+                      onChange={(event) =>
+                        setDataSend({
+                          ...dataSend,
+                          is_divisible:
+                            event?.target?.value == "نعم" ? true : false,
+                        })
+                      }
+                      checked={dataSend?.is_divisible == false}
+                      value="لا"
+                      label="لا"
+                    />
+                  </div>
+                  {errors?.is_divisible && (
+                    <p className="text-xs text-red-600 dark:text-red-500 text-right">
+                      {errors?.is_divisible}
+                    </p>
+                  )}
                 </div>
-                <div className="flex flex-row justify-end mt-6 gap-8">
-                  <RadioInput
-                    name="isDivisibleType"
-                    onChange={(event) =>
-                      setDataSend({
-                        ...dataSend,
-                        is_divisible:
-                          event?.target?.value == "نعم" ? true : false,
-                      })
-                    }
-                    checked={dataSend?.is_divisible == true}
-                    value="نعم"
-                    label="نعم"
-                  />
-                  <RadioInput
-                    name="isDivisibleType"
-                    onChange={(event) =>
-                      setDataSend({
-                        ...dataSend,
-                        is_divisible:
-                          event?.target?.value == "نعم" ? true : false,
-                      })
-                    }
-                    checked={dataSend?.is_divisible == false}
-                    value="لا"
-                    label="لا"
-                  />
-                </div>
-                {errors?.is_divisible && (
-                  <p className="text-xs text-red-600 dark:text-red-500 text-right">
-                    {errors?.is_divisible}
-                  </p>
-                )}
-              </div>
-            )}
+              )}
             <div className="bg-white rounded-lg border border-[#E5E7EB] w-full mb-4 items-start justify-start p-4">
               <div className="flex items-center justify-end">
                 <p className="text-base font-bold text-[#4B5563]">المرفقات</p>

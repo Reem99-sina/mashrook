@@ -7,6 +7,7 @@ import {
   FaEllipsisH,
   FaAngleDoubleLeft,
 } from "react-icons/fa";
+import { RiAdvertisementFill } from "react-icons/ri";
 import { BsPerson } from "react-icons/bs";
 import toast from "react-hot-toast";
 import {FormatNumber} from "@/app/hooks/formatNumber"
@@ -69,6 +70,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ page, limit }) => {
               setShowNotification(false);
             }, 3000);
   };
+  
   const handleSaveClick = (ele:any) => {
     setSaved(ele)
     if(ele?.id){
@@ -133,7 +135,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ page, limit }) => {
                     {FormatNumber(ele?.details[i]?.price) || FormatNumber(ele?.price)} {"ريال"}
                     <span className="text-[#3B73B9]">
                       {" "}
-                      (بدون القيمة المضافة أو السعي)
+                      (بدون ضريبة التصرفات العقارية  أو السعي)
                     </span>
                   </p>
                 </div>
@@ -222,7 +224,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ page, limit }) => {
                       { FormatNumber(ele?.landDetails[i]?.price)} {"ريال"}
                       <span className="text-[#3B73B9]">
                         {" "}
-                        (بدون القيمة المضافة أو السعي)
+                        (بدون ضريبة التصرفات العقارية أو السعي)
                       </span>
                     </p>
                   </div>
@@ -294,9 +296,15 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ page, limit }) => {
           <div className="flex flex-col mt-4 mx-2 border-2 rounded-lg p-4 bg-white">
             <div className="flex justify-between py-2 container items-start">
               <div className="flex flex-col justify-between h-full items-start">
+                <div className="flex flex-row  items-center">
                 <p className="text-2xl px-4 text-black mb-4 font-bold">
                   {ele?.propertyTypeDetails?.title||ele?.propertyType?.title }
                 </p>
+                {(ele?.propertyAdvertising&&ele?.propertyAdvertising?.length>0)&&<div className="text-sm mb-4 flex  items-center border-2 rounded-md px-2 py-1 gap-x-2 shadow-lg bg-gray-300 text-black"> 
+                <RiAdvertisementFill className="text-blue-450" />
+                  <p>{"اعلان ممول"}</p>
+                </div>}
+                </div>
                 <div className="flex flex-row gap-x-2">
                   <span
                     className={`text-white text-right px-4 py-1 rounded-2xl ${

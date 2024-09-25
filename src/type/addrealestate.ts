@@ -270,3 +270,20 @@ export interface RequestInfo{
     data?:any,
     status?:number
 }
+export interface propertyAdvertisingItemsinterface{
+    id: number,
+    type:string,
+  name:string,
+  phone:string,
+  title:string,
+  details:string,
+    user_id: null|number,
+    updatedAt: string,
+    createdAt: string
+}
+export interface propertyAdvertiseinterface{
+    id: number,
+    status:string
+    updatedAt: string,
+    createdAt: string
+}

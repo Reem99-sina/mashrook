@@ -3,16 +3,16 @@ import { useRouter } from 'next/navigation';
 import { FaChevronRight } from 'react-icons/fa';
 
 export default function BackButton() {
-    const router = useRouter();
+  const router = useRouter();
 
-    const handleBack = () => {
-      router.back();
-    };
+  const handleBack = () => {
+    router.back();
+  };
   return (
     <div>
-                          <button onClick={handleBack} className="mr-4 p-2 shadow-md rounded-full">
-                    <FaChevronRight className="text-xl " />
-                  </button>
+      <button onClick={handleBack} className="mr-4 p-2 shadow-md rounded-full">
+        <FaChevronRight className="text-xl " />
+      </button>
     </div>
   )
 }

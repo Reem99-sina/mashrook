@@ -5,12 +5,12 @@ import { RotateRealEstate, RotateRight } from "@/app/assets/svg";
 interface PostsCardProps {
   type: string;
   status: string;
-  id: number;
+  id: number|null;
   requestNumber: number;
   announcementDate: string;
   announcementStatus: string;
   active?: string;
-  onRenew: () => void;
+  onRenew: (requestNumber:number) => void;
   onViewProperty: () => void;
 }
 
@@ -26,7 +26,7 @@ const PostsCard: React.FC<PostsCardProps> = ({
   onViewProperty,
 }) => {
   return (
-    <div className="bg-white shadow-md rounded-lg p-4 max-w-sm border border-[#E5E7EB] mb-4">
+    <div className="bg-white shadow-md rounded-lg p-4 border border-[#E5E7EB] mb-4">
       <div className="flex justify-between items-center">
         <h3 className="font-bold text-lg">{type}</h3>
       </div>
@@ -34,10 +34,10 @@ const PostsCard: React.FC<PostsCardProps> = ({
       <div className="flex flex-row  items-center gap-2">
         <span
           className={`px-3 py-1 rounded-xl text-xs font-normal text-white ${
-            status === "للبيع" ? "bg-[#98CC5D]" : "bg-gray-400"
+            status === "بيع" ? "bg-[#98CC5D]" : "bg-gray-400"
           }`}
         >
-          {status}
+          {status == "بيع" ? "للبيع" : "للتطوير"}
         </span>
         <span
           className={`px-3 py-1 rounded-xl text-xs font-normal text-white ${
@@ -81,7 +81,7 @@ const PostsCard: React.FC<PostsCardProps> = ({
       <div className="mt-4 flex justify-between items-center  border-t">
         <Button
           text="عرض العقار"
-          onClick={onRenew}
+          onClick={()=>onRenew(requestNumber)}
           startIcon={<RotateRealEstate />}
           className="!bg-white !text-[#3B73B9] !flex-row-reverse !flex !gap-2"
         />
