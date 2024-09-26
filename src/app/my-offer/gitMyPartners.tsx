@@ -172,7 +172,8 @@ export const GitMyPartners = () => {
       propertyOwnerType: ele?.property?.propertyOwnerType?.title,
       land_details_id: ele?.land_details_id,
       room_id: ele?.details?.room[0]?.id || ele?.landDetails?.room[0]?.id,
-      sender_id: ele?.details?.room[0]?.sender_id
+      sender_id: ele?.details?.room[0]?.sender_id,
+      receiver_id: ele?.details?.room[0]?.receiver_id
     }))
   }, [newDataMemo, title])
   let fiterData = useMemo(() => {
@@ -369,6 +370,7 @@ export const GitMyPartners = () => {
                   onShow={() => router.push(`/showpartner/${offer?.id}`)}
                   room_id={offer?.room_id}
                   sender_id={offer?.sender_id}
+                  receiver_id={offer?.receiver_id}
                 />
               ))}
             </div>

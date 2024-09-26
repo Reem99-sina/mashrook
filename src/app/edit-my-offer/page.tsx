@@ -175,7 +175,7 @@ const EditMyOffer = () => {
         />
 
         <InputAreaPrice
-          title="السعر للمتر المربع"
+          title={!offer?.type?"السعر للمتر المربع":"السعر"}
           onChange={(event) =>
             setOffer((prev: any) => ({
               ...prev,
@@ -184,7 +184,7 @@ const EditMyOffer = () => {
           }
           measurement="ريال"
           value={offer?.price ? offer?.price : ""}
-          desc="(بدون القيمة المضافة والسعي)"
+          desc="(بدون ضريبة التصرفات العقارية والسعي)"
         />
         {offer?.type ? (
           <>

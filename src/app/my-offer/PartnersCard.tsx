@@ -37,7 +37,8 @@ interface PartnersCardProps {
   details_id: number,
   land_details_id: number,
   room_id: number,
-  sender_id: number
+  sender_id: number,
+  receiver_id:number
 }
 
 export const PartnersCard: React.FC<PartnersCardProps> = ({
@@ -62,7 +63,8 @@ export const PartnersCard: React.FC<PartnersCardProps> = ({
   details_id,
   land_details_id,
   room_id,
-  sender_id
+  sender_id,
+  receiver_id
 }) => {
   const steps = ["التعبئة", "الإفراغ", "الإرسال"];
   const currentStep = 1;
@@ -77,6 +79,7 @@ export const PartnersCard: React.FC<PartnersCardProps> = ({
             if (title) {
               Cookie.set("title", title)
               Cookie.set("senderId", String(sender_id))
+              Cookie.set("receiver_id",String(receiver_id))
             }
           }}
         >

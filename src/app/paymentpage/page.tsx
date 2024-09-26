@@ -19,6 +19,7 @@ import {paymentSchema} from "@/typeSchema/schema"
 import {useState,useEffect} from "react"
 import { validateForm } from "../hooks/validate";
 import {useRouter} from "next/navigation"
+import { format } from "date-fns";
 export default function Payment() {
   const router=useRouter()
   let { selectData } = useSelector<RootState>(
@@ -336,6 +337,7 @@ let [url,setUrl]=useState<any>()
                           placeholder="الرجاء الادخال"
                           name=" الرجاء الادخال"
                           id="holderName"
+                          defaultValue={format(new Date(),"yyyy-MM-dd")}
                           className="bg-gray-200 rounded-xl flex-grow text-right  px-4 py-2 w-full"
                       onChange={(e)=>setData((prev)=>({...prev,endDate:e.target.value}))}
 

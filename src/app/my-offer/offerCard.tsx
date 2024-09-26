@@ -263,7 +263,7 @@ export const OfferCard: React.FC<ChatCardProps> = ({
                         {FormatNumber(detail?.price)} {"ريال"}
                         <span className="text-[#3B73B9]">
                           {" "}
-                          (بدون القيمة المضافة أو السعي)
+                          (بدون ضريبة التصرفات العقارية أو السعي)
                         </span>
                       </p>
                     </div>
@@ -359,6 +359,7 @@ export const OfferCard: React.FC<ChatCardProps> = ({
                     ? `${title} ${detail?.type}`
                     : `${title} قطعة رقم ${detail?.plan_number}`)
                   Cookie.set("senderId", String(detail?.room[0]?.sender_id))
+                  Cookie.set("receiver_id",String(detail?.room[0]?.receiver_id))
                 }}
               >
                 عرض المحادثات

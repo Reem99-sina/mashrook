@@ -157,7 +157,7 @@ export const OtherOfferCard: React.FC<ChatCardProps> = ({
                         {detail?.price} {"ريال"}
                         <span className="text-[#3B73B9]">
                           {" "}
-                          (بدون القيمة المضافة أو السعي)
+                          (بدون ضريبة التصرفات العقارية أو السعي)
                         </span>
                       </p>
                     </div>

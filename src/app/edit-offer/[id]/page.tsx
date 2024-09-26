@@ -678,7 +678,7 @@ const EditOffer = () => {
                       })
                     }
                     measurement="ريال"
-                    desc="(بدون القيمة المضافة والسعي)"
+                    desc="(بدون ضريبة التصرفات العقارية والسعي)"
                   />
                 </>
               ))}
@@ -721,7 +721,7 @@ const EditOffer = () => {
                   }
                   value={detail?.price ? Number(detail?.price) : ""}
                   measurement="ريال"
-                  desc="(بدون القيمة المضافة والسعي)"
+                  desc="(بدون ضريبة التصرفات العقارية والسعي)"
                 />
                 <NumberRoom
                   value={Number(dataCom?.age)}
@@ -914,7 +914,7 @@ const EditOffer = () => {
                         }
                         value={floor?.price ? floor?.price : ""}
                         measurement="ريال"
-                        desc="(بدون القيمة المضافة والسعي)"
+                        desc="(بدون ضريبة التصرفات العقارية والسعي)"
                       />
                       <NumberRoom
                         value={floor?.rooms_number}
@@ -1152,7 +1152,7 @@ const EditOffer = () => {
                       }
                       value={detail?.price ? detail?.price : ""}
                       measurement="ريال"
-                      desc="(بدون القيمة المضافة والسعي)"
+                      desc="(بدون ضريبة التصرفات العقارية والسعي)"
                     />
                     <NumberRoom
                       value={detail?.rooms_number}

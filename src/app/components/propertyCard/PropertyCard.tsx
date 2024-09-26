@@ -297,10 +297,10 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ page, limit }) => {
             <div className="flex justify-between py-2 container items-start">
               <div className="flex flex-col justify-between h-full items-start">
                 <div className="flex flex-row  items-center">
-                <p className="text-2xl px-4 text-black mb-4 font-bold">
+                <p className="text-2xl px-4 text-black mb-4 font-bold whitespace-nowrap">
                   {ele?.propertyTypeDetails?.title||ele?.propertyType?.title }
                 </p>
-                {(ele?.propertyAdvertising&&ele?.propertyAdvertising?.length>0)&&<div className="text-sm mb-4 flex  items-center border-2 rounded-md px-2 py-1 gap-x-2 shadow-lg bg-gray-300 text-black"> 
+                {(ele?.propertyAdvertising&&ele?.propertyAdvertising?.length>0)&&<div className="text-sm mb-4 flex justify-center items-center border-2 rounded-md px-2 py-1  shadow-lg bg-gray-300 text-black"> 
                 <RiAdvertisementFill className="text-blue-450" />
                   <p>{"اعلان ممول"}</p>
                 </div>}

@@ -19,14 +19,13 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { getRequest,dataReturn } from "@/redux/features/getRequest";
-import useFcmToken ,{useMessage,requestPermission}from '@/utils/hooks/useFcmToken';
+import useFcmToken from '@/utils/hooks/useFcmToken';
 import FcmTokenComp from "@/utils/firebase/firebaseForeground"
 // import { FcmTokenComp, onMessage } from "firebase/messaging";
 const limit = 5
 
 export default function Home() {
   const router = useRouter();
-  const { fcmToken,notificationPermissionStatus } = useFcmToken();
   const { loading, message, data } = useSelector<RootState>(
     (state) => state.getRequest
   ) as { loading: boolean; message: string; data: dataReturn[] };

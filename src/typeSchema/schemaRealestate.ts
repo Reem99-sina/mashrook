@@ -12,7 +12,7 @@ export let earthSchema = object().shape({
   long: number()
     .notOneOf([0], "احداثيات مكان مطلوبة")
     .required("احداثيات مكان مطلوبة"),
-  district: string().required("حي مطلوب"),
+  district: string().notOneOf(["other"], "حي مطلوب").required("حي مطلوب"),
   city: string().required(" مدينة مطلوب"),
   is_divisible: boolean().required("هل العقار قابل للتجزئة؟"),
   advertisement_number: string(),
@@ -36,7 +36,7 @@ export let departmentOrRowSchema = object().shape({
   property_owner_type_id: number().required(" ما صفة مقدم الغرض؟ "),
   property_purpose_id: number().required(" ما الغرض ؟"),
   property_type_id: number().required(" ما نوع العقار ؟"),
-  district: string().required("حي مطلوب"),
+  district: string().notOneOf(["other"], "حي مطلوب").required("حي مطلوب"),
   address: string().required("عنوان مطلوب"),
   lat: number()
     .notOneOf([0], "احداثيات مكان مطلوبة")
@@ -71,7 +71,7 @@ export let departmentOrRowArchSchema = object().shape({
   property_owner_type_id: number().required(" ما صفة مقدم الغرض؟ "),
   property_purpose_id: number().required(" ما الغرض ؟"),
   property_type_id: number().required(" ما نوع العقار ؟"),
-  district: string().required("حي مطلوب"),
+  district: string().notOneOf(["other"], "حي مطلوب").required("حي مطلوب"),
   images: array(),
   address: string().required("عنوان مطلوب"),
   lat: number()
@@ -112,7 +112,7 @@ export let departmentWithVillaSchema = object().shape({
   property_owner_type_id: number().required(" ما صفة مقدم الغرض؟ "),
   property_purpose_id: number().required(" ما الغرض ؟"),
   property_type_id: number().required(" ما نوع العقار ؟"),
-  district: string().required("حي مطلوب"),
+  district: string().notOneOf(["other"], "حي مطلوب").required("حي مطلوب"),
   city: string().required(" مدينة مطلوب"),
   images: array(),
   address: string().required("عنوان مطلوب"),
@@ -171,7 +171,7 @@ export let villaOwnSchema = object().shape({
   long: number()
     .notOneOf([0], "احداثيات مكان مطلوبة")
     .required("احداثيات مكان مطلوبة"),
-  district: string().required("حي مطلوب"),
+    district: string().notOneOf(["other"], "حي مطلوب").required("حي مطلوب"),
   city: string().required(" مدينة مطلوب"),
   is_divisible: boolean().required("هل العقار قابل للتجزئة؟"),
   advertisement_number: string(),

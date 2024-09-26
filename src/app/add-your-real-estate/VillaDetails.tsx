@@ -46,7 +46,7 @@ const VillaDetails: React.FC<VillaDetailsProps> = ({
         value={villa[index]?.price>0?villa[index]?.price:""}
         errors={errors && errors[`details[${index}].price`]}
         measurement="ريال"
-        desc="(بدون القيمة المضافة والسعي)"
+        desc="(بدون ضريبة التصرفات العقارية والسعي)"
       />
       <NumberRoom
         errors={errors && errors[`details[${index}].rooms_number`]}

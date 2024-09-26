@@ -268,7 +268,7 @@ useEffect(()=>{
               <div className="flex justify-between bg-gray-100 w-full items-center rounded-lg ml-2 mt-2 px-2  py-1 ">
                 <span className="text-sm">السعر</span>
                 <span className="text-blue-450 text-xs">
-                  (بدون القيمة المضافة أو السعي)
+                  (بدون ضريبة التصرفات العقارية أو السعي)
                 </span>
                 <div className="flex justify-center items-center border-2 rounded-lg p-2 ">
                   <span>

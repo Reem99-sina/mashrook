@@ -30,6 +30,7 @@ export const MyOffer = () => {
       ? `${message?.details?.type} ${message?.property?.propertyType?.title}`
       : `${message?.property?.propertyType?.title} قطعة رقم ${message?.landDetails?.plan_number}`)
       Cookie.set("senderId",String(message?.sender_id))
+      Cookie.set("receiver_id",String(message?.receiver_id))
     router.push(`/ChatPage/${message?.id}`);
 
   };
@@ -81,8 +82,8 @@ export const MyOffer = () => {
               subtitle={messageFile(message)}
               title={
                 message?.details?.type
-                  ? `${message?.details?.type} ${message?.property?.propertyType?.title}`
-                  : `${message?.property?.propertyType?.title} قطعة رقم ${message?.landDetails?.plan_number}`
+                  ? `(${message?.details?.type}) ${message?.property?.propertyType?.title}`
+                  : `${message?.property?.propertyType?.title} قطعة رقم (${message?.landDetails?.plan_number})`
               }
               time={format(message.lastMessage?.createdAt, "hh:mm a")}
               image={<Block />}

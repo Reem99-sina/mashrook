@@ -117,8 +117,8 @@ const JoinStatusButtons: React.FC<JoinStatusButtonsProps> = ({
   }, []);
 
   const partnershipAmount = useMemo(() => {
-    return data?.price && data?.area ? (data?.price * partnershipPercentage * data?.area) / 100 : 100;
-  }, [data?.price, partnershipPercentage, data?.area]);
+    return !data?.type&&data?.price && data?.area ? (data?.price * partnershipPercentage * data?.area) / 100 :data?.type&&data?.price? (data?.price * partnershipPercentage ) / 100:100;
+  }, [data?.price, partnershipPercentage, data?.area,data?.type]);
   useEffect(() => {
     if (typeof window !== "undefined") {
       sessionStorage.setItem("amount", String(partnershipAmount));
@@ -196,7 +196,7 @@ const JoinStatusButtons: React.FC<JoinStatusButtonsProps> = ({
               <p className="text-sm font-medium">
                 المبلغ الكلي
                 <span className="text-blue-450 font-bold mx-4">
-                  {data?.price && data?.area ? FormatNumber(data?.price * data?.area) : ""} ريال
+                  {data?.price && data?.area &&!data?.type ? FormatNumber(data?.price * data?.area) : data?.price && data?.area &&data?.type?FormatNumber(data?.price):""} ريال
                 </span>
               </p>
             </div>

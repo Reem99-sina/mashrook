@@ -28,6 +28,7 @@ const ChatPage = () => {
   ) as { user: userInfo, message: string };
   const [title, setTitle] = useState<string>();
   const [senderId, setsenderId] = useState<number>();
+  const [receiver_id, setreceiver_id] = useState<number>();
 
   const { loading, message, data } = useSelector<RootState>(
     (state) => state.messageByID
@@ -73,8 +74,12 @@ const ChatPage = () => {
 
     const title = Cookie.get("title")
     const sender_id = Cookie.get("senderId")
+    const receiver_id = Cookie.get("receiver_id")
     if (sender_id) {
       setsenderId(Number(sender_id))
+    }
+    if(receiver_id){
+      setreceiver_id(Number(receiver_id))
     }
     if (title) {
       setTitle(title)
@@ -84,9 +89,25 @@ const ChatPage = () => {
     const pusher = new Pusher("eac8985b87012d5f5753", {
       cluster: "mt1",
     });
-    const channel = pusher.subscribe(`chats-${senderId || 2}`);
+    const channel = pusher.subscribe(`chats-${senderId}`);
+    const channelReceiver = pusher.subscribe(`chats-${receiver_id}`);
+    channelReceiver.bind(`newMessage`, function (message: messagePusher) {
+      const urlPattern = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i;
+      setMessage((prev) => [...prev, {
+        message: message?.message,
+        alert_link: null, alert_link_text: null,
+        alert_link_type: null,
+        alert_message: null,
+        alert_message_text: null,
+        room_id: Number(id),
+        type: message?.type,
+        user_id: message?.authorId,
+        createdAt: String(new Date())
+      }])
+      setNewMessage("")
+    });
+    
     channel.bind(`newMessage`, function (message: messagePusher) {
-      console.log(message, "message")
       const urlPattern = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i;
       setMessage((prev) => [...prev, {
         message: message?.message,
@@ -102,9 +123,9 @@ const ChatPage = () => {
       setNewMessage("")
     });
     return () => {
-      pusher.unsubscribe(`chats-${senderId || 2}`);
+      pusher.unsubscribe(`chats-${senderId||receiver_id||2}`);
     };
-  }, [id, senderId]);
+  }, [id, senderId,receiver_id]);
 
   useEffect(() => {
     if (id) {
