@@ -7,6 +7,7 @@ import {
 } from "@/app/assets/svg";
 import Image from "next/image";
 import Link from "next/link"
+import { formatPhoneNumber } from "@/app/hooks/formatNumber"
 export default function Footer() {
   return (
     <div className="flex flex-col items-center justify-center w-full h-full  border-2  bg-white ">
@@ -24,9 +25,9 @@ export default function Footer() {
         className="rounded-xl mt-4"
       />
       <h2 className="text-xl font-bold mt-8 mb-4 text-center">للاتصال</h2>
-      <p>9665533332368</p>
+      <p style={{direction:"ltr"}}>{formatPhoneNumber(9665550455855)}</p>
       <p>info@Mashrook.sa</p>
-      <Link href={`whatsapp://send?phone=+9665533332368`}><Butwhatsapp className="rounded-xl mt-4 mb-4" /></Link>
+      <Link href={`whatsapp://send?phone=+9665550455855`}><Butwhatsapp className="rounded-xl mt-4 mb-4" /></Link>
       <h2 className="text-xl font-bold mb-4 text-center">العنوان</h2>
       <p className="text-center">الرياض ,حي الحمراء,طريق الامام عبد الله بن سعود بن عبد العزيزص.ب 13241</p>
 

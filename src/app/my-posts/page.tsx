@@ -38,6 +38,9 @@ const MyPosts: React.FC = () => {
     data: any;
   };
   const modalRef = useRef<ModalRef>(null);
+  const AnnounceMentStatus=useMemo(()=>{
+    return (ele:dataReturn)=>(ele?.propertyAdvertising&&ele?.propertyAdvertising[0]?.status=="active")?"متاح":ele?.propertyAdvertising&&ele?.propertyAdvertising[0]?.status=="expired"?"منتهي":ele?.propertyAdvertising&&ele?.propertyAdvertising[0]?.status=="rejected"?"مرفوض":ele?.propertyAdvertising&&ele?.propertyAdvertising[0]?.status=="waiting_for_approved"?"في انتظار الموافقة":""
+  },[])
   const dataAdvertiseMemo=useMemo(()=>{
    return dataAdvertise?.map((ele:dataReturn)=>({
       type:ele?.propertyTypeDetails?.title,
@@ -45,10 +48,10 @@ const MyPosts: React.FC = () => {
       id:ele?.propertyAdvertising?ele?.propertyAdvertising[0]?.id:null,
       requestNumber:ele?.id,
       announcementDate: ele?.propertyAdvertising?format(new Date(ele?.propertyAdvertising[0]?.createdAt), "yyyy-MM-dd"):"",
-      announcementStatus:(ele?.propertyAdvertising&&ele?.propertyAdvertising[0]?.status=="active")?"متاح":"",
+      announcementStatus:AnnounceMentStatus(ele),
       active:"تمت الشراكة"
     }))
-  },[dataAdvertise])
+  },[dataAdvertise,AnnounceMentStatus])
   
   let dataPagination = useMemo(() => {
     return dataAdvertiseMemo?.slice((currentPage - 1) * 3, currentPage * 3);

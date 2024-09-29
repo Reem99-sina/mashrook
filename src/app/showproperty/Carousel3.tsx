@@ -13,7 +13,7 @@ export function CarouselDefault({images}:{images:imageInfo[]}) {
   return (
     <Carousel placeholder={undefined}
     onPointerEnterCapture={undefined}
-    onPointerLeaveCapture={undefined} className="rounded-xl">
+    onPointerLeaveCapture={undefined} className="rounded-xl bg-gray-500 ">
       {images?.map((ele)=><Image
       key={ele?.id}
         src={ele.link}

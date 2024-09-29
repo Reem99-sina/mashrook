@@ -364,7 +364,7 @@ const PropertyDetails: React.FC<{id:any}> = ({id}:{id:any}) => {
               </span>
             </div>
           </div>
-          <div className="flex bg-gray-100 w-full justify-between items-center py-2  px-2 rounded-lg ml-2 mt-4">
+          {selectData?.license_number&& <div className="flex bg-gray-100 w-full justify-between items-center py-2  px-2 rounded-lg ml-2 mt-4">
             <div>
               <p>رقم الترخيص للإعلان</p>
             </div>
@@ -374,7 +374,7 @@ const PropertyDetails: React.FC<{id:any}> = ({id}:{id:any}) => {
                 <p>{selectData?.license_number}</p>
               </span>
             </div>
-          </div>
+          </div>}
           <div className="flex bg-gray-100 w-full justify-between items-center py-2  px-2 rounded-lg ml-2 mt-4">
             <div>
               <p>رقم الطلب</p>

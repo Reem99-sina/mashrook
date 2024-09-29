@@ -266,7 +266,7 @@ useEffect(()=>{
                 </div>
               </div>
               <div className="flex justify-between bg-gray-100 w-full items-center rounded-lg ml-2 mt-2 px-2  py-1 ">
-                <span className="text-sm">السعر</span>
+                <span className="text-sm"> السعر</span>
                 <span className="text-blue-450 text-xs">
                   (بدون ضريبة التصرفات العقارية أو السعي)
                 </span>
@@ -480,7 +480,7 @@ useEffect(()=>{
               </span>
             </div>
           </div>
-          <div className="flex bg-gray-100 w-full justify-between items-center py-2  px-2 rounded-lg ml-2 mt-4">
+          {selectData?.license_number&& <div className="flex bg-gray-100 w-full justify-between items-center py-2  px-2 rounded-lg ml-2 mt-4">
             <div>
               <p>رقم الترخيص للإعلان</p>
             </div>
@@ -490,7 +490,8 @@ useEffect(()=>{
                 <p>{selectData?.license_number}</p>
               </span>
             </div>
-          </div>
+          </div>}
+         
           <div className="flex bg-gray-100 w-full justify-between items-center py-2  px-2 rounded-lg ml-2 mt-4">
             <div>
               <p>رقم الطلب</p>

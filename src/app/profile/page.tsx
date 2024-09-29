@@ -12,6 +12,8 @@ import { CiEdit } from "react-icons/ci";
 import { updateUserImage } from "@/redux/features/userSlice"
 import { userInfo } from "@/type/addrealestate"
 import { fetchuser, removeUser } from "@/redux/features/userSlice"
+import { FaUser } from "react-icons/fa";
+
 const Page = () => {
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
@@ -88,7 +90,9 @@ const Page = () => {
         ) : (
           <div className="flex flex-col items-center justify-center">
             <div className="rounded-full w-[159px] h-[159px] overflow-hidden ">
-              <Image src={user?.image ? user?.image : "/Block.png"} width={159} height={159} alt="block" />
+              {user?.image ?<Image src={user?.image} width={159} height={159} alt="block" />: <div className="rounded-full bg-gray-200 w-full h-full flex justify-center align-center p-2">
+                <FaUser size="sm" className="text-gray-500"/>
+                </div>}
             </div>
             <div className="rounded-md border-2 border-gray-500 flex flex-row-reverse items-center p-2 gap-2 cursor-pointer"
             >

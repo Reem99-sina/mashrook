@@ -185,7 +185,14 @@ const EditOffer = () => {
       putLocation({
         ...datasend,
       })
-    )
+    ).then((res: any) => {
+      if (res.payload.data) {
+        router.push(`/my-offer?title=عروضي`);
+      } else if (res.payload.status) {
+        toast.error(res.payload.message);
+        router.push(`/my-offer?title=عروضي`);
+      }
+    })
     if (images && images?.length > 0 && Array.isArray(images)) {
       let newImages = images.filter((item) => item instanceof File);
       newImages.map((image: File) =>
@@ -227,7 +234,7 @@ const EditOffer = () => {
         }
       });
     } else {
-      const ids = compare(dataCom?.details, selectData?.details)
+      const ids = compare(dataCom?.landDetails, selectData?.landDetails)
       dataCom?.landDetails?.map((detail: landInfo) => {
         if (detail?.id && ids.includes(detail?.id)) {
           dispatch(

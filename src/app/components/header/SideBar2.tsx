@@ -6,10 +6,11 @@ import { useEffect, useState } from "react";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { removeLogin } from "@/redux/features/loginSlice";
-import {removeTokenUser} from "@/redux/features/userSlice"
+import {removeTokenUser,deleteTokenUser} from "@/redux/features/userSlice"
 import Cookie from "js-cookie";
 import { useRouter } from "next/navigation";
 import {fetchToken}from "@/redux/features/userSlice"
+import useFcmToken from '@/utils/hooks/useFcmToken';
 interface SideBarProps {
   sidebarOpen: boolean;
   toggleSidebar: (e:any) => void;
@@ -21,7 +22,7 @@ export default function SideBar({ sidebarOpen, toggleSidebar }: SideBarProps) {
     (state) => state.register
   ) as {  token:string };
   const [open, setOpen] = useState(false);
-
+  const { fcmToken,notificationPermissionStatus } = useFcmToken();
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
@@ -148,7 +149,7 @@ export default function SideBar({ sidebarOpen, toggleSidebar }: SideBarProps) {
                     
                     <li className="mb-4 text-xl hover:text-gray-800 ">
                       <Link
-                        href="/"
+                        href="/notification"
                         className=" text-blue-450 hover:text-[#3B73B9] "
                       >
                         الاشعارات
@@ -160,6 +161,7 @@ export default function SideBar({ sidebarOpen, toggleSidebar }: SideBarProps) {
                         href="/"
                         className=" text-black hover:text-[#3B73B9] "
                         onClick={(e) => {
+                          dispatch(deleteTokenUser({token:fcmToken}))
                           Cookie.remove("token");
                           Cookie.remove("user");
                           Cookie.remove("tokenTime");
@@ -181,7 +183,7 @@ export default function SideBar({ sidebarOpen, toggleSidebar }: SideBarProps) {
                 {" "}
                 تحتاج اي مساعدة او عندك استفسار؟
               </p>
-              <Link className="mt-4 bg-green-500 py-2 px-4 rounded-lg text-white flex flex-row gap-2 items-center " href={`whatsapp://send?phone=+9660000130244`}>
+              <Link className="mt-4 bg-green-500 py-2 px-4 rounded-lg text-white flex flex-row gap-2 items-center " href={`whatsapp://send?phone=+9665550455855`}>
                 تواصل معنا
                 <Whatsapp />
               </Link>

@@ -25,7 +25,7 @@ export const ChatCard: React.FC<ChatCardProps> = ({
     >
       <div className="flex flex-row gap-6 items-center justify-between">
         <div>{image}</div>
-        <div className="flex flex-col flex-wrap mb-auto p-3">
+        <div className="flex flex-col flex-wrap mb-auto p-3 items-start w-full">
           <p className="font-normal text-base text-[#000000DE]">{title}</p>
           <p className="text-xs font-normal">{subtitle}</p>
         </div>

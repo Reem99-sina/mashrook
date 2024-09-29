@@ -54,7 +54,7 @@ const Verify: React.FC = () => {
       ).then((res:any)=>{
         if(res.payload.message&&!res.payload.status){
           toast.success(res.payload.message);
-          Cookie.set("token", data?.token);
+          Cookie.set("token", res.payload?.data?.token);
           links.push(`/`);
         }else if(res.payload.status){
           toast.error(res.payload.message);

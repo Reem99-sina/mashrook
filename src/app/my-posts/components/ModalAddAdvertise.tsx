@@ -22,6 +22,8 @@ const ModalAddAdvertising = ({ refModel }: { refModel: React.RefObject<ModalRef>
     dataSelect:any
   };
   let [property_id, setPropertyId] = useState<number>()
+  let [show, setShow] = useState<boolean>(false)
+
   const { token } = useSelector<RootState>(
     (state) => state.register
   ) as { token: string };
@@ -55,7 +57,7 @@ const ModalAddAdvertising = ({ refModel }: { refModel: React.RefObject<ModalRef>
               </option>
             ))}
           </select>
-          {!property_id && (
+          {show && (
                   <p className="text-xs text-red-600 dark:text-red-500 text-right my-2">
                    يجب ادخال عقار لتعلن عليه
                   </p>
@@ -71,7 +73,10 @@ const ModalAddAdvertising = ({ refModel }: { refModel: React.RefObject<ModalRef>
             className="!flex !flex-row-reverse items-center justify-center gap-2"
             onClick={() => {
               if(property_id){
+                setShow(false)
               router?.push(`/my-posts/${property_id}/termsandconditions`)
+              }else{
+                setShow(true)
               }
             }}
           />

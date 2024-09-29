@@ -88,20 +88,7 @@ export const resetNewFromOld=async(data:resetPasswordFromOld)=>{
       .catch((error) => error?.response?.data);
     return response;
 }
-export const getUserRequest = createAsyncThunk(
-  "putUser",
-  async (_, { rejectWithValue }) => {
-    const response = await axios
-      .get("https://server.mashrook.sa/user", {
-        headers: {
-          Authorization: Cookie.get("token"),
-        },
-      })
-      .then((response) => response.data)
-      .catch((error) => error?.response?.data); // Adjust your endpoint as necessary
-    return response; // Return the user data from API response
-  }
-);
+
 const initialstate = {
   loading: false,
   message: "",
@@ -164,21 +151,6 @@ const loginSlice = createSlice({
         state.loading = false;
         state.message = action.error.message ? action.error.message : "error";
         state.data = null;
-      }),
-      builder.addCase(getUserRequest.fulfilled, (state, action) => {
-        if(action?.payload?.data){
-          Cookie.set("user", JSON.stringify(action?.payload?.data));
-        }
-        state.dataUser = action?.payload?.data;
-        // Unauthorized, jwt malformed
-      }),
-      builder.addCase(getUserRequest.rejected, (state, action) => {
-        state.dataUser = null;
-        Cookie.remove("token");
-        Cookie.remove("user");
-      }),
-      builder.addCase(getUserRequest.pending, (state, action) => {
-        state.dataUser = null;
       }),
       builder.addCase(forget.fulfilled, (state, action) => {
         (state.messageForget = action?.payload?.message

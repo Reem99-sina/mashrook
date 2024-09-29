@@ -7,12 +7,19 @@ import { useRouter } from "next/navigation";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import Cookie from "js-cookie";
-import { fetchToken } from "@/redux/features/userSlice"
+import { fetchToken ,fetchuser, getUserRequest,removeLogin } from "@/redux/features/userSlice"
 import { validateForm } from "@/app/hooks/validate";
 import { dataReturn, addUnqiue, typePay } from "@/redux/features/getRequest";
 import { amountSchema } from "@/typeSchema/schema";
 import { FormatNumber } from "@/app/hooks/formatNumber"
 import toast from "react-hot-toast"
+import { userInfo } from "@/type/addrealestate"
+import {
+  IoMdCloseCircleOutline,
+} from "react-icons/io";
+import {
+  Accreditation
+} from "@/app/assets/svg";
 type JoinStatusButtonsProps = {
   currentDealStatus: boolean;
   data: typePay;
@@ -25,10 +32,9 @@ const JoinStatusButtons: React.FC<JoinStatusButtonsProps> = ({
   dataMain,
 }) => {
   const [showDialog, setShowDialog] = useState(false);
-  const { token } = useSelector<RootState>(
+  const { token,user } = useSelector<RootState>(
     (state) => state.register
-  ) as { token: string };
-  const [user, setUser] = useState<any>();
+  ) as { token: string, user:userInfo };
   const [partnershipPercentage, setPartnershipPercentage] = useState(0);
   const router = useRouter();
   const availableAmount = 600000;
@@ -105,16 +111,18 @@ const JoinStatusButtons: React.FC<JoinStatusButtonsProps> = ({
   }, [partnershipPercentage]);
   useEffect(() => {
     dispatch(fetchToken())
+    dispatch(fetchuser())
   }, [dispatch])
-  useEffect(() => {
-    if (typeof window != "undefined") {
-      const userItem = Cookie?.get("user");
-      if (userItem && userItem != "undefined") {
-        const makeObject = JSON.parse(userItem)
-        setUser(makeObject);
-      }
-    }
-  }, []);
+
+  // useEffect(() => {
+  //   if (typeof window != "undefined") {
+  //     const userItem = Cookie?.get("user");
+  //     if (userItem && userItem != "undefined") {
+  //       const makeObject = JSON.parse(userItem)
+  //       setUser(makeObject);
+  //     }
+  //   }
+  // }, []);
 
   const partnershipAmount = useMemo(() => {
     return !data?.type&&data?.price && data?.area ? (data?.price * partnershipPercentage * data?.area) / 100 :data?.type&&data?.price? (data?.price * partnershipPercentage ) / 100:100;
@@ -177,7 +185,8 @@ const JoinStatusButtons: React.FC<JoinStatusButtonsProps> = ({
       {showDialog && (
         <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex justify-center items-center px-2 ">
           <div className="bg-white rounded-lg p-4 z-50 ">
-            <div className="flex justify-between items-center mb-6 border-b-2 pb-2 ">
+            <div className="flex justify-center items-center mb-6 border-b-2 pb-2 flex-col">
+              <div  className="flex justify-start items-center w-full ">
               <button
                 type="button"
                 className="text-2xl font-bold  text-gray-600 hover:text-gray-900"
@@ -185,14 +194,19 @@ const JoinStatusButtons: React.FC<JoinStatusButtonsProps> = ({
               >
                 &times;
               </button>
-              <h2 className="text-sm lg:text-xl font-bold">
+              <h2 className="text-sm lg:text-xl font-bold justify-self-center w-full">
                 {data?.piece_number
                   ? "رقم القطعة-" + data?.piece_number
                   : data?.type}
               </h2>
-              <p></p>
+              </div>
+              <p className="text-sm font-medium my-2 flex justify-center items-center text-[#6B7280]">
+              {dataMain?.finance ? "متاح" : "غير متاح"}   التمويل العقاري
+               
+              </p>
             </div>
             <div className="mb-4">
+          
               <p className="text-sm font-medium">
                 المبلغ الكلي
                 <span className="text-blue-450 font-bold mx-4">

@@ -12,14 +12,16 @@ import { BsSave } from "react-icons/bs";
 import toast from "react-hot-toast";
 import { FaAd } from "react-icons/fa";
 import { CiLogout } from "react-icons/ci";
-import { removeTokenUser, deleteUser, removeMessage } from "@/redux/features/userSlice"
+import { removeTokenUser, deleteUser, removeMessage ,deleteTokenUser} from "@/redux/features/userSlice"
 import { RiDeleteBinLine } from "react-icons/ri";
+import useFcmToken from '@/utils/hooks/useFcmToken';
 import Cookie from 'js-cookie';
 import { removeLogin } from "@/redux/features/loginSlice"
 import MainOtion from "./component/mainOption"
 import { userInfo } from "@/type/addrealestate"
 const MyAccountPage = () => {
   const router = useRouter();
+  const { fcmToken,notificationPermissionStatus } = useFcmToken();
   const { user, message } = useSelector<RootState>(
     (state) => state.register
   ) as { user: userInfo, message: string };
@@ -31,6 +33,7 @@ const MyAccountPage = () => {
     router.push("/");
   };
   const onDeleteAccount = () => {
+    dispatch(deleteTokenUser({token:fcmToken}))
     Cookie.remove("token");
     Cookie.remove("user");
     Cookie.remove("tokenTime");
@@ -65,7 +68,7 @@ const MyAccountPage = () => {
       </div>
       <MainOtion title={user?.username} subTitle={"عرض الملف الشخصية"} dataUser={user} onClick={() => router.push("/profile")} />
       <MainOtion title={"كلمة السر"} dataUser={user} Icon={BsKey} onClick={() => router.push("/password")} />
-      <MainOtion title={"الاشعارات"} dataUser={user} Icon={IoIosNotificationsOutline} onClick={() => router.push("/")} />
+      <MainOtion title={"الاشعارات"} dataUser={user} Icon={IoIosNotificationsOutline} onClick={() => router.push("/notification")} />
       <MainOtion title={"رخصة فال"} dataUser={user} Icon={FaAddressCard} onClick={() => router.push("/lisence_number")} />
       <MainOtion title={"محفوظاتي"} dataUser={user} Icon={BsSave} onClick={() => router.push("/mySave")} />
       <MainOtion title={"اعلاناتي"} dataUser={user} Icon={FaAd} onClick={() => router.push("/my-posts")} />

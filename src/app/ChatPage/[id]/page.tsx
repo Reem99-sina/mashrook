@@ -69,9 +69,7 @@ const ChatPage = () => {
     }
   }, [data])
   useEffect(() => {
-
     dispatch(fetchuser())
-
     const title = Cookie.get("title")
     const sender_id = Cookie.get("senderId")
     const receiver_id = Cookie.get("receiver_id")

@@ -7,12 +7,11 @@ import {
   User,
 } from "@/app/assets/svg";
 import Cookie from "js-cookie";
-import {fetchToken}from "@/redux/features/userSlice"
+import {fetchToken,getUserRequest,removeLogin }from "@/redux/features/userSlice"
 import Image from "next/image";
 import Link from "next/link";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
-import { getUserRequest,removeLogin } from "@/redux/features/loginSlice";
 import {userInfo} from "@/type/addrealestate"
 
 export default function MainHeader() {
@@ -45,7 +44,7 @@ export default function MainHeader() {
       <div className="flex items-center justify-between">
         <div className="w-full self-center p-4">
           <button onClick={toggleSidebar}>
-            {(!dataUser) ? (
+            {(!dataUser&&!userProfile) ? (
               <Mainnavigationmenu />
             ) : (
               <div className="flex items-center flex-row-reverse gap-x-2 border-2 border-gray-200 p-2 rounded-full">

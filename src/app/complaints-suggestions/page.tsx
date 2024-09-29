@@ -2,6 +2,7 @@
 import { TextInput } from "@/app/components/shared/text-input.component";
 import {useState} from "react"
 import 'react-phone-number-input/style.css'
+import { BackButtonOutline } from "../assets/svg";
 import PhoneInput from 'react-phone-number-input'
 import { Button } from "@/app/components/shared/button.component";
 import { ComplaintsSchema } from "@/typeSchema/schema";
@@ -30,6 +31,10 @@ const ComplaintsSuggestions=()=>{
         type:""
     })
     const [errors, setErrors] = useState<undefined|ComplaintsSuggestionsProps>();
+    const handleBack = (e: React.MouseEvent<HTMLButtonElement>) => {
+      e.preventDefault()
+      router.back();
+  };
     const onSubmit=async()=>{
         const status=await validateForm(data,ComplaintsSchema,setErrors)
         if(status==true){
@@ -45,6 +50,19 @@ const ComplaintsSuggestions=()=>{
     }
     return (
         <div className="m-2 " style={{direction:"rtl"}}>
+          <div className="flex items-center justify-center m-2">
+      <div>
+        <button onClick={handleBack}>
+          <BackButtonOutline />
+        </button>
+      </div>
+      <div className="flex flex-1  items-center justify-center border-b-2 border-gray-200">
+        <p className="flex items-center justify-center text-[#36343B] font-bold text-xl pb-2">
+           اضافة شكوي او اقتراح
+        </p>
+      </div>
+      </div>
+      <div className="mx-3">
             <h3 className="text-xl font-bold my-3">راسلنا</h3>
             <div style={{direction:"ltr"}}>
             <div style={{direction:"rtl"}} className="my-2">
@@ -143,6 +161,7 @@ const ComplaintsSuggestions=()=>{
               onClick={onSubmit}
               className="relative flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-[#3B73B9] border border-transparent rounded-md group  focus:outline-none focus:ring-2 focus:ring-offset-2 "
             ></Button>
+            </div>
             </div>
         </div>
     )

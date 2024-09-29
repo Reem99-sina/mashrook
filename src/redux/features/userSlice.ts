@@ -10,12 +10,29 @@ export interface userRegister {
 interface userImage {
   image: File;
 }
+interface userDeleteToken{
+  token:string
+}
 interface userUpdata {
   username?: string;
   email?: string;
   phone?: string;
   val_license?: string;
 }
+export const getUserRequest = createAsyncThunk(
+  "putUser",
+  async (_, { rejectWithValue }) => {
+    const response = await axios
+      .get("https://server.mashrook.sa/user", {
+        headers: {
+          Authorization: Cookie.get("token"),
+        },
+      })
+      .then((response) => response.data)
+      .catch((error) => error?.response?.data); // Adjust your endpoint as necessary
+    return response; // Return the user data from API response
+  }
+);
 export const register = createAsyncThunk(
   "register",
   async (data: userRegister, { rejectWithValue }) => {
@@ -76,12 +93,23 @@ export const deleteUser = createAsyncThunk("auth/deleteuser", async () => {
     .catch((error) => error?.response?.data); // Adjust your endpoint as necessary
   return response; // Return the user data from API response
 });
+export const deleteTokenUser = createAsyncThunk("auth/deleteTokenuser", async (data:userDeleteToken) => {
+  const response = await axios
+    .delete(`https://server.mashrook.sa/user/logout/${data?.token}`, {
+      headers: {
+        Authorization: Cookie.get("token"),
+      },
+    })
+    .then((response) => response.data)
+    .catch((error) => error?.response?.data); // Adjust your endpoint as necessary
+  return response; // Return the user data from API response
+});
 const initialstate = {
   loading: false,
   message: "",
   data: null,
   token: "",
-  user: "",
+  user: null,
 };
 
 const userSlice = createSlice({
@@ -95,10 +123,14 @@ const userSlice = createSlice({
     },
     removeTokenUser: (state) => {
       state.token = "";
-      state.user = "";
+      state.user = null;
     },
     removeMessage: (state) => {
       state.message = "";
+    }, removeLogin: (state) => {
+      state.message = "";
+      state.data = null;
+      state.user = null;
     },
   },
   extraReducers: (builder) => {
@@ -132,10 +164,10 @@ const userSlice = createSlice({
         state.user = action.payload ? action.payload : "";
       }),
       builder.addCase(fetchuser.pending, (state, action) => {
-        state.user = "";
+        state.user = null;
       }),
       builder.addCase(fetchuser.rejected, (state, action) => {
-        state.user = "";
+        state.user = null;
       }),
       builder.addCase(updateUserImage.fulfilled, (state, action) => {
         // state.user=action.payload?action.payload:""
@@ -172,8 +204,22 @@ const userSlice = createSlice({
       }),
       builder.addCase(deleteUser.rejected, (state, action) => {
         state.message = action.error.message ? action.error.message : "error";
+      }),builder.addCase(getUserRequest.fulfilled, (state, action) => {
+        if(action?.payload?.data){
+          Cookie.set("user", JSON.stringify(action?.payload?.data));
+        }
+        state.user = action?.payload?.data;
+        // Unauthorized, jwt malformed
+      }),
+      builder.addCase(getUserRequest.rejected, (state, action) => {
+        state.user = null;
+        Cookie.remove("token");
+        Cookie.remove("user");
+      }),
+      builder.addCase(getUserRequest.pending, (state, action) => {
+        state.user = null;
       });
   },
 });
-export const { removeUser, removeTokenUser, removeMessage } = userSlice.actions;
+export const { removeUser, removeTokenUser, removeMessage,removeLogin } = userSlice.actions;
 export default userSlice.reducer;

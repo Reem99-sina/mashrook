@@ -12,6 +12,7 @@ import postrealEstateType from "./features/postRealEstate";
 import loginReducer from "./features/loginSlice";
 import getCitySlice from "./features/getCity";
 import { Action } from "@reduxjs/toolkit";
+import getNotification from "./features/getMyNotification"
 import getRequest from "./features/getRequest";
 import getRequestSlice from "./features/getOrders";
 import getPartnerSlice from "./features/getPartners";
@@ -49,7 +50,8 @@ const store = configureStore({
     messageByDetailsId: getMessageByDetailById,
     messageByLandId: getMessageByLandId,
     myAdvertise: getAdvertiseSlice,
-    complaints:ComplaintSlice
+    complaints:ComplaintSlice,
+    notifications:getNotification
   },
 });
 export default store;
