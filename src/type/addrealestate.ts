@@ -283,3 +283,125 @@ export interface propertyAdvertiseinterface {
   updatedAt: string;
   createdAt: string;
 }
+export interface dataReturnType {
+  id: number;
+  type: string;
+  is_divisible?: boolean;
+  age?: number;
+  license_number: string;
+  area: number;
+  price: number;
+  min_price: string | null;
+  advertisement_number: string;
+  partnership_amount: any;
+  finance: boolean;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+  user_id: number;
+  property_type_id: number;
+  property_owner_type_id: number;
+  property_purpose_id: number;
+  propertyLocation: {
+    id: number;
+    lat: number;
+    long: number;
+    address: string;
+    city: string;
+    district: string;
+    createdAt: string;
+    updatedAt: string;
+    property_id: number;
+  };
+  landDetails: {
+    id: number;
+    is_divisible: boolean;
+    piece_number: string;
+    plan_number: string;
+    type: string | null;
+    createdAt: string;
+    updatedAt: string;
+    property_id: number;
+    area: number;
+    price: number;
+    stage: string;
+    available_percentage: number;
+    available_price: number;
+  }[];
+  details: ({
+    id: number;
+    type: string;
+    area: number;
+    price: number;
+    rooms_number: number;
+    halls_number: number;
+    bathrooms_number: number;
+    kitchens_number: number;
+    stage: string;
+    available_percentage: number;
+    available_price: number;
+    age: number;
+    status: any;
+    location: any;
+    apartment_number: any;
+    apartment_floor: any;
+    min_apartment_floor: any;
+    createdAt: string;
+    updatedAt: string;
+    property_id: number;
+    amenities?: {
+      pool?: boolean; // مزايا اضافية مسبح
+      garden?: boolean; // مزايا اضافية
+      servants_room?: boolean; // مزايا اضافية غرفة خدم
+      ac?: boolean; // مزايا اضافية مكيفة
+      furnished?: boolean; // مزايا اضافية مؤثثة
+      kitchen?: boolean; // مزايا اضافية مطبخ راكب
+      garage?: boolean;
+      car_entrance?: boolean;
+    };
+  }&landInfo)[];
+  amenities: any[];
+  user: {
+    id: number;
+    username: string;
+    email: string;
+    status: string;
+    createdAt: string;
+    updatedAt: string;
+  };
+  propertyType: {
+    id: number;
+    title: string;
+    createdAt: string;
+    updatedAt: string;
+  };
+  propertyPurpose: {
+    id: number;
+    title: string;
+    createdAt: string;
+    updatedAt: string;
+  };
+  propertyOwnerType: {
+    id: number;
+    title: string;
+    createdAt: string;
+    updatedAt: string;
+  };
+  propertyTypeDetails: {
+    id: number;
+    title: string;
+    createdAt: string;
+    updatedAt: string;
+  };
+  propertyMedia: {
+    id: number;
+    name: string;
+    link: string;
+    createdAt: string;
+    updatedAt: string;
+    property_id: number;
+  }[];
+  propertySaved?: saveElement[];
+  propertyDetailsOwnership?: realEstatePartner[];
+  propertyAdvertising?:propertyAdvertiseinterface[]
+}

@@ -55,7 +55,6 @@ export const fetchuser = createAsyncThunk("auth/featchuser", async () => {
 export const fetchAuthId = createAsyncThunk("auth/fetchAuthId", async () => {
   const userData = Cookie.get("auth");
   if (userData != "undefined" && userData) {
-    console.log(true,"teri")
     return JSON.parse(userData);
   }else{
     return false

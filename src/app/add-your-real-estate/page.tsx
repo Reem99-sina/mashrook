@@ -57,6 +57,7 @@ import {
   departmentWithVillaSchema,
   schemaMain,
   earthDevSchema,
+  earthDevSchemaWithoutAdvert
 } from "@/typeSchema/schemaRealestate";
 import VillaDetails from "./VillaDetails";
 import OnSuccess from "./OnSuccess";
@@ -108,7 +109,7 @@ const AddYourRealEstate: React.FC = () => {
     property_purpose_id: 0,
     property_type_id: 0,
     partner_type_id: 0,
-    city: "تبوك",
+    city: "الرياض",
     district: "other",
     address: "",
     area: 0,
@@ -130,7 +131,7 @@ const AddYourRealEstate: React.FC = () => {
       setDataSend((prev) => ({ ...prev, property_type_id: option?.id }));
       setSelectedPropertyType(option);
     }
-    setDataSend((prev) => ({ ...prev, city: "تبوك" }));
+    setDataSend((prev) => ({ ...prev, city: "الرياض" }));
   };
   const { token } = useSelector<RootState>(
     (state) => state.register
@@ -210,6 +211,7 @@ const AddYourRealEstate: React.FC = () => {
     garage: false,
   });
   const [images, setImages] = useState<File[] | undefined>([]);
+ 
   const { data, title, details, titleSection, detailsSection } =
     useSelector<RootState>((state) => state.properityType) as {
       loading: boolean;
@@ -231,6 +233,9 @@ const AddYourRealEstate: React.FC = () => {
     message: string;
     data: detailsType[];
   };
+  const villaOne=useMemo(()=>{
+    return villa.filter((ele)=>ele?.type)
+  },[villa])
   const { data: dataOwnerType } = useSelector<RootState>(
     (state) => state.properityOwnerType
   ) as {
@@ -292,8 +297,7 @@ const AddYourRealEstate: React.FC = () => {
             ));
         }
         if (
-          dataSend.property_owner_type_id == 2 ||
-          dataSend.property_owner_type_id == 3
+          (dataSend.property_owner_type_id == 2 ||dataSend.property_owner_type_id == 3)&&(dataSend?.property_purpose_id==1)
         ) {
           validationMain =
             validationMain &&
@@ -302,6 +306,19 @@ const AddYourRealEstate: React.FC = () => {
                 ...mediator,
               },
               earthDevSchema,
+              setErrors
+            ));
+        }
+        if (
+          (dataSend.property_owner_type_id == 2 ||dataSend.property_owner_type_id == 3)&&(dataSend?.property_purpose_id!=1)
+        ) {
+          validationMain =
+            validationMain &&
+            (await validateForm(
+              {
+                ...mediator,
+              },
+              earthDevSchemaWithoutAdvert,
               setErrors
             ));
         }
@@ -412,7 +429,7 @@ const AddYourRealEstate: React.FC = () => {
                 property_type_details_id:
                   departmentArch?.property_type_details_id,
                 age: departmentArch?.age,
-                details: villa,
+                details: villaOne,
                 images: images,
               },
               villaOwnSchema,
@@ -426,7 +443,7 @@ const AddYourRealEstate: React.FC = () => {
                 property_type_details_id:
                   departmentArch?.property_type_details_id,
                 age: departmentArch?.age,
-                details: villa,
+                details: villaOne,
                 ...mediator,
                 images,
               })
@@ -593,6 +610,7 @@ const AddYourRealEstate: React.FC = () => {
                       )}
                   </div>
                   <div className="flex flex-row-reverse flex-wrap justify-start mt-6 gap-8">
+                    
                     {item.tattle == "نوع العقار"
                       ? data?.data?.map(
                         (option: { id: number; title: string }) => (
@@ -672,13 +690,13 @@ const AddYourRealEstate: React.FC = () => {
                           )}
                         </div>
                       )}
-                  </div>
-
-                  {(dataSend?.property_owner_type_id == 2 ||
-                    dataSend?.property_owner_type_id == 3) &&
-                    item.tattle == "صفة مقدم العرض" && (
-                      <>
-                        <div className="flex items-end gap-2 justify-end flex-col mt-5">
+                  </div>  
+                </div>
+              ))}
+              {(dataSend?.property_owner_type_id == 2 ||
+                    dataSend?.property_owner_type_id == 3)  && (
+                      <div className="bg-white rounded-lg border border-[#E5E7EB] p-2">
+                        <div className="flex items-end gap-2 justify-end flex-col mt-2">
                           <p className="text-base text-[#4B5563] font-medium">
                             رقم رخصة فال{" "}
                           </p>
@@ -698,7 +716,7 @@ const AddYourRealEstate: React.FC = () => {
                             </p>
                           )}
                         </div>
-                        <div className="flex items-end gap-2 justify-end flex-col mt-5">
+                        {dataSend?.property_purpose_id==1&&<div className="flex items-end gap-2 justify-end flex-col mt-2">
                           <p className="text-base text-[#4B5563] font-medium">
                           رقم ترخيص الاعلان{" "}
                           </p>
@@ -717,13 +735,10 @@ const AddYourRealEstate: React.FC = () => {
                               {String(errors?.advertisement_number)}
                             </p>
                           )}
-                        </div>
-                      </>
+                        </div>}
+                      </div>
                     )}
-                </div>
-              ))}
             </div>
-
             {titleSection && detailsSection && (
               <div className="bg-white rounded-lg border border-[#E5E7EB] w-full mb-4 items-start justify-start p-4 mt-4">
                 <div className="flex items-center justify-end">
@@ -1049,7 +1064,7 @@ const AddYourRealEstate: React.FC = () => {
                           setvilla((prev) =>
                             prev.map((ele, i) =>
                               i == index
-                                ? { ...ele, type: e.target.value }
+                                ? { ...ele, type:e.target.checked? e.target.value:"" }
                                 : ele
                             )
                           )
@@ -1061,12 +1076,19 @@ const AddYourRealEstate: React.FC = () => {
                           villa={villa}
                           index={index}
                           setvilla={setvilla}
+                          villaOne={villaOne}
                           errors={errors}
                         />
                       </AccordionComponent>
                     ))}
                   </>
                 )}
+                 {errors?.details &&
+                           (
+                            <p className="text-xs text-red-600 dark:text-red-500 text-right">
+                              {String(errors?.details)}
+                            </p>
+                          )}
               {selectedPropertyType?.title === "فيلا" &&
                 departmentArch?.property_type_details_id == 3 && (
                   <>
@@ -1523,7 +1545,7 @@ const AddYourRealEstate: React.FC = () => {
                 {haveNumber && (
                   <div className="mb-4" style={{ direction: "rtl" }}>
                     <label className="block mb-2 font-medium mt-2">
-                      رقم الإعلان{" "}
+                      رقم ترخيص الإعلان{" "}
                     </label>
                     <div className="flex items-center">
                       <input

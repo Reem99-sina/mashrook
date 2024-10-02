@@ -70,7 +70,6 @@ export const MyOrdersCard: React.FC<ChatCardProps> = ({
             {alternativeCount}
           </span>
         </Link>
-
       </div>
       <div className="flex gap-2 mt-2">
         <span className="rounded-xl bg-[#F3F4F6] pl-2 pr-2 pt-[2px] pb-[2px] text-xs font-normal text-[#6B7280]">
