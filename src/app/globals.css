@@ -1,0 +1,79 @@
+@import url("https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+
+body {
+  font-family: var(--font-cairo);
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+}
+.rtl-grid {
+  direction: rtl;
+}
+/* for client journey and how to buy vertical line */
+.step-line {
+  position: absolute;
+  top: 100%;
+  height: 165px; 
+  width: 0;
+  border-left: 2px dashed #98CC5D; 
+}
+
+@media (min-width: 768px) {
+  .step-line {
+    height: 120px; /* Increase height on larger screens */
+  }
+}
+.bg-green-450{
+  background-color: #98CC5D;
+}
+.bg-blue-450{
+  background-color: #3B73B9;
+}
+.bg-orange-450{
+  background-color: #E3A008;
+}
+.bg-red-450{
+  background-color: #e3081a;
+}
+.text-blue-450{
+  color: #3B73B9;
+}
+*{
+  font-family:"Cairo"
+}
+.PhoneInputCountrySelectArrow{
+  display: none !important;
+}
+.PhoneInputCountryIcon{
+  margin:0px 3px;
+}
