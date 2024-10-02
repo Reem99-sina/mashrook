@@ -29,7 +29,10 @@ export let earthSchema = object().shape({
     ),
 });
 export let earthDevSchema = object().shape({
-  advertisement_number: string().required("ما رقم الاعلان؟"),
+  advertisement_number: string().required("ما رقم ترخيص الاعلان؟"),
+  license_number: string().required("ما رقم الرخصة"),
+});
+export let earthDevSchemaWithoutAdvert = object().shape({
   license_number: string().required("ما رقم الرخصة"),
 });
 export let departmentOrRowSchema = object().shape({
@@ -184,7 +187,7 @@ export let villaOwnSchema = object().shape({
       object().shape({
         type: string().required(" ما  دور ؟"),
         area: number().notOneOf([0], "ما  مساحة ؟").required(" ما  مساحة ؟"),
-        price: number().notOneOf([0], "ما  الشعر ؟").required(" ما  السعر ؟"),
+        price: number().notOneOf([0], "ما  السعر ؟").required(" ما  السعر ؟"),
         rooms_number: number()
           .notOneOf([0], "ما عدد غرف؟")
           .required("ما عدد غرف؟"), // في حالة الفيلا عدد الغرف

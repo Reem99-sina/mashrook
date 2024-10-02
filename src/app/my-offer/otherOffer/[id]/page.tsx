@@ -3,7 +3,7 @@ import MainHeader from "@/app/components/header/MainHeader";
 import { BackButtonOutline } from "@/app/assets/svg";
 import { useRouter, useParams } from "next/navigation";
 import { OtherOfferCard } from "../myOtherOfferCrd";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { getOtherOrders } from "@/redux/features/getOrders";
@@ -51,20 +51,7 @@ function OtherOffer() {
             <>
               <OtherOfferCard
                 key={index}
-                title={offer.title}
-                count={offer.count}
-                date={offer.date}
-                requestNumber={offer.requestNumber}
-                city={offer.city}
-                district={offer.district}
-                budget={offer.budget}
-                type={offer.type}
-                inProgress={offer.inProgress}
-                active={offer.active}
-                expired={offer.expired}
-                purpose={offer.purpose}
-                lisNumber={offer.lisNumber}
-                details={offer.details}
+                otheroffer={offer}
               />
             </>
           ))}

@@ -406,9 +406,9 @@ const EditOffer = () => {
                             value={dataCom?.license_number}
                           />
                         </div>
-                        <div className="flex items-end gap-2 justify-end flex-col mt-2">
+                        {dataCom?.property_purpose_id==1&&<div className="flex items-end gap-2 justify-end flex-col mt-2">
                           <p className="text-base text-[#4B5563] font-medium">
-                            رقم الاعلان{" "}
+                            رقم ترخيص الاعلان{" "}
                           </p>
                           <TextInput
                             inputProps={{ placeholder: "-- الرجاء الادخال --" }}
@@ -421,7 +421,7 @@ const EditOffer = () => {
                             disabled={true}
                             value={dataCom?.advertisement_number}
                           />
-                        </div>
+                        </div>} 
                       </>
                     )}
                 </div>

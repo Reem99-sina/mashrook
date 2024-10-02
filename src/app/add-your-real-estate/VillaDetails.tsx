@@ -9,6 +9,7 @@ import {
 interface VillaDetailsProps {
   villa: earthInter[];
   index: number;
+  villaOne:earthInter[];
   setvilla: React.Dispatch<React.SetStateAction<earthInter[]>>;
   errors: any;
 }
@@ -16,6 +17,7 @@ interface VillaDetailsProps {
 const VillaDetails: React.FC<VillaDetailsProps> = ({
   villa,
   index,
+  villaOne,
   setvilla,
   errors,
 }) => {
@@ -31,7 +33,7 @@ const VillaDetails: React.FC<VillaDetailsProps> = ({
           )
         }
         value={villa[index]?.area>0?villa[index]?.area:""}
-        errors={errors && errors[`details[${index}].area`]}
+        errors={errors && errors[`details[${index-index}].area`]}
         measurement="متر"
       />
       <InputAreaPrice
@@ -44,12 +46,12 @@ const VillaDetails: React.FC<VillaDetailsProps> = ({
           )
         }
         value={villa[index]?.price>0?villa[index]?.price:""}
-        errors={errors && errors[`details[${index}].price`]}
+        errors={errors && errors[`details[${index-index}].price`]}
         measurement="ريال"
         desc="(بدون ضريبة التصرفات العقارية والسعي)"
       />
       <NumberRoom
-        errors={errors && errors[`details[${index}].rooms_number`]}
+        errors={errors && errors[`details[${index-index}].rooms_number`]}
         value={villa[index]?.rooms_number}
         onChange={(e) =>
           setvilla((prev) =>
@@ -67,7 +69,7 @@ const VillaDetails: React.FC<VillaDetailsProps> = ({
         max={10}
       />
       <NumberRoom
-        errors={errors && errors[`details[${index}].halls_number`]}
+        errors={errors && errors[`details[${index-index}].halls_number`]}
         value={villa[index]?.halls_number}
         onChange={(e) =>
           setvilla((prev) =>
@@ -85,7 +87,7 @@ const VillaDetails: React.FC<VillaDetailsProps> = ({
         max={3}
       />
       <NumberRoom
-        errors={errors && errors[`details[${index}].bathrooms_number`]}
+        errors={errors && errors[`details[${index-index}].bathrooms_number`]}
         value={villa[index]?.bathrooms_number}
         onChange={(e) =>
           setvilla((prev) =>
@@ -103,7 +105,7 @@ const VillaDetails: React.FC<VillaDetailsProps> = ({
         max={3}
       />
       <NumberRoom
-        errors={errors && errors[`details[${index}].kitchens_number`]}
+        errors={errors && errors[`details[${index-index}].kitchens_number`]}
         value={villa[index]?.kitchens_number}
         onChange={(e) =>
           setvilla((prev) =>

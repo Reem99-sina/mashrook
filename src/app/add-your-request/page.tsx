@@ -99,7 +99,7 @@ const AddYourRequest: React.FC = () => {
   ]);
   const [criteria, setCriteria] = useState<CriteriaInter>({
     dealStatus: "",
-    city: "تبوك",
+    city: "الرياض",
     district: null,
     unitType: 0,
     unitStatus: "",
@@ -111,6 +111,9 @@ const AddYourRequest: React.FC = () => {
   const [sentYourRequest, setSentYourRequest] = useState<boolean>(false);
   let [open,setOpen]=useState<boolean>(false)
   const [errors, setErrors] = useState<properityErrorTypeInter>();
+  const villaOne=useMemo(()=>{
+    return detailsVilla.filter((ele)=>ele?.type)
+  },[detailsVilla])
   const { data, titleSection, detailsSection } =
   useSelector<RootState>((state) => state.properityType) as {
     loading: boolean;
@@ -223,7 +226,7 @@ const AddYourRequest: React.FC = () => {
           criteria?.unitType == 4
         ) {
           const status = await validateForm(
-            { ...datasend, details: detailsVilla },
+            { ...datasend, details: villaOne },
             villaOwnSchema,
             setErrors
           );
@@ -232,7 +235,7 @@ const AddYourRequest: React.FC = () => {
               postProperityType({
                 ...datasend,
                 finance: criteria?.dealStatus == "نعم" ? true : false,
-                details: detailsVilla,
+                details: villaOne,
               })
             );
           }
@@ -401,6 +404,7 @@ const AddYourRequest: React.FC = () => {
                     onChange={(event) =>
                       setCriteria({ ...criteria, city: event?.target?.value })
                     }
+                    value={criteria?.city}
                   >
                     {city?.map((city: cityDetial) => (
                       <option key={city.id} value={city.nameAr}>
@@ -501,8 +505,8 @@ const AddYourRequest: React.FC = () => {
                             unitStatus: event?.target?.value,
                           })
                         }
-                        value="اي"
-                        label="اي"
+                        value="كلاهما"
+                        label="كلاهما"
                       />
                     </div>
                   </div>
@@ -563,7 +567,7 @@ const AddYourRequest: React.FC = () => {
                       onChange={(e) => {
                         setDetails((prev) =>
                           prev.map((ele, i) =>
-                            i == ind ? { ...ele, type: e.target.value } : ele
+                            i == ind ? { ...ele, type:e.target.checked? e.target.value:"" } : ele
                           )
                         );
                       }}
@@ -619,6 +623,12 @@ const AddYourRequest: React.FC = () => {
                       </>
                     </AccordionComponent>
                   ))}
+                     {errors?.details &&
+                           (
+                            <p className="text-xs text-red-600 dark:text-red-500 text-right">
+                              {String(errors?.details)}
+                            </p>
+                          )}
                 </>
               )}
             </div>
