@@ -700,7 +700,7 @@ const AddYourRealEstate: React.FC = () => {
                         </div>
                         <div className="flex items-end gap-2 justify-end flex-col mt-5">
                           <p className="text-base text-[#4B5563] font-medium">
-                            رقم الاعلان{" "}
+                          رقم ترخيص الاعلان{" "}
                           </p>
                           <TextInput
                             inputProps={{ placeholder: "-- الرجاء الادخال --" }}
@@ -917,7 +917,7 @@ const AddYourRealEstate: React.FC = () => {
                         }
                         errors={errors && errors[`landDetails[${index}].price`]}
                         measurement="ريال"
-                        desc=" (بدون ضريبة التصرفات العقارية والسعي) "
+                        desc=" (بدون ضريبة التصرفات العقارية و السعي) "
                       />
                       {index > 0 && (
                         <>
@@ -951,7 +951,7 @@ const AddYourRealEstate: React.FC = () => {
                         measurement="متر"
                       />
                       <InputAreaPrice
-                        title="الكلي السعر"
+                        title=" السعر"
                         onChange={(event) =>
                           setDataSend({
                             ...dataSend,
@@ -961,7 +961,7 @@ const AddYourRealEstate: React.FC = () => {
                         value={dataSend?.price > 0 ? dataSend?.price : ""}
                         errors={errors?.price}
                         measurement="ريال"
-                        desc=" (بدون ضريبة التصرفات العقارية والسعي) "
+                        desc=" (بدون ضريبة التصرفات العقارية و السعي) "
                       />
                     </>
                   )}
@@ -1094,7 +1094,7 @@ const AddYourRealEstate: React.FC = () => {
                           measurement="متر"
                         />
                         <InputAreaPrice
-                          title="الكلي السعر "
+                          title=" السعر "
                           onChange={(event) =>
                             setDataSend({
                               ...dataSend,
@@ -1104,7 +1104,7 @@ const AddYourRealEstate: React.FC = () => {
                           value={dataSend?.price > 0 ? dataSend?.price : ""}
                           errors={errors?.price}
                           measurement="ريال"
-                          desc=" (بدون ضريبة التصرفات العقارية والسعي) "
+                          desc=" (بدون ضريبة التصرفات العقارية و السعي) "
                         />
                         <NumberRoom
                           errors={String(errors?.rooms_number)}
@@ -1222,7 +1222,7 @@ const AddYourRealEstate: React.FC = () => {
                           measurement="متر"
                         />
                         <InputAreaPrice
-                          title="الكلي السعر"
+                          title=" السعر"
                           onChange={(event) =>
                             setDepartmentvilla({
                               ...departmentvilla,
@@ -1233,7 +1233,7 @@ const AddYourRealEstate: React.FC = () => {
 
                           errors={errors && errors["apartment.price"]}
                           measurement="ريال"
-                          desc=" (بدون ضريبة التصرفات العقارية والسعي) "
+                          desc=" (بدون ضريبة التصرفات العقارية و السعي) "
                         />
                         <NumberRoom
                           errors={errors && errors["apartment.rooms_number"]}

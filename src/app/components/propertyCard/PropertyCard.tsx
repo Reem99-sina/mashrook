@@ -135,7 +135,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ page, limit }) => {
                     {FormatNumber(ele?.details[i]?.price) || FormatNumber(ele?.price)} {"ريال"}
                     <span className="text-[#3B73B9]">
                       {" "}
-                      (بدون ضريبة التصرفات العقارية  أو السعي)
+                      (بدون ضريبة التصرفات العقارية  و السعي)
                     </span>
                   </p>
                 </div>
@@ -224,7 +224,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ page, limit }) => {
                       { FormatNumber(ele?.landDetails[i]?.price)} {"ريال"}
                       <span className="text-[#3B73B9]">
                         {" "}
-                        (بدون ضريبة التصرفات العقارية أو السعي)
+                        (بدون ضريبة التصرفات العقارية و السعي)
                       </span>
                     </p>
                   </div>

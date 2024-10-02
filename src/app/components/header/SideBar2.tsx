@@ -165,6 +165,7 @@ export default function SideBar({ sidebarOpen, toggleSidebar }: SideBarProps) {
                           Cookie.remove("token");
                           Cookie.remove("user");
                           Cookie.remove("tokenTime");
+                          Cookie.remove("auth");
                           toggleSidebar(e)
                           router.push("/")
                           dispatch(removeLogin());

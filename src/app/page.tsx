@@ -12,31 +12,36 @@ import { AppDispatch, RootState } from "@/redux/store";
 import Cookie from "js-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import { removeToken } from "@/redux/features/loginSlice";
-import {fetchToken,removeTokenUser}from "@/redux/features/userSlice"
+import {fetchToken,removeTokenUser,fetchAuthId}from "@/redux/features/userSlice"
 import PropertyCard from "./components/propertyCard/PropertyCard";
 import { MdKeyboardArrowLeft } from "react-icons/md";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState,useRef } from "react";
 import toast from "react-hot-toast";
 import { getRequest,dataReturn } from "@/redux/features/getRequest";
 import useFcmToken from '@/utils/hooks/useFcmToken';
 import FcmTokenComp from "@/utils/firebase/firebaseForeground"
+import ModelForm from "@/app/components/check-id-number/ModelForm"
+import { ModalRef } from "@/app/components/shared/modal.component";
 // import { FcmTokenComp, onMessage } from "firebase/messaging";
 const limit = 5
 
 export default function Home() {
   const router = useRouter();
+  const modalRef = useRef<ModalRef>(null);
+  const [path,setPath]=useState("")
   const { loading, message, data } = useSelector<RootState>(
     (state) => state.getRequest
   ) as { loading: boolean; message: string; data: dataReturn[] };
   const timesForWeek=Cookie.get("tokenTime")
-  const {  token } = useSelector<RootState>(
+  const {  token,auth } = useSelector<RootState>(
     (state) => state.register
-  ) as {  token:string };
+  ) as {  token:string,auth:boolean };
   // register
   const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
     dispatch(fetchToken())
+    dispatch(fetchAuthId())
   }, [dispatch]);
   useEffect(() => {
     const checkAndRemoveCookie = () => {
@@ -77,6 +82,7 @@ export default function Home() {
         </div>
         <div className="flex">
           <main className="container mx-auto ">
+            <ModelForm modalRef={modalRef} path={path}/>
             <section className="bg-[url('/background-cover.png')] rounded shadow-md text-center">
               <div className="pt-4">
                 <div className="flex justify-center">
@@ -90,11 +96,17 @@ export default function Home() {
                     // href={"add-your-real-estate"}
                     className="flex hover:shadow-lg"
                     onClick={() => {
+                      setPath("/add-your-real-estate")
                       if (!token) {
                         toast.error("انت تحتاج الي تسجيل دخول");
                         router.push("/login");
+
                       } else {
-                        router.push("/add-your-real-estate");
+                          if(!auth){
+                            modalRef?.current?.open()
+                          }else{
+                            router.push("/add-your-real-estate");
+                          }
                       }
                     }}
                   >
@@ -103,12 +115,20 @@ export default function Home() {
                   <button
                     className="flex hover:shadow-lg"
                     onClick={() => {
+                      setPath("/add-your-request")
                       if (!token) {
                         toast.error("انت تحتاج الي تسجيل دخول");
                         router.push("/login");
+
                       } else {
-                        router.replace("/add-your-request");
+                          if(!auth){
+                            modalRef?.current?.open()
+                          }else{
+                            router.replace("/add-your-request");
+                          }
                       }
+                       
+                      
                     }}
                   >
                     <Addbutton />

@@ -167,7 +167,6 @@ export const GitMyPartners = () => {
       bidRequestNumber: ele?.property?.id,
       partnershipRatio: ele?.percentage,
       purpose: ele?.property?.propertyPurpose?.title,
-      finance: ele?.property?.finance,
       details_id: ele?.details_id,
       propertyOwnerType: ele?.property?.propertyOwnerType?.title,
       land_details_id: ele?.land_details_id,
@@ -350,7 +349,6 @@ export const GitMyPartners = () => {
                   district={offer.district}
                   budget={offer.budget}
                   purpose={offer.purpose}
-                  finance={offer.finance}
                   propertyOwnerType={offer.propertyOwnerType}
                   PartnershipNumber={offer.PartnershipNumber}
                   details_id={offer?.details_id}

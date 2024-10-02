@@ -33,7 +33,6 @@ interface PartnersCardProps {
   bidRequestNumber: number;
   partnershipRatio: number;
   purpose: string,
-  finance: boolean,
   details_id: number,
   land_details_id: number,
   room_id: number,
@@ -59,7 +58,7 @@ export const PartnersCard: React.FC<PartnersCardProps> = ({
   realEstate,
   bidRequestNumber,
   partnershipRatio,
-  purpose, finance,
+  purpose,
   details_id,
   land_details_id,
   room_id,
@@ -146,12 +145,12 @@ export const PartnersCard: React.FC<PartnersCardProps> = ({
           </span>
         </div>
 
-        <div className=" flex items-center justify-between bg-[#F3F4F6] rounded-lg p-2">
+        {/* <div className=" flex items-center justify-between bg-[#F3F4F6] rounded-lg p-2">
           <p className="font-normal text-[#6B7280] text-sm">
             أرغب في تمويل عقاري
           </p>
           {finance ? <Accreditation /> : <IoMdCloseCircleOutline color="red" />}
-        </div>
+        </div> */}
 
         <div className=" flex items-center justify-between bg-[#F3F4F6] rounded-lg p-2">
           <p className="font-normal text-[#6B7280] text-sm">نسبة الشراكة </p>

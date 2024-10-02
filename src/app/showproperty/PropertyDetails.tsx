@@ -234,7 +234,7 @@ useEffect(()=>{
             {/* <h3 className="text-xl font-bold">قطعة {selectData?.landDetails?.piece_number}</h3> */}
             <div className="flex justify-between bg-gray-100 w-full items-center rounded-lg ml-2 mt-4 px-2  py-2">
               <span>العمر</span>
-              <span>   {selectData?.age} {(selectData?.age&&selectData?.age>1)?"سنين":"سنة"}</span>
+              <span>   {(selectData?.age&&selectData?.age>=1)&&selectData?.age} {(selectData?.age&&selectData?.age>1)?"سنين":(selectData?.age&&selectData?.age==1)?"سنة":"جديد"}</span>
             </div>
             <div className="flex justify-between bg-gray-100 w-full items-center rounded-lg ml-2 mt-4 px-2  py-2">
               <span>المساحة</span>

@@ -37,6 +37,7 @@ const MyAccountPage = () => {
     Cookie.remove("token");
     Cookie.remove("user");
     Cookie.remove("tokenTime");
+    Cookie.remove("auth");
     router.push("/")
     dispatch(removeLogin());
     dispatch(removeTokenUser());

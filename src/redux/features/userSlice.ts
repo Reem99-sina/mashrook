@@ -52,6 +52,19 @@ export const fetchuser = createAsyncThunk("auth/featchuser", async () => {
     return JSON.parse(userData);
   }
 });
+export const fetchAuthId = createAsyncThunk("auth/fetchAuthId", async () => {
+  const userData = Cookie.get("auth");
+  if (userData != "undefined" && userData) {
+    console.log(true,"teri")
+    return JSON.parse(userData);
+  }else{
+    return false
+  }
+});
+export const fetchAuthIdMakeCheck = createAsyncThunk("auth/fetchAuthIdMakeCheck", async () => {
+  const userData = Cookie.set("auth",String(true));
+  return true
+});
 export const updateUserImage = createAsyncThunk(
   "auth/updateUserImage",
   async (data: userImage) => {
@@ -110,6 +123,7 @@ const initialstate = {
   data: null,
   token: "",
   user: null,
+  auth:false
 };
 
 const userSlice = createSlice({
@@ -124,6 +138,7 @@ const userSlice = createSlice({
     removeTokenUser: (state) => {
       state.token = "";
       state.user = null;
+      state.auth=false
     },
     removeMessage: (state) => {
       state.message = "";
@@ -216,9 +231,25 @@ const userSlice = createSlice({
         Cookie.remove("token");
         Cookie.remove("user");
       }),
-      builder.addCase(getUserRequest.pending, (state, action) => {
-        state.user = null;
+    builder.addCase(fetchAuthId.fulfilled, (state, action) => {
+        state.auth = action.payload ? action.payload : "";
+      }),
+      builder.addCase(fetchAuthId.pending, (state, action) => {
+        state.auth = false;
+      }),
+      builder.addCase(fetchAuthId.rejected, (state, action) => {
+        state.auth = false;
+      }),
+      builder.addCase(fetchAuthIdMakeCheck.fulfilled, (state, action) => {
+        state.auth = action.payload ? true:false;
+      }),
+      builder.addCase(fetchAuthIdMakeCheck.pending, (state, action) => {
+        state.auth = false;
+      }),
+      builder.addCase(fetchAuthIdMakeCheck.rejected, (state, action) => {
+        state.auth = false;
       });
+      // fetchAuthIdMakeCheck
   },
 });
 export const { removeUser, removeTokenUser, removeMessage,removeLogin } = userSlice.actions;

@@ -264,3 +264,9 @@ export let ComplaintsSchema = object().shape({
   details: string()
   .required("ادخل تفاصيل الرسالة؟")
 });
+export let NationalIdSchema = object().shape({
+  idNumber: string()
+    .min(10, "يجب ادخال 10  ارقام")
+    .max(10, "يجب ادخال 10  ارقام")
+    .required("يجب ادخال 10  ارقام"),
+});

@@ -20,8 +20,9 @@ const InputAreaPrice: React.FC<InputAreaPriceInter> = ({
       <div className="mb-4" style={{ direction: "rtl" }}>
         <label className="block mb-2 font-medium">
           {title}
-          <span className="text-[#3B73B9]">{desc}</span>{" "}
+          
         </label>
+        <p className="text-[#3B73B9] text-sm mb-2">{desc}</p>
         <div className="flex items-center ">
           <input
             type="number"

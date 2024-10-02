@@ -9,7 +9,7 @@ const InputRange=({price,onChange}:InputInfo)=>{
         <div className="flex gap-x-2 justify-end">
         <div className="flex items-end justify-end flex-col ">
                           <p className="text-base text-[#4B5563] font-medium">
-                          اعلي سعر 
+                          أعلى سعر 
                           </p>
                           
                           <TextInput
@@ -21,7 +21,7 @@ const InputRange=({price,onChange}:InputInfo)=>{
                           </div>
                           <div className="flex items-end  justify-end flex-col ">
                           <p className="text-base text-[#4B5563] font-medium">
-                          ادني سعر
+                          أدنى سعر
                           </p>
                           <TextInput
                             inputProps={{ placeholder: "-- الرجاء الادخال --" }}

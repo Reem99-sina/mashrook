@@ -200,10 +200,6 @@ const JoinStatusButtons: React.FC<JoinStatusButtonsProps> = ({
                   : data?.type}
               </h2>
               </div>
-              <p className="text-sm font-medium my-2 flex justify-center items-center text-[#6B7280]">
-              {dataMain?.finance ? "متاح" : "غير متاح"}   التمويل العقاري
-               
-              </p>
             </div>
             <div className="mb-4">
           
