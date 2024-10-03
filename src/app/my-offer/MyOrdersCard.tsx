@@ -12,9 +12,12 @@ import {
 import {
   IoMdCloseCircleOutline,
 } from "react-icons/io";
+import { FormatNumber } from "@/app/hooks/formatNumber"
 import { Button } from "../components/shared/button.component";
 import Stepper from "../components/shared/Stepper";
+import AccordionComponent from "@/app/components/shared/Accordion.component";
 import Link from "next/link"
+import {landInfo,detailOneInfo} from "@/type/addrealestate"
 interface ChatCardProps {
   title: string;
   date: string;
@@ -32,7 +35,8 @@ interface ChatCardProps {
   budget: string;
   type: string;
   finance: boolean;
-  alternativeCount: number
+  alternativeCount: number,
+  details:landInfo[]|detailOneInfo[]
 }
 
 export const MyOrdersCard: React.FC<ChatCardProps> = ({
@@ -52,7 +56,8 @@ export const MyOrdersCard: React.FC<ChatCardProps> = ({
   budget,
   type,
   finance,
-  alternativeCount
+  alternativeCount,
+  details
 }) => {
   const steps = ["التعبئة", "الإفراغ", "الإرسال"];
   const currentStep = 1;
@@ -124,6 +129,40 @@ export const MyOrdersCard: React.FC<ChatCardProps> = ({
           </p>
           {finance ? <Accreditation /> : <IoMdCloseCircleOutline color="red" />}
         </div>
+        {details?.length>0&&
+        <AccordionComponent
+        title={"تفاصيل"}
+                      floors={[]}
+                      error={""}
+                      onChange={(e) => {
+                      }}
+                      value={"تفاصيل"}
+        >
+       {details?.map((detail)=><>
+        {detail?.type?<> <div className=" flex items-center justify-between bg-[#F3F4F6] rounded-lg p-2 m-2">
+          <p className="font-normal text-[#6B7280] text-sm">
+            نوع عقار
+          </p>
+          {detail?.type}
+        </div>
+        <div className=" flex items-center justify-between bg-[#F3F4F6] rounded-lg p-2 m-2">
+          <p className="font-normal text-[#6B7280] text-sm">
+           ميزانية عقار
+          </p>
+          {FormatNumber(detail?.min_price)} ريال -{FormatNumber(detail?.price)} ريال
+         
+        </div>
+        </>
+        : <div className=" flex items-center justify-between bg-[#F3F4F6] rounded-lg p-2 m-2">
+          <p className="font-normal text-[#6B7280] text-sm">
+           ميزانية القطعة
+          </p>
+          {FormatNumber(detail?.min_price)} ريال -${FormatNumber(detail?.price)} ريال
+         
+        </div>}
+        </>)}
+        </AccordionComponent>
+        }
       </div>
 
 

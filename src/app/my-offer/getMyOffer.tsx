@@ -40,7 +40,8 @@ interface criteriaInfo {
   shareRange: number[],
 }
 
-let statuses = [{ title: "متاح" }, { title: "محجوز" }, { title: "تحت الشراكة" }]
+const statuses = [{ title: "متاح" }, { title: "محجوز" }, { title: "تحت الشراكة" }]
+const dealStatuses = ["متكامل", "تحت التقدم", "محدث"]
 export const GitMyOffers = () => {
   const router = useRouter();
   const modalRef = useRef<ModalRef>(null);
@@ -177,9 +178,10 @@ export const GitMyOffers = () => {
   }, [token, dispatch]);
   useEffect(() => {
     dispatch(getOffer({
-      sort: optionFilter == "الأحدث الى الأقدم" ? "created_desc" : optionFilter == "الأقدم الى الأحدث" ? "created_asc" : optionFilter == "الميزانية ( الأدنى الى الأعلى)" ? "price_asc" : optionFilter == "الميزانية ( الأعلى الى الأدنى)" ? "price_decs" : ""
+      sort: optionFilter == "الأحدث الى الأقدم" ? "created_desc" : optionFilter == "الأقدم الى الأحدث" ? "created_asc" : optionFilter == "الميزانية ( الأدنى الى الأعلى)" ? "price_asc" : optionFilter == "الميزانية ( الأعلى الى الأدنى)" ? "price_decs" : "",
+      status: (criteria?.dealStatus == "متكامل") ? "complete" : "available",
     }))
-  }, [optionFilter, dispatch])
+  }, [optionFilter, dispatch,criteria.dealStatus])
   return (
     <div className="p-4 bg-white">
       {isFilterModalOpen && (
@@ -231,11 +233,11 @@ export const GitMyOffers = () => {
       </div>
 
       <div className="mt-5 mb-5 flex flex-row gap-2">
-        {statuses?.map((status: any) => <span key={status?.title} className={`rounded-md border border-[#E5E7EB] text-sm font-normal text-[#6B7280] pl-3 pr-3 pt-1 pb-1 cursor-pointer 
-            ${criteria.realEstateStatus === status?.title ? "bg-blue-450 text-white" : "bg-white text-gray-900"
+        {dealStatuses?.map((status: string) => <span key={status} className={`rounded-md border border-[#E5E7EB] text-sm font-normal text-[#6B7280] pl-3 pr-3 pt-1 pb-1 cursor-pointer 
+            ${criteria.dealStatus === status ? "bg-blue-450 text-white" : "bg-white text-gray-900"
           }
-            `} onClick={() => setCriteria({ ...criteria, realEstateStatus: status?.title })}>
-          {status?.title}
+            `} onClick={() => setCriteria({ ...criteria, dealStatus: status })}>
+          {status}
         </span>)}
 
       </div>
