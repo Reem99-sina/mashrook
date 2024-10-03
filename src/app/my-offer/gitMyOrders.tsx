@@ -139,7 +139,9 @@ export const GitMyOrders = () => {
           dataOrderOne?.landDetails?.length > 0 &&
           `${dataOrderOne?.landDetails[0]?.status}`,
       finance: dataOrderOne?.finance,
-      alternativeCount: dataOrderOne?.alternativeCount
+      alternativeCount: dataOrderOne?.alternativeCount,
+      details:(dataOrderOne?.details&&dataOrderOne?.details?.length>0)?dataOrderOne?.details:( dataOrderOne?.landDetails &&
+        dataOrderOne?.landDetails?.length > 0 )&&dataOrderOne?.landDetails
     }));
   }, [dataOrder]);
   let fiterData = useMemo(() => {
@@ -310,6 +312,7 @@ export const GitMyOrders = () => {
                   onRetreating={() => modalRefRetreating.current?.open()}
                   finance={offer.finance}
                   alternativeCount={offer.alternativeCount}
+                  details={offer.details}
                 />
               ))}
             </div>

@@ -91,8 +91,8 @@ export const PartnersCard: React.FC<PartnersCardProps> = ({
       </div>
 
       <div className="flex gap-2 mt-2">
-        <span className="rounded-xl bg-[#98CC5D] px-2 py-2 text-xs font-normal text-white">
-        {purpose === "بيع" ? purpose : "تطوير"}
+        <span className={`rounded-xl ${purpose === "بيع" ? "bg-green-450" : "bg-orange-450"}  px-2 py-2 text-xs font-normal text-white`}>
+        {purpose === "بيع" ? "للبيع" : "للتطوير"}
         </span>
         <span className="rounded-xl bg-[#F3F4F6] px-2 py-2 text-xs font-normaltext-[#6B7280]">
           {propertyOwnerType}
