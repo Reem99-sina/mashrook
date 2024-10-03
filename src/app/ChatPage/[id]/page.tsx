@@ -121,7 +121,9 @@ const ChatPage = () => {
       setNewMessage("")
     });
     return () => {
-      pusher.unsubscribe(`chats-${senderId||receiver_id||2}`);
+      pusher.unsubscribe(`chats-${senderId}`);
+      pusher.unsubscribe(`chats-${receiver_id}`);
+
     };
   }, [id, senderId,receiver_id]);
 
@@ -203,9 +205,9 @@ const ChatPage = () => {
                     }
                     {msg?.alert_link &&
                       <div className="bg-white rounded-lg shadow-lg flex flex-col items-center justify-center p-2">
-                        <p className="text-[#98CC5D] text-sm">{msg?.alert_link}</p>
-                        <p className="text-blue-450 text-xs">{msg?.alert_link_type}</p>
-                        <p className="text-blue-450 text-xs">{msg?.alert_link_text}</p>
+                        <a className="text-[#98CC5D] text-sm" href={msg?.alert_link} download>{msg?.alert_link_text}</a>
+                        {/* <p className="text-blue-450 text-xs">{msg?.alert_link_type}</p> */}
+                        {/* <p className="text-blue-450 text-xs">{msg?.alert_link_text}</p> */}
                       </div>
                     }
                     {msg?.type == "file" &&
