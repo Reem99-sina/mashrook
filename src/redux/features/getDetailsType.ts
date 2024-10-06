@@ -9,7 +9,7 @@ export interface returnType {
 }
 
 export const getDetailsType = createAsyncThunk<returnType>(
-  "Offer/get",
+  "Offerdetails/get",
   async (_, { rejectWithValue }) => {
     const response = await axios
       .get(`https://server.mashrook.sa/property-type/get/details`, {

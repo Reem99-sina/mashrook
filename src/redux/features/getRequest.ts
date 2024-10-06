@@ -7,6 +7,7 @@ import {
   initialOffer,
   realEstatePartner,
   propertyAdvertiseinterface
+  ,userInfo
 } from "@/type/addrealestate";
 
 export interface returnType {
@@ -97,14 +98,7 @@ export interface dataReturn {
     };
   }[];
   amenities: any[];
-  user: {
-    id: number;
-    username: string;
-    email: string;
-    status: string;
-    createdAt: string;
-    updatedAt: string;
-  };
+  user: userInfo;
   propertyType: {
     id: number;
     title: string;

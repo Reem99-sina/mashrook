@@ -361,14 +361,7 @@ export interface dataReturnType {
     };
   }&landInfo)[];
   amenities: any[];
-  user: {
-    id: number;
-    username: string;
-    email: string;
-    status: string;
-    createdAt: string;
-    updatedAt: string;
-  };
+  user: userInfo;
   propertyType: {
     id: number;
     title: string;

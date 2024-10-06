@@ -1,7 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
 // import { NafazLogo } from '@/app/assets/svg';
-
+import Image from "next/image"
 interface Props {
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 
@@ -24,12 +24,13 @@ export const StepOne: React.FC<Props> = ({ onFinished, className }) => {
         <div className='mt-2 flex items-center justify-center  '>
           <button
             className={clsx(
-              'flex h-20 w-[399px] items-center justify-center rounded-lg border border-[#7B8494] bg-[#7B8494]',
+              'flex h-20 w-[399px] items-center justify-center rounded-lg border border-[#7B8494] bg-[rgb(245,246,248)]',
               className,
             )}
             onClick={onFinished}
           >
             {/* <NafazLogo /> */}
+            <Image src={"/logoid.jpg"} width={150} height={100} alt="logo"/>
           </button>
         </div>
       </div>

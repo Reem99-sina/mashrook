@@ -1,8 +1,8 @@
 'use client';
 
 import { CloseIconSmall,Mashrooklogotextlarge} from '@/app/assets/svg';
-import React, { useState, RefObject } from 'react';
-
+import React, { useState, RefObject,useRef } from 'react';
+import ModelRules from "@/app/components/shared/ModelRules";
 import { StepOne } from './StepOne';
 import { StepTwo } from './StepTwo';
 import {StepThree} from "./StepThree"
@@ -23,10 +23,10 @@ interface IAppProps {
   path:string
 }
 const ModelForm:React.FC<IAppProps> = ({ modalRef,path })=> {
-    const [stepIndex, setStepIndex] = useState(1);
-
+    const [stepIndex, setStepIndex] = useState(0);
+    const modalRefRules = useRef<ModalRef>(null);
   const router = useRouter();
-
+  const [deal, setdeal] = useState(false);
   const goNext = () => {
     if (stepIndex >= steps.length - 1) {
       setStepIndex(0)
@@ -72,8 +72,20 @@ const ModelForm:React.FC<IAppProps> = ({ modalRef,path })=> {
 
           <div className='mt-5'>
             <h1 className='text-sm text-[#7B8080]'>
-              اعدادات الخصوصية <span className='ml-2 mr-2'>|</span> لشروط
-              والاحكام
+             
+              <button
+                    className="text-[#98CC5D]"
+                    onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                      e.preventDefault();
+                      modalRefRules?.current?.open();
+                    }}
+                  >
+                    الشروط
+                و
+                    الأحكام
+                  </button>
+                  <span className='ml-2 mr-2'>|</span> 
+                  اعدادات الخصوصية 
             </h1>
           </div>
         </div>
@@ -95,6 +107,13 @@ const ModelForm:React.FC<IAppProps> = ({ modalRef,path })=> {
             : 'bg-[url("/loginStep4.png")]'
         } bg-contain  bg-no-repeat`}
       ></div>
+       <ModelRules
+              refModel={modalRefRules}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setdeal(e.target.checked)
+              }
+              deal={deal}
+            />
     </div>
     </Modal>
   )

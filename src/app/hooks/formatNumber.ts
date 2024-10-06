@@ -7,7 +7,7 @@ export const formatPhoneNumber = (phoneNumber?:number|null) => {
         const cleaned = ('' + phoneNumber).replace(/\D/g, '');  
   
         // Check if it is a valid number (length for Saudi Arabia numbers)  
-        if (cleaned.length === 13 && cleaned.startsWith('966')) {  
+        if (cleaned.length >= 12 && cleaned.startsWith('966')) {  
           return `+${cleaned.substring(0, 3)} ${cleaned.substring(3, 5)} ${cleaned.substring(5, 8)} ${cleaned.substring(8)}`;  
         }  
       
