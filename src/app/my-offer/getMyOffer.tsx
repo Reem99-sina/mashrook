@@ -179,9 +179,9 @@ export const GitMyOffers = () => {
   useEffect(() => {
     dispatch(getOffer({
       sort: optionFilter == "الأحدث الى الأقدم" ? "created_desc" : optionFilter == "الأقدم الى الأحدث" ? "created_asc" : optionFilter == "الميزانية ( الأدنى الى الأعلى)" ? "price_asc" : optionFilter == "الميزانية ( الأعلى الى الأدنى)" ? "price_decs" : "",
-      status: (criteria?.dealStatus == "متكامل") ? "complete" : "available",
+      status: (criteria?.dealStatus == "متكامل") ? "complete" : criteria?.dealStatus?"available":"",
     }))
-  }, [optionFilter, dispatch,criteria.dealStatus])
+  }, [optionFilter, dispatch,criteria?.dealStatus])
   return (
     <div className="p-4 bg-white">
       {isFilterModalOpen && (
@@ -266,31 +266,31 @@ export const GitMyOffers = () => {
           </>
 
         ) : dataPagination?.length > 0 ? (
-          <div>
+          <div >
             <div className="mx-2">
               {dataPagination?.map((offer: any, index: number) => (
 
                 <OfferCard
-                  key={offer.title + index}
-                  title={offer.title}
-                  count={offer.count}
-                  date={offer.date}
-                  requestNumber={offer.requestNumber}
-                  city={offer.city}
-                  district={offer.district}
-                  budget={offer.budget}
-                  type={offer.type}
-                  inProgress={offer.inProgress}
-                  active={offer.active}
-                  expired={offer.expired}
-                  purpose={offer.purpose}
-                  propertyOwnerType={offer.propertyOwnerType}
-                  lisNumber={offer.lisNumber}
-                  details={offer.details}
+                  key={offer?.id}
+                  title={offer?.title}
+                  count={offer?.count}
+                  date={offer?.date}
+                  requestNumber={offer?.requestNumber}
+                  city={offer?.city}
+                  district={offer?.district}
+                  budget={offer?.budget}
+                  type={offer?.type}
+                  inProgress={offer?.inProgress}
+                  active={offer?.active}
+                  expired={offer?.expired}
+                  purpose={offer?.purpose}
+                  propertyOwnerType={offer?.propertyOwnerType}
+                  lisNumber={offer?.lisNumber}
+                  details={offer?.details}
                   onDelete={() => { modalRef.current?.open(); setId(offer?.id) }}
                   onUpdate={() => { modalRefUpdate.current?.open(); setId(offer?.id) }}
-                  house={offer.house}
-                  id={offer.id}
+                  house={offer?.house}
+                  id={offer?.id}
                 // room_id={offer.details?.room[0]?.id}
                 />
               ))}

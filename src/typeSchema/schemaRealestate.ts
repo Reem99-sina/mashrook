@@ -29,7 +29,7 @@ export let earthSchema = object().shape({
     ),
 });
 export let earthDevSchema = object().shape({
-  advertisement_number: string().required("ما رقم ترخيص الاعلان؟"),
+  advertisement_number: string(),
   license_number: string().required("ما رقم الرخصة"),
 });
 export let earthDevSchemaWithoutAdvert = object().shape({

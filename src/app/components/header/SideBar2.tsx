@@ -32,7 +32,7 @@ export default function SideBar({ sidebarOpen, toggleSidebar }: SideBarProps) {
   return (
     <div>
       {sidebarOpen && (
-        <div className="flex  rtl items-start justify-end p-6 items w-dvh h-screen  ">
+        <div className="flex  rtl items-start justify-end p-6 items w-dvh   ">
           <div className=" w-full">
             <div className="text-right text-bold text-2xl ">
               <ul>
@@ -184,7 +184,7 @@ export default function SideBar({ sidebarOpen, toggleSidebar }: SideBarProps) {
                 {" "}
                 تحتاج اي مساعدة او عندك استفسار؟
               </p>
-              <Link className="mt-4 bg-green-500 py-2 px-4 rounded-lg text-white flex flex-row gap-2 items-center " href={`whatsapp://send?phone=+9665550455855`}>
+              <Link className="mt-4 bg-green-500 py-2 px-4 rounded-lg text-white flex flex-row gap-2 items-center " href={`whatsapp://send?phone=+966550455855`}>
                 تواصل معنا
                 <Whatsapp />
               </Link>

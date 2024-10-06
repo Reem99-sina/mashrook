@@ -609,7 +609,7 @@ const AddYourRealEstate: React.FC = () => {
                         </p>
                       )}
                   </div>
-                  <div className="flex flex-row-reverse flex-wrap justify-start mt-6 gap-8">
+                  <div className="flex flex-row-reverse flex-wrap justify-start mt-6 gap-4">
                     
                     {item.tattle == "نوع العقار"
                       ? data?.data?.map(
@@ -657,12 +657,12 @@ const AddYourRealEstate: React.FC = () => {
                       item.tattle == "الغرض من عرض العقار" && (
                         <div className=" w-full mb-2 items-start justify-start ">
                           <div className="flex items-center justify-end">
-                            <p className="text-base font-bold text-[#4B5563] self-end">
+                            <p className="text-base font-bold text-[#4B5563] self-end" style={{direction:"rtl"}}>
                               {title}
                             </p>
                           </div>
                           <div className="flex flex-row flex-wrap justify-end mt-2 gap-8 items-end">
-                            <div className="mb-4 flex-row-reverse flex">
+                            <div className="mb-2 flex-row-reverse flex">
                               {details?.map(
                                 (ele: { id: number; title: string }) => (
                                   <RadioInput
@@ -690,11 +690,9 @@ const AddYourRealEstate: React.FC = () => {
                           )}
                         </div>
                       )}
-                  </div>  
-                </div>
-              ))}
-              {(dataSend?.property_owner_type_id == 2 ||
-                    dataSend?.property_owner_type_id == 3)  && (
+                      <div className=" w-full">
+                        {(dataSend?.property_owner_type_id == 2 ||
+                    dataSend?.property_owner_type_id == 3)&&item.tattle == "الغرض من عرض العقار"  && (
                       <div className="bg-white rounded-lg border border-[#E5E7EB] p-2">
                         <div className="flex items-end gap-2 justify-end flex-col mt-2">
                           <p className="text-base text-[#4B5563] font-medium">
@@ -738,16 +736,21 @@ const AddYourRealEstate: React.FC = () => {
                         </div>}
                       </div>
                     )}
+                    </div>
+                  </div>  
+                </div>
+              ))}
+              
             </div>
             {titleSection && detailsSection && (
-              <div className="bg-white rounded-lg border border-[#E5E7EB] w-full mb-4 items-start justify-start p-4 mt-4">
+              <div className="bg-white rounded-lg border border-[#E5E7EB] w-full mb-2 items-start justify-start p-4 mt-4">
                 <div className="flex items-center justify-end">
                   <p className="text-base font-bold text-[#4B5563]">
                     {titleSection}
                   </p>
                 </div>
                 <div className="flex flex-row flex-wrap justify-end mt-6 gap-8 items-end">
-                  <div className="mb-4 flex-row-reverse flex">
+                  <div className="mb-2 flex-row-reverse flex">
                     {detailsSection?.map(
                       (ele: { id: number; title: string }) => (
                         <RadioInput

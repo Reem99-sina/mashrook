@@ -121,14 +121,8 @@ export default function Home() {
                         router.push("/login");
 
                       } else {
-                          if(!auth){
-                            modalRef?.current?.open()
-                          }else{
                             router.replace("/add-your-request");
-                          }
-                      }
-                       
-                      
+                      }  
                     }}
                   >
                     <Addbutton />

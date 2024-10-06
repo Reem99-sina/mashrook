@@ -77,7 +77,7 @@ const initialstate = {
 };
 
 const getOfferSlice = createSlice({
-  name: "getOffer",
+  name: "getOfferSlice",
   initialState: initialstate,
   reducers: {
     deleteOffer: (state, action) => {

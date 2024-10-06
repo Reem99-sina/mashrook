@@ -128,7 +128,7 @@ const FilterModalOffer: React.FC<FilterModalProps> = ({
         <div className="">
           <CloseIconSmall
             className="cursor-pointer "
-            onClick={() => refFilter.current?.close()}
+            onClick={() => {refFilter.current?.close();onCloseRequest()}}
             size="lg"
           />
           <h2 className="text-xl font-bold mb-4 text-center border-b-2 pb-4 self-center">

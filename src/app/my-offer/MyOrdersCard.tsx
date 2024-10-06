@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React,{useState} from "react";
 import {
   Accreditation,
   ChatIconSmall,
@@ -61,20 +61,22 @@ export const MyOrdersCard: React.FC<ChatCardProps> = ({
 }) => {
   const steps = ["التعبئة", "الإفراغ", "الإرسال"];
   const currentStep = 1;
-
+  const [open,setOpen]=useState(false)
   return (
     <div className="mt-4 w-full border-2  rounded-lg mb-4 flex flex-col p-4">
       <div className="items-center justify-between  flex-row flex relative">
-        <p className="text-xl font-bold text-[#374151]">{title} </p>
-
-
+        <p className="text-xl font-bold text-[#374151] whitespace-nowrap">{title} </p>
+        <div className="flex justify-between gap-x-2 items-center">
+       
         <Link className="items-center justify-center flex border border-[#E5E7EB] p-2 rounded-md gap-1 " href={`/my-offer/otherOffer/${requestNumber}`}>
-          <p className="font-medium text-sm text-[#3B73B9]">عروض بديله</p>
+          <p className="font-medium text-sm text-[#3B73B9] whitespace-nowrap">عروض بديله</p>
           <OtherOffer />
           <span className=" flex items-center justify-center p-1 w-4 h-4 absolute left-[-9px] top-[-2px] text-[11px] text-white bg-[#F05252] rounded-full">
             {alternativeCount}
           </span>
         </Link>
+       
+        </div>
       </div>
       <div className="flex gap-2 mt-2">
         <span className="rounded-xl bg-[#F3F4F6] pl-2 pr-2 pt-[2px] pb-[2px] text-xs font-normal text-[#6B7280]">
@@ -129,27 +131,20 @@ export const MyOrdersCard: React.FC<ChatCardProps> = ({
           </p>
           {finance ? <Accreditation /> : <IoMdCloseCircleOutline color="red" />}
         </div>
-        {details?.length>0&&
-        <AccordionComponent
-        title={"تفاصيل"}
-                      floors={[]}
-                      error={""}
-                      onChange={(e) => {
-                      }}
-                      value={"تفاصيل"}
-        >
+        <div className="items-center justify-center flex border border-[#E5E7EB] p-2 rounded-md cursor-pointer" onClick={()=>{setOpen(!open)}}>
+          <p className="font-medium text-sm text-[#3B73B9] whitespace-nowrap">{open?"اخفاء التفاصيل":"عرض التفاصيل"}</p>
+        </div>
+        {open&&details?.length>0&&<div className="border-2 border-gray-300 rounded-lg p-2 my-2">
        {details?.map((detail)=><>
-        {detail?.type?<> <div className=" flex items-center justify-between bg-[#F3F4F6] rounded-lg p-2 m-2">
-          <p className="font-normal text-[#6B7280] text-sm">
-            نوع عقار
-          </p>
+        {detail?.type?<> <div className=" flex items-center justify-between  rounded-lg p-2 m-2 font-bold">
+         
           {detail?.type}
         </div>
         <div className=" flex items-center justify-between bg-[#F3F4F6] rounded-lg p-2 m-2">
           <p className="font-normal text-[#6B7280] text-sm">
            ميزانية عقار
           </p>
-          {FormatNumber(detail?.min_price)} ريال -{FormatNumber(detail?.price)} ريال
+          {FormatNumber(detail?.min_price)} ريال - {FormatNumber(detail?.price)} ريال
          
         </div>
         </>
@@ -157,11 +152,11 @@ export const MyOrdersCard: React.FC<ChatCardProps> = ({
           <p className="font-normal text-[#6B7280] text-sm">
            ميزانية القطعة
           </p>
-          {FormatNumber(detail?.min_price)} ريال -${FormatNumber(detail?.price)} ريال
+          {FormatNumber(detail?.min_price)} ريال - {FormatNumber(detail?.price)} ريال
          
         </div>}
         </>)}
-        </AccordionComponent>
+        </div>
         }
       </div>
 

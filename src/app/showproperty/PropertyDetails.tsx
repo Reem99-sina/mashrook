@@ -482,7 +482,7 @@ useEffect(()=>{
           </div>
           {selectData?.license_number&& <div className="flex bg-gray-100 w-full justify-between items-center py-2  px-2 rounded-lg ml-2 mt-4">
             <div>
-              <p>رقم الترخيص للإعلان</p>
+             <p>رقم ترخيص الإعلان</p>
             </div>
             <div className="flex items-center ml-2 text-sm bg-gray-100 border-2  px-2 py-1 rounded-lg">
               <CgSmartphoneShake className=" ml-2" />
@@ -491,7 +491,12 @@ useEffect(()=>{
               </span>
             </div>
           </div>}
-         
+            {(selectData?.propertyOwnerType?.title=="وسيط عقاري"&&selectData?.user?.val_license)&&<div className="flex bg-gray-100 w-full justify-between items-center py-2  px-2 rounded-lg ml-2 mt-4">
+              <div>
+                <p>رقم رخصة فال</p>
+              </div>
+              <p>{selectData?.user?.val_license}</p>
+              </div>}
           <div className="flex bg-gray-100 w-full justify-between items-center py-2  px-2 rounded-lg ml-2 mt-4">
             <div>
               <p>رقم الطلب</p>
