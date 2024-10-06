@@ -85,6 +85,7 @@ export const GitMyOffers = () => {
         dataOrderOne?.propertyTypeDetails?.title ||
         dataOrderOne?.propertyType?.title,
       inProgress: true,
+      status:dataOrderOne?.status,
       date: dataOrderOne?.createdAt
         ? format(new Date(dataOrderOne?.createdAt), "yyyy-MM-dd")
         : "",
@@ -291,6 +292,7 @@ export const GitMyOffers = () => {
                   onUpdate={() => { modalRefUpdate.current?.open(); setId(offer?.id) }}
                   house={offer?.house}
                   id={offer?.id}
+                  status={offer?.status}
                 // room_id={offer.details?.room[0]?.id}
                 />
               ))}
