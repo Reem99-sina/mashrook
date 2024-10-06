@@ -29,7 +29,7 @@ export default function Footer() {
       <p>info@mashrook.sa</p>
       <Link href={`whatsapp://send?phone=+966550455855`}><Butwhatsapp className="rounded-xl mt-4 mb-4" /></Link>
       <h2 className="text-xl font-bold mb-4 text-center">العنوان</h2>
-      <p className="text-center">الرياض ,حي الحمراء,طريق الامام عبد الله بن سعود بن عبد العزيزص.ب 13241</p>
+      <p className="text-center">الرياض ,حي الحمراء , طريق الامام عبد الله بن سعود بن عبد العزيز ص.ب 13241</p>
         <div className="flex flex-col">
           
         </div>

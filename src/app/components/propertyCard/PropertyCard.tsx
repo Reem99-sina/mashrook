@@ -335,7 +335,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ page, limit }) => {
                   {ele?.license_number && (
                     <div className="flex items-center justify-start">
                       <CgSmartphoneShake className="w-[16px]" />
-                      <p className="px-2">ترخيص رقم: {ele?.license_number}</p>
+                      <p className="px-2">رقم ترخيص الإعلان : {ele?.license_number}</p>
                     </div>
                   )}
 
