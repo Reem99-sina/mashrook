@@ -33,6 +33,7 @@ interface ChatCardProps {
   title: string;
   date: string;
   count: number;
+  status:string;
   onEdit?: () => void;
   onUpdate?: () => void;
   onDelete?: () => void;
@@ -73,6 +74,7 @@ export const OfferCard: React.FC<ChatCardProps> = ({
   onUpdate,
   onDelete,
   title,
+  status,
   inProgress,
   active,
   expired,
@@ -105,6 +107,20 @@ export const OfferCard: React.FC<ChatCardProps> = ({
     message: string;
     data: any;
   };
+  const titleStatus=useMemo(()=>{
+    return status=="active"?"انضمام الشركاء":
+    status=="waiting_for_employee"?"في انتظار البدء":
+    status=="pending"?"قيد الانتظار":
+    status=="inprogress"?"السعي":
+     status=="waiting"?"الافراغ":
+      status=="agreement"?"الاتفاق":
+      status=="commission"?"العمولة":
+      status=="documented"?"التوثيق":
+       status=="finished"?"مكتملة":
+       status=="inactive"?"منتهية":
+       status=="suspended"?"موقوفة":
+        status=="rejected"?"مرفوضة":""
+  },[status])
   const userCard = useMemo(() => {
     if (dataOffer?.length > 0 && requestNumber && idDelete) {
       return dataOffer?.map((ele: RealEstateTypeInter) => {
@@ -138,7 +154,7 @@ export const OfferCard: React.FC<ChatCardProps> = ({
   return (
     <div className="mt-4 w-full border-2  rounded-lg mb-4 flex flex-col p-4">
       <div className="items-center justify-between  flex-row flex relative">
-        <p className="text-xl font-bold text-[#374151]">{title} </p>
+        <p className="text-xl font-bold text-[#374151] ">{title} </p>
 
         <Link className="items-center justify-center flex border border-[#E5E7EB] p-2 rounded-md gap-1 " href={`/showproperty/${requestNumber}`}>
           <p className="font-medium text-sm text-[#3B73B9]">عرض التفاصيل </p>
@@ -146,7 +162,7 @@ export const OfferCard: React.FC<ChatCardProps> = ({
         </Link>
       </div>
       <div className="flex gap-2 mt-2">
-        <div className="flex flex-row gap-x-2 text-xs">
+        <div className="flex flex-row gap-[2px] text-xs items-center flex-wrap">
           <span
             className={`text-white text-right px-4 py-1 rounded-2xl ${purpose === "بيع" ? "bg-green-450" : "bg-orange-450"
               }`}
@@ -154,15 +170,21 @@ export const OfferCard: React.FC<ChatCardProps> = ({
             {purpose === "بيع" ? purpose : "تطوير"}
           </span>
           <span
-            className={`text-black text-right px-4 py-1 rounded-2xl bg-gray-200`}
+            className={`text-black text-right px-4 py-1 rounded-2xl bg-gray-200 whitespace-nowrap`}
           >
             {propertyOwnerType}
           </span>
+          
           {/* propertyOwnerType */}
           <span
-            className={`text-black text-right px-4 py-1 rounded-2xl ${"bg-gray-200"}`}
+            className={`text-black text-right px-4 py-1 rounded-2xl ${"bg-gray-200"} whitespace-nowrap`}
           >
             {date}
+          </span>
+          <span
+            className={`text-black text-right px-4 py-1 rounded-2xl ${status=="rejected"?"bg-[#F17EB8]":status=="suspended"?"bg-[#FDF6B2]":"bg-gray-200"} whitespace-nowrap`}
+          >
+             {titleStatus}
           </span>
         </div>
       </div>
