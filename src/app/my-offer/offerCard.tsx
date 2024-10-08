@@ -33,7 +33,7 @@ interface ChatCardProps {
   title: string;
   date: string;
   count: number;
-  status:string;
+  status: string;
   onEdit?: () => void;
   onUpdate?: () => void;
   onDelete?: () => void;
@@ -107,20 +107,20 @@ export const OfferCard: React.FC<ChatCardProps> = ({
     message: string;
     data: any;
   };
-  const titleStatus=useMemo(()=>{
-    return status=="active"?"انضمام الشركاء":
-    status=="waiting_for_employee"?"في انتظار البدء":
-    status=="pending"?"قيد الانتظار":
-    status=="inprogress"?"السعي":
-     status=="waiting"?"الافراغ":
-      status=="agreement"?"الاتفاق":
-      status=="commission"?"العمولة":
-      status=="documented"?"التوثيق":
-       status=="finished"?"مكتملة":
-       status=="inactive"?"منتهية":
-       status=="suspended"?"موقوفة":
-        status=="rejected"?"مرفوضة":""
-  },[status])
+  const titleStatus = useMemo(() => {
+    return status == "active" ? "انضمام الشركاء" :
+      status == "waiting_for_employee" ? "في انتظار البدء" :
+        status == "pending" ? "قيد الانتظار" :
+          status == "inprogress" ? "السعي" :
+            status == "waiting" ? "الافراغ" :
+              status == "agreement" ? "الاتفاق" :
+                status == "commission" ? "العمولة" :
+                  status == "documented" ? "التوثيق" :
+                    status == "finished" ? "مكتملة" :
+                      status == "inactive" ? "منتهية" :
+                        status == "suspended" ? "موقوفة" :
+                          status == "rejected" ? "مرفوضة" : ""
+  }, [status])
   const userCard = useMemo(() => {
     if (dataOffer?.length > 0 && requestNumber && idDelete) {
       return dataOffer?.map((ele: RealEstateTypeInter) => {
@@ -174,7 +174,7 @@ export const OfferCard: React.FC<ChatCardProps> = ({
           >
             {propertyOwnerType}
           </span>
-          
+
           {/* propertyOwnerType */}
           <span
             className={`text-black text-right px-4 py-1 rounded-2xl ${"bg-gray-200"} whitespace-nowrap`}
@@ -182,9 +182,9 @@ export const OfferCard: React.FC<ChatCardProps> = ({
             {date}
           </span>
           <span
-            className={`text-black text-right px-4 py-1 rounded-2xl ${status=="rejected"?"bg-[#F17EB8]":status=="suspended"?"bg-[#FDF6B2]":"bg-gray-200"} whitespace-nowrap`}
+            className={`text-black text-right px-4 py-1 rounded-2xl ${status == "rejected" ? "bg-[#F17EB8]" : status == "suspended" ? "bg-[#FDF6B2]" : "bg-gray-200"} whitespace-nowrap`}
           >
-             {titleStatus}
+            {titleStatus}
           </span>
         </div>
       </div>
@@ -381,14 +381,14 @@ export const OfferCard: React.FC<ChatCardProps> = ({
                     ? `${title} ${detail?.type}`
                     : `${title} قطعة رقم ${detail?.plan_number}`)
                   Cookie.set("senderId", String(detail?.room[0]?.sender_id))
-                  Cookie.set("receiver_id",String(detail?.room[0]?.receiver_id))
+                  Cookie.set("receiver_id", String(detail?.room[0]?.receiver_id))
                 }}
               >
                 عرض المحادثات
                 <BsChatSquareText
                   className={`mr-4 text-xl ${detail?.stage === "finished"
-                      ? "text-gray-600"
-                      : "text-white"
+                    ? "text-gray-600"
+                    : "text-white"
                     }`}
                 />
               </Link>

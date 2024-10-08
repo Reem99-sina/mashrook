@@ -1,5 +1,6 @@
 "use client"
 import { BackButtonOutline } from "@/app/assets/svg";
+import { formatPhoneNumber } from "@/app/hooks/formatNumber"
 import { useRouter } from "next/navigation";
 const AboutPage=()=>{
     let router = useRouter();
@@ -95,7 +96,7 @@ const AboutPage=()=>{
          <p>
          في حالة وجود أي استفسارات متعلقة بهذه السياسة، يمكنك التواصل معنا من خلال إحدى الطرق التالية:
 البريد الإلكتروني: info@mashrook.saر
-رقم خدمة العملاء: +9665550455855
+رقم خدمة العملاء: {formatPhoneNumber(966550455855)}
 
          </p>
          <h3 className="font-bold text-md my-3">
