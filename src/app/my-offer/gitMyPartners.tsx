@@ -3,6 +3,7 @@ import React, { useRef, useState, useEffect, useMemo } from "react";
 import { TextInput } from "../components/shared/text-input.component";
 import { FaRegUserCircle } from "react-icons/fa";
 import { format } from "date-fns";
+import {steps} from "@/type/addrealestate"
 import { fetchToken } from "@/redux/features/userSlice"
 import {
   CloseIconSmall,
@@ -13,7 +14,6 @@ import {
   Note,
 } from "../assets/svg";
 import toast from "react-hot-toast";
-import Cookie from "js-cookie";
 import { FormatNumber } from "@/app/hooks/formatNumber"
 import Pagination from "../components/shared/pagination";
 import {
@@ -33,43 +33,18 @@ import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { RealEstateTypeInter } from "@/redux/features/postRealEstate";
 import { realEstatePartner } from "@/type/addrealestate"
-const data = [
-  {
-    title: "ارض سكنية - قطعة رقم 1256",
-    inProgress: true,
-    date: "2024-4-23",
-    requestNumber: 2020,
-    count: 8,
-    city: "الرياض",
-    district: "المروج,البطحاء",
-    budget: "300,000 ريال",
-    PartnershipNumber: 2020,
-    realEstate: "قطعة رقم 1256",
-    bidRequestNumber: 2020,
-    partnershipRatio: 50,
-    purpose: "للبيع",
-  },
-  {
-    title: "ارض سكنية - قطعة رقم 1256",
-    date: "2024-4-23",
-    requestNumber: 2020,
-    count: 8,
-    city: "الرياض",
-    district: "المروج,البطحاء",
-    budget: "300,000 ريال",
-    PartnershipNumber: 2020,
-    realEstate: "قطعة رقم 1256",
-    bidRequestNumber: 2020,
-    partnershipRatio: 50,
-    purpose: "للبيع",
-  },
-];
-let statuses = [{ title: "متكامل" }, { title: "تحت التقدم" }];
+
+const statuses = [{ title: "متكامل" }, { title: "تحت التقدم" }];
+
 export const GitMyPartners = () => {
   const handleSelect = (option: string) => {
     setOption(option);
   };
   const dispatch = useDispatch<AppDispatch>();
+    const statusIndex = useMemo(() => {
+    return (offer: string) => steps?.findIndex((partner) => partner?.data == offer)
+  }, [])
+  // status
   const [isFilterModalOpen, setIsFilterModalOpen] = useState<boolean>(false);
   const modalRef = useRef<ModalRef>(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -138,7 +113,7 @@ export const GitMyPartners = () => {
   }, [dataPartner])
   const title = useMemo(() => {
     return (partner: realEstatePartner) => {
-      return partner?.details_id ? `${partner?.property?.propertyType?.title} (${partner?.details?.type})` : `${partner?.property?.propertyType?.title} 
+      return partner?.details_id ? `${partner?.property?.propertyTypeDetails?.title} (${partner?.details?.type})` : `${partner?.property?.propertyType?.title} 
      القطعة رقم ${partner?.landDetails?.plan_number}
       `
     }
@@ -172,9 +147,10 @@ export const GitMyPartners = () => {
       land_details_id: ele?.land_details_id,
       room_id: ele?.details?.room[0]?.id || ele?.landDetails?.room[0]?.id,
       sender_id: ele?.details?.room[0]?.sender_id,
-      receiver_id: ele?.details?.room[0]?.receiver_id
+      receiver_id: ele?.details?.room[0]?.receiver_id,
+      currentStep:statusIndex(ele?.status)
     }))
-  }, [newDataMemo, title])
+  }, [newDataMemo, title,statusIndex])
   let fiterData = useMemo(() => {
     return {
       min_price:
@@ -369,6 +345,7 @@ export const GitMyPartners = () => {
                   room_id={offer?.room_id}
                   sender_id={offer?.sender_id}
                   receiver_id={offer?.receiver_id}
+                  currentStep={offer?.currentStep}
                 />
               ))}
             </div>

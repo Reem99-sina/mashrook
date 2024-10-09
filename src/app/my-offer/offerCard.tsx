@@ -11,10 +11,12 @@ import {
   CloseIconSmall,
 } from "../assets/svg";
 import toast from "react-hot-toast"
+import {steps,PartnerStage} from "@/type/addrealestate"
 import { RealEstateTypeInter, earthInter } from "@/redux/features/postRealEstate";
 import { Modal, ModalRef } from "../components/shared/modal.component";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
+import Stepper from "../components/shared/Stepper";
 import { BsChatSquareText } from "react-icons/bs";
 import Link from "next/link"
 import Cookie from "js-cookie"
@@ -49,6 +51,7 @@ interface ChatCardProps {
   purpose: string;
   lisNumber: string;
   house?: boolean;
+    currentStep:number;
   propertyOwnerType: string;
   details: {
     piece_number: string;
@@ -79,6 +82,7 @@ export const OfferCard: React.FC<ChatCardProps> = ({
   active,
   expired,
   date,
+  currentStep,
   requestNumber,
   count,
   city,
@@ -92,8 +96,6 @@ export const OfferCard: React.FC<ChatCardProps> = ({
   propertyOwnerType,
   house,
 }) => {
-  const steps = ["الانتهاء", "السعي", "دفع الرسوم", "انضمام الشركاء"];
-  const currentStep = 1;
   let router = useRouter();
   const modalRef = useRef<ModalRef>(null);
   const [idDelete, setId] = useState<detailType>();
@@ -108,19 +110,9 @@ export const OfferCard: React.FC<ChatCardProps> = ({
     data: any;
   };
   const titleStatus = useMemo(() => {
-    return status == "active" ? "انضمام الشركاء" :
-      status == "waiting_for_employee" ? "في انتظار البدء" :
-        status == "pending" ? "قيد الانتظار" :
-          status == "inprogress" ? "السعي" :
-            status == "waiting" ? "الافراغ" :
-              status == "agreement" ? "الاتفاق" :
-                status == "commission" ? "العمولة" :
-                  status == "documented" ? "التوثيق" :
-                    status == "finished" ? "مكتملة" :
-                      status == "inactive" ? "منتهية" :
-                        status == "suspended" ? "موقوفة" :
-                          status == "rejected" ? "مرفوضة" : ""
-  }, [status])
+    console.log(status,steps,"steps")
+    return PartnerStage?.find((partner) => partner?.data == status)?.label
+  }, [status,PartnerStage])
   const userCard = useMemo(() => {
     if (dataOffer?.length > 0 && requestNumber && idDelete) {
       return dataOffer?.map((ele: RealEstateTypeInter) => {
@@ -328,14 +320,14 @@ export const OfferCard: React.FC<ChatCardProps> = ({
               </div>
               {/* {inProgress ? ( */}
               {/* <> */}
-              {/* <div className="p-4 w-full">
-                <Stepper steps={steps} currentStep={detail?.currentStep} />
+              <div className="p-4 w-full">
+ <Stepper steps={steps.map((step)=>step?.label)} currentStep={currentStep>=0?currentStep:0} />
               </div>
               <div className="flex items-center justify-center ">
                 <p className="text-xs text-[#6B7280] font-semibold">
                   مراحل الشراكة
                 </p>
-              </div> */}
+              </div>
               {/* </> */}
               {/* ) : null} */}
               <hr className="border-gray-200 dark:border-white my-2" />

@@ -1,36 +1,36 @@
 "use client";
 import clsx from "clsx";
-import React, { useState, useEffect,useMemo } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { TextInput } from "../components/shared/text-input.component";
 import { Block, MessageIcon, Search } from "@/app/assets/svg";
 import { ChatCard } from "./ChatCard";
 import { useRouter } from "next/navigation";
-import {fetchToken}from "@/redux/features/userSlice"
+import { fetchToken } from "@/redux/features/userSlice"
 import { format } from "date-fns";
 import Cookie from "js-cookie";
 import { Note } from "../assets/svg";
 import { FaRegUserCircle } from "react-icons/fa";
-import {chatInfo} from "@/type/chatinterface"
+import { chatInfo } from "@/type/chatinterface"
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 
 export const MyOffer = () => {
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
-  const {  token } = useSelector<RootState>(
+  const { token } = useSelector<RootState>(
     (state) => state.register
-  ) as {  token:string };
-  const messageFile=useMemo(()=>{
-    return(messageFrom:chatInfo)=>{
-      return messageFrom?.lastMessage?.type=="file"?"تم ارسال ملف":messageFrom?.lastMessage?.message
+  ) as { token: string };
+  const messageFile = useMemo(() => {
+    return (messageFrom: chatInfo) => {
+      return messageFrom?.lastMessage?.type == "file" ? "تم ارسال ملف" : messageFrom?.lastMessage?.message
     }
-  },[])
-  const OnClick = (message:chatInfo) => {
-    Cookie.set("title",  message?.details?.type
-      ? `${message?.details?.type} ${message?.property?.propertyType?.title}`
+  }, [])
+  const OnClick = (message: chatInfo) => {
+    Cookie.set("title", message?.details?.type
+      ? `${message?.property?.propertyTypeDetails?.title} - ${message?.details?.type}`
       : `${message?.property?.propertyType?.title} قطعة رقم ${message?.landDetails?.plan_number}`)
-      Cookie.set("senderId",String(message?.sender_id))
-      Cookie.set("receiver_id",String(message?.receiver_id))
+    Cookie.set("senderId", String(message?.sender_id))
+    Cookie.set("receiver_id", String(message?.receiver_id))
     router.push(`/ChatPage/${message?.id}`);
 
   };
@@ -82,7 +82,7 @@ export const MyOffer = () => {
               subtitle={messageFile(message)}
               title={
                 message?.details?.type
-                  ? `(${message?.details?.type}) ${message?.property?.propertyType?.title}`
+                  ? `${message?.property?.propertyTypeDetails?.title} - ${message?.details?.type} `
                   : `${message?.property?.propertyType?.title} قطعة رقم (${message?.landDetails?.plan_number})`
               }
               time={format(message.lastMessage?.createdAt, "hh:mm a")}

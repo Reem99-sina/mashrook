@@ -28,6 +28,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { RealEstateTypeInter } from "@/redux/features/postRealEstate";
 import { deleteProperty, removeDelete, UpdataExpiredDateProperty } from "@/redux/features/getPartners"
 import { FormatNumber } from "@/app/hooks/formatNumber"
+import { steps } from "@/type/addrealestate"
+
 interface criteriaInfo {
   dealStatus: string,
   city: string,
@@ -62,6 +64,10 @@ export const GitMyOffers = () => {
     unitStatus: false,
   });
   const [idDelete, setId] = useState<number>();
+  const statusIndex = useMemo(() => {
+
+    return (offer: string) => steps?.findIndex((partner) => partner?.data == offer)
+  }, [steps])
   const dispatch = useDispatch<AppDispatch>();
   let {
     loading,
@@ -85,7 +91,7 @@ export const GitMyOffers = () => {
         dataOrderOne?.propertyTypeDetails?.title ||
         dataOrderOne?.propertyType?.title,
       inProgress: true,
-      status:dataOrderOne?.status,
+      status: dataOrderOne?.status,
       date: dataOrderOne?.createdAt
         ? format(new Date(dataOrderOne?.createdAt), "yyyy-MM-dd")
         : "",
@@ -108,6 +114,7 @@ export const GitMyOffers = () => {
           dataOrderOne?.landDetails?.length > 0 &&
           `${dataOrderOne?.landDetails[0]?.status}`,
       lisNumber: dataOrderOne?.license_number,
+      currentStep: dataOrderOne?.status ? statusIndex(dataOrderOne?.status) : 0,
       propertyOwnerType: dataOrderOne?.propertyOwnerType?.title,
       details:
         dataOrderOne?.details && dataOrderOne?.details?.length > 0
@@ -116,7 +123,7 @@ export const GitMyOffers = () => {
           dataOrderOne?.landDetails?.length > 0 &&
           dataOrderOne?.landDetails,
     }));
-  }, [dataOffer]);
+  }, [dataOffer, statusIndex]);
   let fiterData = useMemo(() => {
     return {
       min_price: criteria?.priceRange[0] != 500000 ? criteria?.priceRange[0] : null,
@@ -180,9 +187,9 @@ export const GitMyOffers = () => {
   useEffect(() => {
     dispatch(getOffer({
       sort: optionFilter == "الأحدث الى الأقدم" ? "created_desc" : optionFilter == "الأقدم الى الأحدث" ? "created_asc" : optionFilter == "الميزانية ( الأدنى الى الأعلى)" ? "price_asc" : optionFilter == "الميزانية ( الأعلى الى الأدنى)" ? "price_decs" : "",
-      status: (criteria?.dealStatus == "متكامل") ? "complete" : criteria?.dealStatus?"available":"",
+      status: (criteria?.dealStatus == "متكامل") ? "complete" : criteria?.dealStatus ? "available" : "",
     }))
-  }, [optionFilter, dispatch,criteria?.dealStatus])
+  }, [optionFilter, dispatch, criteria?.dealStatus])
   return (
     <div className="p-4 bg-white">
       {isFilterModalOpen && (
@@ -293,6 +300,7 @@ export const GitMyOffers = () => {
                   house={offer?.house}
                   id={offer?.id}
                   status={offer?.status}
+                  currentStep={offer?.currentStep}
                 // room_id={offer.details?.room[0]?.id}
                 />
               ))}

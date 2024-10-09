@@ -1,4 +1,79 @@
 import { dataReturn } from "@/redux/features/getRequest";
+export const steps =[
+   {
+    label: "قيد الانتظار",
+    data: "pending",
+  },
+  {
+    label: "انضمام الشركاء",
+    data: "active",
+  },
+  {
+    label: "السعي",
+    data: "inprogress",
+  },
+  {
+    label: "الافراغ",
+    data: "waiting",
+  },
+  {
+    label: "منتهية",
+    data: "inactive",
+  },{
+    label: "موقوفة",
+    data: "suspended",
+  },
+];
+export const PartnerStage = [
+  {
+    label: "انضمام الشركاء",
+    data: "active",
+  },
+  {
+    label: "في انتظار البدء",
+    data: "waiting_for_employee",
+  },
+  {
+    label: "قيد الانتظار",
+    data: "pending",
+  },
+  {
+    label: "السعي",
+    data: "inprogress",
+  },
+  {
+    label: "الافراغ",
+    data: "waiting",
+  },
+  {
+    label: "الاتفاق",
+    data: "agreement",
+  },
+  {
+    label: "العمولة",
+    data: "commission",
+  },
+  {
+    label: "التوثيق",
+    data: "documented",
+  },
+  {
+    label: "مكتملة",
+    data: "finished",
+  },
+  {
+    label: "منتهية",
+    data: "inactive",
+  },
+  {
+    label: "موقوفة",
+    data: "suspended",
+  },
+  {
+    label: "مرفوضة",
+    data: "rejected",
+  },
+];
 export interface detailsType {
   id: number;
   title: string;
