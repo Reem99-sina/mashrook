@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import {steps} from "@/type/addrealestate"
 import {
   Accreditation,
   ChatIconSmall,
@@ -37,7 +38,8 @@ interface PartnersCardProps {
   land_details_id: number,
   room_id: number,
   sender_id: number,
-  receiver_id:number
+  receiver_id:number,
+  currentStep:number
 }
 
 export const PartnersCard: React.FC<PartnersCardProps> = ({
@@ -63,10 +65,10 @@ export const PartnersCard: React.FC<PartnersCardProps> = ({
   land_details_id,
   room_id,
   sender_id,
-  receiver_id
+  receiver_id,
+  currentStep
 }) => {
-  const steps = ["التعبئة", "الإفراغ", "الإرسال"];
-  const currentStep = 1;
+ console.log(currentStep,"currentStep")
 
   return (
     <div className="mt-4 w-full border-2  rounded-lg mb-4 flex flex-col p-4">
@@ -174,16 +176,14 @@ export const PartnersCard: React.FC<PartnersCardProps> = ({
           </p>
         </div> */}
       </div>
-      {inProgress ? (
-        <>
+      
           <div className="p-4">
-            <Stepper steps={steps} currentStep={currentStep} />
+            <Stepper steps={steps.map((step)=>step?.label)} currentStep={currentStep>=0?currentStep:0} />
           </div>
           <div className="flex items-center justify-center ">
-            <p className="text-xs text-[#6B7280] font-semibold">مراحل الطلب</p>
+            <p className="text-xs text-[#6B7280] font-semibold">مراحل الشراكة</p>
           </div>
-        </>
-      ) : null}
+       
 
       <div className="flex flex-row items-center justify-center border-t-2 mt-5 border-[#E5E7EB]">
         <Button
