@@ -1,6 +1,10 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { AppDispatch, RootState } from "@/redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import {bannerinfo} from "@/type/addrealestate"
+import {getBanners}from "@/redux/features/getbanner"
 import Image from "next/image";
 import {
   Bcard1,
@@ -27,6 +31,10 @@ const images = [
 ];
 
 export default function CarouselTransition() {
+  const dispatch = useDispatch<AppDispatch>();
+  const {  data } = useSelector<RootState>(
+    (state) => state.banners
+  ) as bannerinfo;
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
@@ -35,10 +43,13 @@ export default function CarouselTransition() {
     }, 4000);
     return () => clearInterval(interval);
   }, []);
-
+  useEffect(()=>{
+     dispatch(getBanners())
+  },[dispatch])
+console.log(data,"data")
   return (
     <div className="relative w-full h-auto rounded-xl">
-      {images.map((image, index) => (
+      {data?.map((image, index) => (
         <div
           key={index}
           className={`absolute inset-0 transition-opacity duration-1000 ${
@@ -46,9 +57,11 @@ export default function CarouselTransition() {
           }`}
         >
           <Image
-            src={image}
+            src={image?.link}
             alt={`image ${index + 1}`}
-            style={{ objectFit: "cover" }}
+            style={{ objectFit: "cover",width:"100%" }}
+            width={100}
+            height={100}
             className="rounded-xl priority p2"
           />
         </div>
