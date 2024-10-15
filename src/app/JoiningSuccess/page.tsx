@@ -1,30 +1,83 @@
 "use client";
-import React from "react";
-import MainHeader from "../components/header/MainHeader";
-import Footer from "../components/header/Footer2";
+import React,{useEffect,useState} from "react";
 import Link from "next/link"
 import { Check } from "@/app/assets/svg";
+import toast from "react-hot-toast"
+import { IoMdCloseCircleOutline } from "react-icons/io";
+import { AppDispatch, RootState } from "@/redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { useSearchParams } from 'next/navigation'
+import { postPaymentType, removeStatePayment, postPaymentFileType } from "@/redux/features/postRequest"
 
 export default function JoiningSuccess() {
+  const dispatch = useDispatch<AppDispatch>()
+    const searchParams = useSearchParams()
+  const [success,setSucces]=useState(false)
+  const [message,setMessage]=useState("")
+
+  const search = searchParams.get('status')
+  const property_id=searchParams.get('property_id')
+  const details_id=searchParams.get('details_id')
+  const type=searchParams.get('type')
+
+  useEffect(()=>{
+    if(search=="paid"){
+      if(type=="false"){
+dispatch(postPaymentType({
+                      property_id: Number(property_id),
+                      details_id: Number(details_id),
+                      
+                      amount: Number(sessionStorage.getItem("amount"))
+      })).then((res: any) => {
+        if (res.payload.data) {
+          setSucces(true)
+          setMessage(res.payload.message)
+          toast.success(res.payload.message);
+        } else if (res.payload.status) {
+          setSucces(false)
+          setMessage(res.payload.message)
+          toast.error(res.payload.message);
+        }
+      })
+      }else if(type=="true"){
+dispatch(postPaymentType({
+                      property_id: Number(property_id),
+                      land_details_id: Number(details_id),
+                      
+                      amount: Number(sessionStorage.getItem("amount"))
+      })).then((res: any) => {
+        if (res.payload.data) {
+          setSucces(true)
+          setMessage(res.payload.message)
+          toast.success(res.payload.message);
+          
+        } else if (res.payload.status) {
+          setSucces(false)
+          setMessage(res.payload.message)
+          toast.error(res.payload.message);
+         
+        }
+      })
+      }
+    }
+  },[search])
+
   return (
     <div className="flex justify-center w-dvh h-max  ">
       <div className="w-full bg-white rounded text-black shadow ">
-        <div className="w-full z-50">
-          <MainHeader />
-        </div>
         <div className="flex">
           <main className="container mx-auto ">
             <section className=" rounded text-center">
               <div className="flex flex-col border-2 shadow-lg p-2 rounded-lg justify-around items-center py-10">
-                <Check />
+               {success? <Check />:<IoMdCloseCircleOutline className="text-[9rem] text-red-500"/>}
 
                 <h2 className="my-4 font-bold text-xl">
-                  تم الاشتراك في العقار بنجاح
+                 {success? "تم الاشتراك في العقار بنجاح":"لم يتم الاشتراك في العقار"}
                 </h2>
-
+                <p className="my-4 font-bold text-xl ">{message}</p>
                 <div className="flex bg-gray-100 items-center justify-center py-2 px-2 rounded-2xl my-4 ">
                   <span className="mr-2 ml-2 text-lg font-bold">
-                    <h4>2024</h4>
+                    <h4>{property_id}</h4>
                   </span>
                   <p>رقم الشراكة</p>
                 </div>
@@ -44,10 +97,6 @@ export default function JoiningSuccess() {
                 >
                   الذهاب الى شراكاتي
                 </Link>
-              </div>
-
-              <div className="pt-8">
-                <Footer />
               </div>
             </section>
           </main>
