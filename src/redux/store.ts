@@ -8,6 +8,7 @@ import properityRequest from "./features/postRequest";
 import properityPurpose from "./features/getproperityPurpose";
 import properityOwnerType from "./features/getProperityOwnerType";
 import getDetailTypesSlice from "./features/getDetailsType";
+import getBannerSlice from "./features/getbanner"
 import postrealEstateType from "./features/postRealEstate";
 import loginReducer from "./features/loginSlice";
 import getCitySlice from "./features/getCity";
@@ -51,7 +52,8 @@ const store = configureStore({
     messageByLandId: getMessageByLandId,
     myAdvertise: getAdvertiseSlice,
     complaints:ComplaintSlice,
-    notifications:getNotification
+    notifications:getNotification,
+    banners:getBannerSlice
   },
 });
 export default store;

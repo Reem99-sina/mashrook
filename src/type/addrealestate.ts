@@ -473,3 +473,15 @@ export interface dataReturnType {
   propertyDetailsOwnership?: realEstatePartner[];
   propertyAdvertising?:propertyAdvertiseinterface[]
 }
+export interface Banners {
+  id: number;
+  status: string;
+  link: string;
+  createdAt: string;
+  updatedAt: string;
+}
+export interface bannerinfo{
+  loading: boolean,
+  message: string,
+  data:Banners[]|null
+}
