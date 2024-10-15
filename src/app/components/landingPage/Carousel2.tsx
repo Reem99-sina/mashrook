@@ -46,7 +46,7 @@ export default function CarouselTransition() {
   useEffect(()=>{
      dispatch(getBanners())
   },[dispatch])
-console.log(data,"data")
+  
   return (
     <div className="relative w-full h-auto rounded-xl">
       {data?.map((image, index) => (
