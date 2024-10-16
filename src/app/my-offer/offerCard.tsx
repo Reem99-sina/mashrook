@@ -110,7 +110,6 @@ export const OfferCard: React.FC<ChatCardProps> = ({
     data: any;
   };
   const titleStatus = useMemo(() => {
-    console.log(status,steps,"steps")
     return PartnerStage?.find((partner) => partner?.data == status)?.label
   }, [status,PartnerStage])
   const userCard = useMemo(() => {

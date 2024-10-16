@@ -68,7 +68,6 @@ export const PartnersCard: React.FC<PartnersCardProps> = ({
   receiver_id,
   currentStep
 }) => {
- console.log(currentStep,"currentStep")
 
   return (
     <div className="mt-4 w-full border-2  rounded-lg mb-4 flex flex-col p-4">
