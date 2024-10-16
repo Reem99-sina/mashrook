@@ -145,7 +145,6 @@ const PropertyDetails: React.FC<{id:number}> = ({id}:{id:number}) => {
         dispatch(deleteSaves({id:ele?.id})).then((res:any)=>{
           if(res?.payload?.message&&!res?.payload?.status){
             setNotificationMessage("تم الغاء الحفظ");
-            console.log(ele?.id,"ele?.id")
             dispatch(removeSelectSave({id:ele?.id}))
             showNotificationSaveMessage()
               }else{

@@ -53,7 +53,6 @@ export default function Payment() {
   async function onSubmit(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault()
     if (data?.method == "bank") {
-      console.log(recipt,"recipt")
       if (recipt) {
         dispatch(postMyReceiptAdvertise({property_id:selectData?.id,amount:selectData?.propertyOwnerType?.title == "مالك" ? 100 : 500,receipt:recipt}))
         .then((res: any) => {

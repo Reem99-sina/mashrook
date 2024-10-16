@@ -70,39 +70,36 @@ export default function Payment() {
             // land_details_id: selectData?.detail_id,
             receipt: recipt,
             amount: Number(sessionStorage.getItem("amount"))
-          }))
+          })).then((res: any) => {
+        if (res.payload.data) {
+          
+          toast.success(res.payload.message);
+          router.push("/JoiningSuccess")
+        } else if (res.payload.status) {
+         
+          toast.error(res.payload.message);
+        }})
         } else {
           dispatch(postPaymentFileType({
             property_id: selectData?.id,
             details_id: selectData?.detail_id,
             // land_details_id: selectData?.detail_id,
+            receipt: recipt,
             amount: Number(sessionStorage.getItem("amount"))
-          }))
+          })).then((res: any) => {
+        if (res.payload.data) {
+          
+          toast.success(res.payload.message);
+          router.push("/JoiningSuccess")
+        } else if (res.payload.status) {
+         
+          toast.error(res.payload.message);
+        }})
         }
       } else {
         setErrors({ ...errors, receipt: "يجب ادخال ايصال" })
       }
-    } else {
-      const status = await validateForm(data, paymentSchema, setErrors)
-      if (status == true) {
-        if (selectData?.type) {
-          dispatch(postPaymentType({
-            property_id: selectData?.id,
-            land_details_id: selectData?.detail_id,
-            // land_details_id: selectData?.detail_id,
-            amount: Number(sessionStorage.getItem("amount"))
-          }))
-        } else {
-          dispatch(postPaymentType({
-            property_id: selectData?.id,
-            details_id: selectData?.detail_id,
-            // land_details_id: selectData?.detail_id,
-            amount: Number(sessionStorage.getItem("amount"))
-          }))
-        }
-
-      }
-    }
+    } 
 
   }
   function readAndPreview(file: File) {
@@ -153,7 +150,7 @@ export default function Payment() {
                       رسوم خدمة شراكة
                     </p>
                   </div>
-                  <p>  {selectData?.title} - قطعة رقم {selectData?.numberPiece}</p>
+                  <p>  {selectData?.title}  {selectData?.numberPiece?"- قطعة رقم "+ selectData?.numberPiece:""}</p>
 
                   <div className="flex bg-gray-100 items-center justify-center py-2 px-2 rounded-lg mt-4 w-1/3 ml-auto">
                     <span className="mr-2 ml-2 text-lg font-bold">
@@ -177,7 +174,7 @@ export default function Payment() {
                   <div className="text-right p-4 mb-4 rounded-xl bg-gray-200">
                     <p className="text-xl font-bold">بيانات الدفع</p>
                   </div>
-                  <div className="mysr" style={{ display: data?.method == "bank" ? "none" : "block" }}></div>
+                  <div className="mysr" style={{ display: data?.method == "bank" ? "none" : "block",direction:"rtl" }}></div>
                   {data?.method == "bank" &&
                     //       url?<>
                     //         <div className="my-2 border-2 shadow-md p-4 rounded-xl flex flex-row-reverse items-center justify-between">
@@ -273,7 +270,7 @@ export default function Payment() {
                   {data?.method == "bank" && <div className="flex flex-row items-center align-middle justify-center  p-2 text-blue-450">
                     <button
                       type="button"
-                      // href="/JoiningSuccess"
+                      // href="//JoiningSuccess"
                       onClick={onSubmit}
                       className="bg-blue-450 text-white px-4 py-2 rounded-2xl p-2 m-2 flex-grow text-center">
                       الدفع

@@ -28,11 +28,11 @@ const AboutLayout = ({
     if (typeof window?.Moyasar !== 'undefined') {
       window?.Moyasar.init({
         element: ".mysr",
-        amount: selectData?.propertyOwnerType == "مالك" ? 100 : 500,
+        amount: selectData?.propertyOwnerType == "مالك" ? 100 : 50000,
         currency: "SAR",
         description: "Test API",
-        publishable_api_key: "pk_test_piTjfJ4VGnL6BHKARNCNBfm2bu9EhfgoTrbEDz6x",
-        callback_url: `https://mashrook.sa/JoiningSuccess?property_id=${selectData?.id}&details_id=${selectData?.detail_id}&type=${selectData?.type}`,
+        publishable_api_key: process.env.NEXT_PUBLIC_PUBLICKEY!,
+        callback_url: `${process.env.NEXT_PUBLIC_BASEURL}/JoiningSuccess?property_id=${selectData?.id}&details_id=${selectData?.detail_id}&type=${selectData?.type}`,
         methods: ["creditcard", "stcpay"],
         language: "ar",
         credit_card: {
@@ -68,11 +68,11 @@ const AboutLayout = ({
           if (typeof  window?.Moyasar !== 'undefined') {
              window?.Moyasar.init({
               element: ".mysr",
-              amount: selectData?.propertyOwnerType == "مالك" ? 100 : 500,
+              amount: selectData?.propertyOwnerType == "مالك" ? 10000 : 50000,
               currency: "SAR",
               description: "Test API",
-              publishable_api_key: "pk_test_piTjfJ4VGnL6BHKARNCNBfm2bu9EhfgoTrbEDz6x",
-              callback_url: `https://mashrook.sa/JoiningSuccess?property_id=${selectData?.id}&details_id=${selectData?.detail_id}&type=${selectData?.type}`,
+              publishable_api_key: process.env.NEXT_PUBLIC_PUBLICKEY!,
+              callback_url: `${process.env.NEXT_PUBLIC_BASEURL}/JoiningSuccess?property_id=${selectData?.id}&details_id=${selectData?.detail_id}&type=${selectData?.type}`,
               methods: ["creditcard", "stcpay"],
               language: "ar",
               credit_card: {
