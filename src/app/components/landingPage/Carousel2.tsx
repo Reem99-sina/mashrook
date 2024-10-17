@@ -52,15 +52,15 @@ export default function CarouselTransition() {
       {data?.map((image, index) => (
         <div
           key={index}
-          className={`absolute inset-0 transition-opacity duration-1000 ${
+          className={`absolute inset-0 transition-opacity duration-1000 w-full ${
             index === currentIndex ? "opacity-100" : "opacity-0"
           }`}
         >
           <Image
             src={image?.link}
             alt={`image ${index + 1}`}
-            style={{ objectFit: "cover",width:"100%" }}
-            width={100}
+            style={{ objectFit: "cover" }}
+            width={500}
             height={100}
             className="rounded-xl priority p2"
           />
