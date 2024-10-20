@@ -74,7 +74,7 @@ export default function Payment() {
         if (res.payload.data) {
           
           toast.success(res.payload.message);
-          router.push("/JoiningSuccess")
+          router.push(`/JoiningSuccess?status=pending&id=${res?.payload?.data?.id}`)
         } else if (res.payload.status) {
          
           toast.error(res.payload.message);
@@ -90,7 +90,7 @@ export default function Payment() {
         if (res.payload.data) {
           
           toast.success(res.payload.message);
-          router.push("/JoiningSuccess")
+          router.push(`/JoiningSuccess?status=pending&id=${res?.payload?.data?.id}`)
         } else if (res.payload.status) {
          
           toast.error(res.payload.message);
