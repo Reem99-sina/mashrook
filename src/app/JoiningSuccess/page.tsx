@@ -4,6 +4,7 @@ import Link from "next/link"
 import { Check } from "@/app/assets/svg";
 import toast from "react-hot-toast"
 import { IoMdCloseCircleOutline } from "react-icons/io";
+import { CiNoWaitingSign } from "react-icons/ci";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from 'next/navigation'
@@ -17,6 +18,8 @@ export default function JoiningSuccess() {
   const hasSentRequest = useRef(false);
   const search = searchParams.get('status')
   const property_id = searchParams.get('property_id')
+  const id = searchParams.get('id')
+
   const details_id = searchParams.get('details_id')
   const type = searchParams.get('type')
   const onSend = async () => {
@@ -63,7 +66,7 @@ export default function JoiningSuccess() {
       onSend()
     }
   }, [])
-
+  
   return (
     <div className="flex justify-center w-dvh h-max  ">
       <div className="w-full bg-white rounded text-black shadow ">
@@ -71,15 +74,15 @@ export default function JoiningSuccess() {
           <main className="container mx-auto ">
             <section className=" rounded text-center">
               <div className="flex flex-col border-2 shadow-lg p-2 rounded-lg justify-around items-center py-10">
-                {success ? <Check /> : <IoMdCloseCircleOutline className="text-[9rem] text-red-500" />}
+                {success&&search=="paid" ? <Check /> :search=="failed"? <IoMdCloseCircleOutline className="text-[9rem] text-red-500" />:search=="pending"?<CiNoWaitingSign className="text-[9rem] text-blue-450"/>:""}
 
                 <h2 className="my-4 font-bold text-xl">
-                  {success ? "تم الاشتراك في العقار بنجاح" : "لم يتم الاشتراك في العقار"}
+                  {success&&search=="paid" ? "تم الاشتراك في العقار بنجاح" :search=="failed"? "لم يتم الاشتراك في العقار":search=="pending"?"انه سيتم الموافقة بعد التاكد من وصول التحويل البنكي":""}
                 </h2>
                 {success ? null : <p className="my-4 font-bold text-xl ">{message}</p>}
-                <div className="flex bg-gray-100 items-center justify-center py-2 px-2 rounded-2xl my-4 ">
+                <div className="flex bg-gray-100 items-center justify-center py-2 px-2 rounded-2xl my-4 flex-row-reverse">
                   <span className="mr-2 ml-2 text-lg font-bold">
-                    <h4>{property_id}</h4>
+                    <h4>{property_id!="undefined"&&property_id||id!="undefined"&&id}</h4>
                   </span>
                   <p>رقم الشراكة</p>
                 </div>
