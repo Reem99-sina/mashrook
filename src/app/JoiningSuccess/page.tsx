@@ -29,11 +29,11 @@ export default function JoiningSuccess() {
         details_id: Number(details_id),
         amount: Number(sessionStorage.getItem("amount"))
       })).then((res: any) => {
-        if (res.payload.data) {
+        if (res?.payload?.data) {
           setSucces(true)
           setMessage(res.payload.message)
           toast.success(res.payload.message);
-        } else if (res.payload.status) {
+        } else if (res?.payload?.status) {
           setSucces(false)
           setMessage(res.payload.message)
           toast.error(res.payload.message);

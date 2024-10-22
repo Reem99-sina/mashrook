@@ -88,7 +88,7 @@ export default function TermsAndConditions() {
                   />
                   <div className="flex flex-row items-center align-middle justify-end p-2 text-blue-450">
                     <p>
-                      في حالة الموافقة رسوم الخدمة 100 ريال تدفع لمشروك للانضمام
+                      في حالة الموافقة رسوم الخدمة 500 ريال تدفع لمشروك للانضمام
                       للشراكة
                     </p>
                     <span>

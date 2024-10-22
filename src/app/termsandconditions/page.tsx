@@ -26,7 +26,7 @@ export default function TermsAndConditions() {
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
   };
- 
+  console.log(selectData,"selectData")
   const handleButtonClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     if (!isChecked) {
       e.preventDefault();
@@ -34,22 +34,6 @@ export default function TermsAndConditions() {
       setTimeout(() => {
         setShowNotification(false);
       }, 5000);
-    }else if(selectData?.propertyPurpose!=1){
-      if(selectData?.type){
-        dispatch(postPaymentType({
-          property_id: selectData?.id,
-          land_details_id: selectData?.detail_id,
-      // land_details_id: selectData?.detail_id,
-      amount:Number(sessionStorage.getItem("amount"))
-        }))
-      }else{
-        dispatch(postPaymentType({
-          property_id: selectData?.id,
-          details_id: selectData?.detail_id,
-      // land_details_id: selectData?.detail_id,
-      amount:Number(sessionStorage.getItem("amount"))
-        }))
-      }
     }
   };
   return (
@@ -131,7 +115,7 @@ export default function TermsAndConditions() {
                   </div>
                   <div className="flex flex-row items-center align-middle justify-center p-2 text-blue-450">
                     <Link
-                      href={selectData?.propertyPurpose==1?"/paymentpage":"/JoiningSuccess"}
+                      href={selectData?.propertyPurpose ==1?"/paymentpage":`/JoiningSuccess?status=paid&property_id=${selectData?.id}&details_id=${selectData?.detail_id}&type=${selectData?.type}`}
                       onClick={handleButtonClick}
                       className="bg-blue-450 text-white px-4 py-2 rounded-2xl p-2 m-2 flex-grow text-center"
                     >

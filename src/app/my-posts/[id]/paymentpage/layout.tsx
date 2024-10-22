@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect } from "react";
-import MainHeader from "../components/header/MainHeader";
-import Footer from "../components/header/Footer2";
+import { useParams } from "next/navigation";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { dataReturn } from "@/redux/features/getRequest"
@@ -13,26 +12,16 @@ const AboutLayout = ({
 }: Readonly<{
   children: React.ReactNode;
 }>) => {
-  
-  let { selectData } = useSelector<RootState>(
-    (state) => state.getRequest
-  ) as {
-    loading: boolean; message: string; data: dataReturn[], selectData: {
-      id: number, detail_id?: number, title: string, numberPiece: number,
-      type: boolean,
-      propertyOwnerType: string,
-      propertyPurpose: string
-    }
-  };
+  const params = useParams()
   useEffect(() => {
     if (typeof window?.Moyasar !== 'undefined') {
       window?.Moyasar.init({
         element: ".mysr",
-        amount: selectData?.propertyOwnerType == "مالك" ? 10000 : 50000,
+        amount:  50000,
         currency: "SAR",
         description: "Test API",
         publishable_api_key: process.env.NEXT_PUBLIC_PUBLICKEY!,
-        callback_url: `${process.env.NEXT_PUBLIC_BASEURL}/JoiningSuccess?property_id=${selectData?.id}&details_id=${selectData?.detail_id}&type=${selectData?.type}`,
+        callback_url: `${process.env.NEXT_PUBLIC_BASEURL}/my-posts/${params?.id}/JoiningSuccess?property_id=${params?.id}`,
         methods: ["creditcard", "stcpay"],
         language: "ar",
         credit_card: {
@@ -55,12 +44,7 @@ const AboutLayout = ({
   return (
     <div dir="" >
       <div className="bg-white">
-
-        <div dir="ltr" className="relative">
-          <MainHeader />
-        </div>
         {children}
-        <Footer />
       </div>
       <Script
         src="https://cdn.moyasar.com/mpf/1.7.3/moyasar.js"
@@ -68,11 +52,11 @@ const AboutLayout = ({
           if (typeof  window?.Moyasar !== 'undefined') {
              window?.Moyasar.init({
               element: ".mysr",
-              amount: selectData?.propertyOwnerType == "مالك" ? 10000 : 50000,
+              amount:  50000,
               currency: "SAR",
               description: "Test API",
               publishable_api_key: process.env.NEXT_PUBLIC_PUBLICKEY!,
-              callback_url: `${process.env.NEXT_PUBLIC_BASEURL}/JoiningSuccess?property_id=${selectData?.id}&details_id=${selectData?.detail_id}&type=${selectData?.type}`,
+              callback_url: `${process.env.NEXT_PUBLIC_BASEURL}/my-posts/${params?.id}/JoiningSuccess?property_id=${params?.id}`,
               methods: ["creditcard", "stcpay"],
               language: "ar",
               credit_card: {
@@ -85,9 +69,9 @@ const AboutLayout = ({
                     reject();
                   } else {
                     // dispatch(postPaymentType({
-                    //   property_id: selectData?.id,
-                    //   details_id: selectData?.detail_id,
-                    //   // land_details_id: selectData?.detail_id,
+                    //   property_id: params?.id,
+                    //   details_id: params?.detail_id,
+                    //   // land_details_id: params?.detail_id,
                     //   amount: Number(sessionStorage.getItem("amount"))
                     // }))
                     resolve({})
