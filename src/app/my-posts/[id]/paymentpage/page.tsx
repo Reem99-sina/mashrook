@@ -54,33 +54,21 @@ export default function Payment() {
     e.preventDefault()
     if (data?.method == "bank") {
       if (recipt) {
-        dispatch(postMyReceiptAdvertise({property_id:selectData?.id,amount:selectData?.propertyOwnerType?.title == "مالك" ? 100 : 500,receipt:recipt}))
+        dispatch(postMyReceiptAdvertise({property_id:selectData?.id,amount:500,receipt:recipt}))
         .then((res: any) => {
-          if (res.payload.message && !res.payload.status) {
-            toast.success(res.payload.message)
-            router.push("/my-posts");
-          } else if (res.payload.status) {
-            toast.error(res.payload.message);
-          }
+          if (res.payload.data) {
+          
+          toast.success(res.payload.message);
+          router.push(`/my-posts/${params?.id}/JoiningSuccess?status=pending&property_id=${params?.id}`)
+        } else if (res.payload.status) {
+         
+          toast.error(res.payload.message);
+        }
         })
       } else {
         setErrors({ ...errors, receipt: "يجب ادخال ايصال" })
       }
-    } else {
-      const status = await validateForm(data, paymentSchema, setErrors)
-      if (status == true) {
-         dispatch(postMyAdvertise({property_id:selectData?.id,amount:selectData?.propertyOwnerType?.title == "مالك" ? 100 : 500}))
-         .then((res: any) => {
-          if (res.payload.message && !res.payload.status) {
-            toast.success(res.payload.message)
-            router.push("/my-posts");
-          } else if (res.payload.status) {
-            toast.error(res.payload.message);
-          }
-        })
-      }
-    }
-
+    } 
   }
   function readAndPreview(file: File) {
     // Make sure `file.name` matches our extensions criteria
@@ -141,7 +129,7 @@ export default function Payment() {
 
                 <div className="text-right p-4 m-4 bg-gray-200">
                   <div className="flex flex-row justify-between">
-                    <p className="text-xl text-green-500 font-bold">{selectData?.propertyOwnerType?.title == "مالك" ? 100 : 500} ريال</p>
+                    <p className="text-xl text-green-500 font-bold">{500} ريال</p>
                     <p className="text-xl text-blue-450 font-bold my-2">
                       رسوم اعلان
                     </p>
@@ -173,7 +161,8 @@ export default function Payment() {
                   <div className="text-right p-4 mb-4 rounded-xl bg-gray-200">
                     <p className="text-xl font-bold">بيانات الدفع</p>
                   </div>
-                  {data?.method == "bank" ?
+                  <div className="mysr" style={{ display: data?.method == "bank" ? "none" : "block",direction:"rtl" }}></div>
+                  {data?.method == "bank" &&
                     //       url?<>
                     //         <div className="my-2 border-2 shadow-md p-4 rounded-xl flex flex-row-reverse items-center justify-between">
                     //   <div className="flex flex-row-reverse items-center gap-x-3">
@@ -262,85 +251,16 @@ export default function Payment() {
                           </div>
                         </div>
                       </div>
-                    </> : <>
-                      <div className="border-2 shadow-md p-4 rounded-xl">
-                        <h3 className="my-2">اسم صاحب البطاقة</h3>
-                        <input
-                          type="text"
-                          placeholder="الرجاء الادخال"
-                          name=" الرجاء الادخال"
-                          id="holderName"
-                          className="bg-gray-200 rounded-xl flex-grow text-right  px-4 py-2 w-full"
-                          onChange={(e) => setData((prev) => ({ ...prev, name: e.target.value }))}
-                        />
-                        {errors?.name && (
-                          <p className="text-xs text-red-600 dark:text-red-500 text-right">
-                            {String(errors?.name)}
-                          </p>
-                        )}
-                        <h3 className="my-2">رقم البطاقة</h3>
-                        <input
-                          type="number"
-                          placeholder="الرجاء الادخال"
-                          name=" الرجاء الادخال"
-                          id="holderName"
-                          className="bg-gray-200 rounded-xl flex-grow text-right  px-4 py-2 w-full"
-                          onChange={(e) => setData((prev) => ({ ...prev, numCard: Number(e.target.value) }))}
-                        />
-                        {errors?.numCard && (
-                          <p className="text-xs text-red-600 dark:text-red-500 text-right">
-                            {String(errors?.numCard)}
-                          </p>
-                        )}
-                        <div className="flex flex-row justify-end flex-wrap mb-4 gap-x-2">
-                          <div>
-                            <h3 className="my-2 mx-6">CVV</h3>
-                            <input
-                              type="number"
-                              placeholder="الرجاء الادخال"
-                              name=" الرجاء الادخال"
-                              id="holderName"
-                              className="bg-gray-200 rounded-xl flex-grow text-right  px-4 py-2 w-full"
-                              onChange={(e) => setData((prev) => ({ ...prev, cvv: e.target.value }))}
-
-                            />
-                            {errors?.cvv && (
-                              <p className="text-xs text-red-600 dark:text-red-500 text-right">
-                                {String(errors?.cvv)}
-                              </p>
-                            )}
-                          </div>
-                          <div>
-                            <h3 className="my-2 mx-6">تاريخ الانتهاء</h3>
-                            <input
-                              type="date"
-                              placeholder="الرجاء الادخال"
-                              name=" الرجاء الادخال"
-                              id="holderName"
-                              className="bg-gray-200 rounded-xl flex-grow text-right  px-4 py-2 w-full"
-                              onChange={(e) => setData((prev) => ({ ...prev, endDate: e.target.value }))}
-
-                            />
-                            {errors?.endDate && (
-                              <p className="text-xs text-red-600 dark:text-red-500 text-right">
-                                {String(errors?.endDate)}
-                              </p>
-                            )}
-                          </div>
-                        </div>
-                      </div>
                     </>}
-
-
-                  <div className="flex flex-row items-center align-middle justify-center  p-2 text-blue-450">
+                   {data?.method == "bank" && <div className="flex flex-row items-center align-middle justify-center  p-2 text-blue-450">
                     <button
                       type="button"
-                      // href="/JoiningSuccess"
+                      // href="//JoiningSuccess"
                       onClick={onSubmit}
                       className="bg-blue-450 text-white px-4 py-2 rounded-2xl p-2 m-2 flex-grow text-center">
                       الدفع
                     </button>
-                  </div>
+                  </div>}         
                 </div>
               </div>
             </section>

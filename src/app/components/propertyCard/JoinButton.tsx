@@ -51,7 +51,7 @@ const JoinStatusButtons: React.FC<JoinStatusButtonsProps> = ({
   const [errors, setErrors] = useState<{
     amount: string;
   }>();
-
+  console.log(dataMain,data,"data")
   const handleDialogToggle = () => {
 
     setShowDialog(!showDialog);
