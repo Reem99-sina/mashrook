@@ -131,7 +131,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ page, limit }) => {
               <div className="flex flex-col gap-y-2 my-2 flex-wrap items-start">
                 <div className="bg-gray-200 rounded-xl  flex items-center p-2">
                   <LuTag />
-                  <p className="text-base  md:text-xs lg:text-sm mx-2">
+                  <p className="text-base  mx-2">
                     {FormatNumber(ele?.details[i]?.price) || FormatNumber(ele?.price)} {"ريال"}
                     <span className="text-[#3B73B9]">
                       {" "}
@@ -141,7 +141,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ page, limit }) => {
                 </div>
                 <div className="bg-gray-200 rounded-xl p-2 mr-4 flex items-center">
                   <BiArea />
-                  <p className="text-base md:text-xs lg:text-sm mx-2 ">
+                  <p className="text-base mx-2 ">
                     {ele?.details[i]?.area || ele?.area} م<sup>2</sup>
                   </p>
                 </div>
@@ -220,7 +220,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ page, limit }) => {
                 <div className="flex flex-col gap-y-2  my-2  items-start flex-wrap ">
                   <div className="bg-gray-200 rounded-xl px-2 flex items-center">
                     <LuTag />
-                    <p className="text-base md:text-xs lg:text-sm mx-2">
+                    <p className="text-base mx-2">
                       { FormatNumber(ele?.landDetails[i]?.price)} {"ريال"}
                       <span className="text-[#3B73B9]">
                         {" "}
@@ -230,7 +230,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ page, limit }) => {
                   </div>
                   <div className="bg-gray-200 rounded-xl px-2 mr-4 flex items-center">
                     <BiArea />
-                    <p className="text-base md:text-xs lg:text-sm mx-2 ">
+                    <p className="text-base mx-2 ">
                       {ele?.landDetails[i]?.area} م<sup>2</sup>
                     </p>
                   </div>

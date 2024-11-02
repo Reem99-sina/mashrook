@@ -12,7 +12,7 @@ const cairo = Cairo({
 });
 
 export const metadata: Metadata = {
-  title: "Mashrook",
+  title: "مشروك",
   description: "منصة مشروك العقارية",
 };
 

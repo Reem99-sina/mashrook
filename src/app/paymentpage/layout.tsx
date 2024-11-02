@@ -4,58 +4,58 @@ import MainHeader from "../components/header/MainHeader";
 import Footer from "../components/header/Footer2";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
-import { dataReturn } from "@/redux/features/getRequest"
+import { dataReturn } from "@/redux/features/getRequest";
 
-
-import Script from 'next/script';
+import Script from "next/script";
 const AboutLayout = ({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) => {
-  
-  let { selectData } = useSelector<RootState>(
-    (state) => state.getRequest
-  ) as {
-    loading: boolean; message: string; data: dataReturn[], selectData: {
-      id: number, detail_id?: number, title: string, numberPiece: number,
-      type: boolean,
-      propertyOwnerType: string,
-      propertyPurpose: string
-    }
+  let { selectData } = useSelector<RootState>((state) => state.getRequest) as {
+    loading: boolean;
+    message: string;
+    data: dataReturn[];
+    selectData: {
+      id: number;
+      detail_id?: number;
+      title: string;
+      numberPiece: number;
+      type: boolean;
+      propertyOwnerType: string;
+      propertyPurpose: string;
+    };
   };
   useEffect(() => {
-    if (typeof window?.Moyasar !== 'undefined') {
+    if (typeof window?.Moyasar !== "undefined") {
       window?.Moyasar.init({
         element: ".mysr",
         amount: selectData?.propertyOwnerType == "مالك" ? 10000 : 50000,
         currency: "SAR",
         description: "Test API",
         publishable_api_key: process.env.NEXT_PUBLIC_PUBLICKEY!,
-        callback_url: `${process.env.NEXT_PUBLIC_BASEURL}/JoiningSuccess?property_id=${selectData?.id}&details_id=${selectData?.detail_id}&type=${selectData?.type}`,
+        callback_url: `${process.env.NEXT_PUBLIC_BASEURL}/JoiningSuccess?property_id=${selectData?.id}&details_id=${selectData?.detail_id}&type=${selectData?.type}&amountBack=${Number(sessionStorage.getItem("amount"))}`,
         methods: ["creditcard", "stcpay"],
         language: "ar",
         credit_card: {
           save_card: false,
         },
-        on_completed: function (payment:any) {
+        on_completed: function (payment: any) {
           return new Promise(function (resolve, reject) {
-            if ((payment?.status == "failed")) {
+            if (payment?.status == "failed") {
               reject();
             } else {
-               resolve({})
+              resolve({});
             }
           });
-        }
+        },
       });
     }
   }, []);
 
-  
   return (
-    <div dir="" >
+    <div dir="">
       <div className="bg-white">
-
         <div dir="ltr" className="relative">
           <MainHeader />
         </div>
@@ -65,23 +65,29 @@ const AboutLayout = ({
       <Script
         src="https://cdn.moyasar.com/mpf/1.7.3/moyasar.js"
         onLoad={() => {
-          if (typeof  window?.Moyasar !== 'undefined') {
-             window?.Moyasar.init({
+          if (typeof window?.Moyasar !== "undefined") {
+            window?.Moyasar.init({
               element: ".mysr",
               amount: selectData?.propertyOwnerType == "مالك" ? 10000 : 50000,
               currency: "SAR",
               description: "Test API",
               publishable_api_key: process.env.NEXT_PUBLIC_PUBLICKEY!,
-              callback_url: `${process.env.NEXT_PUBLIC_BASEURL}/JoiningSuccess?property_id=${selectData?.id}&details_id=${selectData?.detail_id}&type=${selectData?.type}`,
+              callback_url: `${
+                process.env.NEXT_PUBLIC_BASEURL
+              }/JoiningSuccess?property_id=${selectData?.id}&details_id=${
+                selectData?.detail_id
+              }&type=${selectData?.type}&amountBack=${Number(
+                sessionStorage.getItem("amount")
+              )}`,
               methods: ["creditcard", "stcpay"],
               language: "ar",
               credit_card: {
                 save_card: false,
               },
-              on_completed: (payment:any) => {
+              on_completed: (payment: any) => {
                 return new Promise(function (resolve, reject) {
                   // savePayment is just an example, your usage may vary.
-                  if ((payment?.status == "failed")) {
+                  if (payment?.status == "failed") {
                     reject();
                   } else {
                     // dispatch(postPaymentType({
@@ -90,15 +96,13 @@ const AboutLayout = ({
                     //   // land_details_id: selectData?.detail_id,
                     //   amount: Number(sessionStorage.getItem("amount"))
                     // }))
-                    resolve({})
+                    resolve({});
                   }
-
                 });
-              }
+              },
             });
           }
         }}
-
       />
     </div>
   );
