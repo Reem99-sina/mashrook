@@ -559,6 +559,7 @@ const AddYourRealEstate: React.FC = () => {
         : prev.filter((ele, index) => index != indexRemove)
     );
   }, [count.nums, indexRemove]);
+
   return (
     <>
       {!sentYourRequest ? (
@@ -742,8 +743,8 @@ const AddYourRealEstate: React.FC = () => {
               ))}
               
             </div>
-            {titleSection && detailsSection && (
-              <div className="bg-white rounded-lg border border-[#E5E7EB] w-full mb-2 items-start justify-start p-4 mt-4">
+            {titleSection && detailsSection&&dataSend?.property_purpose_id==1 && (
+              <div className="bg-white rounded-lg border border-[#E5E7EB] w-full mb-2 items-start justify-start p-4">
                 <div className="flex items-center justify-end">
                   <p className="text-base font-bold text-[#4B5563]">
                     {titleSection}

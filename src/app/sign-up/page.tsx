@@ -1,27 +1,27 @@
 "use client";
 
-import React,{useRef} from "react";
+import React, { useRef } from "react";
 import { CloseButton, MashrookLogo } from "@/app/assets/svg";
 import { TextInput } from "../components/shared/text-input.component";
 import { Button } from "../components/shared/button.component";
-import 'react-phone-number-input/style.css'
-import {  ModalRef } from "../components/shared/modal.component";
-import PhoneInput from 'react-phone-number-input'
+import "react-phone-number-input/style.css";
+import { ModalRef } from "../components/shared/modal.component";
+import PhoneInput from "react-phone-number-input";
 import { useRouter } from "next/navigation";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
-import { register,removeUser } from "@/redux/features/userSlice";
+import { register, removeUser } from "@/redux/features/userSlice";
 import toast from "react-hot-toast";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { registerSchema } from "@/typeSchema/schema";
 import { validateForm } from "@/app/hooks/validate";
 import ModelRules from "@/app/components/shared/ModelRules";
-import Cookie from "js-cookie"
+import Cookie from "js-cookie";
 export interface userRegister {
   username: string;
   email: string;
-  phone:string;
+  phone: string;
   password: string;
   repeate_password: string;
 }
@@ -32,7 +32,7 @@ const SignUp: React.FC = () => {
   const [user, setUser] = useState<userRegister>({
     username: "",
     email: "",
-    phone:"",
+    phone: "",
     password: "",
     repeate_password: "",
   });
@@ -43,7 +43,7 @@ const SignUp: React.FC = () => {
   const [errors, setErrors] = useState<{
     username: string;
     email: string;
-    phone:string;
+    phone: string;
     password: string;
     repeate_password: string;
   }>();
@@ -58,7 +58,7 @@ const SignUp: React.FC = () => {
         setErrors({
           username: "",
           email: "",
-          phone:"",
+          phone: "",
           password: "",
           repeate_password: "",
         });
@@ -68,19 +68,19 @@ const SignUp: React.FC = () => {
     }
   };
   useEffect(() => {
-    if (message&&Boolean(data) == true) {
+    if (message && Boolean(data) == true) {
       toast.success(message);
       router.push(`/verify/${data?.user?.email}`);
-    }else if(message&&Boolean(data) == false){
+    } else if (message && Boolean(data) == false) {
       toast.error(message);
     }
-    return ()=>{
-      dispatch(removeUser())
-    }
-  }, [data, message, router,dispatch]);
+    return () => {
+      dispatch(removeUser());
+    };
+  }, [data, message, router, dispatch]);
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const storedToken =  Cookie.remove("token");
+      const storedToken = Cookie.remove("token");
     }
   }, []);
   return (
@@ -146,25 +146,33 @@ const SignUp: React.FC = () => {
                   </p>
                 )}
               </div>
-              <div className="!my-2" style={{direction:"rtl"}}>
-                <h3 className="font-bold text-[#4B5563] my-2">ادخل الرقم الجوال</h3>
-              <PhoneInput
-              placeholder="050 345 6708"
-              className="border-2 border-gray-300 p-1 rounded-md "
-          numberInputProps={{style:{textAlign:"end"}}}
-      value={user?.phone}
-      defaultCountry="SA"
-      countries={["SA"]}
-      labels={{"SA":"المملكة العربية السعودية"}}
-      addInternationalOption={false}
-      international = {false}
-      onChange={(value)=>setUser({ ...user, phone: value?String(value):"" })}/>
-      {errors?.phone && (
+              <div className="!my-2" style={{ direction: "rtl" }}>
+                <h3 className="font-bold text-[#4B5563] my-2">
+                  ادخل الرقم الجوال
+                </h3>
+                <PhoneInput
+                  placeholder="050 345 6708"
+                  className="border-2 border-gray-300 p-1 rounded-md "
+                  numberInputProps={{ style: { textAlign: "end" } }}
+                  value={user?.phone}
+                  defaultCountry="SA"
+                  countries={["SA"]}
+                  labels={{ SA: "المملكة العربية السعودية" }}
+                  addInternationalOption={false}
+                  international={false}
+                  onChange={(value) => {
+                    if (value) {
+                      setUser((prev) => ({ ...prev, phone: String(value) }));
+                    }
+                  }}
+                  limitMaxLength={true}
+                />
+                {errors?.phone && (
                   <p className="text-xs text-red-600 dark:text-red-500 text-right">
                     {errors?.phone}
                   </p>
                 )}
-</div>
+              </div>
 
               <div className="!mb-2">
                 <TextInput
@@ -210,25 +218,25 @@ const SignUp: React.FC = () => {
                 htmlFor="remember-me"
                 className="block ml-2 text-sm text-gray-900"
               >
-                  <button
-                    className="text-[#98CC5D]"
-                    onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-                      e.preventDefault();
-                      modalRefRules?.current?.open();
-                    }}
-                  >
-                    الأحكام 
-                  </button>
                 <button
-                    className="text-[#98CC5D]"
-                    onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-                      e.preventDefault();
-                      modalRefRules?.current?.open();
-                    }}
-                  >
-                    الشروط و
-                  </button>
-                  لقد قرأت ووافقت على
+                  className="text-[#98CC5D]"
+                  onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                    e.preventDefault();
+                    modalRefRules?.current?.open();
+                  }}
+                >
+                  الأحكام
+                </button>
+                <button
+                  className="text-[#98CC5D]"
+                  onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                    e.preventDefault();
+                    modalRefRules?.current?.open();
+                  }}
+                >
+                  الشروط و
+                </button>
+                لقد قرأت ووافقت على
               </label>
               <input
                 id="remember-me"
@@ -241,27 +249,30 @@ const SignUp: React.FC = () => {
             </div>
           </div>
           <ModelRules
-              refModel={modalRefRules}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setCheckBox(e.target.checked)
-              }
-              deal={checkBox}
-            />
+            refModel={modalRefRules}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setCheckBox(e.target.checked)
+            }
+            deal={checkBox}
+          />
           <div>
-          {loading?<button
-              className="relative flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-[#3B73B9] border border-transparent rounded-md group  focus:outline-none focus:ring-2 focus:ring-offset-2 "
-              disabled={loading}
-            ><AiOutlineLoading3Quarters className="rotate-90 text-gray-500"/>
-            </button>:<>
-            <Button
-              text="تسجيل جديد"
-              className="relative flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-[#3B73B9] border border-transparent rounded-md group  focus:outline-none focus:ring-2 focus:ring-offset-2 "
-              onClick={() => {}}
-              type="submit"
-            />
-            </>}
-
-           
+            {loading ? (
+              <button
+                className="relative flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-[#3B73B9] border border-transparent rounded-md group  focus:outline-none focus:ring-2 focus:ring-offset-2 "
+                disabled={loading}
+              >
+                <AiOutlineLoading3Quarters className="rotate-90 text-gray-500" />
+              </button>
+            ) : (
+              <>
+                <Button
+                  text="تسجيل جديد"
+                  className="relative flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-[#3B73B9] border border-transparent rounded-md group  focus:outline-none focus:ring-2 focus:ring-offset-2 "
+                  onClick={() => {}}
+                  type="submit"
+                />
+              </>
+            )}
           </div>
         </form>
         <div className="mt-auto bg-[#3B73B9] text-center w-full h-[271px] mb-0 lg:h-[40px] flex items-center  lg:gap-2 justify-center flex-col lg:flex-row-reverse">
