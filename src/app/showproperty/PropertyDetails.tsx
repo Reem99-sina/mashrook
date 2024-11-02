@@ -1,6 +1,6 @@
 "use client";
 
-import React ,{useEffect,useMemo}from "react";
+import React, { useEffect, useMemo } from "react";
 import MainHeader from "../components/header/MainHeader";
 import Footer from "../components/header/Footer2";
 import { useState } from "react";
@@ -9,10 +9,10 @@ import { CarouselDefault } from "./Carousel3";
 import { GoLocation } from "react-icons/go";
 import { BsPerson } from "react-icons/bs";
 import { format } from "date-fns";
-import {addSelectSave,removeSelectSave} from "@/redux/features/getRequest"
+import { addSelectSave, removeSelectSave } from "@/redux/features/getRequest";
 import { FaBookmark, FaChevronRight, FaRegCalendarAlt } from "react-icons/fa";
 import { CgSmartphoneShake } from "react-icons/cg";
-import {userInfo,saveElement,RequestInfo} from "@/type/addrealestate"
+import { userInfo, saveElement, RequestInfo } from "@/type/addrealestate";
 import {
   IoIosCheckmarkCircleOutline,
   IoMdCloseCircleOutline,
@@ -25,55 +25,78 @@ import { RxArrowLeft } from "react-icons/rx";
 import { MdOutlineFlag } from "react-icons/md";
 import Image from "next/image";
 import JoinStatusButtons from "../components/propertyCard/JoinButton";
-import {postSave,deleteSave,deleteSaves} from "@/redux/features/mySave"
-import { AppDispatch,RootState } from "@/redux/store";
-import { useDispatch,useSelector } from "react-redux";
-import {dataReturn} from "@/redux/features/getRequest"
-import {useRouter} from "next/navigation"
-import Cookie from 'js-cookie';
-import {Vector,Money,Diagram,Dance,Shower,Kitchen,CheckOut} from "@/app/assets/svg"
-import {fetchuser} from "@/redux/features/userSlice"
-import dynamic from "next/dynamic"
-const Map = dynamic(() => import("@/app/components/shared/map"), { ssr:false })
-const PropertyDetails: React.FC<{id:number}> = ({id}:{id:number}) => {
-
+import { postSave, deleteSave, deleteSaves } from "@/redux/features/mySave";
+import { AppDispatch, RootState } from "@/redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { dataReturn } from "@/redux/features/getRequest";
+import { useRouter } from "next/navigation";
+import Cookie from "js-cookie";
+import {
+  Vector,
+  Money,
+  Diagram,
+  Dance,
+  Shower,
+  Kitchen,
+  CheckOut,
+} from "@/app/assets/svg";
+import { fetchuser } from "@/redux/features/userSlice";
+import dynamic from "next/dynamic";
+const Map = dynamic(() => import("@/app/components/shared/map"), {
+  ssr: false,
+});
+const PropertyDetails: React.FC<{ id: number }> = ({ id }: { id: number }) => {
   const [activeTab, setActiveTab] = useState<"location" | "details">(
     "location"
   );
   const isDivisible = true;
   const [saved, setSaved] = useState(false);
 
- let router=useRouter()
- const dispatch = useDispatch<AppDispatch>();
+  let router = useRouter();
+  const dispatch = useDispatch<AppDispatch>();
 
   const [showNotification, setShowNotification] = useState(false);
   const [notificationMessage, setNotificationMessage] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
   const [reportText, setReportText] = useState("");
-  const {  user } = useSelector<RootState>(
-    (state) => state.register
-  ) as { user:userInfo,message:string };
+  const { user } = useSelector<RootState>((state) => state.register) as {
+    user: userInfo;
+    message: string;
+  };
   const [showReportNotification, setShowReportNotification] = useState(false);
   const [reportNotificationMessage, setReportNotificationMessage] =
     useState("");
 
+  let { loading, message, data, selectData, messageReport, status } =
+    useSelector<RootState>((state) => state.getRequest) as {
+      loading: boolean;
+      message: string;
+      data: dataReturn[];
+      selectData: dataReturn;
+      messageReport: string;
+      status: number;
+    };
 
-    let { loading, message, data,selectData,messageReport,status } = useSelector<RootState>(
-      (state) => state.getRequest
-    ) as { loading: boolean; message: string; data: dataReturn[], selectData:dataReturn,messageReport:string,status:number};
-
-    let { loading:loadingSave, message:messageSave, data:dataSave } = useSelector<RootState>(
-      (state) => state.save
-    ) as { loading: boolean; message: string; data: any };
+  let {
+    loading: loadingSave,
+    message: messageSave,
+    data: dataSave,
+  } = useSelector<RootState>((state) => state.save) as {
+    loading: boolean;
+    message: string;
+    data: any;
+  };
   const maxChars = 250;
 
   const currentDealStatus = "متاح";
-  let save=useMemo(()=>{
-    return (ele:dataReturn)=>{
-     return ele?.propertySaved?.map(({property_id}:saveElement)=>property_id).includes(ele?.id)
-    }
-},[])
+  let save = useMemo(() => {
+    return (ele: dataReturn) => {
+      return ele?.propertySaved
+        ?.map(({ property_id }: saveElement) => property_id)
+        .includes(ele?.id);
+    };
+  }, []);
   const handleReportClick = () => {
     setIsDialogOpen(true);
   };
@@ -88,13 +111,13 @@ const PropertyDetails: React.FC<{id:number}> = ({id}:{id:number}) => {
   };
 
   const handleReportSubmit = () => {
-   
-    
-    dispatch(postReport({
-      message:reportText,
-      property_id:Number(id)
-    }))
-   
+    dispatch(
+      postReport({
+        message: reportText,
+        property_id: Number(id),
+      })
+    );
+
     setIsDialogOpen(false);
     setReportText("");
   };
@@ -123,54 +146,53 @@ const PropertyDetails: React.FC<{id:number}> = ({id}:{id:number}) => {
   };
   const showNotificationSaveMessage = () => {
     setShowNotification(true);
-            setTimeout(() => {
-              setShowNotification(false);
-            }, 3000);
+    setTimeout(() => {
+      setShowNotification(false);
+    }, 3000);
   };
-  const handleSaveClick = (ele:dataReturn) => {
+  const handleSaveClick = (ele: dataReturn) => {
     // setSaved(ele)
-    if(ele?.id){
-      if(save(ele)==false){
-        dispatch(postSave({property_id:ele?.id})).then((res:any)=>{
-          if(res?.payload?.message&&!res?.payload?.status){
+    if (ele?.id) {
+      if (save(ele) == false) {
+        dispatch(postSave({ property_id: ele?.id })).then((res: any) => {
+          if (res?.payload?.message && !res?.payload?.status) {
             setNotificationMessage("تم الحفظ");
-            dispatch(addSelectSave({id:ele?.id,data:res?.payload?.data}))
-            showNotificationSaveMessage()
-          }else{
+            dispatch(addSelectSave({ id: ele?.id, data: res?.payload?.data }));
+            showNotificationSaveMessage();
+          } else {
             setNotificationMessage(res?.payload?.message);
-            showNotificationSaveMessage()
-          }          
-        })
-      }else{
-        dispatch(deleteSaves({id:ele?.id})).then((res:any)=>{
-          if(res?.payload?.message&&!res?.payload?.status){
+            showNotificationSaveMessage();
+          }
+        });
+      } else {
+        dispatch(deleteSaves({ id: ele?.id })).then((res: any) => {
+          if (res?.payload?.message && !res?.payload?.status) {
             setNotificationMessage("تم الغاء الحفظ");
-            dispatch(removeSelectSave({id:ele?.id}))
-            showNotificationSaveMessage()
-              }else{
-                setNotificationMessage(res?.payload?.message);
-                showNotificationSaveMessage()
-              }
-          })
+            dispatch(removeSelectSave({ id: ele?.id }));
+            showNotificationSaveMessage();
+          } else {
+            setNotificationMessage(res?.payload?.message);
+            showNotificationSaveMessage();
+          }
+        });
       }
     }
   };
   useEffect(() => {
-    dispatch(fetchuser())
-}, [dispatch]);
-useEffect(()=>{
-  return ()=>{
-    dispatch(deleteSave())
-  }
-},[dispatch])
+    dispatch(fetchuser());
+  }, [dispatch]);
+  useEffect(() => {
+    return () => {
+      dispatch(deleteSave());
+    };
+  }, [dispatch]);
 
-  useEffect(()=>{
-    if(messageReport&&status){
+  useEffect(() => {
+    if (messageReport && status) {
       setReportNotificationMessage(messageReport);
       showNotificationMessage();
     }
-    
-  },[messageReport,status])
+  }, [messageReport, status]);
 
   const detailsContent = (
     <div className="mt-4">
@@ -233,19 +255,31 @@ useEffect(()=>{
             {/* <h3 className="text-xl font-bold">قطعة {selectData?.landDetails?.piece_number}</h3> */}
             <div className="flex justify-between bg-gray-100 w-full items-center rounded-lg ml-2 mt-4 px-2  py-2">
               <span>العمر</span>
-              <span>   {(Boolean(selectData?.age)&&selectData?.age!=0)&&selectData?.age} {(selectData?.age&&selectData?.age>1)?"سنين":(selectData?.age&&selectData?.age==1)?"سنة":"جديد"}</span>
+              <span>
+                {" "}
+                {Boolean(selectData?.age) &&
+                  selectData?.age != 0 &&
+                  selectData?.age}{" "}
+                {selectData?.age && selectData?.age > 1
+                  ? "سنين"
+                  : selectData?.age && selectData?.age == 1
+                  ? "سنة"
+                  : "جديد"}
+              </span>
             </div>
-           {Boolean(selectData?.area)&&<div className="flex justify-between bg-gray-100 w-full items-center rounded-lg ml-2 mt-4 px-2  py-2">
-              <span>المساحة</span>
-              <div className="flex justify-center items-center border-2 rounded-lg p-2">
-                <span>
-                  <Vector className="text-xl mx-2" />
-                </span>
-                <span>
-                  {selectData?.area} م<sup>2</sup>
-                </span>
+            {Boolean(selectData?.area) && (
+              <div className="flex justify-between bg-gray-100 w-full items-center rounded-lg ml-2 mt-4 px-2  py-2">
+                <span>المساحة</span>
+                <div className="flex justify-center items-center border-2 rounded-lg p-2">
+                  <span>
+                    <Vector className="text-xl mx-2" />
+                  </span>
+                  <span>
+                    {selectData?.area} م<sup>2</sup>
+                  </span>
+                </div>
               </div>
-            </div>}
+            )}
           </>
         )}
         {selectData?.details?.map((ele) => (
@@ -383,19 +417,33 @@ useEffect(()=>{
         <h2 className="text-2xl font-bold mb-4">موقع العقار</h2>
 
         <div className="mt-2">
-          {selectData?.landDetails?.map((ele:any)=>ele?.piece_number)?.join(",")&&<div className="flex justify-between bg-gray-100 w-full items-center rounded-lg ml-2 mt-4 px-2  py-2">
-            <span>رقم المخطط</span>
-            {/* <span>{selectData?.landDetails?.plan_number}</span> */}
-            <span>{selectData?.landDetails?.map((ele:any)=>ele?.piece_number)?.join(",")}</span>
-          </div>}
-          
+          {selectData?.landDetails
+            ?.map((ele: any) => ele?.piece_number)
+            ?.join(",") && (
+            <div className="flex justify-between bg-gray-100 w-full items-center rounded-lg ml-2 mt-4 px-2  py-2">
+              <span>رقم المخطط</span>
+              {/* <span>{selectData?.landDetails?.plan_number}</span> */}
+              <span>
+                {selectData?.landDetails
+                  ?.map((ele: any) => ele?.piece_number)
+                  ?.join(",")}
+              </span>
+            </div>
+          )}
+
           <div className="flex justify-between bg-gray-100 w-full items-center rounded-lg ml-2 mt-4 px-2  py-2">
             <span>المدينة</span>
             <span>{selectData?.propertyLocation?.city}</span>
           </div>
           <div className="flex justify-between bg-gray-100 w-full items-center rounded-lg ml-2 mt-4 px-2  py-2">
             <span>الحي</span>
-            <span> {selectData?.propertyLocation?.district?.replace(/[\[\]\\"]/g, '')}</span>
+            <span>
+              {" "}
+              {selectData?.propertyLocation?.district?.replace(
+                /[\[\]\\"]/g,
+                ""
+              )}
+            </span>
           </div>
           <div className="flex-col justify-between bg-gray-100 w-full items-center rounded-lg ml-2 mt-4 px-2  py-2">
             <div> الموقع</div>
@@ -403,8 +451,13 @@ useEffect(()=>{
           </div>
         </div>
         <div className="mt-4">
-        {(selectData?.propertyLocation?.lat&&selectData?.propertyLocation?.long)&&
-          <Map latitude={selectData?.propertyLocation?.lat}longitude={selectData?.propertyLocation?.long}/>}
+          {selectData?.propertyLocation?.lat &&
+            selectData?.propertyLocation?.long && (
+              <Map
+                latitude={selectData?.propertyLocation?.lat}
+                longitude={selectData?.propertyLocation?.long}
+              />
+            )}
         </div>
       </div>
     </div>
@@ -479,23 +532,28 @@ useEffect(()=>{
               </span>
             </div>
           </div>
-          {selectData?.license_number&& <div className="flex bg-gray-100 w-full justify-between items-center py-2  px-2 rounded-lg ml-2 mt-4">
-            <div>
-             <p>رقم ترخيص الإعلان</p>
-            </div>
-            <div className="flex items-center ml-2 text-sm bg-gray-100 border-2  px-2 py-1 rounded-lg">
-              <CgSmartphoneShake className=" ml-2" />
-              <span className="mr-2 text-lg ">
-                <p>{selectData?.license_number}</p>
-              </span>
-            </div>
-          </div>}
-            {(selectData?.propertyOwnerType?.title=="وسيط عقاري"&&selectData?.user?.val_license)&&<div className="flex bg-gray-100 w-full justify-between items-center py-2  px-2 rounded-lg ml-2 mt-4">
+          {selectData?.license_number && (
+            <div className="flex bg-gray-100 w-full justify-between items-center py-2  px-2 rounded-lg ml-2 mt-4">
               <div>
-                <p>رقم رخصة فال</p>
+                <p>رقم ترخيص الإعلان</p>
               </div>
-              <p>{selectData?.user?.val_license}</p>
-              </div>}
+              <div className="flex items-center ml-2 text-sm bg-gray-100 border-2  px-2 py-1 rounded-lg">
+                <CgSmartphoneShake className=" ml-2" />
+                <span className="mr-2 text-lg ">
+                  <p>{selectData?.license_number}</p>
+                </span>
+              </div>
+            </div>
+          )}
+          {selectData?.propertyOwnerType?.title == "وسيط عقاري" &&
+            selectData?.user?.val_license && (
+              <div className="flex bg-gray-100 w-full justify-between items-center py-2  px-2 rounded-lg ml-2 mt-4">
+                <div>
+                  <p>رقم رخصة فال</p>
+                </div>
+                <p>{selectData?.user?.val_license}</p>
+              </div>
+            )}
           <div className="flex bg-gray-100 w-full justify-between items-center py-2  px-2 rounded-lg ml-2 mt-4">
             <div>
               <p>رقم الطلب</p>
@@ -528,7 +586,7 @@ useEffect(()=>{
           </div>
           <div className="flex bg-gray-100 w-full justify-between items-center py-2  px-2 rounded-lg ml-2 mt-4">
             <div>
-              <p>  العقار قابل للتجزئة</p>
+              <p> العقار قابل للتجزئة</p>
             </div>
             <span>
               {selectData?.is_divisible == false ? (
@@ -544,16 +602,6 @@ useEffect(()=>{
             className="flex w-full justify-center mt-4 mb-4 rounded-xl"
           >
             <button
-              onClick={() => setActiveTab("location")}
-              className={`flex-grow border-2 z-0 ${
-                activeTab === "location"
-                  ? "bg-blue-450 text-white px-8 rounded-xl"
-                  : "bg-white px-8 py-4 rounded-xl"
-              }`}
-            >
-              موقع العقار
-            </button>
-            <button
               onClick={() => setActiveTab("details")}
               className={`flex-grow border-2 border-r-0 -mr-4 z-1 ${
                 activeTab === "details"
@@ -562,6 +610,16 @@ useEffect(()=>{
               }`}
             >
               تفاصيل العقار
+            </button>
+            <button
+              onClick={() => setActiveTab("location")}
+              className={`flex-grow border-2 z-0 ${
+                activeTab === "location"
+                  ? "bg-blue-450 text-white px-8 rounded-xl"
+                  : "bg-white px-8 py-4 rounded-xl"
+              }`}
+            >
+              موقع العقار
             </button>
           </div>
           {activeTab === "details" ? detailsContent : locationContent}
@@ -572,15 +630,25 @@ useEffect(()=>{
         className="flex justify-around items-center mt-4 text-lg border-2 rounded-t-xl z-50 bg-white"
       >
         <div className="flex flex-row py-1 items-center justify-center">
-                <button
-                  onClick={()=>handleSaveClick(selectData)}
-                  className={`${(selectData?.user_id==user?.id||!user)?"text-gray-500":"text-blue-500"} mx-2 align-middle`}
-                  disabled={selectData?.user_id==user?.id||!user}
-                >
-                  {save(selectData) ? "إلغاء الحفظ" : "حفظ"}
-                </button>
-                <FaBookmark className={`${(selectData?.user_id==user?.id||!user)?"text-gray-500":"text-blue-500"} mx-2 text-xl align-middle`} />
-              </div>
+          <button
+            onClick={() => handleSaveClick(selectData)}
+            className={`${
+              selectData?.user_id == user?.id || !user
+                ? "text-gray-500"
+                : "text-blue-500"
+            } mx-2 align-middle`}
+            disabled={selectData?.user_id == user?.id || !user}
+          >
+            {save(selectData) ? "إلغاء الحفظ" : "حفظ"}
+          </button>
+          <FaBookmark
+            className={`${
+              selectData?.user_id == user?.id || !user
+                ? "text-gray-500"
+                : "text-blue-500"
+            } mx-2 text-xl align-middle`}
+          />
+        </div>
 
         <div className="bg-gray-300 inline-block h-10 w-0.5 align-bottom"></div>
         {showNotification && (
@@ -591,12 +659,18 @@ useEffect(()=>{
         <div className="flex flex-row py-4 items-center justify-center">
           <button
             onClick={handleReportClick}
-            className={`${selectData?.user_id==user?.id?"text-gray-500":"text-red-500"}  mx-2 align-middle`}
-            disabled={selectData?.user_id==user?.id}
+            className={`${
+              selectData?.user_id == user?.id ? "text-gray-500" : "text-red-500"
+            }  mx-2 align-middle`}
+            disabled={selectData?.user_id == user?.id}
           >
             ابلاغ
           </button>
-          <MdOutlineFlag className={`${selectData?.user_id==user?.id?"text-gray-500":"text-red-500"} mx-2 text-xl align-middle`} />
+          <MdOutlineFlag
+            className={`${
+              selectData?.user_id == user?.id ? "text-gray-500" : "text-red-500"
+            } mx-2 text-xl align-middle`}
+          />
         </div>
 
         {isDialogOpen && (
@@ -687,7 +761,6 @@ useEffect(()=>{
       </div>
 
       <Footer />
-      
     </div>
   );
 };
