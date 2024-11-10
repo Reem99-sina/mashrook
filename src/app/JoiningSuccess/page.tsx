@@ -101,7 +101,7 @@ export default function JoiningSuccess() {
                     : search == "failed"
                     ? "لم يتم الاشتراك في العقار"
                     : search == "pending"
-                    ? "انه سيتم الموافقة بعد التاكد من وصول التحويل البنكي"
+                    ? " سيتم الموافقة بعد التاكد من وصول التحويل البنكي"
                     : ""}
                 </h2>
                 {success ? null : (

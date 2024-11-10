@@ -26,6 +26,7 @@ export interface dataReturn {
   is_divisible?: boolean;
   age?: number;
   license_number: string;
+  property_type_details_id?:number;
   area: number;
   price: number;
   min_price: string | null;
