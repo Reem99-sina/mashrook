@@ -55,7 +55,7 @@ export default function JoiningSuccess() {
                 {success&&search=="paid" ? <Check /> :search=="failed"? <IoMdCloseCircleOutline className="text-[9rem] text-red-500" />:search=="pending"?<CiNoWaitingSign className="text-[9rem] text-blue-450"/>:""}
 
                <h2 className="my-4 font-bold text-xl">
-                  {success&&search=="paid" ? "تم الاشتراك في العقار بنجاح" :search=="failed"? "لم يتم الاشتراك في العقار":search=="pending"?"انه سيتم الموافقة بعد التاكد من وصول التحويل البنكي":""}
+                  {success&&search=="paid" ? "تم الاشتراك في العقار بنجاح" :search=="failed"? "لم يتم الاشتراك في العقار":search=="pending"?" سيتم الموافقة بعد التاكد من وصول التحويل البنكي":""}
                 </h2>
 
                 <div className="flex bg-gray-100 items-center justify-center py-2 px-2 rounded-2xl my-4 ">
