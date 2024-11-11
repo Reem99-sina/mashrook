@@ -8,7 +8,6 @@ export { default as Mainnavigationmenu } from "./Button - Main navigation menu.s
 export { default as Addrequest } from "./Addrequest.svg";
 export { default as Addbutton } from "./Addbutton.svg";
 export { default as Add } from "./add.png";
-
 export { default as Truckicon } from "./Layer_x0020_1(2).svg";
 export { default as Realestatagent } from "./Layer_x0020_1(1).svg";
 export { default as Mobileapp } from "./Layer_x0020_1.svg";
