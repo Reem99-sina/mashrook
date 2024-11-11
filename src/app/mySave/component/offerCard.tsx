@@ -1,35 +1,21 @@
 "use client";
 import React,{useState,useEffect} from "react";
 import {
-  Accreditation,
   Dots,
-  DeleteIcon,
-  EditIcon,
-  OtherOffer,
-  UpdateIcon,
-  Rebuild,
-  ChatIconSmall,
 } from "@/app/assets/svg";
 import {FormatNumber} from "@/app/hooks/formatNumber"
-
-import {postSave,deleteSave,deleteSaves,deleteSaveId} from "@/redux/features/mySave"
+import {deleteSave,deleteSaves,deleteSaveId} from "@/redux/features/mySave"
 import {
-  FaRegCalendarAlt,
   FaBookmark,
   FaEllipsisH,
-  FaAngleDoubleLeft,
 } from "react-icons/fa";
-import { BsChatSquareText } from "react-icons/bs";
 import Link from "next/link"
-import { Button } from "@/app/components/shared/button.component";
-import Stepper from "@/app/components/shared/Stepper";
 import { CgSmartphoneShake } from "react-icons/cg";
 import CircularProgressBar from "@/app/components/propertyCard/RadialProgressBar";
 import { FinishedShares } from "@/app/assets/svg";
 import { GoLocation } from "react-icons/go";
 import { LuTag } from "react-icons/lu";
 import { BiArea } from "react-icons/bi";
-import { CiLocationOn } from "react-icons/ci";
 import { useRouter } from "next/navigation";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";

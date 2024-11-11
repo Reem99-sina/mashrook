@@ -1,6 +1,6 @@
 import { dataReturn } from "@/redux/features/getRequest";
-export const steps =[
-   {
+export const steps = [
+  {
     label: "قيد الانتظار",
     data: "pending",
   },
@@ -19,59 +19,151 @@ export const steps =[
   {
     label: "منتهية",
     data: "inactive",
-  },{
+  },
+  {
     label: "موقوفة",
     data: "suspended",
   },
 ];
 export const PartnerStage = [
   {
-    label: "انضمام الشركاء",
-    data: "active",
-  },
-  {
     label: "في انتظار البدء",
     data: "waiting_for_employee",
+    color: "#1E429F",
   },
   {
     label: "قيد الانتظار",
     data: "pending",
+    color: "#FDF6B2",
+  },
+  {
+    label: "انضمام الشركاء",
+    data: "active",
+    color: "#E3A008",
   },
   {
     label: "السعي",
     data: "inprogress",
+    color: "#544F9E",
   },
   {
     label: "الافراغ",
     data: "waiting",
+    color: "#EF401E",
   },
   {
     label: "الاتفاق",
     data: "agreement",
+    color: "#03543F",
   },
   {
     label: "العمولة",
     data: "commission",
+    color: "#03543F",
   },
   {
     label: "التوثيق",
     data: "documented",
+    color: "#03543F",
   },
   {
     label: "مكتملة",
     data: "finished",
+    color: "#03543F",
   },
   {
     label: "منتهية",
     data: "inactive",
+    color: "#9B1C1C",
   },
   {
     label: "موقوفة",
     data: "suspended",
+    color: "#9B1C1C",
   },
   {
     label: "مرفوضة",
     data: "rejected",
+    color: "#9B1C1C",
+  },
+];
+export const PartnerOwnStage = [
+  {
+    label: "انضمام الشركاء",
+    data: "active",
+    color: "#E3A008",
+  },
+  {
+    label: "السعي",
+    data: "inprogress",
+    color: "#544F9E",
+  },
+  {
+    label: "الافراغ",
+    data: "waiting",
+    color: "#EF401E",
+  },
+  {
+    label: "منتهية",
+    data: "inactive",
+    color: "#9B1C1C",
+  },
+];
+
+export const PartnerDeveloperStage = [
+  {
+    label: "انضمام الشركاء",
+    data: "active",
+    color: "#E3A008",
+  },
+  {
+    label: "دفع رسوم",
+    data: "pay_fees",
+    color: "#544F9E",
+  },
+  {
+    label: "السعي",
+    data: "inprogress",
+    color: "#544F9E",
+  },
+
+  {
+    label: "الافراغ",
+    data: "waiting",
+    color: "#EF401E",
+  },
+  {
+    label: "منتهية",
+    data: "inactive",
+    color: "#9B1C1C",
+  },
+];
+export const PartnerDeveloperNoSellStage = [
+  {
+    label: "انضمام الشركاء",
+    data: "active",
+    color: "#E3A008",
+  },
+  {
+    label: "الاتفاق",
+    data: "agreement",
+    color: "#03543F",
+  },
+  {
+    label: "العمولة",
+    data: "commission",
+    color: "#03543F",
+  },
+
+  {
+    label: "التوثيق",
+    data: "documented",
+    color: "#03543F",
+  },
+  {
+    label: "منتهية",
+    data: "inactive",
+    color: "#9B1C1C",
   },
 ];
 export interface detailsType {
@@ -434,7 +526,7 @@ export interface dataReturnType {
       garage?: boolean;
       car_entrance?: boolean;
     };
-  }&landInfo)[];
+  } & landInfo)[];
   amenities: any[];
   user: userInfo;
   propertyType: {
@@ -471,7 +563,7 @@ export interface dataReturnType {
   }[];
   propertySaved?: saveElement[];
   propertyDetailsOwnership?: realEstatePartner[];
-  propertyAdvertising?:propertyAdvertiseinterface[]
+  propertyAdvertising?: propertyAdvertiseinterface[];
 }
 export interface Banners {
   id: number;
@@ -480,8 +572,8 @@ export interface Banners {
   createdAt: string;
   updatedAt: string;
 }
-export interface bannerinfo{
-  loading: boolean,
-  message: string,
-  data:Banners[]|null
+export interface bannerinfo {
+  loading: boolean;
+  message: string;
+  data: Banners[] | null;
 }

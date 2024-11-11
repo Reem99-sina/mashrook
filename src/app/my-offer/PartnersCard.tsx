@@ -1,6 +1,11 @@
 "use client";
 import React from "react";
-import {steps} from "@/type/addrealestate"
+import {
+  PartnerDeveloperNoSellStage,
+  PartnerDeveloperStage,
+  PartnerOwnStage,
+  steps,
+} from "@/type/addrealestate";
 import {
   Accreditation,
   ChatIconSmall,
@@ -9,12 +14,10 @@ import {
   Undo,
 } from "../assets/svg";
 import { Button } from "../components/shared/button.component";
-import Cookie from "js-cookie"
+import Cookie from "js-cookie";
 import Stepper from "../components/shared/Stepper";
-import {
-  IoMdCloseCircleOutline,
-} from "react-icons/io";
-import Link from "next/link"
+import { IoMdCloseCircleOutline } from "react-icons/io";
+import Link from "next/link";
 interface PartnersCardProps {
   title?: string;
   date: string;
@@ -33,13 +36,13 @@ interface PartnersCardProps {
   realEstate: string;
   bidRequestNumber: number;
   partnershipRatio: number;
-  purpose: string,
-  details_id: number,
-  land_details_id: number,
-  room_id: number,
-  sender_id: number,
-  receiver_id:number,
-  currentStep:number
+  purpose: string;
+  details_id: number;
+  land_details_id: number;
+  room_id: number;
+  sender_id: number;
+  receiver_id: number;
+  currentStep: number;
 }
 
 export const PartnersCard: React.FC<PartnersCardProps> = ({
@@ -66,20 +69,21 @@ export const PartnersCard: React.FC<PartnersCardProps> = ({
   room_id,
   sender_id,
   receiver_id,
-  currentStep
+  currentStep,
 }) => {
-
   return (
     <div className="mt-4 w-full border-2  rounded-lg mb-4 flex flex-col p-4">
       <div className="items-center justify-between  flex-row flex relative ">
         <p className="text-xl font-bold text-[#374151] flex-1">{title} </p>
 
-        <Link className="items-center justify-center flex border border-[#E5E7EB] p-2 rounded-md gap-1 " href={`/ChatPage/${room_id}`}
+        <Link
+          className="items-center justify-center flex border border-[#E5E7EB] p-2 rounded-md gap-1 "
+          href={`/ChatPage/${room_id}`}
           onClick={() => {
             if (title) {
-              Cookie.set("title", title)
-              Cookie.set("senderId", String(sender_id))
-              Cookie.set("receiver_id",String(receiver_id))
+              Cookie.set("title", title);
+              Cookie.set("senderId", String(sender_id));
+              Cookie.set("receiver_id", String(receiver_id));
             }
           }}
         >
@@ -92,8 +96,12 @@ export const PartnersCard: React.FC<PartnersCardProps> = ({
       </div>
 
       <div className="flex gap-2 mt-2">
-        <span className={`rounded-xl ${purpose === "بيع" ? "bg-green-450" : "bg-orange-450"}  px-2 py-2 text-xs font-normal text-white`}>
-        {purpose === "بيع" ? "للبيع" : "للتطوير"}
+        <span
+          className={`rounded-xl ${
+            purpose === "بيع" ? "bg-green-450" : "bg-orange-450"
+          }  px-2 py-2 text-xs font-normal text-white`}
+        >
+          {purpose === "بيع" ? "للبيع" : "للتطوير"}
         </span>
         <span className="rounded-xl bg-[#F3F4F6] px-2 py-2 text-xs font-normaltext-[#6B7280]">
           {propertyOwnerType}
@@ -175,14 +183,22 @@ export const PartnersCard: React.FC<PartnersCardProps> = ({
           </p>
         </div> */}
       </div>
-      
-          <div className="p-4">
-            <Stepper steps={steps.map((step)=>step?.label)} currentStep={currentStep>=0?currentStep:0} />
-          </div>
-          <div className="flex items-center justify-center ">
-            <p className="text-xs text-[#6B7280] font-semibold">مراحل الشراكة</p>
-          </div>
-       
+
+      <div className="p-4">
+        <Stepper
+          steps={
+            purpose === "بيع"
+              ? propertyOwnerType == "مالك"
+                ? PartnerOwnStage.map((step) => step?.label)
+                : PartnerDeveloperStage.map((step) => step?.label)
+              : PartnerDeveloperNoSellStage.map((step) => step?.label)
+          }
+          currentStep={currentStep >= 0 ? currentStep : 0}
+        />
+      </div>
+      <div className="flex items-center justify-center ">
+        <p className="text-xs text-[#6B7280] font-semibold">مراحل الشراكة</p>
+      </div>
 
       <div className="flex flex-row items-center justify-center border-t-2 mt-5 border-[#E5E7EB]">
         <Button

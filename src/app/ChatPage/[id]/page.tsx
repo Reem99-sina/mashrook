@@ -83,6 +83,7 @@ const ChatPage = () => {
       setTitle(title)
     }
   }, [dispatch]);
+  
   useEffect(() => {
     const pusher = new Pusher("eac8985b87012d5f5753", {
       cluster: "mt1",

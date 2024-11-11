@@ -4,6 +4,7 @@ import { TextInput } from "../components/shared/text-input.component";
 import { FaRegUserCircle } from "react-icons/fa";
 import { format } from "date-fns";
 import {steps} from "@/type/addrealestate"
+import { findStep } from "./find-steps";
 import { fetchToken } from "@/redux/features/userSlice"
 import {
   CloseIconSmall,
@@ -42,7 +43,7 @@ export const GitMyPartners = () => {
   };
   const dispatch = useDispatch<AppDispatch>();
     const statusIndex = useMemo(() => {
-    return (offer: string) => steps?.findIndex((partner) => partner?.data == offer)
+    return (offer:RealEstateTypeInter) => findStep(offer)?.findIndex((partner) => partner?.data == offer)
   }, [])
   // status
   const [isFilterModalOpen, setIsFilterModalOpen] = useState<boolean>(false);
@@ -146,9 +147,9 @@ export const GitMyPartners = () => {
       propertyOwnerType: ele?.property?.propertyOwnerType?.title,
       land_details_id: ele?.land_details_id,
       room_id: ele?.details?.room[0]?.id || ele?.landDetails?.room[0]?.id,
-      sender_id: ele?.details?.room[0]?.sender_id,
-      receiver_id: ele?.details?.room[0]?.receiver_id,
-      currentStep:statusIndex(ele?.status)
+      sender_id: ele?.details?.room[0]?.sender_id|| ele?.landDetails?.room[0]?.sender_id,
+      receiver_id: ele?.details?.room[0]?.receiver_id|| ele?.landDetails?.room[0]?.receiver_id,
+      currentStep:statusIndex(ele)
     }))
   }, [newDataMemo, title,statusIndex])
   let fiterData = useMemo(() => {
