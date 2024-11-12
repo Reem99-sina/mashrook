@@ -47,7 +47,7 @@ const Map = dynamic(() => import("@/app/components/shared/map"), {
 });
 const PropertyDetails: React.FC<{ id: number }> = ({ id }: { id: number }) => {
   const [activeTab, setActiveTab] = useState<"location" | "details">(
-    "location"
+    "details"
   );
   const isDivisible = true;
   const [saved, setSaved] = useState(false);
@@ -116,10 +116,17 @@ const PropertyDetails: React.FC<{ id: number }> = ({ id }: { id: number }) => {
         message: reportText,
         property_id: Number(id),
       })
-    );
-
-    setIsDialogOpen(false);
-    setReportText("");
+    )
+      .then((res: any) => {
+        if (res.payload) {
+          setReportNotificationMessage(res.payload.message);
+          showNotificationMessage();
+        }
+      })
+      .finally(() => {
+        setIsDialogOpen(false);
+        setReportText("");
+      });
   };
 
   const handleCancelClick = () => {
@@ -186,13 +193,6 @@ const PropertyDetails: React.FC<{ id: number }> = ({ id }: { id: number }) => {
       dispatch(deleteSave());
     };
   }, [dispatch]);
-
-  useEffect(() => {
-    if (messageReport && status) {
-      setReportNotificationMessage(messageReport);
-      showNotificationMessage();
-    }
-  }, [messageReport, status]);
 
   const detailsContent = (
     <div className="mt-4">
