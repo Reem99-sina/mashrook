@@ -19,10 +19,6 @@ import {
 import { HiOutlineSquare3Stack3D } from "react-icons/hi2";
 import { BiArea, BiShareAlt } from "react-icons/bi";
 import { LuTag } from "react-icons/lu";
-import { RxArrowLeft } from "react-icons/rx";
-import { MdOutlineFlag } from "react-icons/md";
-import Image from "next/image";
-import JoinStatusButtons from "../components/propertyCard/JoinButton";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { dataReturn } from "@/redux/features/getRequest";
@@ -43,34 +39,16 @@ const Map = dynamic(() => import("@/app/components/shared/map"), {
   ssr: false,
 });
 const PropertyDetails: React.FC<{ id: any }> = ({ id }: { id: any }) => {
-  const [activeTab, setActiveTab] = useState<"location" | "details">(
-    "location"
-  );
-  const isDivisible = true;
-  const [saved, setSaved] = useState(false);
+  const [activeTab, setActiveTab] = useState<"location" | "details">("details");
   let router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
-  const [showNotification, setShowNotification] = useState(false);
-  const [notificationMessage, setNotificationMessage] = useState("");
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
-  const [reportText, setReportText] = useState("");
   const { user } = useSelector<RootState>((state) => state.register) as {
     user: userInfo;
     message: string;
   };
-  const [showReportNotification, setShowReportNotification] = useState(false);
-  const [reportNotificationMessage, setReportNotificationMessage] =
-    useState("");
-  let { loading, message, data, selectData, messageReport, status } =
-    useSelector<RootState>((state) => state.getRequest) as {
-      loading: boolean;
-      message: string;
-      data: dataReturn[];
-      selectData: dataReturn;
-      messageReport: string;
-      status: number;
-    };
+  let { selectData } = useSelector<RootState>((state) => state.getRequest) as {
+    selectData: dataReturn;
+  };
   const userOwnerShipArray = useMemo(() => {
     return selectData?.propertyDetailsOwnership?.filter(
       (ele: realEstatePartner) => ele?.user_id == user?.id
@@ -83,37 +61,11 @@ const PropertyDetails: React.FC<{ id: any }> = ({ id }: { id: any }) => {
           ele?.land_details_id == detail?.id || ele?.details_id == detail?.id
       );
   }, [userOwnerShipArray]);
-  const maxChars = 250;
 
-  const currentDealStatus = "متاح";
-  const showNotificationMessage = () => {
-    setShowReportNotification(true);
-    setTimeout(() => {
-      setShowReportNotification(false);
-    }, 3000);
-  };
-
-  const handleSaveClick = () => {
-    if (!saved) {
-      setNotificationMessage("تم الحفظ");
-    } else {
-      setNotificationMessage("تم الغاء الحفظ");
-    }
-    setSaved(!saved);
-    setShowNotification(true);
-    setTimeout(() => {
-      setShowNotification(false);
-    }, 3000);
-  };
   useEffect(() => {
     dispatch(fetchuser());
   }, [dispatch]);
-  useEffect(() => {
-    if (messageReport && status) {
-      setReportNotificationMessage(messageReport);
-      showNotificationMessage();
-    }
-  }, [messageReport, status]);
+
   const detailsContent = (
     <div className="mt-4">
       <div className="border-2 rounded-lg p-4">
