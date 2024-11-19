@@ -1,6 +1,6 @@
 "use client";
 import MainHeader from "@/app/components/header/MainHeader";
-import { BackButtonOutline } from "@/app/assets/svg";
+import { BackButtonOutline, MessageIcon } from "@/app/assets/svg";
 import { useRouter, useParams } from "next/navigation";
 import { OtherOfferCard } from "../myOtherOfferCrd";
 import { useEffect, useMemo } from "react";
@@ -49,13 +49,21 @@ function OtherOffer() {
         <div className="m-2">
           {dataOther?.map((offer: any, index: number) => (
             <>
-              <OtherOfferCard
-                key={index}
-                otheroffer={offer}
-              />
+              <OtherOfferCard key={index} otheroffer={offer} />
             </>
           ))}
         </div>
+        {dataOther?.length == 0 && (
+          <div className="flex flex-col items-center justify-center p-9 w-full">
+            <MessageIcon />
+            <p className="font-medium text-3xl text-[#6B7280] mt-6">
+              لا شيء هنا!
+            </p>
+            <p className="text-base font-normal text-[#9CA3AF] mt-3">
+              لا توجد اي محادثات هنا بعد
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );

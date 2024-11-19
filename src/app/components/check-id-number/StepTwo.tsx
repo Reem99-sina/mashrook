@@ -2,7 +2,7 @@ import React, { useState,useEffect } from 'react';
 // import { Brush } from '@/app/assets/svg';
 import { TextInput } from '../shared/text-input.component';
 import { Button } from '../shared/button.component';
-import {fetchuser,fetchAuthIdMakeCheck } from "@/redux/features/userSlice"
+import {fetchuser,fetchAuthIdMakeCheck, sendNationalIdUser } from "@/redux/features/userSlice"
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { userInfo } from "@/type/addrealestate"
@@ -20,9 +20,9 @@ interface UserInput {
 
 export const StepTwo: React.FC<Props> = ({ onFinished }) => {
     const dispatch = useDispatch<AppDispatch>();
-    const { user } = useSelector<RootState>(
+    const { user,TransactionId,code } = useSelector<RootState>(
         (state) => state.register
-      ) as {  user:userInfo };
+      ) as {  user:userInfo ,TransactionId:string|null,code:string|null};
   const [userInput, setUserInput] = useState<UserInput>({
     idNumber: '',
   });
@@ -38,8 +38,11 @@ export const StepTwo: React.FC<Props> = ({ onFinished }) => {
   const onSubmit=async()=>{
     const status=await validateForm({idNumber:userInput?.idNumber},NationalIdSchema,setErrors)
     if(status==true){
-        dispatch(fetchAuthIdMakeCheck())
-        onFinished()
+        dispatch(sendNationalIdUser({national_id:userInput?.idNumber})).then((res)=>{
+          if(!res.payload.status){
+            onFinished()
+          }
+        })
     }
   }
   useEffect(() => {
