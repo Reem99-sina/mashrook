@@ -97,15 +97,7 @@ const ModelForm:React.FC<IAppProps> = ({ modalRef,path })=> {
       </div>
 
       <div
-        className={`   ${
-          stepIndex === 0
-            ? 'bg-[url("/login.png")]'
-            : stepIndex === 1
-            ? 'bg-[url("/loginStep2.png")]'
-            : stepIndex === 2
-            ? 'bg-[url("/loginStep3.png")]'
-            : 'bg-[url("/loginStep4.png")]'
-        } bg-contain  bg-no-repeat`}
+        className={`  bg-contain  bg-no-repeat`}
       ></div>
        <ModelRules
               refModel={modalRefRules}

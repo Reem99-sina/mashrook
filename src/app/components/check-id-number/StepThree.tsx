@@ -1,7 +1,11 @@
 import React from "react";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAuthId, verifyNationalIdUser } from "@/redux/features/userSlice";
+import {
+  fetchAuthId,
+  fetchAuthIdMakeCheck,
+  verifyNationalIdUser,
+} from "@/redux/features/userSlice";
 import toast from "react-hot-toast";
 interface Props {
   onFinished: () => void;
@@ -10,9 +14,9 @@ interface Props {
 export const StepThree: React.FC<Props> = ({ onFinished }) => {
   const [error, setError] = React.useState("");
   const dispatch = useDispatch<AppDispatch>();
-  const { TransactionId,code } = useSelector<RootState>(
+  const { TransactionId, code } = useSelector<RootState>(
     (state) => state.register
-  ) as {  TransactionId:string|null,code:string|null};
+  ) as { TransactionId: string | null; code: string | null };
   const { token, auth } = useSelector<RootState>((state) => state.register) as {
     token: string;
     auth: boolean;
@@ -31,17 +35,24 @@ export const StepThree: React.FC<Props> = ({ onFinished }) => {
   //   }
   //   return () => clearInterval(interval);
   // }, [time, auth, onFinished]);
-  const sendVerify=()=>{
-    dispatch(verifyNationalIdUser({TransactionId:TransactionId})).then((res)=>{
-      if(!res.payload.status){
-        onFinished()
-      }else{
-        setError(res.payload.message)
-      }
-    }).catch((error)=>{
-      setError(error.message)
-    })
-  }
+  const sendVerify = () => {
+    if (auth) {
+      onFinished();
+    } else {
+      dispatch(verifyNationalIdUser({ TransactionId: TransactionId }))
+        .then((res) => {
+          if (!res.payload.status) {
+            dispatch(fetchAuthIdMakeCheck());
+            onFinished();
+          } else {
+            setError(res.payload.message);
+          }
+        })
+        .catch((error) => {
+          setError(error.message);
+        });
+    }
+  };
   React.useEffect(() => {
     dispatch(fetchAuthId());
   }, [dispatch]);
@@ -59,17 +70,14 @@ export const StepThree: React.FC<Props> = ({ onFinished }) => {
             </p>
           </div>
           <div className="mb-3 flex items-center justify-center  ">
-            <div className=" relative flex h-[90px] w-[389px] items-center  justify-center rounded-2xl border border-[#F4F6F9] bg-[#F4F6F9] ">
-              <div className="flex h-16 w-16 items-center justify-center rounded-full border-2 border-[#A4A4A4] bg-white">
-                <span
-                  className="text-lg font-bold text-[#7B8494]"
-                  onClick={sendVerify}
-                >
-                  {code}
-                </span>
+            <div className=" relative flex h-[90px] w-[389px] items-center  justify-center rounded-2xl border border-[#F4F6F9] bg-[#F4F6F9] cursor-pointer" onClick={sendVerify}>
+              <div
+                className="flex h-16 w-16 items-center justify-center rounded-full border-2 border-[#A4A4A4] bg-white "
+               
+              >
+                <span className="text-lg font-bold text-[#7B8494]">{code}</span>
               </div>
             </div>
-           
           </div>
           <p className="text-red-500 mb-3">{error}</p>
         </div>
