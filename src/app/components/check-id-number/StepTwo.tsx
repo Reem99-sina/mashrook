@@ -48,7 +48,6 @@ export const StepTwo: React.FC<Props> = ({ onFinished }) => {
       setErrors
     );
     if (status == true) {
-      setTimeout(() => {
         dispatch(sendNationalIdUser({ national_id: userInput?.idNumber }))
           .then((res) => {
             if (!res.payload.status) {
@@ -60,7 +59,6 @@ export const StepTwo: React.FC<Props> = ({ onFinished }) => {
           .finally(() => {
             setclick(false);
           });
-      }, 120000);
     }
   };
   useEffect(() => {
