@@ -16,7 +16,7 @@ interface Props {
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   value?: string;
   input?: string;
-  onFinished: () => void;
+  onFinished: (stepNum?: number) => void;
 }
 interface UserInput {
   idNumber: string;
@@ -25,6 +25,7 @@ interface UserInput {
 export const StepTwo: React.FC<Props> = ({ onFinished }) => {
   const dispatch = useDispatch<AppDispatch>();
   const [error, setError] = useState("");
+  const [click, setclick] = useState(false);
   const { user, TransactionId, code } = useSelector<RootState>(
     (state) => state.register
   ) as { user: userInfo; TransactionId: string | null; code: string | null };
@@ -34,33 +35,39 @@ export const StepTwo: React.FC<Props> = ({ onFinished }) => {
   const [errors, setErrors] = useState<UserInput>({
     idNumber: "",
   });
-
   const IsDisabled = userInput.idNumber == "";
 
   const clearUserInput = () => {
     setUserInput({ idNumber: "" });
   };
   const onSubmit = async () => {
+    setclick(true);
     const status = await validateForm(
       { idNumber: userInput?.idNumber },
       NationalIdSchema,
       setErrors
     );
     if (status == true) {
-      dispatch(sendNationalIdUser({ national_id: userInput?.idNumber })).then(
-        (res) => {
-          if (!res.payload.status) {
-            onFinished();
-          } else {
-            
-            setError(res.payload.message);
-          }
-        }
-      );
+      setTimeout(() => {
+        dispatch(sendNationalIdUser({ national_id: userInput?.idNumber }))
+          .then((res) => {
+            if (!res.payload.status) {
+              onFinished();
+            } else {
+              setError(res.payload.message);
+            }
+          })
+          .finally(() => {
+            setclick(false);
+          });
+      }, 120000);
     }
   };
   useEffect(() => {
     dispatch(fetchuser());
+    //   return () => {
+    //   clearInterval(interval);
+    // };
   }, [dispatch]);
   return (
     <div>
@@ -103,6 +110,7 @@ export const StepTwo: React.FC<Props> = ({ onFinished }) => {
               ))}
             <Button
               disabled={IsDisabled}
+              isLoading={click}
               text={IsDisabled ? "تسجيل الدخول" : "تحقق من الهوية"}
               className={
                 "mt-3 flex h-10 w-[325px] items-center justify-center bg-blue-450"

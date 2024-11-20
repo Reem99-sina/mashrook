@@ -6,13 +6,16 @@ import {
   fetchAuthIdMakeCheck,
   verifyNationalIdUser,
 } from "@/redux/features/userSlice";
-import toast from "react-hot-toast";
+import { IoIosArrowForward } from "react-icons/io";
+import clsx from "clsx";
 interface Props {
-  onFinished: () => void;
+  onFinished: (stepNumber?: number) => void;
 }
 
 export const StepThree: React.FC<Props> = ({ onFinished }) => {
   const [error, setError] = React.useState("");
+  
+
   const dispatch = useDispatch<AppDispatch>();
   const { TransactionId, code } = useSelector<RootState>(
     (state) => state.register
@@ -21,20 +24,7 @@ export const StepThree: React.FC<Props> = ({ onFinished }) => {
     token: string;
     auth: boolean;
   };
-  // React.useEffect(() => {
-  //   let interval: NodeJS.Timeout;
-  //   if (auth == true) {
-  //     onFinished();
-  //   }
-  //   if (time > 0) {
-  //     interval = setInterval(() => {
-  //       settime((prevTimer) => prevTimer - 1);
-  //     }, 1000);
-  //   } else if (time == 0) {
-  //     onFinished();
-  //   }
-  //   return () => clearInterval(interval);
-  // }, [time, auth, onFinished]);
+ 
   const sendVerify = () => {
     if (auth) {
       onFinished();
@@ -61,24 +51,28 @@ export const StepThree: React.FC<Props> = ({ onFinished }) => {
       <div className="flex h-full  w-full flex-col items-center justify-center  text-center	 ">
         <div className="mt-8 flex w-[453px] flex-col items-center rounded-lg border border-[#DCDFE4]">
           <div className="mb-3 mt-8">
-            <p className="text-[20px] font-bold"> تطابق رمز التحقق</p>
-            <p className=" mt-3 text-sm text-[#7B8080]">
-              اختر رمز التحقق المرسل كما هو مطابق بالمرسل على رقم{" "}
-            </p>
-            <p className="text-sm text-[#7B8080]">
-              جوالك المسجل لدى مركز المعلومات الوطني{" "}
-            </p>
-          </div>
-          <div className="mb-3 flex items-center justify-center  ">
-            <div className=" relative flex h-[90px] w-[389px] items-center  justify-center rounded-2xl border border-[#F4F6F9] bg-[#F4F6F9] cursor-pointer" onClick={sendVerify}>
-              <div
-                className="flex h-16 w-16 items-center justify-center rounded-full border-2 border-[#A4A4A4] bg-white "
-               
-              >
-                <span className="text-lg font-bold text-[#7B8494]">{code}</span>
-              </div>
+            <div className="flex items-center justify-end gap-x-3">
+              <p className="text-[20px] font-bold text-black"> رمز التحقق</p>
+              <IoIosArrowForward
+                className="cursor-pointer text-lg"
+                onClick={() => onFinished(1)}
+              />
             </div>
           </div>
+          <div className="mb-3 flex items-center justify-center  ">
+            <div
+              className={clsx(
+                " relative flex p-[45px] items-center  justify-center rounded-2xl border border-[#F4F6F9] bg-[#ddf3f3]",
+               "cursor-pointer"
+              )}
+              onClick={sendVerify}
+            >
+              <span className="text-xl font-bold text-black">{code}</span>
+            </div>
+          </div>
+          <p className=" mt-3 text-sm text-[#7B8080]">
+            الرجاء فتح تطبيق نفاذ و تأكيد الطلب باختيار الرقم أعلاه
+          </p>
           <p className="text-red-500 mb-3">{error}</p>
         </div>
       </div>

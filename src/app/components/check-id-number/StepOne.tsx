@@ -14,7 +14,7 @@ export const StepOne: React.FC<Props> = ({ onFinished, className }) => {
     <div>
       <div className='mt-8 flex h-[246px] w-full flex-col items-center rounded-lg border border-[#DCDFE4]'>
         <div className='mb-3 mt-8 items-center justify-center text-center'>
-          <p className='text-[20px] font-black text-[#58595B]'> تسجيل الدخول</p>
+          <p className='text-[20px] font-black text-black'> تسجيل الدخول</p>
           <p className='mt-3 text-sm text-blue-gray-400'>
             برجاء ادخال رقم الهوية الوطنية المسجل
             <br />
