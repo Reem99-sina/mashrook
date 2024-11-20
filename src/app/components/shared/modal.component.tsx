@@ -14,10 +14,11 @@ interface Props {
   children: React.ReactNode;
   size?: DialogProps["size"];
   className?: string;
+  functiontoClose?: () => void;
 }
 
- export const Modal = forwardRef<ModalRef, Props>(
-  ({ children, size, className }, ref) => {
+export const Modal = forwardRef<ModalRef, Props>(
+  ({ children, size, className, functiontoClose }, ref) => {
     const [isVisible, setIsVisible] = React.useState(false);
 
     useImperativeHandle(ref, () => ({
@@ -29,7 +30,12 @@ interface Props {
       <Dialog
         open={isVisible}
         size={size}
-        handler={() => setIsVisible(false)}
+        handler={() => {
+          setIsVisible(false);
+          if (functiontoClose) {
+            functiontoClose();
+          }
+        }}
         className={clsx("border-0 focus:border-0", className)}
         placeholder={undefined}
         onPointerEnterCapture={undefined}
@@ -40,4 +46,4 @@ interface Props {
     );
   }
 );
-Modal.displayName = 'Modal';
+Modal.displayName = "Modal";

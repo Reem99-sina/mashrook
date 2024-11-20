@@ -68,7 +68,7 @@ const ModelForm: React.FC<IAppProps> = ({ modalRef, path }) => {
   }
   
   return (
-    <Modal ref={modalRef} size="sm">
+    <Modal ref={modalRef} size="sm" functiontoClose={()=>setStepIndex(0)}>
       <div className="flex  justify-center items-center">
         <div className="flex  flex-col  ">
           <div className="flex justify-between items-center">
@@ -77,6 +77,7 @@ const ModelForm: React.FC<IAppProps> = ({ modalRef, path }) => {
                 if(stepIndex==2){
                   verifyNationalId()
                 }
+                setStepIndex(0)
                 modalRef.current?.close();
               }}
               className="h-10 w-10 cursor-pointer m-3"

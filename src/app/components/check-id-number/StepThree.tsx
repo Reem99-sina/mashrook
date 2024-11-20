@@ -14,7 +14,7 @@ interface Props {
 
 export const StepThree: React.FC<Props> = ({ onFinished }) => {
   const [error, setError] = React.useState("");
-  
+  const [appear, setAppear] = React.useState(false);
 
   const dispatch = useDispatch<AppDispatch>();
   const { TransactionId, code } = useSelector<RootState>(
@@ -24,7 +24,7 @@ export const StepThree: React.FC<Props> = ({ onFinished }) => {
     token: string;
     auth: boolean;
   };
- 
+
   const sendVerify = () => {
     if (auth) {
       onFinished();
@@ -35,7 +35,11 @@ export const StepThree: React.FC<Props> = ({ onFinished }) => {
             dispatch(fetchAuthIdMakeCheck());
             onFinished();
           } else {
-            setError(res.payload.message);
+            setError(
+              res.payload.message == "There is an active verification."
+                ? "يجب الانتظار 3 دقائق"
+                : res.payload.message
+            );
           }
         })
         .catch((error) => {
@@ -43,6 +47,11 @@ export const StepThree: React.FC<Props> = ({ onFinished }) => {
         });
     }
   };
+  React.useEffect(() => {
+    setTimeout(() => {
+      setAppear(true);
+    }, 120000);
+  }, []);
   React.useEffect(() => {
     dispatch(fetchAuthId());
   }, [dispatch]);
@@ -53,17 +62,19 @@ export const StepThree: React.FC<Props> = ({ onFinished }) => {
           <div className="mb-3 mt-8">
             <div className="flex items-center justify-end gap-x-3">
               <p className="text-[20px] font-bold text-black"> رمز التحقق</p>
-              <IoIosArrowForward
-                className="cursor-pointer text-lg"
-                onClick={() => onFinished(1)}
-              />
+              {appear && (
+                <IoIosArrowForward
+                  className="cursor-pointer text-2xl"
+                  onClick={() => onFinished(1)}
+                />
+              )}
             </div>
           </div>
           <div className="mb-3 flex items-center justify-center  ">
             <div
               className={clsx(
                 " relative flex p-[45px] items-center  justify-center rounded-2xl border border-[#F4F6F9] bg-[#ddf3f3]",
-               "cursor-pointer"
+                "cursor-pointer"
               )}
               onClick={sendVerify}
             >
@@ -73,7 +84,7 @@ export const StepThree: React.FC<Props> = ({ onFinished }) => {
           <p className=" mt-3 text-sm text-[#7B8080]">
             الرجاء فتح تطبيق نفاذ و تأكيد الطلب باختيار الرقم أعلاه
           </p>
-          <p className="text-red-500 mb-3">{error}</p>
+          {/* <p className="text-red-500 mb-3">{error}</p> */}
         </div>
       </div>
     </div>
