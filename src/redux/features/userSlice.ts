@@ -10,8 +10,8 @@ export interface userRegister {
 interface userImage {
   image: File;
 }
-interface userDeleteToken{
-  token:string
+interface userDeleteToken {
+  token: string;
 }
 interface userUpdata {
   username?: string;
@@ -56,14 +56,17 @@ export const fetchAuthId = createAsyncThunk("auth/fetchAuthId", async () => {
   const userData = Cookie.get("auth");
   if (userData != "undefined" && userData) {
     return JSON.parse(userData);
-  }else{
-    return false
+  } else {
+    return false;
   }
 });
-export const fetchAuthIdMakeCheck = createAsyncThunk("auth/fetchAuthIdMakeCheck", async () => {
-  const userData = Cookie.set("auth",String(true));
-  return true
-});
+export const fetchAuthIdMakeCheck = createAsyncThunk(
+  "auth/fetchAuthIdMakeCheck",
+  async () => {
+    const userData = Cookie.set("auth", String(true));
+    return true;
+  }
+);
 export const updateUserImage = createAsyncThunk(
   "auth/updateUserImage",
   async (data: userImage) => {
@@ -105,24 +108,56 @@ export const deleteUser = createAsyncThunk("auth/deleteuser", async () => {
     .catch((error) => error?.response?.data); // Adjust your endpoint as necessary
   return response; // Return the user data from API response
 });
-export const deleteTokenUser = createAsyncThunk("auth/deleteTokenuser", async (data:userDeleteToken) => {
-  const response = await axios
-    .delete(`https://server.mashrook.sa/user/logout/${data?.token}`, {
-      headers: {
-        Authorization: Cookie.get("token"),
-      },
-    })
-    .then((response) => response.data)
-    .catch((error) => error?.response?.data); // Adjust your endpoint as necessary
-  return response; // Return the user data from API response
-});
+export const deleteTokenUser = createAsyncThunk(
+  "auth/deleteTokenuser",
+  async (data: userDeleteToken) => {
+    const response = await axios
+      .delete(`https://server.mashrook.sa/user/logout/${data?.token}`, {
+        headers: {
+          Authorization: Cookie.get("token"),
+        },
+      })
+      .then((response) => response.data)
+      .catch((error) => error?.response?.data); // Adjust your endpoint as necessary
+    return response; // Return the user data from API response
+  }
+);
+export const sendNationalIdUser = createAsyncThunk(
+  "transaction",
+  async (data: { national_id: string }) => {
+    return await axios
+      .post(`https://server.mashrook.sa/transaction`, data, {
+        headers: {
+          Authorization: Cookie.get("token"),
+        },
+      })
+      .then((response) => response.data)
+      .catch((error) => error?.response?.data);
+  }
+);
+export const verifyNationalIdUser = createAsyncThunk(
+  "verify-transaction",
+  async (data: { TransactionId: string|null }) => {
+    return await axios
+      .post(`https://server.mashrook.sa/transaction/verify-transaction`, data, {
+        headers: {
+          Authorization: Cookie.get("token"),
+        },
+      })
+      .then((response) => response.data)
+      .catch((error) => error?.response?.data);
+  }
+);
+// https://server.mashrook.sa/transaction
 const initialstate = {
   loading: false,
   message: "",
   data: null,
   token: "",
   user: null,
-  auth:false
+  auth: false,
+  TransactionId: null,
+  code: null,
 };
 
 const userSlice = createSlice({
@@ -137,14 +172,19 @@ const userSlice = createSlice({
     removeTokenUser: (state) => {
       state.token = "";
       state.user = null;
-      state.auth=false
+      state.auth = false;
+      state.TransactionId = null;
+      state.code = null;
     },
     removeMessage: (state) => {
       state.message = "";
-    }, removeLogin: (state) => {
+    },
+    removeLogin: (state) => {
       state.message = "";
       state.data = null;
       state.user = null;
+      state.TransactionId = null;
+      state.code = null;
     },
   },
   extraReducers: (builder) => {
@@ -218,8 +258,9 @@ const userSlice = createSlice({
       }),
       builder.addCase(deleteUser.rejected, (state, action) => {
         state.message = action.error.message ? action.error.message : "error";
-      }),builder.addCase(getUserRequest.fulfilled, (state, action) => {
-        if(action?.payload?.data){
+      }),
+      builder.addCase(getUserRequest.fulfilled, (state, action) => {
+        if (action?.payload?.data) {
           Cookie.set("user", JSON.stringify(action?.payload?.data));
         }
         state.user = action?.payload?.data;
@@ -230,7 +271,7 @@ const userSlice = createSlice({
         Cookie.remove("token");
         Cookie.remove("user");
       }),
-    builder.addCase(fetchAuthId.fulfilled, (state, action) => {
+      builder.addCase(fetchAuthId.fulfilled, (state, action) => {
         state.auth = action.payload ? action.payload : "";
       }),
       builder.addCase(fetchAuthId.pending, (state, action) => {
@@ -240,7 +281,7 @@ const userSlice = createSlice({
         state.auth = false;
       }),
       builder.addCase(fetchAuthIdMakeCheck.fulfilled, (state, action) => {
-        state.auth = action.payload ? true:false;
+        state.auth = action.payload ? true : false;
       }),
       builder.addCase(fetchAuthIdMakeCheck.pending, (state, action) => {
         state.auth = false;
@@ -248,8 +289,20 @@ const userSlice = createSlice({
       builder.addCase(fetchAuthIdMakeCheck.rejected, (state, action) => {
         state.auth = false;
       });
-      // fetchAuthIdMakeCheck
+    builder.addCase(sendNationalIdUser.fulfilled, (state, action) => {
+      state.TransactionId = action.payload.data?.TransactionId;
+      state.code = action.payload.data?.code;
+    }),
+      builder.addCase(sendNationalIdUser.pending, (state, action) => {
+        state.TransactionId = null;
+        state.code = null;
+      }),
+      builder.addCase(sendNationalIdUser.rejected, (state, action) => {
+        state.TransactionId = null;
+        state.code = null;
+      });
   },
 });
-export const { removeUser, removeTokenUser, removeMessage,removeLogin } = userSlice.actions;
+export const { removeUser, removeTokenUser, removeMessage, removeLogin } =
+  userSlice.actions;
 export default userSlice.reducer;
