@@ -50,7 +50,7 @@ export const StepThree: React.FC<Props> = ({ onFinished }) => {
   React.useEffect(() => {
     setTimeout(() => {
       setAppear(true);
-    }, 120000);
+    }, 180000);
   }, []);
   React.useEffect(() => {
     dispatch(fetchAuthId());
@@ -58,8 +58,8 @@ export const StepThree: React.FC<Props> = ({ onFinished }) => {
   return (
     <div>
       <div className="flex h-full  w-full flex-col items-center justify-center  text-center	 ">
-        <div className="mt-8 flex w-[453px] flex-col items-center rounded-lg border border-[#DCDFE4]">
-          <div className="mb-3 mt-8">
+        <div className="my-4 flex w-[453px] flex-col items-center rounded-lg border border-[#DCDFE4] pb-2">
+          <div className="mb-3 mt-3">
             <div className="flex items-center justify-end gap-x-3">
               <p className="text-[20px] font-bold text-black"> رمز التحقق</p>
               {appear && (
