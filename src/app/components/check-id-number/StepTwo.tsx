@@ -58,7 +58,12 @@ export const StepTwo: React.FC<Props> = ({ onFinished }) => {
           })
           .finally(() => {
             setclick(false);
+            setErrors({idNumber:""})
           });
+    }else{
+      setclick(false);
+    
+
     }
   };
   useEffect(() => {
@@ -100,18 +105,18 @@ export const StepTwo: React.FC<Props> = ({ onFinished }) => {
               type={"number"}
               className="mt-3 h-10 w-[280px] rounded-md border border-[#E2E2E2] bg-[#fff] px-3 py-1 font-normal !text-black"
             />
-            {errors?.idNumber ||
-              (error && (
-                <p className="text-xs text-red-600 dark:text-red-500 text-right">
+            {(errors?.idNumber ||
+              error )&& (
+                <p className="text-xs !text-red-600 text-right">
                   {String(errors?.idNumber) || error}
                 </p>
-              ))}
+              )}
             <Button
               disabled={IsDisabled}
               isLoading={click}
               text={IsDisabled ? "تسجيل الدخول" : "تحقق من الهوية"}
               className={
-                "mt-3 flex h-10 w-[325px] items-center justify-center bg-blue-450"
+                "my-3 flex h-10 w-[325px] items-center justify-center bg-blue-450"
               }
               onClick={onSubmit}
             />

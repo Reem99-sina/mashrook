@@ -56,7 +56,7 @@ const ModelForm: React.FC<IAppProps> = ({ modalRef, path }) => {
     .then((res) => {
       if (!res.payload.status) {
         dispatch(fetchAuthIdMakeCheck());
-        setStepIndex(stepIndex+1)
+        goNext()
       } else {
         toast.error(res.payload.message)
         setError(res.payload.message);
