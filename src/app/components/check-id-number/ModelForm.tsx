@@ -68,7 +68,7 @@ const ModelForm: React.FC<IAppProps> = ({ modalRef, path }) => {
   }
   
   return (
-    <Modal ref={modalRef} size="sm" functiontoClose={()=>setStepIndex(0)}>
+    <Modal ref={modalRef} size="sm" functiontoClose={()=>{}}>
       <div className="flex  justify-center items-center">
         <div className="flex  flex-col  ">
           <div className="flex justify-between items-center">

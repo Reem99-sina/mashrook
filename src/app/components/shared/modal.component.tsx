@@ -31,9 +31,10 @@ export const Modal = forwardRef<ModalRef, Props>(
         open={isVisible}
         size={size}
         handler={() => {
-          setIsVisible(false);
           if (functiontoClose) {
             functiontoClose();
+          } else {
+            setIsVisible(false);
           }
         }}
         className={clsx("border-0 focus:border-0", className)}

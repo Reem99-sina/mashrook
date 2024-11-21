@@ -36,14 +36,12 @@ export const StepThree: React.FC<Props> = ({ onFinished }) => {
             onFinished();
           } else {
             setError(
-              res.payload.message == "There is an active verification."
-                ? "يجب الانتظار 3 دقائق"
-                : res.payload.message
+               res.payload.message
             );
           }
         })
         .catch((error) => {
-          setError(error.message);
+          setError( error.message);
         });
     }
   };
@@ -84,7 +82,7 @@ export const StepThree: React.FC<Props> = ({ onFinished }) => {
           <p className=" mt-3 text-sm text-[#7B8080]">
             الرجاء فتح تطبيق نفاذ و تأكيد الطلب باختيار الرقم أعلاه
           </p>
-          {/* <p className="text-red-500 mb-3">{error}</p> */}
+          <p className="text-red-500 mb-3">{error}</p>
         </div>
       </div>
     </div>
