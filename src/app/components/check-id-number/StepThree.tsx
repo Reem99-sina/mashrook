@@ -81,7 +81,7 @@ export const StepThree: React.FC<Props> = ({ onFinished }) => {
             الرجاء فتح تطبيق نفاذ و تأكيد الطلب باختيار الرقم أعلاه
           </p>
           <p className=" mt-3 text-sm text-[#7B8080]">
-            بعد تاكيد الرقم علي نفاذ اضغط علي رمز التحقق لاستكمال طلبك
+            بعد تاكيد الرقم علي نفاذ اضغط علي رمز التحقق للدخول للصفحة
           </p>
           <p className="text-red-500 mb-3">{error}</p>
         </div>
