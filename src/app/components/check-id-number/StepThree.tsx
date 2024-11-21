@@ -35,13 +35,11 @@ export const StepThree: React.FC<Props> = ({ onFinished }) => {
             dispatch(fetchAuthIdMakeCheck());
             onFinished();
           } else {
-            setError(
-               res.payload.message
-            );
+            setError(res.payload.message);
           }
         })
         .catch((error) => {
-          setError( error.message);
+          setError(error.message);
         });
     }
   };
@@ -81,6 +79,9 @@ export const StepThree: React.FC<Props> = ({ onFinished }) => {
           </div>
           <p className=" mt-3 text-sm text-[#7B8080]">
             الرجاء فتح تطبيق نفاذ و تأكيد الطلب باختيار الرقم أعلاه
+          </p>
+          <p className=" mt-3 text-sm text-[#7B8080]">
+            بعد تاكيد الرقم علي نفاذ اضغط علي رمز التحقق لاستكمال طلبك
           </p>
           <p className="text-red-500 mb-3">{error}</p>
         </div>
