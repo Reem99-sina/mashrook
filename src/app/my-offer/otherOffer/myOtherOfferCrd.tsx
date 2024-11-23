@@ -169,7 +169,7 @@ export const OtherOfferCard: React.FC<ChatCardProps> = ({
                     </div>
                     <div className="rounded-xl px-2 flex items-center gap-x-2">
                       <LuTag className="bg-gray-200 " />
-                      <p> سعر المتر بالريال </p>
+                      <p> سعر المتر  </p>
                       <p className="text-base  md:text-xs lg:text-sm mx-2">
                         {FormatNumber(detail?.price)} {"ريال"}
                       </p>

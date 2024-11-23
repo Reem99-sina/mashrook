@@ -140,7 +140,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ page, limit }) => {
                 <div className="   items-start my-1">
                   <div className=" rounded-xl px-2 flex items-center gap-x-2">
                     <LuTag className="bg-gray-200" />
-                    <p> سعر المتر بالريال </p>
+                    <p> سعر المتر  </p>
                     <p className="text-base mx-2">
                       {FormatNumber(ele?.details[i]?.price)} {"ريال"}
                     </p>
@@ -231,7 +231,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ page, limit }) => {
                 <div className="   items-start my-1">
                   <div className=" rounded-xl px-2 flex items-center gap-x-2">
                     <LuTag className="bg-gray-200" />
-                    <p> سعر المتر بالريال </p>
+                    <p> سعر المتر  </p>
                     <p className="text-base mx-2">
                       {FormatNumber(ele?.landDetails[i]?.price)} {"ريال"}
                     </p>
