@@ -2,15 +2,14 @@ import React from "react";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  fetchAuthId,
   fetchAuthIdMakeCheck,
-  verifyNationalIdUser,
 } from "@/redux/features/userSlice";
 import { IoIosArrowForward } from "react-icons/io";
 import clsx from "clsx";
 import mqtt from 'mqtt';
 
 import { ModalRef } from "../shared/modal.component";
+import toast from "react-hot-toast";
 interface Props {
   onFinished: (stepNumber?: number) => void;
   modalRef: React.RefObject<ModalRef>;
@@ -36,11 +35,11 @@ export const StepThree: React.FC<Props> = ({ onFinished, modalRef }) => {
   //   }
   // };
   React.useEffect(() => {
-    const client = mqtt.connect('wss://broker.hivemq.com:8884/mqtt');
+    const client = mqtt.connect(process.env.NEXT_PUBLIC_MQTT!);
 
     client.on('connect', () => {
       console.log('Connected to MQTT broker');
-      client.subscribe('mashrook-transaction-status', (err) => {
+      client.subscribe('mashrook-transaction-status', (err:Error|null) => {
         if (err) {
           console.error('Subscription failed:', err);
         } else {
@@ -48,7 +47,7 @@ export const StepThree: React.FC<Props> = ({ onFinished, modalRef }) => {
         }
       });
     });
-    client.on('message', (topic, message) => {
+    client.on('message', (topic:string, message:Buffer) => {
       const data = JSON.parse(message.toString());
        if(data.TransactionId == TransactionId){
        if (data.Status == "COMPLETED") {
@@ -57,15 +56,15 @@ export const StepThree: React.FC<Props> = ({ onFinished, modalRef }) => {
         } else if (data.Status == "REJECTED") {
           onFinished(0);
           modalRef?.current?.close();
+          toast.error("لم يتم تأكيد الكود علي منصة نفاذ")
         }
        }
     });
-
-    // Clean up the client connection when the component is unmounted
     return () => {
       client.end();
     };
   }, []);
+
   return (
     <div>
       <div className="flex h-full  w-full flex-col items-center justify-center  text-center	 ">
