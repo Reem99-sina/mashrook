@@ -53,7 +53,7 @@ const CircularProgressBar: React.FC<CircularProgressBarProps> = ({
         dy=".3em"
         textAnchor="middle"
         className="percentage-text"
-        fontSize="12px"
+        fontSize="16px"
         fill= {strokeColor}
       >
         {`${percentage}%`}

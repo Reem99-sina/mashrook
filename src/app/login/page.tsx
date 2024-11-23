@@ -199,7 +199,7 @@ const Login: React.FC = () => {
           </div>
           <div className="text-right">
             <Link href="/login-otp" className="text-blue-450 text-right">
-              عن طريق OTP تسجيل الدخول
+               تسجيل الدخول بارسال رمز التحقق عبر البريد
             </Link>
           </div>
         </form>
