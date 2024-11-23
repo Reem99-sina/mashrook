@@ -3,8 +3,8 @@
 import React, { useEffect, useState } from "react";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
-import {bannerinfo} from "@/type/addrealestate"
-import {getBanners}from "@/redux/features/getbanner"
+import { bannerinfo } from "@/type/addrealestate";
+import { getBanners } from "@/redux/features/getbanner";
 import Image from "next/image";
 import {
   Bcard1,
@@ -32,21 +32,23 @@ const images = [
 
 export default function CarouselTransition() {
   const dispatch = useDispatch<AppDispatch>();
-  const {  data } = useSelector<RootState>(
+  const { data } = useSelector<RootState>(
     (state) => state.banners
   ) as bannerinfo;
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
+      if (data) {
+        setCurrentIndex((prevIndex) => (prevIndex + 1) % data?.length);
+      }
     }, 4000);
     return () => clearInterval(interval);
-  }, []);
-  useEffect(()=>{
-     dispatch(getBanners())
-  },[dispatch])
-  
+  }, [data]);
+  useEffect(() => {
+    dispatch(getBanners());
+  }, [dispatch]);
+
   return (
     <div className="relative w-full h-auto rounded-xl">
       {data?.map((image, index) => (

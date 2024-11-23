@@ -6,6 +6,7 @@ import { Cairo } from "next/font/google";
 import { ReduxProvider } from "./components/provider/ReduxProvider";
 import ToasterContext from "./components/provider/ToasterProvider";
 // const inter = Inter({ subsets: ["latin"] });
+require("dotenv").config()
 const cairo = Cairo({
   subsets: ["latin", "arabic"],
   weight: ["400", "700"],

@@ -26,7 +26,7 @@ import { Modal, ModalRef } from "../components/shared/modal.component";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import Stepper from "../components/shared/Stepper";
-import { BsChatSquareText } from "react-icons/bs";
+import { BsChatSquareText, BsDatabase } from "react-icons/bs";
 import Link from "next/link";
 import Cookie from "js-cookie";
 import { Button } from "../components/shared/button.component";
@@ -44,6 +44,7 @@ import {
 import { useRouter } from "next/navigation";
 import { FormatNumber } from "@/app/hooks/formatNumber";
 import { detailOneInfo } from "@/type/addrealestate";
+import { CiWallet } from "react-icons/ci";
 interface ChatCardProps {
   title: string;
   date: string;
@@ -122,7 +123,7 @@ export const OfferCard: React.FC<ChatCardProps> = ({
     message: string;
     data: any;
   };
-  
+
   const titleStatus = useMemo(() => {
     return PartnerStage?.find((partner) => partner?.data == status)?.label;
   }, [status, PartnerStage]);
@@ -304,27 +305,36 @@ export const OfferCard: React.FC<ChatCardProps> = ({
                             `قطعة رقم  ${detail?.plan_number}`}
                       </p>
                     </div>
-                    <div className="flex items-center  justify-start">
-                      <GoLocation />
-                      <p className="px-2">
-                        مدينة {city}، {district}
-                      </p>
-                    </div>
                     <div className="flex flex-col gap-y-2 my-2 flex-wrap items-start">
-                      <div className="bg-gray-200 rounded-xl px-2 flex items-center">
-                        <LuTag />
-                        <p className="text-base  md:text-xs lg:text-sm mx-2">
-                          {FormatNumber(detail?.price)} {"ريال"}
-                          <span className="text-[#3B73B9]">
-                            {" "}
-                            (بدون ضريبة التصرفات العقارية و السعي)
-                          </span>
-                        </p>
-                      </div>
-                      <div className="bg-gray-200 rounded-xl px-2 mr-4 flex items-center">
-                        <BiArea />
+                      <div className=" rounded-xl px-2  flex items-center gap-x-2">
+                        <BiArea className="bg-gray-200 " />
+                        <p> مساحة الارض</p>
                         <p className="text-base md:text-xs lg:text-sm mx-2 ">
                           {detail?.area} م<sup>2</sup>
+                        </p>
+                      </div>
+                      <div className="rounded-xl px-2 flex items-center gap-x-2">
+                        <LuTag className="bg-gray-200 " />
+                        <p> سعر المتر بالريال </p>
+                        <p className="text-base  md:text-xs lg:text-sm mx-2">
+                          {FormatNumber(detail?.price)} {"ريال"}
+                        </p>
+                      </div>
+                      <div className=" rounded-xl px-2  flex items-center gap-x-2">
+                        <BsDatabase className="bg-gray-200" />
+                        <p>الاجمالي</p>
+                        <p className="text-base mx-2 ">
+                          {detail?.type
+                            ? FormatNumber(detail?.price)
+                            : FormatNumber(detail?.price * detail?.area)}{" "}
+                          ريال
+                        </p>
+                      </div>
+                      <div className=" rounded-xl px-2  flex items-center gap-x-2 ">
+                        <CiWallet className="bg-gray-200" />
+                        <p> المتاح</p>
+                        <p className="text-base mx-2 ">
+                          {FormatNumber(detail?.available_price)} ريال
                         </p>
                       </div>
                     </div>
