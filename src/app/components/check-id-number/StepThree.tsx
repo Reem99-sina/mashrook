@@ -40,11 +40,11 @@ export const StepThree: React.FC<Props> = ({ onFinished, modalRef }) => {
 
     client.on('connect', () => {
       console.log('Connected to MQTT broker');
-      client.subscribe('transaction/status', (err) => {
+      client.subscribe('mashrook-transaction-status', (err) => {
         if (err) {
           console.error('Subscription failed:', err);
         } else {
-          console.log('Subscribed to transaction/status');
+          console.log('Subscribed');
         }
       });
     });
