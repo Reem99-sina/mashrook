@@ -36,7 +36,7 @@ export const StepThree: React.FC<Props> = ({ onFinished, modalRef }) => {
   //   }
   // };
   React.useEffect(() => {
-    const client = mqtt.connect('wss://broker.hivemq.com:8000/mqtt');
+    const client = mqtt.connect('wss://broker.hivemq.com:8884/mqtt');
 
     client.on('connect', () => {
       console.log('Connected to MQTT broker');
