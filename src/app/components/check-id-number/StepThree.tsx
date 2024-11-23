@@ -8,6 +8,8 @@ import {
 } from "@/redux/features/userSlice";
 import { IoIosArrowForward } from "react-icons/io";
 import clsx from "clsx";
+import mqtt from 'mqtt';
+
 import { ModalRef } from "../shared/modal.component";
 interface Props {
   onFinished: (stepNumber?: number) => void;
@@ -31,55 +33,39 @@ export const StepThree: React.FC<Props> = ({ onFinished, modalRef }) => {
   const sendVerify = () => {
     if (auth) {
       onFinished();
-    } else {
-      dispatch(verifyNationalIdUser({ TransactionId: TransactionId }))
-        .then((res) => {
-          if (!res.payload.status) {
-            dispatch(fetchAuthIdMakeCheck());
-            onFinished();
-          } else {
-            setError(res.payload.message);
-          }
-        })
-        .catch((error) => {
-          setError(error.message);
-        });
     }
   };
   React.useEffect(() => {
-    setTimeout(() => {
-      setAppear(true);
-    }, 180000);
-  }, []);
-  React.useEffect(() => {
-    const interval = setInterval(() => {
-      dispatch(verifyNationalIdUser({ TransactionId: TransactionId })).then(
-        (data) => {
-         
-          // if (data.status === "confirmed") {
-         
-          setStatus(data?.payload?.data?.Status);
-          if (data?.payload?.data?.Status == "COMPLETED") {
-            dispatch(fetchAuthIdMakeCheck());
-            onFinished();
-            clearInterval(interval);
-          } else if (data?.payload?.data?.Status == "REJECTED") {
-            onFinished(0);
-            modalRef?.current?.close();
-            clearInterval(interval);
-          } else if (appear == true && data?.payload?.data?.Status == null) {
-            onFinished(0);
-            modalRef?.current?.close();
-            clearInterval(interval);
-          }
+    const client = mqtt.connect('ws://broker.hivemq.com:8000/mqtt');
+
+    client.on('connect', () => {
+      console.log('Connected to MQTT broker');
+      client.subscribe('transaction/status', (err) => {
+        if (err) {
+          console.error('Subscription failed:', err);
+        } else {
+          console.log('Subscribed to transaction/status');
         }
-      );
-    }, 5000); // Poll every 5 seconds
-    return () => clearInterval(interval); // Clean up interval on component unmount
-  }, [TransactionId,appear]);
-  React.useEffect(() => {
-    dispatch(fetchAuthId());
-  }, [dispatch]);
+      });
+    });
+    client.on('message', (topic, message) => {
+      const data = JSON.parse(message.toString());
+       if(data.TransactionId == TransactionId){
+       if (data.Status == "COMPLETED") {
+          dispatch(fetchAuthIdMakeCheck());
+          onFinished();
+        } else if (data.Status == "REJECTED") {
+          onFinished(0);
+          modalRef?.current?.close();
+        }
+       }
+    });
+
+    // Clean up the client connection when the component is unmounted
+    return () => {
+      client.end();
+    };
+  }, []);
   return (
     <div>
       <div className="flex h-full  w-full flex-col items-center justify-center  text-center	 ">
