@@ -51,21 +51,7 @@ const ModelForm: React.FC<IAppProps> = ({ modalRef, path }) => {
       }
     }
   };
-  const verifyNationalId=()=>{
-    dispatch(verifyNationalIdUser({ TransactionId: TransactionId }))
-    .then((res) => {
-      if (!res.payload.status) {
-        dispatch(fetchAuthIdMakeCheck());
-        goNext()
-      } else {
-        toast.error(res.payload.message)
-        setError(res.payload.message);
-      }
-    })
-    .catch((error) => {
-      setError(error.message);
-    });
-  }
+  
   
   return (
     <Modal ref={modalRef} size="sm" functiontoClose={()=>{}}>
@@ -74,9 +60,6 @@ const ModelForm: React.FC<IAppProps> = ({ modalRef, path }) => {
           <div className="flex justify-between items-center">
             <CloseIconSmall
               onClick={() => {
-                if(stepIndex==2){
-                  verifyNationalId()
-                }
                 setStepIndex(0)
                 modalRef.current?.close();
               }}
@@ -98,7 +81,7 @@ const ModelForm: React.FC<IAppProps> = ({ modalRef, path }) => {
           <div className="flex  flex-col items-center  justify-center">
             {stepIndex === 0 && <StepOne onFinished={goNext} />}
             {stepIndex === 1 && <StepTwo onFinished={goNext} />}
-            {stepIndex === 2 && <StepThree onFinished={goNext} />}
+            {stepIndex === 2 && <StepThree onFinished={goNext} modalRef={modalRef} />}
 
            
           </div>

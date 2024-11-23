@@ -8,13 +8,16 @@ import {
 } from "@/redux/features/userSlice";
 import { IoIosArrowForward } from "react-icons/io";
 import clsx from "clsx";
+import { ModalRef } from "../shared/modal.component";
 interface Props {
   onFinished: (stepNumber?: number) => void;
+  modalRef: React.RefObject<ModalRef>;
 }
 
-export const StepThree: React.FC<Props> = ({ onFinished }) => {
+export const StepThree: React.FC<Props> = ({ onFinished, modalRef }) => {
   const [error, setError] = React.useState("");
   const [appear, setAppear] = React.useState(false);
+  const [status, setStatus] = React.useState("");
 
   const dispatch = useDispatch<AppDispatch>();
   const { TransactionId, code } = useSelector<RootState>(
@@ -48,6 +51,32 @@ export const StepThree: React.FC<Props> = ({ onFinished }) => {
       setAppear(true);
     }, 180000);
   }, []);
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      dispatch(verifyNationalIdUser({ TransactionId: TransactionId })).then(
+        (data) => {
+         
+          // if (data.status === "confirmed") {
+         
+          setStatus(data?.payload?.data?.Status);
+          if (data?.payload?.data?.Status == "COMPLETED") {
+            dispatch(fetchAuthIdMakeCheck());
+            onFinished();
+            clearInterval(interval);
+          } else if (data?.payload?.data?.Status == "REJECTED") {
+            onFinished(0);
+            modalRef?.current?.close();
+            clearInterval(interval);
+          } else if (appear == true && data?.payload?.data?.Status == null) {
+            onFinished(0);
+            modalRef?.current?.close();
+            clearInterval(interval);
+          }
+        }
+      );
+    }, 5000); // Poll every 5 seconds
+    return () => clearInterval(interval); // Clean up interval on component unmount
+  }, [TransactionId,appear]);
   React.useEffect(() => {
     dispatch(fetchAuthId());
   }, [dispatch]);
