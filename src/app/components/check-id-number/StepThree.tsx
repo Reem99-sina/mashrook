@@ -30,11 +30,11 @@ export const StepThree: React.FC<Props> = ({ onFinished, modalRef }) => {
     auth: boolean;
   };
 
-  const sendVerify = () => {
-    if (auth) {
-      onFinished();
-    }
-  };
+  // const sendVerify = () => {
+  //   if (auth) {
+  //     onFinished();
+  //   }
+  // };
   React.useEffect(() => {
     const client = mqtt.connect('wss://broker.hivemq.com:8000/mqtt');
 
@@ -84,10 +84,8 @@ export const StepThree: React.FC<Props> = ({ onFinished, modalRef }) => {
           <div className="mb-3 flex items-center justify-center  ">
             <div
               className={clsx(
-                " relative flex p-[45px] items-center  justify-center rounded-2xl border border-[#F4F6F9] bg-[#ddf3f3]",
-                "cursor-pointer"
+                " relative flex p-[45px] items-center  justify-center rounded-2xl border border-[#F4F6F9] bg-[#ddf3f3]"
               )}
-              onClick={sendVerify}
             >
               <span className="text-xl font-bold text-black">{code}</span>
             </div>
