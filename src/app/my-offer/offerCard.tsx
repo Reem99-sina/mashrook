@@ -225,7 +225,7 @@ export const OfferCard: React.FC<ChatCardProps> = ({
         {lisNumber && (
           <div className="flex items-center justify-start">
             <CgSmartphoneShake className="w-[16px]" />
-            <p className="px-2">ترخيص رقم: {lisNumber}</p>
+            <p className="px-2">رقم ترخيص الإعلان: {lisNumber}</p>
           </div>
         )}
         <div className="flex items-center  justify-start">

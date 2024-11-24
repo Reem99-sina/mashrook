@@ -128,7 +128,7 @@ export const GitMyOffers = () => {
           : dataOrderOne?.landDetails &&
             dataOrderOne?.landDetails?.length > 0 &&
             `${dataOrderOne?.landDetails[0]?.status}`,
-      lisNumber: dataOrderOne?.license_number,
+      lisNumber: dataOrderOne?.advertisement_number,
       currentStep: dataOrderOne?.status ? statusIndex(dataOrderOne) : 0,
       propertyOwnerType: dataOrderOne?.propertyOwnerType?.title,
       details:

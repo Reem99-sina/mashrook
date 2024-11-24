@@ -131,7 +131,7 @@ export const OtherOfferCard: React.FC<ChatCardProps> = ({
       <div className="pt-1 mr-4 text-sm text-gray-700 mt-2">
         <div className="flex items-center justify-start">
           <CgSmartphoneShake className="w-[16px]" />
-          <p className="px-2">ترخيص رقم: {otheroffer?.license_number}</p>
+          <p className="px-2">رقم ترخيص الإعلان: {otheroffer?.advertisement_number}</p>
         </div>
         <div className="flex items-center  justify-start">
           <GoLocation />
