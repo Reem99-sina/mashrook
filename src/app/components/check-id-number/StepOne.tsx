@@ -12,19 +12,19 @@ interface Props {
 export const StepOne: React.FC<Props> = ({ onFinished, className }) => {
   return (
     <div>
-      <div className='mt-8 flex h-[246px] w-full flex-col items-center rounded-lg border border-[#DCDFE4]'>
+      <div className='mt-8 flex h-[246px] w-full flex-col  rounded-lg border border-[#DCDFE4]'>
         <div className='mb-3 mt-8 items-center justify-center text-center'>
-          <p className='text-[20px] font-black text-black'> تسجيل الدخول</p>
-          <p className='mt-3 text-sm text-blue-gray-400'>
+          <p className='xl:text-[20px] font-black text-black xs:text-sm'> تسجيل الدخول</p>
+          <p className='mt-3 text-sm text-blue-gray-400 px-2'>
             برجاء ادخال رقم الهوية الوطنية المسجل
             <br />
             لدى مركز المعلومات الوطني ( نفاذ )
           </p>
         </div>
-        <div className='mt-2 flex items-center justify-center  '>
+        <div className='m-2 flex items-center justify-center  '>
           <button
             className={clsx(
-              'flex h-20 w-[399px] items-center justify-center rounded-lg border border-[#7B8494] bg-[rgb(245,246,248)]',
+              'flex h-20 w-full items-center justify-center rounded-lg border border-[#7B8494] bg-[rgb(245,246,248)]',
               className,
             )}
             onClick={onFinished}

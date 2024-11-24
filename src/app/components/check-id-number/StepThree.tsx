@@ -68,7 +68,7 @@ export const StepThree: React.FC<Props> = ({ onFinished, modalRef }) => {
   return (
     <div>
       <div className="flex h-full  w-full flex-col items-center justify-center  text-center	 ">
-        <div className="my-4 flex w-[453px] flex-col items-center rounded-lg border border-[#DCDFE4] pb-2">
+        <div className="my-4 flex lg:w-[453px] xs:w-full flex-col items-center rounded-lg border border-[#DCDFE4] pb-2 mx-2">
           <div className="mb-3 mt-3">
             <div className="flex items-center justify-end gap-x-3">
               <p className="text-[20px] font-bold text-black"> رمز التحقق</p>
@@ -89,10 +89,10 @@ export const StepThree: React.FC<Props> = ({ onFinished, modalRef }) => {
               <span className="text-xl font-bold text-black">{code}</span>
             </div>
           </div>
-          <p className=" mt-3 text-sm text-[#7B8080]">
+          <p className=" mt-3 text-sm text-[#7B8080] px-2">
             الرجاء فتح تطبيق نفاذ و تأكيد الطلب باختيار الرقم أعلاه
           </p>
-          <p className=" mt-3 text-sm text-[#7B8080]">
+          <p className=" mt-3 text-sm text-[#7B8080] px-2">
             بعد تاكيد الرقم علي نفاذ اضغط علي رمز التحقق للدخول للصفحة
           </p>
           <p className="text-red-500 mb-3">{error}</p>
