@@ -55,9 +55,9 @@ const ModelForm: React.FC<IAppProps> = ({ modalRef, path }) => {
   
   return (
     <Modal ref={modalRef} size="sm" functiontoClose={()=>{}}>
-      <div className="flex  justify-center items-center">
+      <div className="">
         <div className="flex  flex-col  ">
-          <div className="flex justify-between items-center">
+          <div className="flex justify-around items-center">
             <CloseIconSmall
               onClick={() => {
                 setStepIndex(0)
@@ -66,7 +66,7 @@ const ModelForm: React.FC<IAppProps> = ({ modalRef, path }) => {
               className="h-10 w-10 cursor-pointer m-3"
               
             />
-            <div>
+            <div >
               {/* <Mashrooklogotextlarge className='h-16 w-[244px]' /> */}
               <Image
                 src={Mashrooklogotextlarge}
@@ -78,7 +78,7 @@ const ModelForm: React.FC<IAppProps> = ({ modalRef, path }) => {
             </div>
           </div>
 
-          <div className="flex  flex-col items-center  justify-center">
+          <div className="flex  flex-col   justify-center p-5">
             {stepIndex === 0 && <StepOne onFinished={goNext} />}
             {stepIndex === 1 && <StepTwo onFinished={goNext} />}
             {stepIndex === 2 && <StepThree onFinished={goNext} modalRef={modalRef} />}

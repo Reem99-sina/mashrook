@@ -74,14 +74,14 @@ export const StepTwo: React.FC<Props> = ({ onFinished }) => {
   }, [dispatch]);
   return (
     <div>
-      <div className=" flex h-[246px] w-[438px] flex-col items-center rounded-lg border border-[#DCDFE4] text-center">
+      <div className=" flex  w-full flex-col items-center rounded-lg border border-[#DCDFE4] text-center">
         <div className="mb-3 mt-8">
-          <p className="text-[20px] font-bold"> تسجيل الدخول</p>
-          <p className=" mt-3 text-sm text-[#7B8080]">
+          <p className="xl:text-[20px] font-bold xs:text-sm"> تسجيل الدخول</p>
+          <p className=" mt-3 xl:text-sm text-[#7B8080] xs:text-xs px-2">
             {" "}
             برجاء ادخال رقم الهوية الوطنية المسجل
           </p>
-          <p className="text-sm text-[#7B8080]">
+          <p className="xl:text-sm text-[#7B8080] xs:text-xs">
             لدى مركز المعلومات الوطني ( نفاذ )
           </p>
         </div>
@@ -103,7 +103,7 @@ export const StepTwo: React.FC<Props> = ({ onFinished }) => {
                 }
               }}
               type={"number"}
-              className="mt-3 h-10 w-[280px] rounded-md border border-[#E2E2E2] bg-[#fff] px-3 py-1 font-normal !text-black"
+              className="mt-3 h-10  rounded-md border border-[#E2E2E2] bg-[#fff] px-3 py-1 font-normal !text-black"
             />
             {(errors?.idNumber ||
               error )&& (

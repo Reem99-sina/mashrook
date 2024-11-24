@@ -7,12 +7,14 @@ export interface returnType {
   message: string | undefined;
   data: detailsType[] | null;
 }
-
-export const getproperityPurposeType = createAsyncThunk<returnType>(
+interface dataSendType{
+  property_owner_type_id?:number
+}
+export const getproperityPurposeType = createAsyncThunk<returnType,(dataSendType|undefined)>(
   "properityPurpose",
-  async (_, { rejectWithValue }) => {
+  async (data:(dataSendType|undefined), { rejectWithValue }) => {
     const response = await axios
-      .get("https://server.mashrook.sa/property-purpose")
+      .get(`https://server.mashrook.sa/property-purpose?property_owner_type_id=${data?.property_owner_type_id}`)
       .then((response) => response.data)
       .catch((error) => error?.response?.data);
     return response;
