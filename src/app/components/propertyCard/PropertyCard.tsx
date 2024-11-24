@@ -344,11 +344,11 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ page, limit }) => {
                   <p>رقم الطلب: {ele?.id}</p>
                 </div>
                 <div className="pt-1 mr-4 text-sm text-gray-700 mt-2">
-                  {ele?.license_number && (
+                  {ele?.advertisement_number && (
                     <div className="flex items-center justify-start">
                       <CgSmartphoneShake className="w-[16px]" />
                       <p className="px-2">
-                        رقم ترخيص الإعلان : {ele?.license_number}
+                        رقم ترخيص الإعلان : {ele?.advertisement_number}
                       </p>
                     </div>
                   )}
