@@ -131,7 +131,9 @@ export const OtherOfferCard: React.FC<ChatCardProps> = ({
       <div className="pt-1 mr-4 text-sm text-gray-700 mt-2">
         <div className="flex items-center justify-start">
           <CgSmartphoneShake className="w-[16px]" />
-          <p className="px-2">رقم ترخيص الإعلان: {otheroffer?.advertisement_number}</p>
+          <p className="px-2">
+            رقم ترخيص الإعلان: {otheroffer?.advertisement_number}
+          </p>
         </div>
         <div className="flex items-center  justify-start">
           <GoLocation />
@@ -162,28 +164,30 @@ export const OtherOfferCard: React.FC<ChatCardProps> = ({
                   <div className="flex flex-col gap-y-2 my-2 flex-wrap items-start">
                     <div className=" rounded-xl px-2  flex items-center gap-x-2">
                       <BiArea className="bg-gray-200 " />
-                      <p> مساحة الارض</p>
+                      <p> {detail?.type ? "المساحة" : "مساحة الارض"}</p>
                       <p className="text-base md:text-xs lg:text-sm mx-2 ">
                         {detail?.area} م<sup>2</sup>
                       </p>
                     </div>
                     <div className="rounded-xl px-2 flex items-center gap-x-2">
                       <LuTag className="bg-gray-200 " />
-                      <p> سعر المتر  </p>
+                      <p> {detail?.type ? "السعر" : "سعر المتر"} </p>
                       <p className="text-base  md:text-xs lg:text-sm mx-2">
                         {FormatNumber(detail?.price)} {"ريال"}
                       </p>
                     </div>
-                    <div className=" rounded-xl px-2  flex items-center gap-x-2">
-                      <BsDatabase className="bg-gray-200" />
-                      <p>الاجمالي</p>
-                      <p className="text-base mx-2 ">
-                        {detail?.type
-                          ? FormatNumber(detail?.price)
-                          : FormatNumber(detail?.price * detail?.area)}{" "}
-                        ريال
-                      </p>
-                    </div>
+                    {!detail?.type ? (
+                      <div className=" rounded-xl px-2  flex items-center gap-x-2">
+                        <BsDatabase className="bg-gray-200" />
+                        <p>الاجمالي</p>
+                        <p className="text-base mx-2 ">
+                          {detail?.type
+                            ? FormatNumber(detail?.price)
+                            : FormatNumber(detail?.price * detail?.area)}{" "}
+                          ريال
+                        </p>
+                      </div>
+                    ) : null}
                     <div className=" rounded-xl px-2  flex items-center gap-x-2 ">
                       <CiWallet className="bg-gray-200" />
                       <p> المتاح</p>

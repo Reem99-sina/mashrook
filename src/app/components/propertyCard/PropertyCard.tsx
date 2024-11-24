@@ -132,7 +132,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ page, limit }) => {
               <div className="flex flex-col  my-2 flex-wrap items-start">
               <div className=" rounded-xl px-2  flex items-center gap-x-2 my-1">
                   <BiArea className="bg-gray-200" />
-                  <p> مساحة الارض</p>
+                  <p> المساحة </p>
                   <p className="text-base mx-2 ">
                     {ele?.details[i]?.area} م<sup>2</sup>
                   </p>
@@ -140,22 +140,13 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ page, limit }) => {
                 <div className="   items-start my-1">
                   <div className=" rounded-xl px-2 flex items-center gap-x-2">
                     <LuTag className="bg-gray-200" />
-                    <p> سعر المتر  </p>
+                    <p> السعر   </p>
                     <p className="text-base mx-2">
                       {FormatNumber(ele?.details[i]?.price)} {"ريال"}
                     </p>
                   </div>
                 </div>
-                <div className=" rounded-xl px-2  flex items-center gap-x-2 my-1">
-                  <BsDatabase className="bg-gray-200" />
-                  <p>الاجمالي</p>
-                  <p className="text-base mx-2 ">
-                    {FormatNumber(
-                      ele?.details[i]?.price 
-                    )}{" "}
-                    ريال
-                  </p>
-                </div>
+               
                 <div className=" rounded-xl px-2  flex items-center gap-x-2 my-1">
                   <CiWallet className="bg-gray-200" />
                   <p> المتاح</p>
