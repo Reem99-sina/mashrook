@@ -67,8 +67,8 @@ const MarketPage: React.FC = () => {
         criteria?.unitType != 0 ? criteria?.unitType : null,
       min_percentage:
         criteria?.shareRange[0] != 10 ? criteria?.shareRange[0] : null,
-        city:criteria?.city,
-        district:criteria?.district,
+      city: criteria?.city,
+      district: criteria?.district,
       max_percentage:
         criteria?.shareRange[1] != 50 ? criteria?.shareRange[0] : null,
       status:
@@ -334,9 +334,9 @@ const MarketPage: React.FC = () => {
             <FaChevronLeft className="text-lg text-gray-900" />
           </button>
         </div>
-
-        <Footer />
-
+        <div dir="ltr">
+          <Footer />
+        </div>
         {/* Sort Popup */}
         {isSortPopupOpen && (
           <SortPopup

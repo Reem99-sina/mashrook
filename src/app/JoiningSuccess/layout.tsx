@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Suspense } from "react"
+import { Suspense } from "react";
 import MainHeader from "../components/header/MainHeader";
 import Footer from "../components/header/Footer2";
 const MyAccountLayout = ({
@@ -14,11 +14,10 @@ const MyAccountLayout = ({
         <div dir="ltr" className="relative">
           <MainHeader />
         </div>
-         <Suspense>
-        {children}
-         </Suspense>
-        <Footer />
-
+        <Suspense>{children}</Suspense>
+        <div dir="ltr">
+          <Footer />
+        </div>
       </div>
     </div>
   );
