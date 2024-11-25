@@ -1,15 +1,10 @@
 "use client";
-import React,{useState,useEffect} from "react";
-import {
-  Dots,
-} from "@/app/assets/svg";
-import {FormatNumber} from "@/app/hooks/formatNumber"
-import {deleteSave,deleteSaves,deleteSaveId} from "@/redux/features/mySave"
-import {
-  FaBookmark,
-  FaEllipsisH,
-} from "react-icons/fa";
-import Link from "next/link"
+import React, { useState, useEffect } from "react";
+import { Dots } from "@/app/assets/svg";
+import { FormatNumber } from "@/app/hooks/formatNumber";
+import { deleteSave, deleteSaves, deleteSaveId } from "@/redux/features/mySave";
+import { FaBookmark, FaEllipsisH } from "react-icons/fa";
+import Link from "next/link";
 import { CgSmartphoneShake } from "react-icons/cg";
 import CircularProgressBar from "@/app/components/propertyCard/RadialProgressBar";
 import { FinishedShares } from "@/app/assets/svg";
@@ -19,51 +14,65 @@ import { BiArea } from "react-icons/bi";
 import { useRouter } from "next/navigation";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
+import { CiWallet } from "react-icons/ci";
+import { BsDatabase } from "react-icons/bs";
 interface ChatCardProps {
-  offer:any
+  offer: any;
 }
 
-export const OfferCard: React.FC<ChatCardProps> = ({
-offer
-}) => {
+export const OfferCard: React.FC<ChatCardProps> = ({ offer }) => {
   const steps = ["الانتهاء", "السعي", "دفع الرسوم", "انضمام الشركاء"];
   const currentStep = 1;
   const [showNotification, setShowNotification] = useState(false);
   let dispatch = useDispatch<AppDispatch>();
   const [notificationMessage, setNotificationMessage] = useState("");
   const [saved, setSaved] = useState(false);
-  let { loading:loadingSave, message:messageSave, data:dataSave } = useSelector<RootState>(
-    (state) => state.save
-  ) as { loading: boolean; message: string; data: any };
+  let {
+    loading: loadingSave,
+    message: messageSave,
+    data: dataSave,
+  } = useSelector<RootState>((state) => state.save) as {
+    loading: boolean;
+    message: string;
+    data: any;
+  };
   let router = useRouter();
-  const handleSaveClick = (id:number) => {
- 
-    if(id){
-    
-        dispatch(deleteSaves({id:id}))
-      
+  const handleSaveClick = (id: number) => {
+    if (id) {
+      dispatch(deleteSaves({ id: id }));
     }
   };
-  useEffect(()=>{
-    if (messageSave=="Properties removed successfully"){
-      
+  useEffect(() => {
+    if (messageSave == "Properties removed successfully") {
       setNotificationMessage("تم الغاء الحفظ");
       setShowNotification(true);
-      dispatch(deleteSaveId({data:dataSave?.filter((ele:any)=>ele?.property?.id!=offer?.requestNumber)}))
+      dispatch(
+        deleteSaveId({
+          data: dataSave?.filter(
+            (ele: any) => ele?.property?.id != offer?.requestNumber
+          ),
+        })
+      );
       setTimeout(() => {
         setShowNotification(false);
       }, 5000);
     }
-    return ()=>{
-      dispatch(deleteSave())
-    }
-  },[messageSave,dataSave,dispatch,offer?.requestNumber])
+    return () => {
+      dispatch(deleteSave());
+    };
+  }, [messageSave, dataSave, dispatch, offer?.requestNumber]);
   return (
-    <div className="mt-4 w-full border-2 border-[#E5E7EB] rounded-lg mb-4  flex flex-col p-2" key={offer?.requestNumber}>
+    <div
+      className="mt-4 w-full border-2 border-[#E5E7EB] rounded-lg mb-4  flex flex-col p-3"
+      key={offer?.requestNumber}
+    >
       <div className="items-center justify-between  flex-row flex relative">
         <p className="text-xl font-bold text-[#374151]">{offer?.title} </p>
 
-        <Link className="items-center justify-center flex border border-[#E5E7EB] p-2 rounded-md gap-1 " href={`/showproperty/${offer?.requestNumber}`}>
+        <Link
+          className="items-center justify-center flex border border-[#E5E7EB] p-2 rounded-md gap-1 "
+          href={`/showproperty/${offer?.requestNumber}`}
+        >
           <p className="font-medium text-sm text-[#3B73B9]">عرض التفاصيل </p>
           <Dots />
         </Link>
@@ -96,10 +105,12 @@ offer
         </p>
       </div>
       <div className="pt-1 mr-4 text-sm text-gray-700 mt-2">
-       {offer?.lisNumber&& <div className="flex items-center justify-start">
-          <CgSmartphoneShake className="w-[16px]" />
-          <p className="px-2">ترخيص رقم: {offer?.lisNumber}</p>
-        </div>}
+        {offer?.lisNumber && (
+          <div className="flex items-center justify-start">
+            <CgSmartphoneShake className="w-[16px]" />
+            <p className="px-2">ترخيص رقم: {offer?.lisNumber}</p>
+          </div>
+        )}
         <div className="flex items-center  justify-start">
           <GoLocation />
           <p className="px-2">
@@ -108,7 +119,7 @@ offer
         </div>
       </div>
       <div className="gap-1 mt-2 flex flex-col">
-        {offer?.details?.map((detail:any, index:number) => (
+        {offer?.details?.map((detail: any, index: number) => (
           <>
             <div
               key={`detail-${index}`}
@@ -124,27 +135,39 @@ offer
                           `قطعة رقم  ${detail?.piece_number}`}
                     </p>
                   </div>
-                  <div className="flex items-center  justify-start">
-          <GoLocation />
-          <p className="px-2">
-            مدينة {offer?.city}، {offer?.district}
-          </p>
-        </div>
                   <div className="flex flex-col gap-y-2 my-2 flex-wrap items-start">
-                    <div className="bg-gray-200 rounded-xl px-2 flex items-center">
-                      <LuTag />
-                      <p className="text-base  md:text-xs lg:text-sm mx-2">
-                        {detail?.price&&FormatNumber(detail?.price)} {"ريال"}
-                        <span className="text-[#3B73B9]">
-                          {" "}
-                          (بدون ضريبة التصرفات العقارية أو السعي)
-                        </span>
-                      </p>
-                    </div>
-                    <div className="bg-gray-200 rounded-xl px-2 mr-4 flex items-center">
-                      <BiArea />
+                    <div className=" rounded-xl px-2  flex items-center gap-x-2">
+                      <BiArea className="bg-gray-200 " />
+                      <p> {"المساحة"}</p>
                       <p className="text-base md:text-xs lg:text-sm mx-2 ">
                         {detail?.area} م<sup>2</sup>
+                      </p>
+                    </div>
+                    <div className="rounded-xl px-2 flex items-center gap-x-2">
+                      <LuTag className="bg-gray-200 " />
+                      <p> {detail?.type ? "السعر" : "سعر المتر"} </p>
+                      <p className="text-base  md:text-xs lg:text-sm mx-2">
+                        {FormatNumber(detail?.price)} {"ريال"}
+                      </p>
+                    </div>
+                    {!detail.type ? (
+                      <div className=" rounded-xl px-2  flex items-center gap-x-2">
+                        <BsDatabase className="bg-gray-200" />
+
+                        <p>الاجمالي</p>
+                        <p className="text-base mx-2 ">
+                          {detail?.type
+                            ? FormatNumber(detail?.price)
+                            : FormatNumber(detail?.price * detail?.area)}{" "}
+                          ريال
+                        </p>
+                      </div>
+                    ) : null}
+                    <div className=" rounded-xl px-2  flex items-center gap-x-2 ">
+                      <CiWallet className="bg-gray-200" />
+                      <p> المتاح</p>
+                      <p className="text-base mx-2 ">
+                        {FormatNumber(detail?.available_price)} ريال
                       </p>
                     </div>
                   </div>
@@ -164,23 +187,14 @@ offer
                       <span className="text-xl font-bold text-blue-500 mb-2">
                         <CircularProgressBar
                           percentage={Number(detail?.available_percentage)}
-                          size={50}
+                          size={70}
                           strokeWidth={5}
                         />
                       </span>
-                      <div className="">
-                        <p className="text-xs text-gray-500">متاح</p>
-                        <p className="text-xs text-gray-500">
-                          {detail?.available_price&&FormatNumber(detail?.available_price)}ريال
-                        </p>
-                      </div>
                     </>
                   )}
                 </div>
               </div>
-              
-              <hr className="border-gray-200 dark:border-white my-2" />
-        
               {/* <button
                 type="button"
                 className={`${
@@ -207,42 +221,46 @@ offer
       </div>
 
       <div className="flex justify-around items-center mt-4">
-              <div className="flex flex-row  py-1 items-center justify-center">
-                <Link href={`/showproperty/${offer?.requestNumber}`} onClick={() => {}}>
-                  <button className="text-blue-500 mx-4 align-middle">
-                    عرض التفاصيل
-                  </button>
-                </Link>
-                <FaEllipsisH className="text-blue-500 mx-2 align-middle" />
-              </div>
-              <div className="bg-gray-300 inline-block h-12 w-0.5 self-stretch"></div>
+        <div className="flex flex-row  py-1 items-center justify-center">
+          <Link
+            href={`/showproperty/${offer?.requestNumber}`}
+            onClick={() => {}}
+          >
+            <button className="text-blue-500 mx-4 align-middle">
+              عرض التفاصيل
+            </button>
+          </Link>
+          <FaEllipsisH className="text-blue-500 mx-2 align-middle" />
+        </div>
+        <div className="bg-gray-300 inline-block h-12 w-0.5 self-stretch"></div>
 
-              <div className="flex flex-row py-1 items-center justify-center">
-                {/* {   console.log(offer,"id")} */}
-                <div
-                  onClick={()=>handleSaveClick(offer?.property_id)}
-                 
-                  className={`text-blue-500 mx-2 align-middle cursor-pointer`}
-                  // disabled={ele?.user?.email==user?.email}
-                >
-                  { "إلغاء الحفظ" }
-                </div>
-                <FaBookmark
-                 className={`
+        <div className="flex flex-row py-1 items-center justify-center">
+          {/* {   console.log(offer,"id")} */}
+          <div
+            onClick={() => handleSaveClick(offer?.property_id)}
+            className={`text-blue-500 mx-2 align-middle cursor-pointer`}
+            // disabled={ele?.user?.email==user?.email}
+          >
+            {"إلغاء الحفظ"}
+          </div>
+          <FaBookmark
+            className={`
                  ${
-                  // ele?.user?.email==user?.email?
-                //   true?
-                //  "text-gray-500"
-                //  :
-                 "text-blue-500"} mx-2 text-xl align-middle`} />
-              </div>
+                   // ele?.user?.email==user?.email?
+                   //   true?
+                   //  "text-gray-500"
+                   //  :
+                   "text-blue-500"
+                 } mx-2 text-xl align-middle`}
+          />
+        </div>
 
-              {showNotification && (
-                <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-500 text-white px-4 py-2 rounded-full">
-                  {notificationMessage}
-                </div>
-              )}
-            </div>
+        {showNotification && (
+          <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-500 text-white px-4 py-2 rounded-full">
+            {notificationMessage}
+          </div>
+        )}
+      </div>
     </div>
   );
 };

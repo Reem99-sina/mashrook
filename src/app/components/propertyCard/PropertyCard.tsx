@@ -214,7 +214,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ page, limit }) => {
                 </div> */}
                 <div className=" rounded-xl px-2  flex items-center gap-x-2 my-1">
                   <BiArea className="bg-gray-200" />
-                  <p> مساحة الارض</p>
+                  <p> المساحة</p>
                   <p className="text-base mx-2 ">
                     {ele?.landDetails[i]?.area} م<sup>2</sup>
                   </p>
