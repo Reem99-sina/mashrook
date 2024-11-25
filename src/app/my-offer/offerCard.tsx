@@ -308,7 +308,7 @@ export const OfferCard: React.FC<ChatCardProps> = ({
                     <div className="flex flex-col gap-y-2 my-2 flex-wrap items-start">
                       <div className=" rounded-xl px-2  flex items-center gap-x-2">
                         <BiArea className="bg-gray-200 " />
-                        <p> {detail?.type?"المساحة":"مساحة الارض"}</p>
+                        <p> {"المساحة"}</p>
                         <p className="text-base md:text-xs lg:text-sm mx-2 ">
                           {detail?.area} م<sup>2</sup>
                         </p>
@@ -354,16 +354,11 @@ export const OfferCard: React.FC<ChatCardProps> = ({
                         <span className="text-xl font-bold text-blue-500 mb-2">
                           <CircularProgressBar
                             percentage={Number(detail?.available_percentage)}
-                            size={50}
+                            size={70}
                             strokeWidth={5}
                           />
                         </span>
-                        <div className="">
-                          <p className="text-xs text-gray-500">متاح</p>
-                          <p className="text-xs text-gray-500">
-                            {FormatNumber(detail?.available_price)}ريال
-                          </p>
-                        </div>
+                        
                       </>
                     )}
                   </div>

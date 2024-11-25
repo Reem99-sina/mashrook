@@ -173,18 +173,11 @@ export const OfferCard: React.FC<ChatCardProps> = ({ offer }) => {
                       <span className="text-xl font-bold text-blue-500 mb-2">
                         <CircularProgressBar
                           percentage={Number(detail?.available_percentage)}
-                          size={50}
+                          size={70}
                           strokeWidth={5}
                         />
                       </span>
-                      <div className="">
-                        <p className="text-xs text-gray-500">متاح</p>
-                        <p className="text-xs text-gray-500">
-                          {detail?.available_price &&
-                            FormatNumber(detail?.available_price)}
-                          ريال
-                        </p>
-                      </div>
+                      
                     </>
                   )}
                 </div>
