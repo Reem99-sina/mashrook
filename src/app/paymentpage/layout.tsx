@@ -60,7 +60,9 @@ const AboutLayout = ({
           <MainHeader />
         </div>
         {children}
+        <div dir="ltr" >
         <Footer />
+        </div>
       </div>
       <Script
         src="https://cdn.moyasar.com/mpf/1.7.3/moyasar.js"

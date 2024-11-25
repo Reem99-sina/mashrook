@@ -14,7 +14,9 @@ const AboutLayout = ({
           <MainHeader />
         </div>
         {children}
+        <div dir="ltr" >
         <Footer />
+        </div>
       </div>
     </div>
   );

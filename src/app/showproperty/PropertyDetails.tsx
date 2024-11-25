@@ -759,8 +759,9 @@ const PropertyDetails: React.FC<{ id: number }> = ({ id }: { id: number }) => {
           </div>
         )}
       </div>
-
+      <div dir="ltr" >
       <Footer />
+      </div>
     </div>
   );
 };

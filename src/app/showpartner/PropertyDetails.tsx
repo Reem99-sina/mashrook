@@ -533,8 +533,9 @@ const PropertyDetails: React.FC<{ id: any }> = ({ id }: { id: any }) => {
           {activeTab === "details" ? detailsContent : locationContent}
         </div>
       </div>
-
+      <div dir="ltr" >
       <Footer />
+      </div>
     </div>
   );
 };
