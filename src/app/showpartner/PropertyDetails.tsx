@@ -49,6 +49,7 @@ const PropertyDetails: React.FC<{ id: any }> = ({ id }: { id: any }) => {
   let { selectData } = useSelector<RootState>((state) => state.getRequest) as {
     selectData: dataReturn;
   };
+
   const userOwnerShipArray = useMemo(() => {
     return selectData?.propertyDetailsOwnership?.filter(
       (ele: realEstatePartner) => ele?.user_id == user?.id
@@ -492,18 +493,20 @@ const PropertyDetails: React.FC<{ id: any }> = ({ id }: { id: any }) => {
               <h4> {selectData?.propertyPurpose?.title}</h4>
             </span>
           </div>
-          <div className="flex bg-gray-100 w-full justify-between items-center py-2  px-2 rounded-lg ml-2 mt-4">
-            <div>
-              <p>العقار قابل للتجزئة</p>
+          {selectData?.landDetails?.length > 0 ? (
+            <div className="flex bg-gray-100 w-full justify-between items-center py-2  px-2 rounded-lg ml-2 mt-4">
+              <div>
+                <p>العقار قابل للتجزئة</p>
+              </div>
+              <span>
+                {selectData?.is_divisible == false ? (
+                  <IoMdCloseCircleOutline className="mr-2 ml-2 bg-red-450 text-white text-2xl font-bold rounded-full " />
+                ) : (
+                  <IoIosCheckmarkCircleOutline className="mr-2 ml-2 bg-green-450 text-white text-2xl font-bold rounded-full " />
+                )}
+              </span>
             </div>
-            <span>
-              {selectData?.is_divisible == false ? (
-                <IoMdCloseCircleOutline className="mr-2 ml-2 bg-red-450 text-white text-2xl font-bold rounded-full " />
-              ) : (
-                <IoIosCheckmarkCircleOutline className="mr-2 ml-2 bg-green-450 text-white text-2xl font-bold rounded-full " />
-              )}
-            </span>
-          </div>
+          ) : null}
 
           <div
             id="detailsLocation"
@@ -511,7 +514,7 @@ const PropertyDetails: React.FC<{ id: any }> = ({ id }: { id: any }) => {
           >
             <button
               onClick={() => setActiveTab("details")}
-              className={`flex-grow border-2 border-r-0 -mr-4 z-1 ${
+              className={`flex-grow border-2 border-r-0  z-1 ${
                 activeTab === "details"
                   ? "bg-blue-450 text-white px-8 rounded-xl"
                   : "bg-white px-8 py-4 rounded-xl"
@@ -533,8 +536,8 @@ const PropertyDetails: React.FC<{ id: any }> = ({ id }: { id: any }) => {
           {activeTab === "details" ? detailsContent : locationContent}
         </div>
       </div>
-      <div dir="ltr" >
-      <Footer />
+      <div dir="ltr">
+        <Footer />
       </div>
     </div>
   );
