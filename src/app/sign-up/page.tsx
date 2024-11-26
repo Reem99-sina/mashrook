@@ -151,7 +151,7 @@ const SignUp: React.FC = () => {
                   ادخل الرقم الجوال
                 </h3>
                 <PhoneInput
-                  placeholder="050 345 6708"
+                  placeholder="50 345 6708"
                   className="border-2 border-gray-300 p-1 rounded-md "
                   numberInputProps={{ style: { textAlign: "end" } }}
                   value={user?.phone}
