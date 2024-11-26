@@ -49,6 +49,7 @@ const PropertyDetails: React.FC<{ id: any }> = ({ id }: { id: any }) => {
   let { selectData } = useSelector<RootState>((state) => state.getRequest) as {
     selectData: dataReturn;
   };
+  
   const userOwnerShipArray = useMemo(() => {
     return selectData?.propertyDetailsOwnership?.filter(
       (ele: realEstatePartner) => ele?.user_id == user?.id
@@ -511,7 +512,7 @@ const PropertyDetails: React.FC<{ id: any }> = ({ id }: { id: any }) => {
           >
             <button
               onClick={() => setActiveTab("details")}
-              className={`flex-grow border-2 border-r-0 -mr-4 z-1 ${
+              className={`flex-grow border-2 border-r-0  z-1 ${
                 activeTab === "details"
                   ? "bg-blue-450 text-white px-8 rounded-xl"
                   : "bg-white px-8 py-4 rounded-xl"
