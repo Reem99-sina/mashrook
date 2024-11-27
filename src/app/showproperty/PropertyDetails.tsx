@@ -42,6 +42,7 @@ import {
 } from "@/app/assets/svg";
 import { fetchuser } from "@/redux/features/userSlice";
 import dynamic from "next/dynamic";
+import { FormatNumber } from "../hooks/formatNumber";
 const Map = dynamic(() => import("@/app/components/shared/map"), {
   ssr: false,
 });
@@ -234,10 +235,14 @@ const PropertyDetails: React.FC<{ id: number }> = ({ id }: { id: number }) => {
                 </div>
               </div>
               <div className="flex justify-between bg-gray-100 w-full items-center rounded-lg ml-2 mt-4 px-2  py-2">
-                <span>مبلغ الشراكة</span>
+                <span>
+                  {selectData?.propertyPurpose?.id == 2
+                    ? "مبلغ التطوير"
+                    : "مبلغ الشراكة"}
+                </span>
                 <div className="flex justify-center items-center border-2 rounded-lg p-2 ">
                   <LuTag className="text-xl mx-2" />
-                  <span>{ele?.price} ريال</span>
+                  <span>{FormatNumber(ele?.price * ele?.area)} ريال</span>
                 </div>
               </div>
 
@@ -298,15 +303,17 @@ const PropertyDetails: React.FC<{ id: number }> = ({ id }: { id: number }) => {
                 </div>
               </div>
               <div className="flex justify-between bg-gray-100 w-full items-center rounded-lg ml-2 mt-2 px-2  py-1 ">
-                <span className="text-sm"> السعر</span>
-                <span className="text-blue-450 text-xs">
-                  (بدون ضريبة التصرفات العقارية أو السعي)
-                </span>
-                <div className="flex justify-center items-center border-2 rounded-lg p-2 ">
+                <div className=" flex justify-start items-start gap-2 flex-col">
+                  <span className="text-sm"> السعر</span>
+                  <span className="text-blue-450 text-xs">
+                    (بدون ضريبة التصرفات العقارية و السعي)
+                  </span>
+                </div>
+                <div className="flex justify-start items-center border-2 rounded-lg p-2  flex-wrap">
                   <span>
                     <Money className="text-xl mx-2" />{" "}
                   </span>
-                  <span>{ele?.price} ريال</span>
+                  <span>{FormatNumber(ele?.price)} ريال</span>
                 </div>
               </div>
               <div className="flex justify-between bg-gray-100 w-full items-center rounded-lg ml-2 mt-2 px-2  py-1">
@@ -468,7 +475,7 @@ const PropertyDetails: React.FC<{ id: number }> = ({ id }: { id: number }) => {
       </div>
 
       <div dir="ltr" className="flex justify-center">
-        <div className="relative p-6 ">
+        <div className="relative p-6   min-h-auto">
           <CarouselDefault images={selectData?.propertyMedia} />
           <BiShareAlt className="absolute top-10 left-10 text-4xl bg-white text-gray-700  rounded-full m-4 p-1 shadow-md " />
           <FaChevronRight
