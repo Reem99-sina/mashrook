@@ -35,6 +35,7 @@ import {
 import { realEstatePartner, landInfo, userInfo } from "@/type/addrealestate";
 import { fetchuser } from "@/redux/features/userSlice";
 import dynamic from "next/dynamic";
+import { FormatNumber } from "../hooks/formatNumber";
 const Map = dynamic(() => import("@/app/components/shared/map"), {
   ssr: false,
 });
@@ -108,10 +109,15 @@ const PropertyDetails: React.FC<{ id: any }> = ({ id }: { id: any }) => {
                 </div>
               </div>
               <div className="flex justify-between bg-gray-100 w-full items-center rounded-lg ml-2 mt-4 px-2  py-2">
-                <span>مبلغ الشراكة</span>
+                <span>
+                  {" "}
+                  {selectData?.propertyPurpose?.id == 2
+                    ? "مبلغ التطوير"
+                    : "مبلغ الشراكة"}
+                </span>
                 <div className="flex justify-center items-center border-2 rounded-lg p-2 ">
                   <LuTag className="text-xl mx-2" />
-                  <span>{ele?.price} ريال</span>
+                  <span>{FormatNumber(ele?.price * ele?.area)} ريال</span>
                 </div>
               </div>
               {userOwnerShip(ele)?.land_details_id == ele?.id && (
@@ -132,7 +138,9 @@ const PropertyDetails: React.FC<{ id: any }> = ({ id }: { id: any }) => {
                     <span>مبلغ شراكتك</span>
                     <div className="flex justify-center items-center border-2 rounded-lg p-2 ">
                       <LuTag className="text-xl mx-2" />
-                      <span>{userOwnerShip(ele)?.amount} ريال</span>
+                      <span>
+                        {FormatNumber(userOwnerShip(ele)?.amount)} ريال
+                      </span>
                     </div>
                   </div>
                 </>
@@ -309,7 +317,9 @@ const PropertyDetails: React.FC<{ id: any }> = ({ id }: { id: any }) => {
                     <span>مبلغ شراكتك</span>
                     <div className="flex justify-center items-center border-2 rounded-lg p-2 ">
                       <LuTag className="text-xl mx-2" />
-                      <span>{userOwnerShip(ele)?.amount} ريال</span>
+                      <span>
+                        {FormatNumber(userOwnerShip(ele)?.amount)} ريال
+                      </span>
                     </div>
                   </div>
                 </>

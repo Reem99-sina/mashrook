@@ -146,7 +146,7 @@ export const OfferCard: React.FC<ChatCardProps> = ({ offer }) => {
                         {detail?.price && FormatNumber(detail?.price)} {"ريال"}
                         <span className="text-[#3B73B9]">
                           {" "}
-                          (بدون ضريبة التصرفات العقارية أو السعي)
+                          (بدون ضريبة التصرفات العقارية و السعي)
                         </span>
                       </p>
                     </div>
