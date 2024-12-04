@@ -177,7 +177,7 @@ export const getRequest = createAsyncThunk<returnType, paramsInput | null>(
   async (data: paramsInput | null, { rejectWithValue }) => {
     if (Cookie.get("token")) {
       const response = await axios
-        .get("https://server.mashrook.sa/property/offer-login", {
+        .get(`${process.env.NEXT_PUBLIC_API}/property/offer-login`, {
           headers: {
             Authorization: Cookie.get("token"),
           },
@@ -189,7 +189,7 @@ export const getRequest = createAsyncThunk<returnType, paramsInput | null>(
       return response;
     } else {
       const response = await axios
-        .get("https://server.mashrook.sa/property/offer", {
+        .get(`${process.env.NEXT_PUBLIC_API}/property/offer`, {
           headers: {},
           params: data ? data : {},
         })
@@ -205,7 +205,7 @@ export const getRequestByid = createAsyncThunk<returnType, { id: number }>(
   async (data: { id: number }, { rejectWithValue }) => {
     if (Cookie.get("token")) {
       const response = await axios
-        .get(`https://server.mashrook.sa/property/get-login/${data?.id}`, {
+        .get(`${process.env.NEXT_PUBLIC_API}/property/get-login/${data?.id}`, {
           headers: {
             Authorization: Cookie.get("token"),
           },
@@ -216,7 +216,7 @@ export const getRequestByid = createAsyncThunk<returnType, { id: number }>(
       return response;
     } else {
       const response = await axios
-        .get(`https://server.mashrook.sa/property/get/${data?.id}`, {
+        .get(`${process.env.NEXT_PUBLIC_API}/property/get/${data?.id}`, {
           headers: {},
         })
         .then((response) => response.data)
@@ -236,7 +236,7 @@ export const postReport = createAsyncThunk<returnType, typeofReport>(
     { rejectWithValue }
   ) => {
     const response = await axios
-      .post("https://server.mashrook.sa/property-report", data, {
+      .post("${process.env.NEXT_PUBLIC_API}/property-report", data, {
         headers: {
           Authorization: Cookie.get("token"),
         },
@@ -323,7 +323,7 @@ const requestGetSlice = createSlice({
       state.message = action?.payload?.message
         ? action.payload.message
         : "success";
-      state.data = action.payload.data;
+      state.data = action?.payload?.data;
     }),
       builder.addCase(getRequest.pending, (state, action) => {
         state.loading = true;

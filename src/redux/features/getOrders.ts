@@ -24,7 +24,7 @@ export const getRequest = createAsyncThunk<returnType, paramsInput | null>(
   "request/get",
   async (data: paramsInput | null, { rejectWithValue }) => {
     const response = await axios
-      .get(`https://server.mashrook.sa/property/get/mine/requests`, {
+      .get(`${process.env.NEXT_PUBLIC_API}/property/get/mine/requests`, {
         headers: {
           Authorization: Cookie.get("token"),
         },
@@ -40,7 +40,7 @@ export const getOtherOrders = createAsyncThunk<returnType, comeType>(
   async (data: comeType, { rejectWithValue }) => {
     const response = await axios
       .get(
-        `https://server.mashrook.sa/property/get/alternative-offers/${data?.id}`,
+        `${process.env.NEXT_PUBLIC_API}/property/get/alternative-offers/${data?.id}`,
         {
           headers: {
             Authorization: Cookie.get("token"),

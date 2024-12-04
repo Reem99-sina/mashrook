@@ -22,7 +22,7 @@ export const getCity = createAsyncThunk<returnType>(
   "city/get",
   async (_, { rejectWithValue }) => {
     const response = await axios
-      .get(`https://server.mashrook.sa/data/city`, {
+      .get(`${process.env.NEXT_PUBLIC_API}/data/city`, {
         headers: {
           Authorization: Cookie.get("token"),
         },
@@ -36,7 +36,7 @@ export const getDistrict = createAsyncThunk<returnType, getType>(
   "district/get",
   async (data: { name: string }, { rejectWithValue }) => {
     const response = await axios
-      .get(`https://server.mashrook.sa/data/district/${data?.name}`, {
+      .get(`${process.env.NEXT_PUBLIC_API}/data/district/${data?.name}`, {
         headers: {
           Authorization: Cookie.get("token"),
         },

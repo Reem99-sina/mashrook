@@ -15,7 +15,7 @@ export const getMessageByDetailId = createAsyncThunk<returnType, getIdType>(
   "messageDetailById",
   async (data: getIdType, { rejectWithValue }) => {
     const response = await axios
-      .get(`https://server.mashrook.sa/message/details/${data?.id}`, {
+      .get(`${process.env.NEXT_PUBLIC_API}/message/details/${data?.id}`, {
         headers: {
           Authorization: Cookie.get("token"),
         },

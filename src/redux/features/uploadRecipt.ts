@@ -22,7 +22,7 @@ export const uploadReciptPut = createAsyncThunk<returnType, comeType>(
     const formData = new FormData();
     Object.keys(data).map((ele: string) => formData.append(ele, data[ele]));
     const response = await axios
-      .post(`https://server.mashrook.sa/payment/upload-receipt`, formData, {
+      .post(`${process.env.NEXT_PUBLIC_API}/payment/upload-receipt`, formData, {
         headers: {
           Authorization: Cookie.get("token"),
         },

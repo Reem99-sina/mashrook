@@ -12,7 +12,7 @@ export const getDetailsType = createAsyncThunk<returnType>(
   "Offerdetails/get",
   async (_, { rejectWithValue }) => {
     const response = await axios
-      .get(`https://server.mashrook.sa/property-type/get/details`, {
+      .get(`${process.env.NEXT_PUBLIC_API}/property-type/get/details`, {
         headers: {
           Authorization: Cookie.get("token"),
         },

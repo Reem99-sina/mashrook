@@ -18,7 +18,7 @@ export const postSave = createAsyncThunk<returnType, comeType>(
   "save/post",
   async (data: comeType, { rejectWithValue }) => {
     const response = await axios
-      .post(`https://server.mashrook.sa/property-saved`, data, {
+      .post(`${process.env.NEXT_PUBLIC_API}/property-saved`, data, {
         headers: {
           Authorization: Cookie.get("token"),
         },
@@ -32,7 +32,7 @@ export const getSaves = createAsyncThunk<returnType>(
   "save/get",
   async (_, { rejectWithValue }) => {
     const response = await axios
-      .get(`https://server.mashrook.sa/property-saved/mine`, {
+      .get(`${process.env.NEXT_PUBLIC_API}/property-saved/mine`, {
         headers: {
           Authorization: Cookie.get("token"),
         },
@@ -46,7 +46,7 @@ export const deleteSaves = createAsyncThunk<returnType, comeIdType>(
   "save/deleteSaves",
   async (data: comeIdType, { rejectWithValue }) => {
     const response = await axios
-      .delete(`https://server.mashrook.sa/property-saved/${data?.id}`, {
+      .delete(`${process.env.NEXT_PUBLIC_API}/property-saved/${data?.id}`, {
         headers: {
           Authorization: Cookie.get("token"),
         },

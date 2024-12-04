@@ -28,7 +28,7 @@ export const getPartner = createAsyncThunk<returnType, paramsInput | null>(
   "partners/get",
   async (data: paramsInput | null, { rejectWithValue }) => {
     const response = await axios
-      .get(`https://server.mashrook.sa/property/get/mine/partners`, {
+      .get(`${process.env.NEXT_PUBLIC_API}/property/get/mine/partners`, {
         headers: {
           Authorization: Cookie.get("token"),
         },
@@ -43,7 +43,7 @@ export const deleteProperty = createAsyncThunk<returnType, comeType>(
   "property/delete",
   async (data: { id: number }, { rejectWithValue }) => {
     const response = await axios
-      .delete(`https://server.mashrook.sa/property/${data?.id}`, {
+      .delete(`${process.env.NEXT_PUBLIC_API}/property/${data?.id}`, {
         headers: {
           Authorization: Cookie.get("token"),
         },
@@ -57,7 +57,7 @@ export const withDrawProperty = createAsyncThunk<returnType, comeWithdrawType>(
   "property/withdraw",
   async (data: comeWithdrawType, { rejectWithValue }) => {
     const response = await axios
-      .post(`https://server.mashrook.sa/property-ownership/withdraw`, data, {
+      .post(`${process.env.NEXT_PUBLIC_API}/property-ownership/withdraw`, data, {
         headers: {
           Authorization: Cookie.get("token"),
         },
@@ -72,7 +72,7 @@ export const UpdataExpiredDateProperty = createAsyncThunk<returnType, comeType>(
   async (data: comeType, { rejectWithValue }) => {
     const response = await axios
       .put(
-        `https://server.mashrook.sa/property/expire-date/${data?.id}`,
+        `${process.env.NEXT_PUBLIC_API}/property/expire-date/${data?.id}`,
         {},
         {
           headers: {

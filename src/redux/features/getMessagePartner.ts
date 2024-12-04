@@ -14,7 +14,7 @@ export const getMessagePartners = createAsyncThunk<returnType>(
   "partnersmessage/get",
   async (_, { rejectWithValue }) => {
     const response = await axios
-      .get(`https://server.mashrook.sa/room/partners`, {
+      .get(`${process.env.NEXT_PUBLIC_API}/room/partners`, {
         headers: {
           Authorization: Cookie.get("token"),
         },

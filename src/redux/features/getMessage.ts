@@ -23,7 +23,7 @@ export const getMessageByid = createAsyncThunk<returnType, getIdType>(
   "messageid/get",
   async (data: getIdType, { rejectWithValue }) => {
     const response = await axios
-      .get(`https://server.mashrook.sa/message/${data?.id}`, {
+      .get(`${process.env.NEXT_PUBLIC_API}/message/${data?.id}`, {
         headers: {
           Authorization: Cookie.get("token"),
         },
@@ -37,7 +37,7 @@ export const postMessage = createAsyncThunk<returnType, sendMessage>(
   "sendmessage",
   async (data: sendMessage, { rejectWithValue }) => {
     const response = await axios
-      .post(`https://server.mashrook.sa/message`, data, {
+      .post(`${process.env.NEXT_PUBLIC_API}/message`, data, {
         headers: {
           Authorization: Cookie.get("token"),
         },
@@ -55,7 +55,7 @@ export const postFileMessage = createAsyncThunk<returnType, sendFileMessage>(
     formData.append("message", data?.message);
 
     const response = await axios
-      .post(`https://server.mashrook.sa/message/upload`, formData, {
+      .post(`${process.env.NEXT_PUBLIC_API}/message/upload`, formData, {
         headers: {
           Authorization: Cookie.get("token"),
         },

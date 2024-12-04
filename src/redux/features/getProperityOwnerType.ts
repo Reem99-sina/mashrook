@@ -12,7 +12,7 @@ export const getproperityOwnerType = createAsyncThunk<returnType>(
   "properityOwnerType",
   async (_, { rejectWithValue }) => {
     const response = await axios
-      .get("https://server.mashrook.sa/property-owner-type")
+      .get(`${process.env.NEXT_PUBLIC_API}/property-owner-type`)
       .then((response) => response.data)
       .catch((error) => error?.response?.data);
     return response;

@@ -14,7 +14,7 @@ export const getMessageOrders = createAsyncThunk<returnType>(
   "messageorder/get",
   async (_, { rejectWithValue }) => {
     const response = await axios
-      .get(`https://server.mashrook.sa/room/property`, {
+      .get(`${process.env.NEXT_PUBLIC_API}/room/property`, {
         headers: {
           Authorization: Cookie.get("token"),
         },

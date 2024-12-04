@@ -51,7 +51,7 @@ export const getproperityType = createAsyncThunk<returnType, propsInter>(
   "properityType/get",
   async (data: propsInter, { rejectWithValue }) => {
     const response = await axios
-      .get(`https://server.mashrook.sa/property-type/${data?.num}`)
+      .get(`${process.env.NEXT_PUBLIC_API}/property-type/${data?.num}`)
       .then((response) => response.data)
       .catch((error) => error?.response?.data);
     return response;
@@ -65,7 +65,7 @@ export const getproperityTypeMore = createAsyncThunk<
   async (data: propsMoreInter, { rejectWithValue }) => {
     const response = await axios
       .get(
-        `https://server.mashrook.sa/property-type/section-details/${data?.type}/${data?.num}`
+        `${process.env.NEXT_PUBLIC_API}/property-type/section-details/${data?.type}/${data?.num}`
       )
       .then((response) => response.data)
       .catch((error) => error?.response?.data);
