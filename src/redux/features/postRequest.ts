@@ -67,7 +67,7 @@ export const postProperityType = createAsyncThunk<
   "properityType/post",
   async (data: properityTypeInter, { rejectWithValue }) => {
     const response = await axios
-      .post("https://server.mashrook.sa/property/request", data, {
+      .post(`${process.env.NEXT_PUBLIC_API}/property/request`, data, {
         headers: {
           Authorization: Cookie.get("token"),
         },
@@ -82,7 +82,7 @@ export const postPaymentType = createAsyncThunk<returnType, paymentType>(
   "paymentType/post",
   async (data: paymentType, { rejectWithValue }) => {
     const response = await axios
-      .post("https://server.mashrook.sa/payment/property", data, {
+      .post(`${process.env.NEXT_PUBLIC_API}/payment/property`, data, {
         headers: {
           Authorization: Cookie.get("token"),
         },
@@ -100,7 +100,7 @@ export const postPaymentFileType = createAsyncThunk<returnType, paymentType>(
     Object?.keys(data)?.map((ele: any) => formData.append(ele, data[ele]));
     // data?.images?.forEach((image) => );
     const response = await axios
-      .post("https://server.mashrook.sa/payment/upload-receipt", formData, {
+      .post(`${process.env.NEXT_PUBLIC_API}/payment/upload-receipt`, formData, {
         headers: {
           Authorization: Cookie.get("token"),
         },

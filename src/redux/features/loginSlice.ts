@@ -31,7 +31,7 @@ export const login = createAsyncThunk<returnType, userLogin>(
   "login",
   async (data: userLogin, { rejectWithValue }) => {
     const response = await axios
-      .post("https://server.mashrook.sa/auth/login", data)
+      .post(`${process.env.NEXT_PUBLIC_API}/auth/login`, data)
       .then((response) => response.data)
       .catch((error) => error?.response?.data);
 
@@ -42,7 +42,7 @@ export const forget = createAsyncThunk<returnType, forgetLogin>(
   "forget",
   async (data: forgetLogin, { rejectWithValue }) => {
     const response = await axios
-      .put("https://server.mashrook.sa/auth/forget-password", data)
+      .put(`${process.env.NEXT_PUBLIC_API}/auth/forget-password`, data)
       .then((response) => response.data)
       .catch((error) => error?.response?.data);
     return response;
@@ -53,7 +53,7 @@ export const reset = createAsyncThunk<returnType, resetLogin>(
   async (data: resetLogin, { rejectWithValue }) => {
     const response = await axios
       .put(
-        "https://server.mashrook.sa/auth/reset-password",
+        `${process.env.NEXT_PUBLIC_API}/auth/reset-password`,
         {
           new_password: data?.new_password,
           repeate_new_password: data?.repeate_new_password,
@@ -72,7 +72,7 @@ export const reset = createAsyncThunk<returnType, resetLogin>(
 export const resetNewFromOld=async(data:resetPasswordFromOld)=>{
   const response = await axios
       .put(
-        "https://server.mashrook.sa/auth/update-password",
+        `${process.env.NEXT_PUBLIC_API}/auth/update-password`,
         {
           new_password: data?.new_password,
           repeate_new_password: data?.repeate_new_password,

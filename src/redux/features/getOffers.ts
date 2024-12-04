@@ -27,7 +27,7 @@ export const getOffer = createAsyncThunk<returnType, paramsInput | null>(
   "Offer/get",
   async (data: paramsInput | null, { rejectWithValue }) => {
     const response = await axios
-      .get(`https://server.mashrook.sa/property/get/mine/offers`, {
+      .get(`${process.env.NEXT_PUBLIC_API}/property/get/mine/offers`, {
         headers: {
           Authorization: Cookie.get("token"),
         },
@@ -45,7 +45,7 @@ export const deleteOfferDetailOrLand = createAsyncThunk<
   if (data?.detail_id) {
     const response = await axios
       .delete(
-        `https://server.mashrook.sa/property/details/${data?.detail_id}`,
+        `${process.env.NEXT_PUBLIC_API}/property/details/${data?.detail_id}`,
         {
           headers: {
             Authorization: Cookie.get("token"),
@@ -58,7 +58,7 @@ export const deleteOfferDetailOrLand = createAsyncThunk<
   } else {
     const response = await axios
       .delete(
-        `https://server.mashrook.sa/property/land-details/${data?.land_detail_id}`,
+        `${process.env.NEXT_PUBLIC_API}/property/land-details/${data?.land_detail_id}`,
         {
           headers: {
             Authorization: Cookie.get("token"),

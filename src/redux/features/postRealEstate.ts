@@ -224,7 +224,7 @@ export const postrealEstateType = createAsyncThunk<
     delete data["images"];
   }
   const response = await axios
-    .post("https://server.mashrook.sa/property/offer", data, {
+    .post(`${process.env.NEXT_PUBLIC_API}/property/offer`, data, {
       headers: {
         Authorization: Cookie.get("token"),
       },
@@ -248,7 +248,7 @@ export const putLandDetailsType = createAsyncThunk<returnType, any>(
   "land-details/put",
   async (data: any, { rejectWithValue }) => {
     const response = await axios
-      .put("https://server.mashrook.sa/property/land-details", data, {
+      .put(`${process.env.NEXT_PUBLIC_API}/property/land-details`, data, {
         headers: {
           Authorization: Cookie.get("token"),
         },
@@ -267,7 +267,7 @@ export const putDetailsType = createAsyncThunk<returnType, any>(
   "details/put",
   async (data: any, { rejectWithValue }) => {
     const response = await axios
-      .put("https://server.mashrook.sa/property/details", data, {
+      .put(`${process.env.NEXT_PUBLIC_API}/property/details`, data, {
         headers: {
           Authorization: Cookie.get("token"),
         },
@@ -286,7 +286,7 @@ export const putLocation = createAsyncThunk<returnType, any>(
   "location/put",
   async (data: any, { rejectWithValue }) => {
     const response = await axios
-      .put("https://server.mashrook.sa/property/location", data, {
+      .put(`${process.env.NEXT_PUBLIC_API}/property/location`, data, {
         headers: {
           Authorization: Cookie.get("token"),
         },
@@ -305,7 +305,7 @@ export const imageRequest = async (data: imageInter) => {
   const formData = new FormData();
   data?.images?.forEach((image) => formData.append("images", image));
   const response = await axios
-    .post(`https://server.mashrook.sa/property-media/${data.id}`, formData, {
+    .post(`${process.env.NEXT_PUBLIC_API}/property-media/${data.id}`, formData, {
       headers: {
         Authorization: Cookie.get("token"),
         "Content-Type": "multipart/form-data",
@@ -319,7 +319,7 @@ export const imageDeleteRequest = createAsyncThunk<returnType, any>(
   "image/delete",
   async (data: imageInter) => {
     const response = await axios
-      .delete(`https://server.mashrook.sa/property-media/${data?.id}`, {
+      .delete(`${process.env.NEXT_PUBLIC_API}/property-media/${data?.id}`, {
         headers: {
           Authorization: Cookie.get("token"),
         },
@@ -337,7 +337,7 @@ export const imageUpdateRequest = createAsyncThunk<returnType, any>(
 
     const response = await axios
       .post(
-        `https://server.mashrook.sa/property-media/upload-single/${data?.id}`,
+        `${process.env.NEXT_PUBLIC_API}/property-media/upload-single/${data?.id}`,
         formData,
         {
           headers: {

@@ -9,7 +9,7 @@ export const getBanners = createAsyncThunk<returnType>(
   "banner/get",
   async (_, { rejectWithValue }) => {
     const response = await axios
-      .get(`https://server.mashrook.sa/banner`)
+      .get(`${process.env.NEXT_PUBLIC_API}/banner`)
       .then((response) => response.data)
       .catch((error) => error?.response?.data);
     return response;

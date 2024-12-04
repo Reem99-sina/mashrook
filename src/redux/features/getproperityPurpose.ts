@@ -14,7 +14,7 @@ export const getproperityPurposeType = createAsyncThunk<returnType,(dataSendType
   "properityPurpose",
   async (data:(dataSendType|undefined), { rejectWithValue }) => {
     const response = await axios
-      .get(`https://server.mashrook.sa/property-purpose?property_owner_type_id=${data?.property_owner_type_id}`)
+      .get(`${process.env.NEXT_PUBLIC_API}/property-purpose?property_owner_type_id=${data?.property_owner_type_id}`)
       .then((response) => response.data)
       .catch((error) => error?.response?.data);
     return response;

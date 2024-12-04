@@ -26,7 +26,7 @@ export const getMyAdvertise = createAsyncThunk<returnType>(
   "advertise/get",
   async (_, { rejectWithValue }) => {
     const response = await axios
-      .get(`https://server.mashrook.sa/property-advertising/mine`, {
+      .get(`${process.env.NEXT_PUBLIC_API}/property-advertising/mine`, {
         headers: {
           Authorization: Cookie.get("token"),
         },
@@ -40,7 +40,7 @@ export const getAllAdvertise = createAsyncThunk<returnType,(dataParamsAdvertise|
   "advertiseAll/get",
   async (data:(dataParamsAdvertise|null), { rejectWithValue }) => {
     const response = await axios
-      .get(`https://server.mashrook.sa/property-advertising`, {
+      .get(`${process.env.NEXT_PUBLIC_API}/property-advertising`, {
         headers: {
           Authorization: Cookie.get("token"),
         },
@@ -57,7 +57,7 @@ export const postMyAdvertise = createAsyncThunk<returnType, dataSend>(
   async (data: dataSend, { rejectWithValue }) => {
     const response = await axios
       .post(
-        `https://server.mashrook.sa/payment/property-advertising`,
+        `${process.env.NEXT_PUBLIC_API}/payment/property-advertising`,
         { property_id: data?.property_id, amount: data?.amount },
         {
           headers: {
@@ -83,7 +83,7 @@ export const postMyReceiptAdvertise = createAsyncThunk<
 
     const response = await axios
       .post(
-        `https://server.mashrook.sa/payment/upload-property-advertising-receipt`,
+        `${process.env.NEXT_PUBLIC_API}/payment/upload-property-advertising-receipt`,
         formData,
         {
           headers: {

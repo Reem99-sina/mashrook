@@ -35,7 +35,7 @@ export const postComplaint = createAsyncThunk<returnType,dataSend>(
   async (data:dataSend, { rejectWithValue }) => {
     if( Cookie.get("token")){
         const response = await axios
-        .post(`https://server.mashrook.sa/complaint`, data,{
+        .post(`${process.env.NEXT_PUBLIC_API}/complaint`, data,{
           headers: {
             Authorization: Cookie.get("token"),
           },
@@ -45,7 +45,7 @@ export const postComplaint = createAsyncThunk<returnType,dataSend>(
       return response;
     }else{
         const response = await axios
-        .post(`https://server.mashrook.sa/complaint/no-login`,data)
+        .post(`${process.env.NEXT_PUBLIC_API}/complaint/no-login`,data)
         .then((response) => response.data)
         .catch((error) => error?.response?.data);
       return response;  
@@ -56,7 +56,7 @@ export const getDistrict = createAsyncThunk<returnType, getType>(
   "district/get",
   async (data: { name: string }, { rejectWithValue }) => {
     const response = await axios
-      .get(`https://server.mashrook.sa/data/district/${data?.name}`, {
+      .get(`${process.env.NEXT_PUBLIC_API}/data/district/${data?.name}`, {
         headers: {
           Authorization: Cookie.get("token"),
         },

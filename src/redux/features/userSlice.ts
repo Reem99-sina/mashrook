@@ -23,7 +23,7 @@ export const getUserRequest = createAsyncThunk(
   "putUser",
   async (_, { rejectWithValue }) => {
     const response = await axios
-      .get("https://server.mashrook.sa/user", {
+      .get(`${process.env.NEXT_PUBLIC_API}/user`, {
         headers: {
           Authorization: Cookie.get("token"),
         },
@@ -37,7 +37,7 @@ export const register = createAsyncThunk(
   "register",
   async (data: userRegister, { rejectWithValue }) => {
     const response = await axios
-      .post("https://server.mashrook.sa/auth", data)
+      .post(`${process.env.NEXT_PUBLIC_API}/auth`, data)
       .then((response) => response.data)
       .catch((error) => error?.response?.data); // Adjust your endpoint as necessary
     return response; // Return the user data from API response
@@ -73,7 +73,7 @@ export const updateUserImage = createAsyncThunk(
     const formData = new FormData();
     formData.append("image", data?.image);
     const response = await axios
-      .put("https://server.mashrook.sa/user/upload-image", formData, {
+      .put(`${process.env.NEXT_PUBLIC_API}/user/upload-image`, formData, {
         headers: {
           Authorization: Cookie.get("token"),
         },
@@ -87,7 +87,7 @@ export const updateUser = createAsyncThunk(
   "auth/updateUser",
   async (data: userUpdata) => {
     const response = await axios
-      .put("https://server.mashrook.sa/user", data, {
+      .put(`${process.env.NEXT_PUBLIC_API}/user`, data, {
         headers: {
           Authorization: Cookie.get("token"),
         },
@@ -99,7 +99,7 @@ export const updateUser = createAsyncThunk(
 );
 export const deleteUser = createAsyncThunk("auth/deleteuser", async () => {
   const response = await axios
-    .delete("https://server.mashrook.sa/user", {
+    .delete(`${process.env.NEXT_PUBLIC_API}/user`, {
       headers: {
         Authorization: Cookie.get("token"),
       },
@@ -112,7 +112,7 @@ export const deleteTokenUser = createAsyncThunk(
   "auth/deleteTokenuser",
   async (data: userDeleteToken) => {
     const response = await axios
-      .delete(`https://server.mashrook.sa/user/logout/${data?.token}`, {
+      .delete(`${process.env.NEXT_PUBLIC_API}/user/logout/${data?.token}`, {
         headers: {
           Authorization: Cookie.get("token"),
         },
@@ -126,7 +126,7 @@ export const sendNationalIdUser = createAsyncThunk(
   "transaction",
   async (data: { national_id: string }) => {
     return await axios
-      .post(`https://server.mashrook.sa/transaction`, data, {
+      .post(`${process.env.NEXT_PUBLIC_API}/transaction`, data, {
         headers: {
           Authorization: Cookie.get("token"),
         },
@@ -139,7 +139,7 @@ export const verifyNationalIdUser = createAsyncThunk(
   "verify-transaction",
   async (data: { TransactionId: string|null }) => {
     return await axios
-      .post(`https://server.mashrook.sa/transaction/verify-transaction`, data, {
+      .post(`${process.env.NEXT_PUBLIC_API}/transaction/verify-transaction`, data, {
         headers: {
           Authorization: Cookie.get("token"),
         },
@@ -148,7 +148,7 @@ export const verifyNationalIdUser = createAsyncThunk(
       .catch((error) => error?.response?.data);
   }
 );
-// https://server.mashrook.sa/transaction
+// ${process.env.NEXT_PUBLIC_API}/transaction
 const initialstate = {
   loading: false,
   message: "",

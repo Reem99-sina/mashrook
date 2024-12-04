@@ -13,7 +13,7 @@ export const verifyRequest = createAsyncThunk(
   "verify",
   async (data: verifyEmail, { rejectWithValue }) => {
     const response = await axios
-      .put("https://server.mashrook.sa/auth/code", data)
+      .put(`${process.env.NEXT_PUBLIC_API}/auth/code`, data)
       .then((response) => response.data)
       .catch((error) => error?.response?.data); // Adjust your endpoint as necessary
     return response; // Return the user data from API response
@@ -23,7 +23,7 @@ export const resendCodeRequest = createAsyncThunk(
   "resendcode",
   async (data: verifyCodeEmail, { rejectWithValue }) => {
     const response = await axios
-      .put("https://server.mashrook.sa/auth/send-code", data)
+      .put(`${process.env.NEXT_PUBLIC_API}/auth/send-code`, data)
       .then((response) => response.data)
       .catch((error) => error?.response?.data); // Adjust your endpoint as necessary
     return response; // Return the user data from API response

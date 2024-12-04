@@ -21,7 +21,7 @@ export const getMyNotification = createAsyncThunk<returnType>(
   "notification/get",
   async (_, { rejectWithValue }) => {
     const response = await axios
-      .get(`https://server.mashrook.sa/notification`, {
+      .get(`${process.env.NEXT_PUBLIC_API}/notification`, {
         headers: {
           Authorization: Cookie.get("token"),
         },
@@ -35,7 +35,7 @@ export const readMessages = createAsyncThunk<returnType, getType>(
   "message/read",
   async (data: { notification_ids: number[] }, { rejectWithValue }) => {
     const response = await axios
-      .put(`https://server.mashrook.sa/notification/read/`, data,{
+      .put(`${process.env.NEXT_PUBLIC_API}/notification/read/`, data,{
         headers: {
           Authorization: Cookie.get("token"),
         },
