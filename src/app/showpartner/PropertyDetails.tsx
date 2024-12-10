@@ -50,7 +50,7 @@ const PropertyDetails: React.FC<{ id: any }> = ({ id }: { id: any }) => {
   let { selectData } = useSelector<RootState>((state) => state.getRequest) as {
     selectData: dataReturn;
   };
-
+console.log(selectData)
   const userOwnerShipArray = useMemo(() => {
     return selectData?.propertyDetailsOwnership?.filter(
       (ele: realEstatePartner) => ele?.user_id == user?.id
@@ -422,6 +422,19 @@ const PropertyDetails: React.FC<{ id: any }> = ({ id }: { id: any }) => {
               {selectData?.propertyOwnerType?.title}
             </div>
           </div>
+          {selectData?.advertisement_number && (
+            <div className="flex bg-gray-100 w-full justify-between items-center py-2  px-2 rounded-lg ml-2 mt-4">
+              <div>
+                <p>رقم ترخيص الإعلان</p>
+              </div>
+              <div className="flex items-center ml-2 text-sm bg-gray-100 border-2  px-2 py-1 rounded-lg">
+                <CgSmartphoneShake className=" ml-2" />
+                <span className="mr-2 text-lg ">
+                  <p>{selectData?.advertisement_number}</p>
+                </span>
+              </div>
+            </div>
+          )}
           <div className="flex bg-gray-100 w-full justify-between items-center py-2  px-2 rounded-lg ml-2 mt-4">
             <div>
               <p>تاريخ اخر تحديث</p>
@@ -451,19 +464,6 @@ const PropertyDetails: React.FC<{ id: any }> = ({ id }: { id: any }) => {
               </span>
             </div>
           </div>
-          {selectData?.license_number && (
-            <div className="flex bg-gray-100 w-full justify-between items-center py-2  px-2 rounded-lg ml-2 mt-4">
-              <div>
-                <p>رقم ترخيص الإعلان</p>
-              </div>
-              <div className="flex items-center ml-2 text-sm bg-gray-100 border-2  px-2 py-1 rounded-lg">
-                <CgSmartphoneShake className=" ml-2" />
-                <span className="mr-2 text-lg ">
-                  <p>{selectData?.license_number}</p>
-                </span>
-              </div>
-            </div>
-          )}
           {selectData?.propertyOwnerType?.title == "وسيط عقاري" &&
             selectData?.user?.val_license && (
               <div className="flex bg-gray-100 w-full justify-between items-center py-2  px-2 rounded-lg ml-2 mt-4">
