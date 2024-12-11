@@ -30,6 +30,7 @@ export default function RootLayout({
           rel="stylesheet"
           href="https://cdn.moyasar.com/mpf/1.7.3/moyasar.css"
         />
+        <GoogleAnalytics />
       </head>
       <body className={cairo.className}>
         <div className="flex items-center justify-center min-h-screen bg-[#DCE9E5]">
@@ -40,7 +41,6 @@ export default function RootLayout({
             </ReduxProvider>
           </div>
         </div>
-        <GoogleAnalytics />
       </body>
     </html>
   );
