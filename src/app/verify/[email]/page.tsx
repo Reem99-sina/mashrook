@@ -14,6 +14,7 @@ import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import Cookie from "js-cookie"
 import { useRouter } from "next/navigation";
 import useFcmToken from '@/utils/hooks/useFcmToken';
+import { eventAnalistic } from "@/utils/event-analistic";
 const Verify: React.FC = () => {
   const router = useParams();
   const links = useRouter();
@@ -53,6 +54,12 @@ const Verify: React.FC = () => {
         })
       ).then((res: any) => {
         if (res.payload.message && !res.payload.status) {
+          eventAnalistic({
+            action:"Register_after_otp",
+            category:"Register",
+            label: 'Register after otp',
+            value: 'Register_after_otp',
+          })
           toast.success(res.payload.message);
           Cookie.set("token", res.payload?.data?.token);
           links.push(`/`);

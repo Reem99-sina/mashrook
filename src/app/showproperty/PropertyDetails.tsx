@@ -43,6 +43,7 @@ import {
 import { fetchuser } from "@/redux/features/userSlice";
 import dynamic from "next/dynamic";
 import { FormatNumber } from "../hooks/formatNumber";
+import { eventAnalistic } from "@/utils/event-analistic";
 const Map = dynamic(() => import("@/app/components/shared/map"), {
   ssr: false,
 });
@@ -123,6 +124,12 @@ const PropertyDetails: React.FC<{ id: number }> = ({ id }: { id: number }) => {
         }
       })
       .finally(() => {
+        eventAnalistic({
+          action: "report_offer",
+          category: "report",
+          label: "Item added to report offer",
+          value: "add_report",
+        });
         setIsDialogOpen(false);
         setReportText("");
       });

@@ -17,6 +17,7 @@ import Link from "next/link";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 import useFcmToken from "@/utils/hooks/useFcmToken";
+import { eventAnalistic } from "@/utils/event-analistic";
 export interface userLogin {
   email: string;
   password: string;
@@ -49,6 +50,12 @@ const Login: React.FC = () => {
     if (status == true) {
       dispatch(login({ ...user, device_token: fcmToken })).then((res: any) => {
         if (res.payload.message && !res.payload.status) {
+          eventAnalistic({
+            action:"Login",
+            category:"Login",
+            label:"login",
+            value:"login"
+          })
           toast.success(res.payload.message);
           router.push(`/`);
         } else if (res.payload.status) {

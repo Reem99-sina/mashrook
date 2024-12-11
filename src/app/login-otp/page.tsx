@@ -16,6 +16,7 @@ import { ForgetSchema } from "@/typeSchema/schema";
 import { validateForm } from "@/app/hooks/validate";
 import Link from "next/link"
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { eventAnalistic } from "@/utils/event-analistic";
 export interface userLogin {
   email: string;
 }
@@ -43,6 +44,12 @@ const LoginOtp: React.FC = () => {
     if (status == true) {
         dispatch(resendCodeRequest({email:String(user?.email)})).then((res:any)=>{
         if(res.payload.message&&!res.payload.status){
+          eventAnalistic({
+            action:"login_otp",
+            category:"login_otp",
+            label:"login_otp",
+            value:"login_otp"
+          })
           toast.success(res.payload.message);
           router.push(`/verify/${user?.email}`);
         }else if(res.payload.status){

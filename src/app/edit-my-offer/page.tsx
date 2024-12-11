@@ -18,15 +18,16 @@ import {
   putLandDetailsType,
   removeStateEdit,
 } from "@/redux/features/postRealEstate";
+import { eventAnalistic } from "@/utils/event-analistic";
 
 const EditMyOffer = () => {
   const modalRef = useRef<ModalRef>(null);
   let [offer, setOffer] = useState<any>();
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
-  let {
-    message,
-  } = useSelector<RootState>((state) => state.realEstateRequest) as {
+  let { message } = useSelector<RootState>(
+    (state) => state.realEstateRequest
+  ) as {
     message: string;
   };
   const handleBack = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -71,13 +72,19 @@ const EditMyOffer = () => {
         })
       ).then((res: any) => {
         if (res.payload.data) {
+          eventAnalistic({
+            action: "edit_offer",
+            category: "edit_offer",
+            label: "edit offer",
+            value: "edit offer",
+          });
           toast.success(res.payload.message);
           router.push(`/my-offer?title=عروضي`);
         } else if (res.payload.status) {
           toast.error(res.payload.message);
           router.push(`/my-offer?title=عروضي`);
         }
-      })
+      });
     } else {
       dispatch(
         putLandDetailsType({
@@ -90,13 +97,19 @@ const EditMyOffer = () => {
         })
       ).then((res: any) => {
         if (res.payload.data) {
+          eventAnalistic({
+            action: "edit_offer",
+            category: "edit_offer",
+            label: "edit offer",
+            value: "edit offer",
+          });
           toast.success(res.payload.message);
           router.push(`/my-offer?title=عروضي`);
         } else if (res.payload.status) {
           toast.error(res.payload.message);
           router.push(`/my-offer?title=عروضي`);
         }
-      })
+      });
     }
   };
   return (
@@ -175,7 +188,7 @@ const EditMyOffer = () => {
         />
 
         <InputAreaPrice
-          title={!offer?.type?"السعر للمتر المربع":"السعر"}
+          title={!offer?.type ? "السعر للمتر المربع" : "السعر"}
           onChange={(event) =>
             setOffer((prev: any) => ({
               ...prev,

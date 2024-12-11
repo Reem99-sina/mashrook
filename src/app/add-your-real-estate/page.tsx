@@ -63,6 +63,7 @@ import VillaDetails from "./VillaDetails";
 import OnSuccess from "./OnSuccess";
 import AddLocation from "../components/add-real-estate-components/AddLocation";
 import PropertyLocation from "../components/add-real-estate-components/PropertyLocation";
+import { eventAnalistic } from "@/utils/event-analistic";
 type Option = {
   id: number;
   title: string;
@@ -542,6 +543,12 @@ const AddYourRealEstate: React.FC = () => {
 
   useEffect(() => {
     if (messagerealEstateRequest && Boolean(datarealEstateRequest) == true) {
+      eventAnalistic({
+        action: "add_offer",
+        category: "offer",
+        label: "Item added to offer",
+        value: "add",
+      });
       toast.success(messagerealEstateRequest);
       setSentYourRequest(true);
     } else if (

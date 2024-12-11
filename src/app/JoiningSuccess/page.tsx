@@ -13,6 +13,7 @@ import {
   removeStatePayment,
   postPaymentFileType,
 } from "@/redux/features/postRequest";
+import { eventAnalistic } from "@/utils/event-analistic";
 
 export default function JoiningSuccess() {
   const dispatch = useDispatch<AppDispatch>();
@@ -36,6 +37,12 @@ export default function JoiningSuccess() {
         })
       ).then((res: any) => {
         if (res?.payload?.data) {
+          eventAnalistic({
+            action: "payment_partner_offer",
+            category: "payment_partner_offer",
+            label: "payment partner offer",
+            value: "payment_partner_offer",
+          });
           setSucces(true);
           setMessage(res.payload.message);
           toast.success(res.payload.message);
@@ -54,6 +61,12 @@ export default function JoiningSuccess() {
         })
       ).then((res: any) => {
         if (res.payload.data) {
+          eventAnalistic({
+            action: "payment_partner_offer",
+            category: "payment_partner_offer",
+            label: "payment partner offer",
+            value: "payment_partner_offer",
+          });
           setSucces(true);
           setMessage(res.payload.message);
           toast.success(res.payload.message);

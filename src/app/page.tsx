@@ -23,6 +23,7 @@ import useFcmToken from '@/utils/hooks/useFcmToken';
 import FcmTokenComp from "@/utils/firebase/firebaseForeground"
 import ModelForm from "@/app/components/check-id-number/ModelForm"
 import { ModalRef } from "@/app/components/shared/modal.component";
+import { eventAnalistic } from "@/utils/event-analistic";
 // import { FcmTokenComp, onMessage } from "firebase/messaging";
 const limit = 5
 
@@ -43,6 +44,7 @@ export default function Home() {
     dispatch(fetchToken())
     dispatch(fetchAuthId())
   }, [dispatch]);
+  
   useEffect(() => {
     const checkAndRemoveCookie = () => {
       const now = new Date();
@@ -70,6 +72,12 @@ export default function Home() {
     return () => clearInterval(interval);
   }, [dispatch,timesForWeek]);
   useEffect(() => {
+    eventAnalistic({
+      action:"Visite_website",
+      category:"website",
+      label: 'visit main page',
+      value: 'visit_main_page',
+    })
     dispatch(getRequest({}));
   }, [dispatch]);
 
