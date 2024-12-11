@@ -18,6 +18,7 @@ import { registerSchema } from "@/typeSchema/schema";
 import { validateForm } from "@/app/hooks/validate";
 import ModelRules from "@/app/components/shared/ModelRules";
 import Cookie from "js-cookie";
+import { eventAnalistic } from "@/utils/event-analistic";
 export interface userRegister {
   username: string;
   email: string;
@@ -55,6 +56,12 @@ const SignUp: React.FC = () => {
     if (checkBox) {
       if (status == true) {
         dispatch(register(user));
+        eventAnalistic({
+          action: "Register_without_otp",
+          category: "register",
+          label: "Register without otp",
+          value: "Register_without_otp",
+        });
         setErrors({
           username: "",
           email: "",

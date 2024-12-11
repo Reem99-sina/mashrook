@@ -7,6 +7,7 @@ import { getMyAdvertise } from "@/redux/features/getMyAdvertise"
 import { fetchToken } from "@/redux/features/userSlice"
 import { Button } from "@/app/components/shared/button.component";
 import { useRouter } from "next/navigation"
+import { eventAnalistic } from "@/utils/event-analistic";
 const ModalAddAdvertising = ({ refModel }: { refModel: React.RefObject<ModalRef> }) => {
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter()
@@ -73,7 +74,13 @@ const ModalAddAdvertising = ({ refModel }: { refModel: React.RefObject<ModalRef>
             className="!flex !flex-row-reverse items-center justify-center gap-2"
             onClick={() => {
               if(property_id){
-                setShow(false)
+              setShow(false)
+              eventAnalistic({
+                action: "advertisement_add",
+                category: "advertisement",
+                label: "Item added to  advertise",
+                value: "add  advertise",
+              });
               router?.push(`/my-posts/${property_id}/termsandconditions`)
               }else{
                 setShow(true)

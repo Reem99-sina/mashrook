@@ -21,6 +21,7 @@ import toast from "react-hot-toast";
 import { userInfo } from "@/type/addrealestate";
 import { IoMdCloseCircleOutline } from "react-icons/io";
 import { Accreditation } from "@/app/assets/svg";
+import { eventAnalistic } from "@/utils/event-analistic";
 type JoinStatusButtonsProps = {
   currentDealStatus: boolean;
   data: typePay;
@@ -76,6 +77,12 @@ const JoinStatusButtons: React.FC<JoinStatusButtonsProps> = ({
           propertyPurpose: dataMain?.propertyPurpose?.id,
         })
       );
+      eventAnalistic({
+        action:"Join_partner_offer",
+        category:"partner offer",
+        label: 'Join partner offer',
+        value: 'Join partner offer',
+      })
       router.push("/termsandconditions");
     }
   };

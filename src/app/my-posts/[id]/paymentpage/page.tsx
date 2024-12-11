@@ -11,69 +11,95 @@ import { useParams } from "next/navigation";
 import { GoDownload } from "react-icons/go";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
-import { dataReturn, addUnqiue, getRequestByid } from "@/redux/features/getRequest"
-import { postMyAdvertise, postMyReceiptAdvertise } from "@/redux/features/getMyAdvertise"
+import {
+  dataReturn,
+  addUnqiue,
+  getRequestByid,
+} from "@/redux/features/getRequest";
+import {
+  postMyAdvertise,
+  postMyReceiptAdvertise,
+} from "@/redux/features/getMyAdvertise";
 import toast from "react-hot-toast";
-import { paymentSchema } from "@/typeSchema/schema"
-import { useState, useEffect } from "react"
+import { paymentSchema } from "@/typeSchema/schema";
+import { useState, useEffect } from "react";
 import { validateForm } from "@/app/hooks/validate";
-import { useRouter } from "next/navigation"
+import { useRouter } from "next/navigation";
+import { eventAnalistic } from "@/utils/event-analistic";
 
 export default function Payment() {
-  const router = useRouter()
-  const params = useParams()
-  let { selectData } = useSelector<RootState>(
-    (state) => state.getRequest
-  ) as { loading: boolean; message: string; data: dataReturn[], selectData: dataReturn };
+  const router = useRouter();
+  const params = useParams();
+  let { selectData } = useSelector<RootState>((state) => state.getRequest) as {
+    loading: boolean;
+    message: string;
+    data: dataReturn[];
+    selectData: dataReturn;
+  };
 
   let [data, setData] = useState({
     method: "",
     name: "",
     numCard: 0,
     endDate: "",
-    cvv: ""
-  })
-  let [recipt, setRecipt] = useState<File>()
+    cvv: "",
+  });
+  let [recipt, setRecipt] = useState<File>();
   const [errors, setErrors] = useState<{
-    method?: string,
-    name?: string,
-    numCard?: number,
-    endDate?: string,
-    cvv?: string,
-    receipt?: string
+    method?: string;
+    name?: string;
+    numCard?: number;
+    endDate?: string;
+    cvv?: string;
+    receipt?: string;
   }>();
-  let dispatch = useDispatch<AppDispatch>()
+  let dispatch = useDispatch<AppDispatch>();
   let refImage = useRef<HTMLInputElement>(null);
   let refA = useRef<any>(null);
-  let [url, setUrl] = useState<any>()
+  let [url, setUrl] = useState<any>();
   const titlePiece = useMemo(() => {
-    const pieces = selectData?.landDetails?.length > 0 ? "رقم القطعة " + selectData?.landDetails?.map((ele) => ele?.piece_number).join(",") : selectData?.propertyType?.title
-    return selectData?.propertyTypeDetails?.title + " " + pieces
-  }, [selectData])
+    const pieces =
+      selectData?.landDetails?.length > 0
+        ? "رقم القطعة " +
+          selectData?.landDetails?.map((ele) => ele?.piece_number).join(",")
+        : selectData?.propertyType?.title;
+    return selectData?.propertyTypeDetails?.title + " " + pieces;
+  }, [selectData]);
   async function onSubmit(e: React.MouseEvent<HTMLButtonElement>) {
-    e.preventDefault()
+    e.preventDefault();
     if (data?.method == "bank") {
       if (recipt) {
-        dispatch(postMyReceiptAdvertise({property_id:selectData?.id,amount:500,receipt:recipt}))
-        .then((res: any) => {
+        dispatch(
+          postMyReceiptAdvertise({
+            property_id: selectData?.id,
+            amount: 500,
+            receipt: recipt,
+          })
+        ).then((res: any) => {
           if (res.payload.data) {
-          
-          toast.success(res.payload.message);
-          router.push(`/my-posts/${params?.id}/JoiningSuccess?status=pending&property_id=${params?.id}`)
-        } else if (res.payload.status) {
-         
-          toast.error(res.payload.message);
-        }
-        })
+            eventAnalistic({
+              action: "payment_advertise",
+              category: "advertisement",
+              label: "Item added to payment_advertise",
+              value: "add payment_advertise",
+            });
+            toast.success(res.payload.message);
+            router.push(
+              `/my-posts/${params?.id}/JoiningSuccess?status=pending&property_id=${params?.id}`
+            );
+          } else if (res.payload.status) {
+            toast.error(res.payload.message);
+          }
+        });
       } else {
-        setErrors({ ...errors, receipt: "يجب ادخال ايصال" })
+        setErrors({ ...errors, receipt: "يجب ادخال ايصال" });
       }
-    } 
+    }
   }
   function readAndPreview(file: File) {
     // Make sure `file.name` matches our extensions criteria
-    if ((file instanceof File) == true) {
-      setRecipt(file)
+    if (file instanceof File == true) {
+      setRecipt(file);
       if (/\.(pdf|png|jpg|jpeg?g|pdf|png|jpg|jpeg)$/i.test(file.name)) {
         const reader = new FileReader();
 
@@ -81,17 +107,15 @@ export default function Payment() {
           "load",
           () => {
             if (reader?.result) {
-
-              setUrl({ name: file?.name, link: reader?.result })
+              setUrl({ name: file?.name, link: reader?.result });
             }
             //   preview.appendChild(image);
           },
-          false,
+          false
         );
 
         reader.readAsDataURL(file);
       }
-
     }
   }
 
@@ -109,11 +133,14 @@ export default function Payment() {
   // },[messagePayment,dataPayment,router,dispatch])
   useEffect(() => {
     if (params?.id) {
-      dispatch(getRequestByid({ id: Number(params?.id) }))
+      dispatch(getRequestByid({ id: Number(params?.id) }));
     }
-  }, [dispatch, params?.id])
+  }, [dispatch, params?.id]);
   return (
-    <div className="flex justify-center w-dvh h-max " style={{ direction: "ltr" }}>
+    <div
+      className="flex justify-center w-dvh h-max "
+      style={{ direction: "ltr" }}
+    >
       <div className="w-full bg-white rounded text-black shadow ">
         <div className="flex">
           <main className="container mx-auto ">
@@ -129,7 +156,9 @@ export default function Payment() {
 
                 <div className="text-right p-4 m-4 bg-gray-200">
                   <div className="flex flex-row justify-between">
-                    <p className="text-xl text-green-500 font-bold">{500} ريال</p>
+                    <p className="text-xl text-green-500 font-bold">
+                      {500} ريال
+                    </p>
                     <p className="text-xl text-blue-450 font-bold my-2">
                       رسوم اعلان
                     </p>
@@ -161,8 +190,14 @@ export default function Payment() {
                   <div className="text-right p-4 mb-4 rounded-xl bg-gray-200">
                     <p className="text-xl font-bold">بيانات الدفع</p>
                   </div>
-                  <div className="mysr" style={{ display: data?.method == "bank" ? "none" : "block",direction:"rtl" }}></div>
-                  {data?.method == "bank" &&
+                  <div
+                    className="mysr"
+                    style={{
+                      display: data?.method == "bank" ? "none" : "block",
+                      direction: "rtl",
+                    }}
+                  ></div>
+                  {data?.method == "bank" && (
                     //       url?<>
                     //         <div className="my-2 border-2 shadow-md p-4 rounded-xl flex flex-row-reverse items-center justify-between">
                     //   <div className="flex flex-row-reverse items-center gap-x-3">
@@ -206,15 +241,24 @@ export default function Payment() {
                             onClick={() => refImage.current?.click()}
                             className="cursor-pointer flex flex-row-reverse gap-x-2"
                           >
-                            <Image src={Add} width={21} height={21} alt={"add"} />
+                            <Image
+                              src={Add}
+                              width={21}
+                              height={21}
+                              alt={"add"}
+                            />
 
                             <p className="text-sm text-[#3B73B9] font-bold">
                               أضف صورة / ملف
                             </p>
                           </div>
-                          {errors?.receipt ? <p className="text-xs text-red-600 dark:text-red-500 text-right">
-                            {String(errors?.receipt)}
-                          </p> : <></>}
+                          {errors?.receipt ? (
+                            <p className="text-xs text-red-600 dark:text-red-500 text-right">
+                              {String(errors?.receipt)}
+                            </p>
+                          ) : (
+                            <></>
+                          )}
                           <input
                             type="file"
                             className="hidden"
@@ -223,7 +267,7 @@ export default function Payment() {
                             onChange={(event) => {
                               const files = event.target.files;
                               if (files) {
-                                readAndPreview(files[0])
+                                readAndPreview(files[0]);
                               }
                             }}
                           />
@@ -237,30 +281,33 @@ export default function Payment() {
                           <div className="flex flex-row-reverse items-center gap-x-3">
                             <IoDocumentText />
                             <div className="text-gray-500 text-xs flex-col items-center  justify-start">
-                              <p>
-                                {url?.name}
-                              </p>
-                              <p>
-                                انقر للتحميل
-                              </p>
+                              <p>{url?.name}</p>
+                              <p>انقر للتحميل</p>
                             </div>
                           </div>
                           <div className="cursor-pointer items-start">
-                            <GoDownload className="text-blue-450 text-md" onClick={() => refA?.current?.click()} />
-                            <a href={url?.link} download ref={refA} ></a>
+                            <GoDownload
+                              className="text-blue-450 text-md"
+                              onClick={() => refA?.current?.click()}
+                            />
+                            <a href={url?.link} download ref={refA}></a>
                           </div>
                         </div>
                       </div>
-                    </>}
-                   {data?.method == "bank" && <div className="flex flex-row items-center align-middle justify-center  p-2 text-blue-450">
-                    <button
-                      type="button"
-                      // href="//JoiningSuccess"
-                      onClick={onSubmit}
-                      className="bg-blue-450 text-white px-4 py-2 rounded-2xl p-2 m-2 flex-grow text-center">
-                      الدفع
-                    </button>
-                  </div>}         
+                    </>
+                  )}
+                  {data?.method == "bank" && (
+                    <div className="flex flex-row items-center align-middle justify-center  p-2 text-blue-450">
+                      <button
+                        type="button"
+                        // href="//JoiningSuccess"
+                        onClick={onSubmit}
+                        className="bg-blue-450 text-white px-4 py-2 rounded-2xl p-2 m-2 flex-grow text-center"
+                      >
+                        الدفع
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             </section>

@@ -1,9 +1,8 @@
-
 "use client";
 
 import React, { useRef, useState, useEffect, useMemo } from "react";
-import InputRange from "./component/inputRange"
-import { Add, CloseIconSmall,BackButtonOutline } from "@/app/assets/svg";
+import InputRange from "./component/inputRange";
+import { Add, CloseIconSmall, BackButtonOutline } from "@/app/assets/svg";
 import RangeComponent from "@/app/components/shared/range.component";
 import { RadioInput } from "../components/shared/radio.component";
 import { Button } from "../components/shared/button.component";
@@ -23,18 +22,19 @@ import {
   postProperityType,
   properityTypeInter,
   properityErrorTypeInter,
-  removeState
+  removeState,
 } from "@/redux/features/postRequest";
 import {
-  dataTypeOfRealEstate
-  ,detailsType
-  ,detailsMoreType
-  ,cityDetial ,
+  dataTypeOfRealEstate,
+  detailsType,
+  detailsMoreType,
+  cityDetial,
   districtDetail,
   returnRealState,
   imageInfo,
-  DataSendInfo,CriteriaInter
-}from "@/type/addrealestate"
+  DataSendInfo,
+  CriteriaInter,
+} from "@/type/addrealestate";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import {
@@ -43,12 +43,13 @@ import {
   earthSchema,
   villaOwnSchema,
 } from "@/typeSchema/schema";
-import {fetchToken}from "@/redux/features/userSlice"
+import { fetchToken } from "@/redux/features/userSlice";
 import { validateForm } from "../hooks/validate";
 import AccordionComponent from "../components/shared/Accordion.component";
 import Cookie from "js-cookie";
-import ModelRules from "@/app/components/shared/ModelRules"
+import ModelRules from "@/app/components/shared/ModelRules";
 import OnAddYourRequestSuccess from "./OnAddYourRequestSuccess";
+import { eventAnalistic } from "@/utils/event-analistic";
 
 const dataReal = [
   {
@@ -77,9 +78,9 @@ const AddYourRequest: React.FC = () => {
   const modalRefRules = useRef<ModalRef>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [deal, setdeal] = useState(false);
-  const {  token } = useSelector<RootState>(
-    (state) => state.register
-  ) as {  token:string };
+  const { token } = useSelector<RootState>((state) => state.register) as {
+    token: string;
+  };
   const [detailsVilla, setDetails] = useState([
     {
       type: "",
@@ -109,13 +110,14 @@ const AddYourRequest: React.FC = () => {
     floorType: "",
   });
   const [sentYourRequest, setSentYourRequest] = useState<boolean>(false);
-  let [open,setOpen]=useState<boolean>(false)
+  let [open, setOpen] = useState<boolean>(false);
   const [errors, setErrors] = useState<properityErrorTypeInter>();
-  const villaOne=useMemo(()=>{
-    return detailsVilla.filter((ele)=>ele?.type)
-  },[detailsVilla])
-  const { data, titleSection, detailsSection } =
-  useSelector<RootState>((state) => state.properityType) as {
+  const villaOne = useMemo(() => {
+    return detailsVilla.filter((ele) => ele?.type);
+  }, [detailsVilla]);
+  const { data, titleSection, detailsSection } = useSelector<RootState>(
+    (state) => state.properityType
+  ) as {
     loading: boolean;
     message: string;
     data: dataTypeOfRealEstate;
@@ -134,8 +136,8 @@ const AddYourRequest: React.FC = () => {
     data: properityTypeInter;
   };
   const { city, district } = useSelector<RootState>((state) => state.city) as {
-    district: districtDetail[]|null;
-    city: cityDetial[]|null;
+    district: districtDetail[] | null;
+    city: cityDetial[] | null;
   };
   const dispatch = useDispatch<AppDispatch>();
 
@@ -153,9 +155,9 @@ const AddYourRequest: React.FC = () => {
       }
     });
   };
-  const handleCiteInputChange = (cite:string) => {
+  const handleCiteInputChange = (cite: string) => {
     setSelectedCites((prevSelectedCites) => {
-        return [...prevSelectedCites, {name:cite,id:undefined}];
+      return [...prevSelectedCites, { name: cite, id: undefined }];
     });
   };
   const handleRemoveCite = (id: number) => {
@@ -164,8 +166,8 @@ const AddYourRequest: React.FC = () => {
   const handleRemoveInputCite = (name: string) => {
     setSelectedCites(selectedCites.filter((cite) => cite.name !== name));
   };
-  const handleBack = (e:React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault()
+  const handleBack = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     router.push("/");
   };
   const filteredCites = useMemo(() => {
@@ -263,8 +265,8 @@ const AddYourRequest: React.FC = () => {
     }
   };
   useEffect(() => {
-    dispatch(fetchToken())
-  }, [dispatch])
+    dispatch(fetchToken());
+  }, [dispatch]);
   useEffect(() => {
     dispatch(getproperityType({ num: 1 }));
     dispatch(getCity());
@@ -282,13 +284,19 @@ const AddYourRequest: React.FC = () => {
   }, [selectedPropertyType?.id, dispatch]);
   useEffect(() => {
     if (messageRequest && Boolean(dataRequest) == true) {
+      eventAnalistic({
+        action: "add_request",
+        category: "request",
+        label: "Item added to requset",
+        value: "add",
+      });
       toast.success(messageRequest);
       setSentYourRequest(true);
     }
   }, [dataRequest, messageRequest]);
   useEffect(() => {
-    dispatch(fetchToken())
-  }, [dispatch])
+    dispatch(fetchToken());
+  }, [dispatch]);
 
   useEffect(() => {
     if (criteria?.city) {
@@ -306,18 +314,21 @@ const AddYourRequest: React.FC = () => {
       {!sentYourRequest ? (
         <form className="flex flex-col items-center min-h-screen h-full w-full bg-[url('/background-cover.png')] bg-cover">
           <MainHeader />
-          <div className="flex items-center justify-center w-full"style={{direction:"rtl"}}>
-              <div className="justify-start">
-                <button onClick={handleBack}>
-                  <BackButtonOutline />
-                </button>
-              </div>
-              <div className="flex flex-1  items-center justify-center">
-                <p className="flex items-center justify-center text-[#36343B] font-bold text-xl">
-                  اضف طلبك
-                </p>
-              </div>
+          <div
+            className="flex items-center justify-center w-full"
+            style={{ direction: "rtl" }}
+          >
+            <div className="justify-start">
+              <button onClick={handleBack}>
+                <BackButtonOutline />
+              </button>
             </div>
+            <div className="flex flex-1  items-center justify-center">
+              <p className="flex items-center justify-center text-[#36343B] font-bold text-xl">
+                اضف طلبك
+              </p>
+            </div>
+          </div>
           <div className="p-4 w-full flex gap-4 flex-col">
             <div className="bg-white rounded-lg border border-[#E5E7EB] w-full  items-start justify-start p-4">
               {dataReal.map((item, index) => (
@@ -420,7 +431,10 @@ const AddYourRequest: React.FC = () => {
                   </p>
                 )}
 
-                <div className="flex items-end gap-2 justify-end flex-row mt-5 cursor-pointer"onClick={() => modalRef.current?.open()}>
+                <div
+                  className="flex items-end gap-2 justify-end flex-row mt-5 cursor-pointer"
+                  onClick={() => modalRef.current?.open()}
+                >
                   <p
                     className={` text-[#3B73B9]  ${
                       selectedCites ? "" : "text-gray-500"
@@ -428,9 +442,7 @@ const AddYourRequest: React.FC = () => {
                   >
                     إضافة حي/ أحياء
                   </p>
-                  <div 
-                    className=" bg-[#3B73B9]"
-                  >
+                  <div className=" bg-[#3B73B9]">
                     <Image src={Add} width={21} height={21} alt={"add"} />
                   </div>
                 </div>
@@ -443,8 +455,12 @@ const AddYourRequest: React.FC = () => {
                   >
                     <CloseIconSmall
                       className="cursor-pointer w-4 h-4"
-                      onClick={() =>cite?.id?handleRemoveCite(cite.id):handleRemoveInputCite(cite?.name)}
-                    />  
+                      onClick={() =>
+                        cite?.id
+                          ? handleRemoveCite(cite.id)
+                          : handleRemoveInputCite(cite?.name)
+                      }
+                    />
                     <p className="text-xs font-normal text-[#9CA3AF]">
                       {cite.name}
                     </p>
@@ -552,9 +568,12 @@ const AddYourRequest: React.FC = () => {
                     }}
                     unit="ريال"
                   />
-                  <InputRange onChange={(values: number[]) => {
+                  <InputRange
+                    onChange={(values: number[]) => {
                       setCriteria({ ...criteria, shareRange: values });
-                    }} price={criteria?.shareRange}/>
+                    }}
+                    price={criteria?.shareRange}
+                  />
                 </>
               ) : (
                 <>
@@ -567,7 +586,12 @@ const AddYourRequest: React.FC = () => {
                       onChange={(e) => {
                         setDetails((prev) =>
                           prev.map((ele, i) =>
-                            i == ind ? { ...ele, type:e.target.checked? e.target.value:"" } : ele
+                            i == ind
+                              ? {
+                                  ...ele,
+                                  type: e.target.checked ? e.target.value : "",
+                                }
+                              : ele
                           )
                         );
                       }}
@@ -576,59 +600,61 @@ const AddYourRequest: React.FC = () => {
                       <>
                         {detailsVilla && detailsVilla[ind] && (
                           <>
-                          <RangeComponent
-                            title="ميزانيتك"
-                            firstNumDes="10,000"
-                            secondNumDes="+20,000,000"
-                            step={10000}
-                            min={10000}
-                            max={20000000}
-                            values={[
-                              detailsVilla[ind]?.min_price,
-                              detailsVilla[ind]?.price,
-                            ]}
-                            handleShareRangeChange={(values: number[]) =>
-                              setDetails((prev) =>
-                                prev?.map((ele, i) =>
-                                  i == ind
-                                    ? {
-                                        ...ele,
-                                        min_price: values[0],
-                                        price: values[1],
-                                      }
-                                    : ele
+                            <RangeComponent
+                              title="ميزانيتك"
+                              firstNumDes="10,000"
+                              secondNumDes="+20,000,000"
+                              step={10000}
+                              min={10000}
+                              max={20000000}
+                              values={[
+                                detailsVilla[ind]?.min_price,
+                                detailsVilla[ind]?.price,
+                              ]}
+                              handleShareRangeChange={(values: number[]) =>
+                                setDetails((prev) =>
+                                  prev?.map((ele, i) =>
+                                    i == ind
+                                      ? {
+                                          ...ele,
+                                          min_price: values[0],
+                                          price: values[1],
+                                        }
+                                      : ele
+                                  )
                                 )
-                              )
-                            }
-                            unit="ريال"
-                          />
-                          <InputRange onChange={(values: number[]) => {
-                            setDetails((prev) =>
-                              prev?.map((ele, i) =>
-                                i == ind
-                                  ? {
-                                      ...ele,
-                                      min_price: values[0],
-                                      price: values[1],
-                                    }
-                                  : ele
-                              )
-                            )
-                          }} price={[
-                            detailsVilla[ind]?.min_price,
-                            detailsVilla[ind]?.price,
-                          ]}/>
+                              }
+                              unit="ريال"
+                            />
+                            <InputRange
+                              onChange={(values: number[]) => {
+                                setDetails((prev) =>
+                                  prev?.map((ele, i) =>
+                                    i == ind
+                                      ? {
+                                          ...ele,
+                                          min_price: values[0],
+                                          price: values[1],
+                                        }
+                                      : ele
+                                  )
+                                );
+                              }}
+                              price={[
+                                detailsVilla[ind]?.min_price,
+                                detailsVilla[ind]?.price,
+                              ]}
+                            />
                           </>
                         )}
                       </>
                     </AccordionComponent>
                   ))}
-                     {errors?.details &&
-                           (
-                            <p className="text-xs text-red-600 dark:text-red-500 text-right">
-                              {String(errors?.details)}
-                            </p>
-                          )}
+                  {errors?.details && (
+                    <p className="text-xs text-red-600 dark:text-red-500 text-right">
+                      {String(errors?.details)}
+                    </p>
+                  )}
                 </>
               )}
             </div>
@@ -707,21 +733,34 @@ const AddYourRequest: React.FC = () => {
             <div className="bg-white rounded-lg border border-[#E5E7EB] w-full mb-4 items-start justify-start p-4">
               <div className="flex items-center justify-end gap-2">
                 <p className="text-xs text-[#6B7280] font-bold">
-                  أوافق على <button className="text-[#98CC5D]" onClick={(e:React.MouseEvent<HTMLButtonElement>)=>{
-                    e.preventDefault()
-                    modalRefRules?.current?.open()
-                    }}>الشروط</button> و
-                  <button className="text-[#98CC5D]"
-                  onClick={(e:React.MouseEvent<HTMLButtonElement>)=>{
-                    e.preventDefault()
-                    modalRefRules?.current?.open()
+                  أوافق على{" "}
+                  <button
+                    className="text-[#98CC5D]"
+                    onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                      e.preventDefault();
+                      modalRefRules?.current?.open();
                     }}
-                  >الأحكام</button> الخاصة بمشروك
+                  >
+                    الشروط
+                  </button>{" "}
+                  و
+                  <button
+                    className="text-[#98CC5D]"
+                    onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                      e.preventDefault();
+                      modalRefRules?.current?.open();
+                    }}
+                  >
+                    الأحكام
+                  </button>{" "}
+                  الخاصة بمشروك
                 </p>
                 <input
                   type="checkbox"
                   className="h-4 w-4 rounded-2xl accent-[#3B73B9]"
-                  onChange={(e:React.ChangeEvent<HTMLInputElement>) => setdeal(e.target.checked)}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setdeal(e.target.checked)
+                  }
                   checked={deal}
                 />
               </div>
@@ -740,7 +779,13 @@ const AddYourRequest: React.FC = () => {
             </div>
           </div>
           <div>
-            <ModelRules refModel={modalRefRules}  onChange={(e:React.ChangeEvent<HTMLInputElement>) => setdeal(e.target.checked)} deal={deal}/>
+            <ModelRules
+              refModel={modalRefRules}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setdeal(e.target.checked)
+              }
+              deal={deal}
+            />
             <Modal ref={modalRef} size="sm">
               <div className="items-start flex justify-center flex-col p-4 ">
                 <div className="flex items-center   w-full">
@@ -766,31 +811,30 @@ const AddYourRequest: React.FC = () => {
                   />
                 </div>
                 <div className="flex flex-col items-end h-[400px] overflow-scroll  w-full">
-                <div
-                      key={"other"}
-                      className="flex justify-end items-center w-full py-2"
-                    >
-                       <span className="mr-2">أخرى</span>
-                      <input
-                        type="checkbox"
-                        onClick={()=>setOpen(!open)}
-                        checked={open==true}
-                        className="checked:accent-[#3B73B9] w-[16px] h-[16px]"
-                      />
-                    </div>
-                
-              
-                <input
-            onBlur={(event) =>{
-              if(event?.target?.value){
-                handleCiteInputChange(event?.target?.value)
-              }
-            }
-            }
-            className={`${open==false?"hidden":"block"} p-2 border border-gray-300 rounded-r-lg w-full`}
-           
-            disabled={open==false}
-            />
+                  <div
+                    key={"other"}
+                    className="flex justify-end items-center w-full py-2"
+                  >
+                    <span className="mr-2">أخرى</span>
+                    <input
+                      type="checkbox"
+                      onClick={() => setOpen(!open)}
+                      checked={open == true}
+                      className="checked:accent-[#3B73B9] w-[16px] h-[16px]"
+                    />
+                  </div>
+
+                  <input
+                    onBlur={(event) => {
+                      if (event?.target?.value) {
+                        handleCiteInputChange(event?.target?.value);
+                      }
+                    }}
+                    className={`${
+                      open == false ? "hidden" : "block"
+                    } p-2 border border-gray-300 rounded-r-lg w-full`}
+                    disabled={open == false}
+                  />
                   {filteredCites?.map((cite: districtDetail) => (
                     <div
                       key={cite.id}
@@ -799,7 +843,9 @@ const AddYourRequest: React.FC = () => {
                       <span className="mr-2">{cite.name}</span>
                       <input
                         type="checkbox"
-                        checked={selectedCites.some((c) => (c?.id&&c?.id == cite.id))}
+                        checked={selectedCites.some(
+                          (c) => c?.id && c?.id == cite.id
+                        )}
                         onChange={() => handleCiteChange(cite)}
                         className="checked:accent-[#3B73B9] w-[16px] h-[16px]"
                       />
@@ -815,11 +861,13 @@ const AddYourRequest: React.FC = () => {
                   <Button
                     text="حفظ"
                     onClick={() => {
-                      if(open!=true){
-
-                        setSelectedCites((prev)=>prev.filter((ele)=>ele?.id!=undefined));
+                      if (open != true) {
+                        setSelectedCites((prev) =>
+                          prev.filter((ele) => ele?.id != undefined)
+                        );
                       }
-                      modalRef.current?.close()}}
+                      modalRef.current?.close();
+                    }}
                   />
                 </div>
               </div>
@@ -831,7 +879,7 @@ const AddYourRequest: React.FC = () => {
         </form>
       ) : (
         <>
-          <OnAddYourRequestSuccess dataRequest={{id:dataRequest?.id}} />
+          <OnAddYourRequestSuccess dataRequest={{ id: dataRequest?.id }} />
         </>
       )}
     </>

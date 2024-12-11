@@ -7,6 +7,7 @@ import { useEffect, useMemo } from "react";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { getOtherOrders } from "@/redux/features/getOrders";
+import { eventAnalistic } from "@/utils/event-analistic";
 function OtherOffer() {
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
@@ -25,6 +26,12 @@ function OtherOffer() {
   useEffect(() => {
     if (id) {
       dispatch(getOtherOrders({ id: Number(id) }));
+      eventAnalistic({
+        action: "show_alternative_offers",
+        category: "alternative_offers",
+        label: "show alternative offers",
+        value: "show alternative offers",
+      });
     }
   }, [id, dispatch]);
   return (

@@ -33,6 +33,7 @@ import {
 } from "@/redux/features/getPartners";
 import { FormatNumber } from "@/app/hooks/formatNumber";
 import { findStep } from "./find-steps";
+import { eventAnalistic } from "@/utils/event-analistic";
 
 interface criteriaInfo {
   dealStatus: string;
@@ -177,6 +178,12 @@ export const GitMyOffers = () => {
     if (idDelete) {
       dispatch(deleteProperty({ id: idDelete })).then((res: any) => {
         if (res.payload.message && !res.payload.status) {
+          eventAnalistic({
+            action: "delete_offer",
+            category: "delete_offer",
+            label: "delete offer",
+            value: "delete offer",
+          });
           toast.success(res.payload.message);
           dispatch(
             deleteOffer({
@@ -197,6 +204,12 @@ export const GitMyOffers = () => {
     if (idDelete) {
       dispatch(UpdataExpiredDateProperty({ id: idDelete })).then((res: any) => {
         if (res.payload.data) {
+          eventAnalistic({
+            action: "renew_offer",
+            category: "renew_offer",
+            label: "renew offer",
+            value: "renew offer",
+          });
           toast.success(res.payload.message);
         } else if (res.payload.status) {
           toast.error(res.payload.message);

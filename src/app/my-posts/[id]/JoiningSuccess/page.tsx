@@ -10,6 +10,7 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { postMyAdvertise } from "@/redux/features/getMyAdvertise";
 import { Check } from "@/app/assets/svg";
+import { eventAnalistic } from "@/utils/event-analistic";
 
 export default function JoiningSuccess() {
   const dispatch = useDispatch<AppDispatch>();
@@ -27,6 +28,12 @@ export default function JoiningSuccess() {
       postMyAdvertise({ property_id: Number(property_id), amount: 500 })
     ).then((res: any) => {
       if (res?.payload?.data) {
+        eventAnalistic({
+          action: "payment_advertise",
+          category: "advertisement",
+          label: "Item added to payment advertise",
+          value: "add payment advertise",
+        });
         setSucces(true);
         setMessage(res.payload.message);
         toast.success(res.payload.message);

@@ -224,6 +224,84 @@ export const OtherOfferCard: React.FC<ChatCardProps> = ({
             </div>
           </>
         ))}
+        {otheroffer?.landDetails?.map((detail, index) => (
+          <>
+            <div
+              key={`detail-${index}`}
+              className="bg-white shadow-lg rounded-lg p-2 mb-4 border-2"
+            >
+              <div className="flex flex-row flex-no-wrap items-center justify-center md:flex-row sm:flex-col ">
+                <div className="ml-auto text-right py-1 ">
+                  <div className="flex flex-row">
+                    <p className="text-2xl px-4 text-black font-bold">
+                      {
+                          `قطعة رقم  ${detail?.piece_number}`}
+                    </p>
+                  </div>
+
+                  <div className="flex flex-col gap-y-2 my-2 flex-wrap items-start">
+                    <div className=" rounded-xl px-2  flex items-center gap-x-2">
+                      <BiArea className="bg-gray-200 " />
+                      <p> {"المساحة"}</p>
+                      <p className="text-base md:text-xs lg:text-sm mx-2 ">
+                        {detail?.area} م<sup>2</sup>
+                      </p>
+                    </div>
+                    <div className="rounded-xl px-2 flex items-center gap-x-2">
+                      <LuTag className="bg-gray-200 " />
+                      <p> {detail?.type ? "السعر" : "سعر المتر"} </p>
+                      <p className="text-base  md:text-xs lg:text-sm mx-2">
+                        {FormatNumber(detail?.price)} {"ريال"}
+                      </p>
+                    </div>
+                    {!detail?.type ? (
+                      <div className=" rounded-xl px-2  flex items-center gap-x-2">
+                        <BsDatabase className="bg-gray-200" />
+                        <p>الاجمالي</p>
+                        <p className="text-base mx-2 ">
+                          {detail?.type
+                            ? FormatNumber(detail?.price)
+                            : FormatNumber(detail?.price * detail?.area)}{" "}
+                          ريال
+                        </p>
+                      </div>
+                    ) : null}
+                    <div className=" rounded-xl px-2  flex items-center gap-x-2 ">
+                      <CiWallet className="bg-gray-200" />
+                      <p> المتاح</p>
+                      <p className="text-base mx-2 ">
+                        {FormatNumber(detail?.available_price)} ريال
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex flex-col items-center justify-center  rounded-full p-2">
+                  {detail?.stage == "finished" ? (
+                    <>
+                      <FinishedShares />
+                    </>
+                  ) : (
+                    <>
+                      <span className="text-xl font-bold text-blue-500 mb-2">
+                        <CircularProgressBar
+                          percentage={Number(detail?.available_percentage)}
+                          size={70}
+                          strokeWidth={5}
+                        />
+                      </span>
+                    </>
+                  )}
+                </div>
+              </div>
+              <JoinStatusButtons
+                currentDealStatus={detail?.stage == "finished"}
+                data={detail}
+                dataMain={otheroffer}
+              />
+            </div>
+          </>
+        ))}
         <hr className="h-px  bg-gray-200 border-0" />
         <div className="flex justify-around items-center mt-2">
           <div className="flex flex-row   items-center justify-center">

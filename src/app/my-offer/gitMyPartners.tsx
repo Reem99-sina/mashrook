@@ -3,9 +3,9 @@ import React, { useRef, useState, useEffect, useMemo } from "react";
 import { TextInput } from "../components/shared/text-input.component";
 import { FaRegUserCircle } from "react-icons/fa";
 import { format } from "date-fns";
-import {steps} from "@/type/addrealestate"
+import { steps } from "@/type/addrealestate";
 import { findStep } from "./find-steps";
-import { fetchToken } from "@/redux/features/userSlice"
+import { fetchToken } from "@/redux/features/userSlice";
 import {
   CloseIconSmall,
   Filter,
@@ -15,7 +15,7 @@ import {
   Note,
 } from "../assets/svg";
 import toast from "react-hot-toast";
-import { FormatNumber } from "@/app/hooks/formatNumber"
+import { FormatNumber } from "@/app/hooks/formatNumber";
 import Pagination from "../components/shared/pagination";
 import {
   getPartner,
@@ -33,7 +33,8 @@ import FilterModalPartner from "./filterModalPartner";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { RealEstateTypeInter } from "@/redux/features/postRealEstate";
-import { realEstatePartner } from "@/type/addrealestate"
+import { realEstatePartner } from "@/type/addrealestate";
+import { eventAnalistic } from "@/utils/event-analistic";
 
 const statuses = [{ title: "متكامل" }, { title: "تحت التقدم" }];
 
@@ -42,9 +43,10 @@ export const GitMyPartners = () => {
     setOption(option);
   };
   const dispatch = useDispatch<AppDispatch>();
-    const statusIndex = useMemo(() => {
-    return (offer:RealEstateTypeInter) => findStep(offer)?.findIndex((partner) => partner?.data == offer)
-  }, [])
+  const statusIndex = useMemo(() => {
+    return (offer: RealEstateTypeInter) =>
+      findStep(offer)?.findIndex((partner) => partner?.data == offer);
+  }, []);
   // status
   const [isFilterModalOpen, setIsFilterModalOpen] = useState<boolean>(false);
   const modalRef = useRef<ModalRef>(null);
@@ -66,23 +68,29 @@ export const GitMyPartners = () => {
     requestNumber: 0,
   });
   const router = useRouter();
-  const { token } = useSelector<RootState>(
-    (state) => state.register
-  ) as { token: string };
+  const { token } = useSelector<RootState>((state) => state.register) as {
+    token: string;
+  };
   const onWithDraw = () => {
     modalRef.current?.close();
     dispatch(
       withDrawProperty(
         idDelete?.details_id
           ? {
-            details_id: idDelete?.details_id,
-          }
+              details_id: idDelete?.details_id,
+            }
           : {
-            land_details_id: idDelete?.land_details_id,
-          }
+              land_details_id: idDelete?.land_details_id,
+            }
       )
     ).then((res: any) => {
       if (res.payload.message && !res.payload.status) {
+        eventAnalistic({
+          action: "partnership_withdraw",
+          category: "partnership_withdraw",
+          label: "partnership withdraw",
+          value: "partnership withdraw",
+        });
         toast.success(res.payload.message);
         dispatch(
           withdrawData({
@@ -98,27 +106,32 @@ export const GitMyPartners = () => {
       } else if (res.payload.status) {
         toast.error(res.payload.message);
       }
-    })
+    });
   };
   let {
     loading,
     message,
-    data: dataPartner
+    data: dataPartner,
   } = useSelector<RootState>((state) => state.partners) as {
     loading: boolean;
     message: string;
     data: any;
   };
   const newDataMemo = useMemo(() => {
-    return dataPartner?.flatMap((dataPartnerOne: RealEstateTypeInter) => dataPartnerOne?.propertyDetailsOwnership)
-  }, [dataPartner])
+    return dataPartner?.flatMap(
+      (dataPartnerOne: RealEstateTypeInter) =>
+        dataPartnerOne?.propertyDetailsOwnership
+    );
+  }, [dataPartner]);
   const title = useMemo(() => {
     return (partner: realEstatePartner) => {
-      return partner?.details_id ? `${partner?.property?.propertyTypeDetails?.title} (${partner?.details?.type})` : `${partner?.property?.propertyType?.title} 
+      return partner?.details_id
+        ? `${partner?.property?.propertyTypeDetails?.title} (${partner?.details?.type})`
+        : `${partner?.property?.propertyType?.title} 
      القطعة رقم ${partner?.landDetails?.plan_number}
-      `
-    }
-  }, [])
+      `;
+    };
+  }, []);
   const newData = useMemo(() => {
     return newDataMemo?.map((ele: any) => ({
       id: ele?.property?.id,
@@ -147,11 +160,15 @@ export const GitMyPartners = () => {
       propertyOwnerType: ele?.property?.propertyOwnerType?.title,
       land_details_id: ele?.land_details_id,
       room_id: ele?.details?.room[0]?.id || ele?.landDetails?.room[0]?.id,
-      sender_id: ele?.details?.room[0]?.sender_id|| ele?.landDetails?.room[0]?.sender_id,
-      receiver_id: ele?.details?.room[0]?.receiver_id|| ele?.landDetails?.room[0]?.receiver_id,
-      currentStep:statusIndex(ele)
-    }))
-  }, [newDataMemo, title,statusIndex])
+      sender_id:
+        ele?.details?.room[0]?.sender_id ||
+        ele?.landDetails?.room[0]?.sender_id,
+      receiver_id:
+        ele?.details?.room[0]?.receiver_id ||
+        ele?.landDetails?.room[0]?.receiver_id,
+      currentStep: statusIndex(ele),
+    }));
+  }, [newDataMemo, title, statusIndex]);
   let fiterData = useMemo(() => {
     return {
       min_price:
@@ -168,17 +185,22 @@ export const GitMyPartners = () => {
         criteria?.unitType != 0 ? criteria?.unitType : null,
       property_purpose_id:
         criteria?.purposeStatus != 0 ? criteria?.purposeStatus : null,
-      status: criteria?.dealStatus == "متكامل" ? "complete" : criteria?.dealStatus == "تحت التقدم" ? "available" : "",
+      status:
+        criteria?.dealStatus == "متكامل"
+          ? "complete"
+          : criteria?.dealStatus == "تحت التقدم"
+          ? "available"
+          : "",
       sort:
         optionFilter == "الأحدث الى الأقدم"
           ? "created_desc"
           : optionFilter == "الأقدم الى الأحدث"
-            ? "created_asc"
-            : optionFilter == "الميزانية ( الأدنى الى الأعلى)"
-              ? "price_asc"
-              : optionFilter == "الميزانية ( الأعلى الى الأدنى)"
-                ? "price_decs"
-                : "",
+          ? "created_asc"
+          : optionFilter == "الميزانية ( الأدنى الى الأعلى)"
+          ? "price_asc"
+          : optionFilter == "الميزانية ( الأعلى الى الأدنى)"
+          ? "price_decs"
+          : "",
       finance: criteria?.unitStatus,
       // option=="الأحدث إلى الأقدم"?handleSelect("latest"):option=="الأقدم الى الأحدث"?handleSelect("oldest"):option=="الميزانية ( الأدنى الى الأعلى)"?handleSelect("priceLowToHigh"):handleSelect("priceHighToLow")
     };
@@ -188,10 +210,9 @@ export const GitMyPartners = () => {
     return newData?.slice((currentPage - 1) * 3, currentPage * 3);
   }, [newData, currentPage]);
   useEffect(() => {
-    dispatch(fetchToken())
-  }, [dispatch])
+    dispatch(fetchToken());
+  }, [dispatch]);
   useEffect(() => {
-
     return () => {
       dispatch(removeMessageWithDraw());
     };
@@ -210,12 +231,12 @@ export const GitMyPartners = () => {
             optionFilter == "الأحدث الى الأقدم"
               ? "created_desc"
               : optionFilter == "الأقدم الى الأحدث"
-                ? "created_asc"
-                : optionFilter == "الميزانية ( الأدنى الى الأعلى)"
-                  ? "price_asc"
-                  : optionFilter == "الميزانية ( الأعلى الى الأدنى)"
-                    ? "price_decs"
-                    : "",
+              ? "created_asc"
+              : optionFilter == "الميزانية ( الأدنى الى الأعلى)"
+              ? "price_asc"
+              : optionFilter == "الميزانية ( الأعلى الى الأدنى)"
+              ? "price_decs"
+              : "",
           status: criteria?.dealStatus == "متكامل" ? "complete" : "available",
         })
       );
@@ -247,8 +268,9 @@ export const GitMyPartners = () => {
           className="flex items-center"
         >
           <div
-            className={`py-1 rounded-md border-2 border-blue-500 ${isFilterModalOpen ? "bg-blue-450" : "bg-white"
-              }`}
+            className={`py-1 rounded-md border-2 border-blue-500 ${
+              isFilterModalOpen ? "bg-blue-450" : "bg-white"
+            }`}
           >
             {isFilterModalOpen ? (
               <MenuWhite className={`text-xl mx-2 my-1`} />
@@ -276,10 +298,11 @@ export const GitMyPartners = () => {
           <span
             key={status?.title}
             className={`rounded-md border border-[#E5E7EB] text-sm font-normal text-[#6B7280] pl-3 pr-3 pt-1 pb-1 cursor-pointer 
-            ${criteria.dealStatus === status?.title
+            ${
+              criteria.dealStatus === status?.title
                 ? "bg-blue-450 text-white"
                 : "bg-white text-gray-900"
-              }
+            }
             `}
             onClick={() =>
               setCriteria({ ...criteria, dealStatus: status?.title })

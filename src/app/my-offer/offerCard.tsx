@@ -45,6 +45,7 @@ import { useRouter } from "next/navigation";
 import { FormatNumber } from "@/app/hooks/formatNumber";
 import { detailOneInfo } from "@/type/addrealestate";
 import { CiWallet } from "react-icons/ci";
+import { eventAnalistic } from "@/utils/event-analistic";
 interface ChatCardProps {
   title: string;
   date: string;
@@ -155,6 +156,12 @@ export const OfferCard: React.FC<ChatCardProps> = ({
     if (idDelete) {
       dispatch(deleteOfferDetailOrLand(idDelete)).then((res: any) => {
         if (res.payload.message && !res.payload.status) {
+          eventAnalistic({
+            action: "delete_offer",
+            category: "delete_offer",
+            label: "delete offer",
+            value: "delete offer",
+          });
           toast.success(res.payload.message);
           if (
             idDelete?.detail_id ||
@@ -315,21 +322,23 @@ export const OfferCard: React.FC<ChatCardProps> = ({
                       </div>
                       <div className="rounded-xl px-2 flex items-center gap-x-2">
                         <LuTag className="bg-gray-200 " />
-                        <p> {detail?.type?"السعر":"سعر المتر"}  </p>
+                        <p> {detail?.type ? "السعر" : "سعر المتر"} </p>
                         <p className="text-base  md:text-xs lg:text-sm mx-2">
                           {FormatNumber(detail?.price)} {"ريال"}
                         </p>
                       </div>
-                      {!detail.type?<div className=" rounded-xl px-2  flex items-center gap-x-2">
-                        <BsDatabase className="bg-gray-200" />
-                        <p>الاجمالي</p>
-                        <p className="text-base mx-2 ">
-                          {detail?.type
-                            ? FormatNumber(detail?.price)
-                            : FormatNumber(detail?.price * detail?.area)}{" "}
-                          ريال
-                        </p>
-                      </div>:null}
+                      {!detail.type ? (
+                        <div className=" rounded-xl px-2  flex items-center gap-x-2">
+                          <BsDatabase className="bg-gray-200" />
+                          <p>الاجمالي</p>
+                          <p className="text-base mx-2 ">
+                            {detail?.type
+                              ? FormatNumber(detail?.price)
+                              : FormatNumber(detail?.price * detail?.area)}{" "}
+                            ريال
+                          </p>
+                        </div>
+                      ) : null}
                       <div className=" rounded-xl px-2  flex items-center gap-x-2 ">
                         <CiWallet className="bg-gray-200" />
                         <p> المتاح</p>
@@ -358,7 +367,6 @@ export const OfferCard: React.FC<ChatCardProps> = ({
                             strokeWidth={5}
                           />
                         </span>
-                        
                       </>
                     )}
                   </div>
