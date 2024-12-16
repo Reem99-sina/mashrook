@@ -183,15 +183,6 @@ const ComplaintsSuggestions = () => {
             )}
           </div>
 
-          {data?.type == "complaint" && (
-            <div dir="rtl"className="mb-2">
-              <p className="text-xs text-[#6B7280] font-bold">
-                سيتم الرد على الشكوى خلال 3 أيام عمل، وللمتابعة والتصعيد يمكن
-                التواصل عبر البريد الإلكتروني . info@mashrook.sa
-              </p>
-            </div>
-          )}
-
           <Button
             type="submit"
             text="ارسال"
@@ -199,6 +190,14 @@ const ComplaintsSuggestions = () => {
             className="relative flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-[#3B73B9] border border-transparent rounded-md group  focus:outline-none focus:ring-2 focus:ring-offset-2 "
           ></Button>
         </div>
+        {data?.type == "complaint" && (
+            <div dir="rtl"className="m-2">
+              <p className="text-xs text-[#6B7280] font-bold">
+                سيتم الرد على الشكوى خلال 3 أيام عمل، وللمتابعة والتصعيد يمكن
+                التواصل عبر البريد الإلكتروني . info@mashrook.sa
+              </p>
+            </div>
+          )}
       </div>
     </div>
   );
