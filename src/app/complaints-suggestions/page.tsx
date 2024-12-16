@@ -13,6 +13,8 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { postComplaint } from "@/redux/features/complaintsSuggestions";
 import { eventAnalistic } from "@/utils/event-analistic";
+import { Textarea } from "@material-tailwind/react";
+import clsx from "clsx";
 interface ComplaintsSuggestionsProps {
   name: string;
   phone: string;
@@ -45,15 +47,14 @@ const ComplaintsSuggestions = () => {
   const onSubmit = async () => {
     const status = await validateForm(data, ComplaintsSchema, setErrors);
     if (status == true) {
-     
       dispatch(postComplaint(data)).then((res: any) => {
         if (res.payload.message && !res.payload.status) {
           eventAnalistic({
-            action:"add_suggest_complaint",
-            category:"suggest_complaint",
-            label: 'add suggest or complaint',
-            value: 'add suggest or complaint',
-          })
+            action: "add_suggest_complaint",
+            category: "suggest_complaint",
+            label: "add suggest or complaint",
+            value: "add suggest or complaint",
+          });
           toast.success(res.payload.message);
           router.push("/");
         } else if (res.payload.status) {
@@ -157,14 +158,23 @@ const ComplaintsSuggestions = () => {
             )}
           </div>
           <div className="!mb-2">
-            <TextInput
-              label="تفاصيل الرسالة "
-              inputProps={{ placeholder: "تفاصيل الرسالة" }}
-              type="text"
+            <label
+              className={clsx(
+                "mb-2  text-base font-bold text-[#4B5563]  items-start flex justify-end",
+                errors?.details && "dark:text-error-dark text-error"
+              )}
+            >
+              تفاصيل الرسالة
+            </label>
+            <Textarea
+              placeholder="تفاصيل الرسالة"
               value={data?.details}
               onChange={(event) =>
                 setData({ ...data, details: event.target.value })
               }
+              style={{ direction: "rtl" }}
+              onPointerEnterCapture={undefined}
+              onPointerLeaveCapture={undefined}
             />
             {errors?.details && (
               <p className="text-xs text-red-600 dark:text-red-500 text-right">
@@ -172,6 +182,16 @@ const ComplaintsSuggestions = () => {
               </p>
             )}
           </div>
+
+          {data?.type == "complaint" && (
+            <div dir="rtl"className="mb-2">
+              <p className="text-xs text-[#6B7280] font-bold">
+                سيتم الرد على الشكوى خلال 3 أيام عمل، وللمتابعة والتصعيد يمكن
+                التواصل عبر البريد الإلكتروني . info@mashrook.sa
+              </p>
+            </div>
+          )}
+
           <Button
             type="submit"
             text="ارسال"
