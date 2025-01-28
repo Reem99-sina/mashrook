@@ -371,7 +371,7 @@ const PropertyDetails: React.FC<{ id: any }> = ({ id }: { id: any }) => {
         </div>
         <a
           className="mt-4 cursor-pointer block"
-          href={`https://www.google.com/maps?q=${selectData?.propertyLocation?.address}`}
+          href={`https://www.google.com/maps?q=${selectData?.propertyLocation?.lat},${selectData?.propertyLocation?.long}`}
           target="_blank"
         >
           {selectData?.propertyLocation?.lat &&
