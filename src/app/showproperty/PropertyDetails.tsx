@@ -463,7 +463,11 @@ const PropertyDetails: React.FC<{ id: number }> = ({ id }: { id: number }) => {
             <div>العنوان التفصيلي {selectData?.propertyLocation?.address}</div>
           </div>
         </div>
-        <div className="mt-4">
+        <a
+          className="mt-4 cursor-pointer block"
+          href={`https://www.google.com/maps/dir/?api=1&origin=${selectData?.propertyLocation?.lat},${selectData?.propertyLocation?.long}`}
+          target="_blank"
+        >
           {selectData?.propertyLocation?.lat &&
             selectData?.propertyLocation?.long && (
               <Map
@@ -471,7 +475,7 @@ const PropertyDetails: React.FC<{ id: number }> = ({ id }: { id: number }) => {
                 longitude={selectData?.propertyLocation?.long}
               />
             )}
-        </div>
+        </a>
       </div>
     </div>
   );
