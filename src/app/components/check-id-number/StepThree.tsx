@@ -53,9 +53,16 @@ export const StepThree: React.FC<Props> = ({ onFinished, modalRef }) => {
   React.useEffect(() => {
     const client = mqtt.connect(process.env.NEXT_PUBLIC_MQTT!);
 
+    const handleVisibilityChange = () => {
+      if (!document.hidden) {
+        console.log("Reconnecting MQTT client...");
+        client.reconnect();
+      }
+    };
+
     client.on("connect", () => {
       console.log("Connected to MQTT broker");
-      client.subscribe("mashrook-transaction-status", (err: Error | null) => {
+      client.subscribe("mashrook-transaction-status", { qos: 1 }, (err: Error | null) => {
         if (err) {
           console.error("Subscription failed:", err);
         } else {
@@ -63,6 +70,7 @@ export const StepThree: React.FC<Props> = ({ onFinished, modalRef }) => {
         }
       });
     });
+
     client.on("message", (topic: string, message: Buffer) => {
       const data = JSON.parse(message.toString());
       if (data.TransactionId == TransactionId) {
@@ -76,10 +84,14 @@ export const StepThree: React.FC<Props> = ({ onFinished, modalRef }) => {
         }
       }
     });
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
     return () => {
       client.end();
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
-  }, []);
+  }, [TransactionId, dispatch, modalRef, onFinished]);
 
   return (
     <div>
