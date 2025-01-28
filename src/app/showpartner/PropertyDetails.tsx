@@ -50,7 +50,7 @@ const PropertyDetails: React.FC<{ id: any }> = ({ id }: { id: any }) => {
   let { selectData } = useSelector<RootState>((state) => state.getRequest) as {
     selectData: dataReturn;
   };
-console.log(selectData)
+  console.log(selectData);
   const userOwnerShipArray = useMemo(() => {
     return selectData?.propertyDetailsOwnership?.filter(
       (ele: realEstatePartner) => ele?.user_id == user?.id
@@ -369,7 +369,11 @@ console.log(selectData)
             <div>العنوان التفصيلي {selectData?.propertyLocation?.address}</div>
           </div>
         </div>
-        <div className="mt-4">
+        <a
+          className="mt-4 cursor-pointer block"
+          href={`https://www.google.com/maps/dir/?api=1&origin=${selectData?.propertyLocation?.lat},${selectData?.propertyLocation?.long}`}
+          target="_blank"
+        >
           {selectData?.propertyLocation?.lat &&
             selectData?.propertyLocation?.long && (
               <Map
@@ -377,7 +381,7 @@ console.log(selectData)
                 longitude={selectData?.propertyLocation?.long}
               />
             )}
-        </div>
+        </a>
       </div>
     </div>
   );
