@@ -56,7 +56,7 @@ export const StepThree: React.FC<Props> = ({ onFinished, modalRef }) => {
     const handleVisibilityChange = () => {
       if (!document.hidden) {
         console.log("Reconnecting MQTT client...");
-        client.reconnect();
+        sendVerify();
       }
     };
 
