@@ -87,7 +87,7 @@ const ModelForm: React.FC<IAppProps> = ({ modalRef, path }) => {
           </div>
           <div className=" flex items-center justify-center  p-4">
             <p className="text-sm text-[#5195A2]">
-              جميع الحقوق محفوظة للمشروك © 2024
+              جميع الحقوق محفوظة لمشروك © 2024
             </p>
           </div>
         </div>
