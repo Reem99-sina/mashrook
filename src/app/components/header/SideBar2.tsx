@@ -40,7 +40,7 @@ export default function SideBar({ sidebarOpen, toggleSidebar }: SideBarProps) {
                   <>
                     <li className="mb-4 text-xl hover:text-gray-800 ">
                       <Link
-                        href="/login"
+                        href="/login-otp"
                         className=" text-gray-500 hover:text-[#3B73B9] "
                       >
                         تسجيل الدخول

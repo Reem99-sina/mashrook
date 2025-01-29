@@ -1,17 +1,13 @@
 "use client";
 
-import Link from "next/link";
 import React, { useState, useRef, useEffect, useMemo } from "react";
 import { RxArrowLeft } from "react-icons/rx";
 import { useRouter } from "next/navigation";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
-import Cookie from "js-cookie";
 import {
   fetchToken,
-  fetchuser,
-  getUserRequest,
-  removeLogin,
+  fetchuser
 } from "@/redux/features/userSlice";
 import { validateForm } from "@/app/hooks/validate";
 import { dataReturn, addUnqiue, typePay } from "@/redux/features/getRequest";
@@ -19,9 +15,8 @@ import { amountSchema } from "@/typeSchema/schema";
 import { FormatNumber } from "@/app/hooks/formatNumber";
 import toast from "react-hot-toast";
 import { userInfo } from "@/type/addrealestate";
-import { IoMdCloseCircleOutline } from "react-icons/io";
-import { Accreditation } from "@/app/assets/svg";
 import { eventAnalistic } from "@/utils/event-analistic";
+
 type JoinStatusButtonsProps = {
   currentDealStatus: boolean;
   data: typePay;
@@ -174,7 +169,7 @@ const JoinStatusButtons: React.FC<JoinStatusButtonsProps> = ({
           onClick={() => {
             if (!token) {
               toast.error("انت تحتاج الي تسجيل دخول");
-              router.push("/login");
+              router.push("/login-otp");
             } else {
               handleDialogToggle();
             }
