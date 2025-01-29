@@ -287,14 +287,14 @@ const SignUp: React.FC = () => {
             لديك حساب بالفعل؟
           </p>
           <a
-            href="/login"
+            href="/login-otp"
             className="font-medium text-base text-white hover:cursor-pointer lg:text-base"
           >
             قم بتسجيل الدخول باستخدام بياناتك{" "}
           </a>
           <div>
             <a
-              href="/login"
+              href="/login-otp"
               className="relative text-sm flex justify-center w-full px-14 mt-9 lg:hidden py-2 font-medium text-white bg-[#3B73B9] border border-transparent border-white rounded-md group  focus:outline-none focus:ring-2 focus:ring-offset-2 "
             >
               تسجيل الدخول

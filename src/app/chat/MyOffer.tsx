@@ -66,7 +66,7 @@ export const MyOffer = () => {
               <button
                 type="button"
                 className={`${"bg-blue-450 text-white hover:bg-blue-800 border-2 border-blue-500"}  font-medium rounded-lg text-sm px-5 py-2.5 flex justify-center  rtl:flex-row-reverse dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
-                onClick={() => router.push("/login")}
+                onClick={() => router.push("/login-otp")}
               >
                 تسجيل الدخول
                 <FaRegUserCircle className={`mr-4 text-xl ${"text-white"}`} />

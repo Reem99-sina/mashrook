@@ -492,7 +492,7 @@ const AddYourRealEstate: React.FC = () => {
         }
       } else {
         toast.error("انت تحتاج الي تسجيل دخول");
-        router.push("/login");
+        router.push("/login-otp");
       }
     } else {
       toast.error(" يجب الموافقه علي شروط الاستخدام وسياسية الخصوصية");

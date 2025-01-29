@@ -12,53 +12,57 @@ import { AppDispatch, RootState } from "@/redux/store";
 import Cookie from "js-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import { removeToken } from "@/redux/features/loginSlice";
-import {fetchToken,removeTokenUser,fetchAuthId}from "@/redux/features/userSlice"
+import {
+  fetchToken,
+  removeTokenUser,
+  fetchAuthId,
+} from "@/redux/features/userSlice";
 import PropertyCard from "./components/propertyCard/PropertyCard";
 import { MdKeyboardArrowLeft } from "react-icons/md";
 import { useRouter } from "next/navigation";
-import { useEffect, useState,useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import toast from "react-hot-toast";
-import { getRequest,dataReturn } from "@/redux/features/getRequest";
-import useFcmToken from '@/utils/hooks/useFcmToken';
-import FcmTokenComp from "@/utils/firebase/firebaseForeground"
-import ModelForm from "@/app/components/check-id-number/ModelForm"
+import { getRequest, dataReturn } from "@/redux/features/getRequest";
+import useFcmToken from "@/utils/hooks/useFcmToken";
+import FcmTokenComp from "@/utils/firebase/firebaseForeground";
+import ModelForm from "@/app/components/check-id-number/ModelForm";
 import { ModalRef } from "@/app/components/shared/modal.component";
 import { eventAnalistic } from "@/utils/event-analistic";
 // import { FcmTokenComp, onMessage } from "firebase/messaging";
-const limit = 5
+const limit = 5;
 
 export default function Home() {
   const router = useRouter();
   const modalRef = useRef<ModalRef>(null);
-  const [path,setPath]=useState("")
+  const [path, setPath] = useState("");
   const { loading, message, data } = useSelector<RootState>(
     (state) => state.getRequest
   ) as { loading: boolean; message: string; data: dataReturn[] };
-  const timesForWeek=Cookie.get("tokenTime")
-  const {  token,auth } = useSelector<RootState>(
-    (state) => state.register
-  ) as {  token:string,auth:boolean };
+  const timesForWeek = Cookie.get("tokenTime");
+  const { token, auth } = useSelector<RootState>((state) => state.register) as {
+    token: string;
+    auth: boolean;
+  };
   // register
   const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
-    dispatch(fetchToken())
-    dispatch(fetchAuthId())
+    dispatch(fetchToken());
+    dispatch(fetchAuthId());
   }, [dispatch]);
-  
+
   useEffect(() => {
     const checkAndRemoveCookie = () => {
       const now = new Date();
       const currentTime = new Date().getTime();
       const hours = now.getHours();
       // Check if it's 12 AM
-      if (hours === 0&&!timesForWeek) {
+      if (hours === 0 && !timesForWeek) {
         // Remove the token from cookies
         dispatch(removeToken());
         Cookie.remove("user");
         Cookie.remove("token");
         dispatch(removeTokenUser());
-
-      }else if(currentTime>Number(timesForWeek)){
+      } else if (currentTime > Number(timesForWeek)) {
         dispatch(removeToken());
         Cookie.remove("user");
         Cookie.remove("token");
@@ -67,30 +71,30 @@ export default function Home() {
       }
     };
     // Run every minute to check if it's 12 AM
-    const interval = setInterval(checkAndRemoveCookie, 60*1000);
+    const interval = setInterval(checkAndRemoveCookie, 60 * 1000);
     // Cleanup the interval when the component unmounts
     return () => clearInterval(interval);
-  }, [dispatch,timesForWeek]);
+  }, [dispatch, timesForWeek]);
   useEffect(() => {
     eventAnalistic({
-      action:"Visite_website",
-      category:"website",
-      label: 'visit main page',
-      value: 'visit_main_page',
-    })
+      action: "Visite_website",
+      category: "website",
+      label: "visit main page",
+      value: "visit_main_page",
+    });
     dispatch(getRequest({}));
   }, [dispatch]);
 
   return (
     <div className="flex justify-center w-dvh h-max ">
-      <FcmTokenComp/>
+      <FcmTokenComp />
       <div className="w-full bg-white rounded text-black shadow ">
         <div className="w-full z-50">
           <MainHeader />
         </div>
         <div className="flex">
           <main className="container mx-auto ">
-            <ModelForm modalRef={modalRef} path={path}/>
+            <ModelForm modalRef={modalRef} path={path} />
             <section className="bg-[url('/background-cover.png')] rounded shadow-md text-center">
               <div className="pt-4">
                 <div className="flex justify-center">
@@ -104,17 +108,16 @@ export default function Home() {
                     // href={"add-your-real-estate"}
                     className="flex hover:shadow-lg"
                     onClick={() => {
-                      setPath("/add-your-real-estate")
+                      setPath("/add-your-real-estate");
                       if (!token) {
                         toast.error("انت تحتاج الي تسجيل دخول");
-                        router.push("/login");
-
+                        router.push("/login-otp");
                       } else {
-                          if(!auth){
-                            modalRef?.current?.open()
-                          }else{
-                            router.push("/add-your-real-estate");
-                          }
+                        if (!auth) {
+                          modalRef?.current?.open();
+                        } else {
+                          router.push("/add-your-real-estate");
+                        }
                       }
                     }}
                   >
@@ -123,14 +126,13 @@ export default function Home() {
                   <button
                     className="flex hover:shadow-lg"
                     onClick={() => {
-                      setPath("/add-your-request")
+                      setPath("/add-your-request");
                       if (!token) {
                         toast.error("انت تحتاج الي تسجيل دخول");
-                        router.push("/login");
-
+                        router.push("/login-otp");
                       } else {
-                            router.replace("/add-your-request");
-                      }  
+                        router.replace("/add-your-request");
+                      }
                     }}
                   >
                     <Addbutton />
