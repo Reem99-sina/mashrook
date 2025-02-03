@@ -18,8 +18,7 @@ interface Props {
 
 export const StepThree: React.FC<Props> = ({ onFinished, modalRef }) => {
   const [error, setError] = React.useState("");
-  const [appear, setAppear] = React.useState(false);
-  const [status, setStatus] = React.useState("");
+  const [appear, setAppear] = React.useState(true);
 
   const dispatch = useDispatch<AppDispatch>();
   const { TransactionId, code } = useSelector<RootState>(
@@ -30,7 +29,7 @@ export const StepThree: React.FC<Props> = ({ onFinished, modalRef }) => {
     auth: boolean;
   };
 
-  const sendVerify = () => {
+  const sendVerify = React.useCallback(() => {
     if (auth) {
       onFinished();
     } else {
@@ -48,7 +47,7 @@ export const StepThree: React.FC<Props> = ({ onFinished, modalRef }) => {
           setError(error.message);
         });
     }
-  };
+  }, [auth, TransactionId, dispatch, onFinished]);
 
   React.useEffect(() => {
     const client = mqtt.connect(process.env.NEXT_PUBLIC_MQTT!);
@@ -91,7 +90,7 @@ export const StepThree: React.FC<Props> = ({ onFinished, modalRef }) => {
       client.end();
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
-  }, [TransactionId, dispatch, modalRef, onFinished]);
+  }, [TransactionId, dispatch, modalRef, onFinished, sendVerify]);
 
   return (
     <div>
