@@ -6,8 +6,8 @@ import {
   saveElement,
   initialOffer,
   realEstatePartner,
-  propertyAdvertiseinterface
-  ,userInfo
+  propertyAdvertiseinterface,
+  userInfo,
 } from "@/type/addrealestate";
 
 export interface returnType {
@@ -26,7 +26,7 @@ export interface dataReturn {
   is_divisible?: boolean;
   age?: number;
   license_number: string;
-  property_type_details_id?:number;
+  property_type_details_id?: number;
   area: number;
   price: number;
   min_price: string | null;
@@ -134,7 +134,7 @@ export interface dataReturn {
   }[];
   propertySaved?: saveElement[];
   propertyDetailsOwnership?: realEstatePartner[];
-  propertyAdvertising?:propertyAdvertiseinterface[]
+  propertyAdvertising?: propertyAdvertiseinterface[];
 }
 export interface typePay {
   id?: number;
@@ -236,7 +236,7 @@ export const postReport = createAsyncThunk<returnType, typeofReport>(
     { rejectWithValue }
   ) => {
     const response = await axios
-      .post("${process.env.NEXT_PUBLIC_API}/property-report", data, {
+      .post(`${process.env.NEXT_PUBLIC_API}/property-report`, data, {
         headers: {
           Authorization: Cookie.get("token"),
         },
