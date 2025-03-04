@@ -9,7 +9,7 @@ const Map = dynamic(() => import("../../components/shared/map"), {
 });
 
 import toast from "react-hot-toast";
-import { typeInput } from "@/redux/features/postRealEstate";
+
 const MapLocation: React.FC<any> = ({ lat, long, onChange }) => {
   const [viewport, setViewport] = useState({
     latitude: 24.64,

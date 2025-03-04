@@ -25,6 +25,7 @@ import { userInfo } from "@/type/addrealestate";
 import Image from "next/image";
 import { chatdetailinfo, messagePusher } from "@/type/chatinterface";
 import { eventAnalistic } from "@/utils/event-analistic";
+
 const ChatPage = () => {
   const params = useParams();
   let refImage = useRef<HTMLInputElement>(null);

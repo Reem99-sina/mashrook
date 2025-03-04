@@ -7,14 +7,19 @@ export interface returnType {
   message: string | undefined;
   data: detailsType[] | null;
 }
-interface dataSendType{
-  property_owner_type_id?:number
+interface dataSendType {
+  property_owner_type_id?: number;
 }
-export const getproperityPurposeType = createAsyncThunk<returnType,(dataSendType|undefined)>(
+export const getproperityPurposeType = createAsyncThunk<
+  returnType,
+  dataSendType | undefined
+>(
   "properityPurpose",
-  async (data:(dataSendType|undefined), { rejectWithValue }) => {
+  async (data: dataSendType | undefined, { rejectWithValue }) => {
     const response = await axios
-      .get(`${process.env.NEXT_PUBLIC_API}/property-purpose?property_owner_type_id=${data?.property_owner_type_id}`)
+      .get(
+        `${process.env.NEXT_PUBLIC_API}/property-purpose?property_owner_type_id=${data?.property_owner_type_id}`
+      )
       .then((response) => response.data)
       .catch((error) => error?.response?.data);
     return response;
