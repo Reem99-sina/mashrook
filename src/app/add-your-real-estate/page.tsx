@@ -25,6 +25,7 @@ import {
   returnRealState,
   imageInfo,
   DataSendInfo,
+  addAdvertisementNumber,
 } from "@/type/addrealestate";
 import CountElement from "./components/CountElemet";
 import CheckFeature from "./components/CheckFeature";
@@ -58,12 +59,16 @@ import {
   schemaMain,
   earthDevSchema,
   earthDevSchemaWithoutAdvert,
+  earthDevReqAdvertiseSchema,
+  earthDevNotReqAdvertiseSchema,
 } from "@/typeSchema/schemaRealestate";
 import VillaDetails from "./VillaDetails";
 import OnSuccess from "./OnSuccess";
 import AddLocation from "../components/add-real-estate-components/AddLocation";
 import PropertyLocation from "../components/add-real-estate-components/PropertyLocation";
 import { eventAnalistic } from "@/utils/event-analistic";
+import CheckAdvertisementNumber from "./components/check-advertisement-number";
+
 type Option = {
   id: number;
   title: string;
@@ -105,6 +110,8 @@ const AddYourRealEstate: React.FC = () => {
   const modalRefRules = useRef<ModalRef>(null);
   const refImage = useRef<HTMLInputElement>(null);
   const [sentYourRequest, setSentYourRequest] = useState<boolean>(false);
+  const [CheckAdvent, setCheckAdvent] = useState<boolean>(false);
+
   const [dataSend, setDataSend] = useState<DataSendInfo>({
     property_owner_type_id: 0,
     property_purpose_id: 0,
@@ -140,9 +147,9 @@ const AddYourRealEstate: React.FC = () => {
   const [haveNumber, setHaveNumber] = useState(false);
   const [deal, setdeal] = useState(false);
 
-  const [mediator, setMediator] = useState({
-    advertisement_number: "",
-    license_number: "",
+  const [mediator, setMediator] = useState<addAdvertisementNumber>({
+    advertisement_number: undefined,
+    license_number: '',
   });
   const initialVillaData: earthInter[] = Array.from({ length: 3 }, () => ({
     type: "",
@@ -237,6 +244,7 @@ const AddYourRealEstate: React.FC = () => {
   const villaOne = useMemo(() => {
     return villa.filter((ele) => ele?.type);
   }, [villa]);
+
   const { data: dataOwnerType } = useSelector<RootState>(
     (state) => state.properityOwnerType
   ) as {
@@ -298,6 +306,20 @@ const AddYourRealEstate: React.FC = () => {
             ));
         }
         if (
+          dataSend?.property_owner_type_id == 1 &&
+          dataSend?.property_purpose_id == 1
+        ) {
+          validationMain =
+            validationMain &&
+            (await validateForm(
+              {
+                ...mediator,
+              },
+              haveNumber ? earthDevReqAdvertiseSchema : earthDevNotReqAdvertiseSchema,
+              setErrors
+            ));
+        }
+        if (
           (dataSend.property_owner_type_id == 2 ||
             dataSend.property_owner_type_id == 3) &&
           dataSend?.property_purpose_id == 1
@@ -308,7 +330,7 @@ const AddYourRealEstate: React.FC = () => {
               {
                 ...mediator,
               },
-              earthDevSchema,
+              earthDevReqAdvertiseSchema,
               setErrors
             ));
         }
@@ -522,7 +544,6 @@ const AddYourRealEstate: React.FC = () => {
     dispatch(getproperityType({ num: dataSend?.property_purpose_id || 1 }));
   }, [dataSend?.property_purpose_id, dispatch]);
   useEffect(() => {
-    
     dispatch(
       getproperityPurposeType({
         property_owner_type_id: dataSend?.property_owner_type_id,
@@ -578,6 +599,7 @@ const AddYourRealEstate: React.FC = () => {
         : prev.filter((ele, index) => index != indexRemove)
     );
   }, [count.nums, indexRemove]);
+
 
   return (
     <>
@@ -744,19 +766,19 @@ const AddYourRealEstate: React.FC = () => {
                                 <p className="text-base text-[#4B5563] font-medium">
                                   رقم ترخيص الاعلان{" "}
                                 </p>
-                                <TextInput
-                                  inputProps={{
-                                    placeholder: "-- الرجاء الادخال --",
-                                  }}
-                                  onChange={(event) =>
-                                    setMediator({
-                                      ...mediator,
-                                      advertisement_number:
-                                        event?.target?.value,
-                                    })
-                                  }
-                                  value={mediator?.advertisement_number}
-                                />
+                                <div className="w-full " dir="rtl">
+                                  <CheckAdvertisementNumber
+                                    onChange={(event) =>
+                                      setMediator({
+                                        ...mediator,
+                                        advertisement_number:
+                                          event?.target?.value,
+                                      })
+                                    }
+                                    value={mediator?.advertisement_number}
+                                    setCheck={(value) => setCheckAdvent(value)}
+                                  />
+                                </div>
                                 {errors?.advertisement_number && (
                                   <p className="text-xs text-red-600 dark:text-red-500 text-right">
                                     {String(errors?.advertisement_number)}
@@ -1596,19 +1618,17 @@ const AddYourRealEstate: React.FC = () => {
                     <label className="block mb-2 font-medium mt-2">
                       رقم ترخيص الإعلان{" "}
                     </label>
-                    <div className="flex items-center">
-                      <input
-                        type="text"
-                        className="w-full p-2 border border-gray-300 rounded-lg"
-                        placeholder="-- الرجاء الادخال --"
-                        onChange={(event) =>
-                          setMediator({
-                            ...mediator,
-                            advertisement_number: event?.target?.value,
-                          })
-                        }
-                      />
-                    </div>
+                    <CheckAdvertisementNumber
+                      onChange={(event) =>
+                        setMediator({
+                          ...mediator,
+                          advertisement_number: event?.target?.value,
+                        })
+                      }
+                      value={mediator?.advertisement_number}
+                      setCheck={(value: boolean) => setCheckAdvent(value)}
+                    />
+
                     {errors?.advertisement_number && (
                       <p className="text-xs text-red-600 dark:text-red-500 text-right">
                         {errors?.advertisement_number}

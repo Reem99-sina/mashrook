@@ -577,3 +577,8 @@ export interface bannerinfo {
   message: string;
   data: Banners[] | null;
 }
+
+export interface addAdvertisementNumber{
+  license_number: string|undefined;
+  advertisement_number: string|undefined;
+}

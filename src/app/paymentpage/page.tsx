@@ -25,6 +25,7 @@ import { validateForm } from "../hooks/validate";
 import { useRouter } from "next/navigation";
 import { format } from "date-fns";
 import { eventAnalistic } from "@/utils/event-analistic";
+import { Button } from "../components/shared/button.component";
 export default function Payment() {
   const router = useRouter();
   let { selectData } = useSelector<RootState>((state) => state.getRequest) as {
@@ -67,8 +68,11 @@ export default function Payment() {
   let refImage = useRef<HTMLInputElement>(null);
   let refA = useRef<any>(null);
   let [url, setUrl] = useState<any>();
+  let [loading, setloading] = useState<boolean>(false);
+
   async function onSubmit(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
+    setloading(true);
     if (data?.method == "bank") {
       if (recipt) {
         if (selectData?.type) {
@@ -80,22 +84,29 @@ export default function Payment() {
               receipt: recipt,
               amount: Number(sessionStorage.getItem("amount")),
             })
-          ).then((res: any) => {
-            if (res.payload.data) {
-              eventAnalistic({
-                action: "payment_partner_offer",
-                category: "payment_partner_offer",
-                label: "payment partner offer",
-                value: "payment_partner_offer",
-              });
-              toast.success(res.payload.message);
-              router.push(
-                `/JoiningSuccess?status=pending&id=${res?.payload?.data?.id}`
-              );
-            } else if (res.payload.status) {
-              toast.error(res.payload.message);
-            }
-          });
+          )
+            .then((res: any) => {
+              if (res.payload.data) {
+                eventAnalistic({
+                  action: "payment_partner_offer",
+                  category: "payment_partner_offer",
+                  label: "payment partner offer",
+                  value: "payment_partner_offer",
+                });
+                toast.success(res.payload.message);
+                router.push(
+                  `/JoiningSuccess?status=pending&id=${res?.payload?.data?.id}`
+                );
+              } else if (res.payload.status) {
+                toast.error(res.payload.message);
+              }
+            })
+            .catch((error) => {
+              toast.error(error.payload.message);
+            })
+            .finally(() => {
+              setloading(false);
+            });
         } else {
           dispatch(
             postPaymentFileType({
@@ -105,22 +116,29 @@ export default function Payment() {
               receipt: recipt,
               amount: Number(sessionStorage.getItem("amount")),
             })
-          ).then((res: any) => {
-            if (res.payload.data) {
-              eventAnalistic({
-                action: "payment_partner_offer",
-                category: "payment_partner_offer",
-                label: "payment partner offer",
-                value: "payment_partner_offer",
-              });
-              toast.success(res.payload.message);
-              router.push(
-                `/JoiningSuccess?status=pending&id=${res?.payload?.data?.id}`
-              );
-            } else if (res.payload.status) {
-              toast.error(res.payload.message);
-            }
-          });
+          )
+            .then((res: any) => {
+              if (res.payload.data) {
+                eventAnalistic({
+                  action: "payment_partner_offer",
+                  category: "payment_partner_offer",
+                  label: "payment partner offer",
+                  value: "payment_partner_offer",
+                });
+                toast.success(res.payload.message);
+                router.push(
+                  `/JoiningSuccess?status=pending&id=${res?.payload?.data?.id}`
+                );
+              } else if (res.payload.status) {
+                toast.error(res.payload.message);
+              }
+            })
+            .catch((error) => {
+              toast.error(error.payload.message || "يوجد تحميل  خاطئة ");
+            })
+            .finally(() => {
+              setloading(false);
+            });
         }
       } else {
         setErrors({ ...errors, receipt: "يجب ادخال ايصال" });
@@ -313,14 +331,13 @@ export default function Payment() {
 
                   {data?.method == "bank" && (
                     <div className="flex flex-row items-center align-middle justify-center  p-2 text-blue-450">
-                      <button
-                        type="button"
-                        // href="//JoiningSuccess"
+                     
+                      <Button
+                        isLoading={loading}
+                        text="الدفع"
                         onClick={onSubmit}
                         className="bg-blue-450 text-white px-4 py-2 rounded-2xl p-2 m-2 flex-grow text-center"
-                      >
-                        الدفع
-                      </button>
+                      />
                     </div>
                   )}
                 </div>

@@ -32,6 +32,14 @@ export let earthDevSchema = object().shape({
   advertisement_number: string(),
   license_number: string().required("ما رقم الرخصة"),
 });
+export let earthDevReqAdvertiseSchema = object().shape({
+  advertisement_number: string().required("ما رقم الترخيص الاعلان"),
+
+});
+export let earthDevNotReqAdvertiseSchema = object().shape({
+  advertisement_number: string(),
+
+});
 export let earthDevSchemaWithoutAdvert = object().shape({
   license_number: string().required("ما رقم الرخصة"),
 });
@@ -174,7 +182,7 @@ export let villaOwnSchema = object().shape({
   long: number()
     .notOneOf([0], "احداثيات مكان مطلوبة")
     .required("احداثيات مكان مطلوبة"),
-    district: string().notOneOf(["other"], "حي مطلوب").required("حي مطلوب"),
+  district: string().notOneOf(["other"], "حي مطلوب").required("حي مطلوب"),
   city: string().required(" مدينة مطلوب"),
   is_divisible: boolean().required("هل العقار قابل للتجزئة؟"),
   advertisement_number: string(),

@@ -352,6 +352,7 @@ const EditOffer = () => {
                   <div className="flex flex-row-reverse flex-wrap justify-start mt-6 gap-2">
                     {item?.option?.map((ele: any, index: number) => (
                       <RadioInput
+                        
                         name={item.english}
                         onChange={() => handleOptionChange(ele, item.title)}
                         value={ele?.title}
@@ -361,7 +362,7 @@ const EditOffer = () => {
                               dataCom[item?.english as keyof typeof dataCom]
                             : false
                         }
-                        key={ele?.id}
+                        key={ele?.id+index}
                         label={ele?.title}
                         disabled={true}
                       />
