@@ -97,7 +97,7 @@ export default function Payment() {
                 router.push(
                   `/JoiningSuccess?status=pending&id=${res?.payload?.data?.id}`
                 );
-              } else if (res.payload.status) {
+              } else {
                 toast.error(res.payload.message);
               }
             })
@@ -129,7 +129,7 @@ export default function Payment() {
                 router.push(
                   `/JoiningSuccess?status=pending&id=${res?.payload?.data?.id}`
                 );
-              } else if (res.payload.status) {
+              } else {
                 toast.error(res.payload.message);
               }
             })
@@ -331,7 +331,6 @@ export default function Payment() {
 
                   {data?.method == "bank" && (
                     <div className="flex flex-row items-center align-middle justify-center  p-2 text-blue-450">
-                     
                       <Button
                         isLoading={loading}
                         text="الدفع"
