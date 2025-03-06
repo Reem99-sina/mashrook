@@ -98,6 +98,7 @@ export default function Payment() {
                   `/JoiningSuccess?status=pending&id=${res?.payload?.data?.id}`
                 );
               } else {
+                toast.error(res.payload.message||res.message||"there an error");
                 toast.error(res.payload.message);
               }
             })
@@ -130,7 +131,7 @@ export default function Payment() {
                   `/JoiningSuccess?status=pending&id=${res?.payload?.data?.id}`
                 );
               } else {
-                toast.error(res.payload.message);
+                toast.error(res.payload.message||res.message||"there an error");
               }
             })
             .catch((error) => {
